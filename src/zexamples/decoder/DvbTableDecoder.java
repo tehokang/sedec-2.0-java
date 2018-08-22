@@ -34,6 +34,9 @@ public class DvbTableDecoder {
                 dataInputStream.readFully(table_buffer);
     
                 Table table = TableFactory.CreateTable(table_buffer);
+                
+                System.out.println(String.format("[%d] file's intofmration \n",  i));
+                
                 table.PrintRawTable();
                 table.PrintTable();
                 

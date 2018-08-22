@@ -3,6 +3,10 @@ package dvb.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief ApplicationUsageDescriptor
+ * @note Verified
+ */
 public class ApplicationUsageDescriptor extends Descriptor {
     private byte usage_type;
     
