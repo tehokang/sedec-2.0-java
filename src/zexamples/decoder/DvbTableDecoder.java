@@ -26,7 +26,10 @@ public class DvbTableDecoder {
             DataInputStream dataInputStream = null;
             try {
                
-                dataInputStream = new DataInputStream(new BufferedInputStream(new FileInputStream(inOutFile)));
+                dataInputStream = 
+                        new DataInputStream(
+                                new BufferedInputStream(
+                                        new FileInputStream(inOutFile)));
                 
                 long table_buffer_length = inOutFile.length();
                 byte[] table_buffer = new byte[(int) table_buffer_length];
@@ -35,7 +38,8 @@ public class DvbTableDecoder {
     
                 Table table = TableFactory.CreateTable(table_buffer);
                 
-                System.out.println(String.format("[%d] file's intofmration \n",  i));
+                System.out.println(
+                        String.format("[%d] table information \n",  i));
                 
                 table.PrintRawTable();
                 table.PrintTable();
