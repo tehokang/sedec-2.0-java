@@ -26,11 +26,16 @@ public abstract class Descriptor {
     }
     
     protected void _PrintDescriptor_(String name) {
-        Logger.d("\tdescriptor_tag : 0x" + Integer.toHexString(descriptor_tag) + " (" + name + ")" + "\n" );
-        Logger.d("\tdescriptor_length : 0x" + Integer.toHexString(descriptor_length) + "\n");
+        Logger.d(String.format("\tdescriptor_tag : 0x%x (%s) \n", descriptor_tag, name));
+        Logger.d(String.format("\tdescriptor_length : 0x%x \n", descriptor_length));
     }
     
     public abstract void PrintDescriptor();
     
+    
+    /**
+     * @brief updateDescriptorLength should return length except for header of descriptor \n
+     * like tag and length 
+     */
     protected abstract void updateDescriptorLength();
 }

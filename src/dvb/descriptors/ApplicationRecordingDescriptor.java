@@ -5,6 +5,10 @@ import java.util.Arrays;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief ApplicationNameDescriptor
+ * @note Not Verified Yet
+ */
 public class ApplicationRecordingDescriptor extends Descriptor {
     private int scheduled_recording_flag;
     private int trick_mode_aware_flag;
@@ -150,22 +154,33 @@ public class ApplicationRecordingDescriptor extends Descriptor {
        
         super._PrintDescriptor_("ApplicationRecordingDescriptor");
 
-        Logger.d("\tscheduled_recording_flag : 0x" + Integer.toHexString(scheduled_recording_flag) + "\n");
-        Logger.d("\ttrick_mode_aware_flag : 0x" + Integer.toHexString(trick_mode_aware_flag) + "\n");
-        Logger.d("\ttime_shift_flag : 0x" + Integer.toHexString(time_shift_flag) + "\n");
-        Logger.d("\tdynamic_flag : 0x" + Integer.toHexString(dynamic_flag) + "\n");
-        Logger.d("\tav_synced_flag : 0x" + Integer.toHexString(av_synced_flag) + "\n");
-        Logger.d("\tinitiating_replay_flag : 0x" + Integer.toHexString(initiating_replay_flag) + "\n");;
-        Logger.d("\tlabel_count : 0x" + Integer.toHexString(label_count) + "\n");
+        Logger.d(String.format("\tscheduled_recording_flag : 0x%x \n", 
+                scheduled_recording_flag));
+        Logger.d(String.format("\ttrick_mode_aware_flag : 0x%x \n", 
+                trick_mode_aware_flag));
+        Logger.d(String.format("\ttime_shift_flag : 0x%x \n", 
+                time_shift_flag));
+        Logger.d(String.format("\tdynamic_flag : 0x%x \n", 
+                dynamic_flag));
+        Logger.d(String.format("\tav_synced_flag : 0x%x \n", 
+                av_synced_flag));
+        Logger.d(String.format("\tinitiating_replay_flag : 0x%x \n", 
+                initiating_replay_flag));
+        Logger.d(String.format("\tlabel_count : 0x%x \n", 
+                label_count));
         for(int i=0; i<label_count;i++) {
-            Logger.d("\t  label_length[" + i + "] = 0x" + Integer.toHexString(label_length[i]) + "\n");
-            Logger.d("\t  label_char : " + Arrays.toString(label_char[i]) + "\n");
-            Logger.d("\t  storage_properties[" + i + "] : 0x" + Integer.toHexString(storage_properties[i]) + "\n");
+            Logger.d(String.format("\t  label_length[%d] : 0x%x \n", 
+                    label_length[i]));
+            Logger.d(String.format("\t  label_char : %s \n", 
+                    new String(label_char[i])));
+            Logger.d(String.format("\t  storage_properties[%d] : 0x%x \n", 
+                    storage_properties[i]));
         }
 
-        Logger.d("\tcomponent_tag_list_length : 0x" + Integer.toHexString(component_tag_list_length) + "\n");
+        Logger.d(String.format("\tcomponent_tag_list_length : 0x%x \n", 
+                component_tag_list_length));
         for(int i=0; i<component_tag_list_length;i++) {
-            Logger.d("\tcomponent_tag : 0x" + Integer.toHexString(component_tag[i]) + "\n");
+            Logger.d(String.format("\tcomponent_tag : 0x%x \n", component_tag[i]));
         }
     }
     

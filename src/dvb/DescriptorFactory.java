@@ -29,8 +29,6 @@ public class DescriptorFactory {
     public static Descriptor CreateDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.GetCurrentBuffer()[0] & 0x0000ff;
         
-        Logger.d(String.format("descriptor_tag : %x \n", descriptor_tag));
-        
         switch ( descriptor_tag ) {
             case APPLICATION_DESCRIPTOR:
                 return new ApplicationDescriptor(brw);

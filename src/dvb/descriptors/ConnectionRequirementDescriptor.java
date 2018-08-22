@@ -3,6 +3,10 @@ package dvb.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief ConnectionRequirementDescriptor
+ * @note Not Verified Yet
+ */
 public class ConnectionRequirementDescriptor extends Descriptor {
     private boolean IP_connection_requirement_flag;
     
@@ -42,7 +46,7 @@ public class ConnectionRequirementDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptor_("ConnectionRequirementDescriptor");
         
-        Logger.d("\tIP_connection_requirement_flag : " + IP_connection_requirement_flag);
+        Logger.d(String.format("\tIP_connection_requirement_flag : %d \n", IP_connection_requirement_flag));
     }
     
 }

@@ -36,6 +36,6 @@ public class ApplicationUsageDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptor_("ApplicationUsageDescriptor");
         
-        Logger.d("\tusage_type : 0x" + Integer.toHexString(usage_type) + "\n");
+        Logger.d(String.format("\tusage_type : 0x%x \n", usage_type));
     }
 }

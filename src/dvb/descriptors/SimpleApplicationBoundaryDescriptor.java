@@ -5,6 +5,10 @@ import java.util.Arrays;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief SimpleApplicationBoundaryDescriptor
+ * @note Verified
+ */
 public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     private byte boundary_extension_count;
     private byte[] boundary_extension_length = new byte[256];
@@ -49,13 +53,14 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptor_("SimpleApplicationBoundaryDescriptor");
         
-        Logger.d("\tboundary_extension_count : 0x" + boundary_extension_count);
+        Logger.d(String.format("\tboundary_extension_count : 0x%x \n", 
+                boundary_extension_count));
      
         for ( int i=0; i<boundary_extension_count; i++) {
-            Logger.d("\tboundary_extension_length[" + i + "] : 0x" + 
-                    Integer.toHexString(boundary_extension_length[i]) + "\n");
-            Logger.d("\tboundary_extension_byte[" + i + "]" + 
-                    Arrays.toString(boundary_extension_byte[i]) + "\n");
+            Logger.d(String.format("\tboundary_extension_length[%d] : 0x%x \n",  
+                    i, boundary_extension_length[i]));
+            Logger.d(String.format("\tboundary_extension_byte[%d] : %s \n",
+                    i, new String(boundary_extension_byte[i])));
         }
     }
 

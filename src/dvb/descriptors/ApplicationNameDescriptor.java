@@ -1,9 +1,14 @@
 package dvb.descriptors;
 
+import java.io.ByteArrayInputStream;
 import java.util.Arrays;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief ApplicationNameDescriptor
+ * @note Verified
+ */
 public class ApplicationNameDescriptor extends Descriptor {
     private byte[] ISO_639_language_code = new byte[3];
     private int application_name_length;
@@ -27,7 +32,7 @@ public class ApplicationNameDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 4 + Arrays.toString(application_name).length();
+        descriptor_length = 4 + application_name.length;
     }
 
     
@@ -50,16 +55,16 @@ public class ApplicationNameDescriptor extends Descriptor {
     @Override
     public void PrintDescriptor() {
         super._PrintDescriptor_("ApplicationNameDescriptor");
-        for(int i=descriptor_length;i>0;)
+        for ( int i=descriptor_length;i>0; )
         {
-            Logger.d("\tISO_639_languahe_code : " +
-                    Byte.toString(ISO_639_language_code[0]) + 
-                    Byte.toString(ISO_639_language_code[1]) +
-                    Byte.toString(ISO_639_language_code[2]) + "\n");
+            Logger.d(String.format("\tISO_639_language_code : %c%c%c \n", 
+                    ISO_639_language_code[0], 
+                    ISO_639_language_code[1],
+                    ISO_639_language_code[2]));
                 
-            Logger.d("\tapplication_name_length : 0x" + 
-                    Integer.toHexString(application_name_length) + "\n");
-            Logger.d("\tapplication_name : " + Arrays.toString(application_name) + "\n");
+            Logger.d(String.format("\tapplication_name_length : 0x%x \n", 
+                    application_name_length));
+            Logger.d(String.format("\tapplication_name : %s \n", new String(application_name)));
             i-=(4+application_name_length);
         }
         Logger.d("\n");

@@ -7,6 +7,10 @@ import java.util.List;
 import base.BitReadWriter;
 import util.Logger;
 
+/**
+ * @brief TransportProtocolDescriptor
+ * @note Verified
+ */
 public class TransportProtocolDescriptor extends Descriptor {
     private static final int PROTOCOL_OBJECT_CAROUSEL = 0x0001;
     private static final int PROTOCOL_HTTP = 0x0003;
@@ -246,32 +250,42 @@ public class TransportProtocolDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptor_("TransportProtocolDescriptor");
         
-        Logger.d("\tprotocol_id : 0x" + Integer.toHexString(protocol_id) + "\n");
-        Logger.d("\ttransport_protocol_label : 0x%x" + Integer.toHexString(transport_protocol_label) + "\n");
+        Logger.d(String.format("\tprotocol_id : 0x%x \n", protocol_id));
+        Logger.d(String.format("\ttransport_protocol_label : 0x%x \n", transport_protocol_label));
 
         switch(protocol_id)
         {
             case PROTOCOL_OBJECT_CAROUSEL:
                 {
-                    Logger.d("\tremote_connection : 0x" + Integer.toHexString(transport.remote_connection) + "\n");;
+                    Logger.d(String.format("\tremote_connection : 0x%x \n", 
+                            transport.remote_connection));;
                     if(0x01 == transport.remote_connection)
                     {
-                        Logger.d("\toriginal_network_id : 0x" + Integer.toHexString(transport.original_network_id) + "\n");
-                        Logger.d("\ttransport_stream_id : 0x" + Integer.toHexString(transport.transport_stream_id) + "\n");
-                        Logger.d("\tservice_id : 0x" + Integer.toHexString(transport.service_id) + "\n");;
+                        Logger.d(String.format("\toriginal_network_id : 0x%x \n", 
+                                transport.original_network_id));
+                        Logger.d(String.format("\ttransport_stream_id : 0x%x \n", 
+                                transport.transport_stream_id));
+                        Logger.d(String.format("\tservice_id : 0x%x \n", 
+                                transport.service_id));
                     }
-                    Logger.d("\tcomponent_tag : 0x" + Integer.toHexString(transport.component_tag) + "\n");;
+                    Logger.d(String.format("\tcomponent_tag : 0x%x \n", 
+                            transport.component_tag));
                 }
                 break;
             case PROTOCOL_HTTP:
                 {
-                    Logger.d("\tURL_base_length : 0x" + Integer.toHexString(channel_transport.URL_base_length) + "\n");
-                    Logger.d("\tURL_base_byte : " +Arrays.toString(channel_transport.URL_base_byte) + "\n");;
-                    Logger.d("\tURL_extension_count : 0x" + Integer.toHexString(channel_transport.URL_extension_count) + "\n");
+                    Logger.d(String.format("\tURL_base_length : 0x%x \n", 
+                            channel_transport.URL_base_length));
+                    Logger.d(String.format("\tURL_base_byte : %s \n", 
+                            new String(channel_transport.URL_base_byte)));
+                    Logger.d(String.format("\tURL_extension_count : 0x%x \n", 
+                            channel_transport.URL_extension_count));
 
                     for ( int i=0;i<url_extensions.size(); i++ ) {
-                        Logger.d("\tmanaged_URL_length : 0x" + url_extensions.get(i).URL_extension_length);
-                        Logger.d("\tmanaged_URL_byte : " + Arrays.toString(url_extensions.get(i).URL_exntension_byte) + "\n");
+                        Logger.d(String.format("\tmanaged_URL_length : 0x%x \n", 
+                                url_extensions.get(i).URL_extension_length));
+                        Logger.d(String.format("\tmanaged_URL_byte : %s \n", 
+                                new String(url_extensions.get(i).URL_exntension_byte)));
                     }
                 }
                 break;
@@ -280,14 +294,19 @@ public class TransportProtocolDescriptor extends Descriptor {
              **/
             case PROTOCOL_DATA_CAROUSEL:
                 {
-                    Logger.d("\tremote_connection : 0x" + Integer.toHexString(transport.remote_connection) + "\n");;
+                    Logger.d(String.format("\tremote_connection : 0x%x \n", 
+                            transport.remote_connection));
                     if(0x01 == transport.remote_connection)
                     {
-                        Logger.d("\toriginal_network_id : 0x" + Integer.toHexString(transport.original_network_id) + "\n");;
-                        Logger.d("\ttransport_stream_id : 0x" + Integer.toHexString(transport.transport_stream_id) + "\n");;
-                        Logger.d("\tservice_id : 0x" + Integer.toHexString(transport.service_id) + "\n");;
+                        Logger.d(String.format("\toriginal_network_id : 0x%x \n",
+                                transport.original_network_id));
+                        Logger.d(String.format("\ttransport_stream_id : 0x%x \n", 
+                                transport.transport_stream_id));
+                        Logger.d(String.format("\tservice_id : 0x%x \n", 
+                                transport.service_id));
                     }
-                    Logger.d("\tcomponent_tag : 0x" + Integer.toHexString(transport.component_tag) + "\n");;
+                    Logger.d(String.format("\tcomponent_tag : 0x%x \n", 
+                            transport.component_tag));
                 }
                 break;
             default:

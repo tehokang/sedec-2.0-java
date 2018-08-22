@@ -4,8 +4,8 @@ import base.BitReadWriter;
 import util.Logger;
 
 public class ParentalRatingDescriptor extends Descriptor {
-    private int[] country_code = new int[64];
-    private byte[] rating = new byte[64];
+    private byte[] country_code = new byte[3];
+    private byte rating;
     private int parent_rating_count;
     
     public ParentalRatingDescriptor(BitReadWriter brw) {
@@ -13,8 +13,10 @@ public class ParentalRatingDescriptor extends Descriptor {
         
         int j=0;
         for ( int i=descriptor_length; i>0; j++ ) {
-            country_code[j] = brw.ReadOnBuffer(24);
-            rating[j] = (byte) brw.ReadOnBuffer(8);
+            country_code[0] = (byte) brw.ReadOnBuffer(8);
+            country_code[1] = (byte) brw.ReadOnBuffer(8);
+            country_code[2] = (byte) brw.ReadOnBuffer(8);
+            rating = (byte) brw.ReadOnBuffer(8);
             i-=4;
             parent_rating_count = j+1;
         }
@@ -31,7 +33,7 @@ public class ParentalRatingDescriptor extends Descriptor {
         
         for ( int i=0; i<parent_rating_count; i++ ) {
             brw.WriteOnBuffer(country_code[i], 24);
-            brw.WriteOnBuffer(rating[i], 8);
+            brw.WriteOnBuffer(rating, 8);
         }
     }
 
@@ -40,8 +42,8 @@ public class ParentalRatingDescriptor extends Descriptor {
         super._PrintDescriptor_("ParentalRatingDescriptor");
         
         for ( int j=0; j<parent_rating_count; j++ ) {
-            Logger.d("\t country_code[" + j + " : " + country_code[j] + "\n");
-            Logger.d("\t rating[" + j + " : " + rating[j] + "\n");
+            Logger.d(String.format("\t country_code[%d] : %s \n", j, new String(country_code)));
+            Logger.d(String.format("\t rating[%d] : 0x%x \n", j, rating));
         }
     }
 
