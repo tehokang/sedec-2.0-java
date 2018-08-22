@@ -1,5 +1,7 @@
 package base;
 
+import java.util.Arrays;
+
 import util.Logger;
 
 public class BitReadWriter {
@@ -17,8 +19,12 @@ public class BitReadWriter {
         m_out_counter = 8;
     }
     
-    public byte[] GetCurrentBuffer() {
+    public byte[] GetBuffer() {
         return m_buffer;
+    }
+    
+    public byte[] GetCurrentBuffer() {
+        return Arrays.copyOfRange(m_buffer, m_pos, m_buffer.length);
     }
     
     public int CalculateCRC32(byte[] temp, int real_data_length) {

@@ -27,10 +27,14 @@ public class ApplicationDescriptor extends Descriptor {
         
         application_profiles_length = brw.ReadOnBuffer(8);
         for ( int i=application_profiles_length; i>0; i-=5) {
-            application_profiles.get(i).application_profile = brw.ReadOnBuffer(16);
-            application_profiles.get(i).version_major = brw.ReadOnBuffer(8);
-            application_profiles.get(i).version_minor = brw.ReadOnBuffer(8);
-            application_profiles.get(i).version_micro = brw.ReadOnBuffer(8);
+            ApplicationProfile application_profile = new ApplicationProfile();
+            
+            application_profile.application_profile = brw.ReadOnBuffer(16);
+            application_profile.version_major = brw.ReadOnBuffer(8);
+            application_profile.version_minor = brw.ReadOnBuffer(8);
+            application_profile.version_micro = brw.ReadOnBuffer(8);
+            
+            application_profiles.add(application_profile);
         }
         
         service_bound_flag = brw.ReadOnBuffer(1);
@@ -105,7 +109,7 @@ public class ApplicationDescriptor extends Descriptor {
         super._PrintDescriptor_("ApplicationDescriptor");
 
         Logger.d("\tapplication_profiles_length : 0x" + Integer.toHexString(application_profiles_length) + "\n");
-        for ( int i=0 ; i<application_profiles_length; i++) {
+        for ( int i=0 ; i<application_profiles.size(); i++) {
             Logger.d("\tapplication_profile : 0x" + Integer.toHexString(application_profiles.get(i).application_profile) + "\n");
             Logger.d("\tversion_major : 0x" + Integer.toHexString(application_profiles.get(i).version_major) + "\n");
             Logger.d("\tversion_minor : 0x" + Integer.toHexString(application_profiles.get(i).version_minor) + "\n");

@@ -19,7 +19,7 @@ public class ApplicationNameDescriptor extends Descriptor {
             application_name_length = brw.ReadOnBuffer(8);
             application_name = new byte[application_name_length];
             for ( int j=0; j<application_name_length; j++) {
-                application_name[i] = (byte) brw.ReadOnBuffer(8);
+                application_name[j] = (byte) brw.ReadOnBuffer(8);
             }
             i-=(4+application_name_length);
         }

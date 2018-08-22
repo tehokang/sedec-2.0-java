@@ -14,9 +14,9 @@ public class TransportProtocolDescriptor extends Descriptor {
     
     private int protocol_id;
     private byte transport_protocol_label;
-    private Transport transport;
+    private Transport transport = new Transport();
     private List<UrlExtension> url_extensions = new ArrayList<>();
-    private ChannelTransport channel_transport;
+    private ChannelTransport channel_transport = new ChannelTransport();
     
     class Transport {
         public byte remote_connection;

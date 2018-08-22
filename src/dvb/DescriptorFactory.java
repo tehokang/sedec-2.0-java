@@ -2,6 +2,7 @@ package dvb;
 
 import base.BitReadWriter;
 import dvb.descriptors.UnknownDescriptor;
+import util.Logger;
 import dvb.descriptors.ApplicationDescriptor;
 import dvb.descriptors.ApplicationNameDescriptor;
 import dvb.descriptors.ApplicationRecordingDescriptor;
@@ -27,6 +28,8 @@ public class DescriptorFactory {
     
     public static Descriptor CreateDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.GetCurrentBuffer()[0] & 0x0000ff;
+        
+        Logger.d(String.format("descriptor_tag : %x \n", descriptor_tag));
         
         switch ( descriptor_tag ) {
             case APPLICATION_DESCRIPTOR:
