@@ -6,7 +6,7 @@ import base.BitReadWriter;
 import util.Logger;
 
 /**
- * @brief ApplicationNameDescriptor
+ * @brief ApplicationRecordingDescriptor
  * @note Not Verified Yet
  */
 public class ApplicationRecordingDescriptor extends Descriptor {
