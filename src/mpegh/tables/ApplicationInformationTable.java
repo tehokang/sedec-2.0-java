@@ -23,6 +23,8 @@ public class ApplicationInformationTable extends Table {
     
     public ApplicationInformationTable(byte[] buffer) {
         super(buffer);
+       
+        System.out.println("AIT Buffer length : " + buffer.length);
         
         __decode_table_body__();
     }

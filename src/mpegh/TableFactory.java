@@ -4,7 +4,7 @@ import base.Table;
 import mpegh.tables.ApplicationInformationTable;
 
 public class TableFactory {
-    public final static int APPLICATION_INFORMATION_TABLE = 0x74;
+    public final static int APPLICATION_INFORMATION_TABLE = 0x9c;
     public final static int UNKNOWN_TABLE = 0xff;
     
     public static Table CreateTable(byte[] buffer) {

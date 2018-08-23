@@ -15,6 +15,7 @@ public class TransportProtocolDescriptor extends Descriptor {
     private static final int PROTOCOL_OBJECT_CAROUSEL = 0x0001;
     private static final int PROTOCOL_HTTP = 0x0003;
     private static final int PROTOCOL_DATA_CAROUSEL = 0x0004;
+    private static final int PROTOCOL_MMT_NON_TIMED = 0x0005;
     
     private int protocol_id;
     private byte transport_protocol_label;
@@ -60,6 +61,7 @@ public class TransportProtocolDescriptor extends Descriptor {
                     transport.component_tag = (byte) brw.ReadOnBuffer(8);
                     break;
                 case PROTOCOL_HTTP:
+                case PROTOCOL_MMT_NON_TIMED:
                     channel_transport.URL_base_length = (byte) brw.ReadOnBuffer(8);
                     for ( int i=0; i<channel_transport.URL_base_length; i++ ) {
                         channel_transport.URL_base_byte[i] = (byte) brw.ReadOnBuffer(8);
@@ -168,6 +170,7 @@ public class TransportProtocolDescriptor extends Descriptor {
                     selector_byte_length = 2;
                 break;
             case PROTOCOL_HTTP:
+            case PROTOCOL_MMT_NON_TIMED:
                 {
                     selector_byte_length = 1 + channel_transport.URL_base_length +
                                             1 + channel_transport.URL_extension_count;

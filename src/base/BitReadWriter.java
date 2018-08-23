@@ -163,13 +163,13 @@ public class BitReadWriter {
 
     public void PrintRawTable() {
         int j=1;
-        Logger.p("########### Byte Align ########### \n");
-        Logger.p(String.format("%03d : ", j));
+        System.out.print("########### Byte Align ########### \n");
+        System.out.print(String.format("%03d : ", j));
         for(int i=0; i<m_buffer.length; i++)
         {
-            Logger.p(String.format("%02x ", m_buffer[i]));
+            System.out.print(String.format("%02x ", m_buffer[i]));
             if(i%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
         }
-        Logger.p("\n################################### \n\n");
+        System.out.print("\n################################### \n\n");
     }
 }

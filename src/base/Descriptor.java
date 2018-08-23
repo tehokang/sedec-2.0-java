@@ -6,6 +6,11 @@ public abstract class Descriptor {
     protected int descriptor_tag;
     protected int descriptor_length;
     
+    public Descriptor() {
+        /**
+         * @warning NOTHING TO HERE SINCE CHILD WANTS TO OVERRIDE
+         */
+    }
     public Descriptor(BitReadWriter brw) {
         descriptor_tag = brw.ReadOnBuffer(8);
         descriptor_length = brw.ReadOnBuffer(8);

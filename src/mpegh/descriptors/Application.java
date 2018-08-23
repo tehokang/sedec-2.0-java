@@ -23,10 +23,12 @@ public class Application {
         application_control_code = brw.ReadOnBuffer(8);
         brw.SkipOnBuffer(4);
         application_descriptors_loop_length = brw.ReadOnBuffer(12);
-        
-        for ( int i=application_descriptors_loop_length; i>0 ;) {
+        System.out.println("application_descriptors_loop_length : " + application_descriptors_loop_length);
+        for ( int i=application_descriptors_loop_length; i>0 ; ) {
             Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(brw);
+            desc.PrintDescriptor();
             i-=desc.GetDescriptorLength();
+            System.out.println("i : " + i);
             application_descriptors.add(desc);
         }
     }

@@ -37,7 +37,9 @@ public class DescriptorFactory {
     public final static int UNKNOWN_DESCRIPTOR = 0xffff;
     
     public static Descriptor CreateDescriptor(BitReadWriter brw) {
-        int descriptor_tag = brw.GetCurrentBuffer()[0] & 0x0000ff;
+        int descriptor_tag = 
+                (((brw.GetCurrentBuffer()[0] & 0xff) << 8) |
+                (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
             case APPLICATION_DESCRIPTOR:
@@ -46,8 +48,8 @@ public class DescriptorFactory {
                 return new TransportProtocolDescriptor(brw);
             case SIMPLE_APPLICATION_LOCATION_DESCRIPTOR:
                 return new SimpleApplicationLocationDescriptor(brw);
-            case APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
-                return new ApplicationBoundaryAndPermissionDescriptor(brw);
+//            case APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
+//                return new ApplicationBoundaryAndPermissionDescriptor(brw);
             case AUTOSTART_PRIORITY_DESCRIPTOR:
                 return new AutostartPriorityDescriptor(brw);
             case CACHE_CONTROL_INFO_DESCRIPTOR:
