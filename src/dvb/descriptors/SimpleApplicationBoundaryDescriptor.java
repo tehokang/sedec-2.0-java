@@ -1,7 +1,5 @@
 package dvb.descriptors;
 
-import java.util.Arrays;
-
 import base.BitReadWriter;
 import util.Logger;
 

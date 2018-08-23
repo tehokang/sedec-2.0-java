@@ -1,7 +1,5 @@
 package hybridcast.descriptors;
 
-import java.io.ByteArrayInputStream;
-import java.util.Arrays;
 import base.BitReadWriter;
 import util.Logger;
 

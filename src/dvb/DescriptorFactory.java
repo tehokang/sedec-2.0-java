@@ -1,8 +1,6 @@
 package dvb;
 
 import base.BitReadWriter;
-import dvb.descriptors.UnknownDescriptor;
-import util.Logger;
 import dvb.descriptors.ApplicationDescriptor;
 import dvb.descriptors.ApplicationNameDescriptor;
 import dvb.descriptors.ApplicationRecordingDescriptor;
@@ -13,6 +11,7 @@ import dvb.descriptors.ParentalRatingDescriptor;
 import dvb.descriptors.SimpleApplicationBoundaryDescriptor;
 import dvb.descriptors.SimpleApplicationLocationDescriptor;
 import dvb.descriptors.TransportProtocolDescriptor;
+import dvb.descriptors.UnknownDescriptor;
 
 public class DescriptorFactory {
     public final static int APPLICATION_DESCRIPTOR = 0x00;
