@@ -152,7 +152,7 @@ public class ApplicationRecordingDescriptor extends Descriptor {
     @Override
     public void PrintDescriptor() {
        
-        super._PrintDescriptor_("ApplicationRecordingDescriptor");
+        super._PrintDescriptorHeader_();
 
         Logger.d(String.format("\tscheduled_recording_flag : 0x%x \n", 
                 scheduled_recording_flag));

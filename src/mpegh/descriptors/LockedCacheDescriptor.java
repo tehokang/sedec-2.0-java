@@ -37,7 +37,7 @@ public class LockedCacheDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("LockedCacheDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tnum_of_locked_cache_node : 0x%x \n", num_of_locked_cache_node));
         for ( int i=0;i<num_of_locked_cache_node; i++ ) {

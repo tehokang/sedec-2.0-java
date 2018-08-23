@@ -51,7 +51,7 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("SimpleApplicationBoundaryDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tboundary_extension_count : 0x%x \n", 
                 boundary_extension_count));

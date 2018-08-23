@@ -49,6 +49,7 @@ public class Application {
         for ( int i=0; i<application_descriptors.size(); i++ ) {
             application_descriptors.get(i).PrintDescriptor();
         }
+        Logger.d("\n");
     }
     
     public int GetOrganizationId() {

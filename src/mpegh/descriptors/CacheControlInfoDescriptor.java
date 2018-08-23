@@ -62,7 +62,7 @@ public class CacheControlInfoDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("CacheControlInfoDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tapplication_size : 0x%x \n", application_size));
         Logger.d(String.format("\tcache_priority : 0x%x \n", cache_priority));

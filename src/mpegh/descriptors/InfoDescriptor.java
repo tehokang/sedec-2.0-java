@@ -52,7 +52,7 @@ public class InfoDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("InfoDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tISO_639_language_code : %c%c%c \n", 
                 ISO_639_language_code[0], 

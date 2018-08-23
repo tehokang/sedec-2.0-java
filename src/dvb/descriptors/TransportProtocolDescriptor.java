@@ -248,7 +248,7 @@ public class TransportProtocolDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("TransportProtocolDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tprotocol_id : 0x%x \n", protocol_id));
         Logger.d(String.format("\ttransport_protocol_label : 0x%x \n", transport_protocol_label));

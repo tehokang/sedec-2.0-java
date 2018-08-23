@@ -37,7 +37,7 @@ public class LinkedPuDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("LinkedPuDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tnum_of_linked_PU : 0x%x \n", num_of_linked_PU));
         Logger.d(String.format("\tlinked_PU_tag : %s \n", new String(linked_PU_tag)));

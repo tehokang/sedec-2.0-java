@@ -39,7 +39,7 @@ public class ParentalRatingDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("ParentalRatingDescriptor");
+        super._PrintDescriptorHeader_();
         
         for ( int j=0; j<parent_rating_count; j++ ) {
             Logger.d(String.format("\t country_code[%d] : %s \n", j, new String(country_code)));

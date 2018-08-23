@@ -32,7 +32,7 @@ public abstract class Table extends BitReadWriter {
     }
          
     public void PrintTable() {
-        Logger.d("======= Section Header ======= \n");
+        Logger.d(String.format("======= Section Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("table_id : 0x%x \n", table_id));
         Logger.d(String.format("section_syntax_indicator : 0x%x \n", section_syntax_indicator));
         Logger.d(String.format("section_length : 0x%x (%d) \n", section_length, section_length));

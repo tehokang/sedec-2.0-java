@@ -55,7 +55,7 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("RandomizedLatencyDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\trange : 0x%x \n", range));
         Logger.d(String.format("\trate : 0x%x \n", rate));

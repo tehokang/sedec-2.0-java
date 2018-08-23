@@ -54,7 +54,7 @@ public class ApplicationNameDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("ApplicationNameDescriptor");
+        super._PrintDescriptorHeader_();
         for ( int i=descriptor_length;i>0; )
         {
             Logger.d(String.format("\tISO_639_language_code : %c%c%c \n", 

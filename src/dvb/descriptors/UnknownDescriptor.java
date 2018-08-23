@@ -19,7 +19,7 @@ public class UnknownDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("Unknown");
+        super._PrintDescriptorHeader_();
     }
 
 }

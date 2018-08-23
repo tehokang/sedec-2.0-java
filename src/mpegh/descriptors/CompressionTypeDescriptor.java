@@ -32,7 +32,7 @@ public class CompressionTypeDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("CompressionTypeDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tcompression_type : 0x%x \n",  compression_type));
         Logger.d(String.format("\toriginal_size : 0x%x (%d) \n", original_size, original_size));

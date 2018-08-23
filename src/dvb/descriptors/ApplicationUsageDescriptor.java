@@ -38,7 +38,7 @@ public class ApplicationUsageDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("ApplicationUsageDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\tusage_type : 0x%x \n", usage_type));
     }

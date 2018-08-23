@@ -30,8 +30,9 @@ public abstract class Descriptor {
         brw.WriteOnBuffer(descriptor_length, 8);
     }
     
-    protected void _PrintDescriptor_(String name) {
-        Logger.d(String.format("\tdescriptor_tag : 0x%x (%s) \n", descriptor_tag, name));
+    protected void _PrintDescriptorHeader_() {
+        Logger.d(String.format("\tdescriptor_tag : 0x%x (%s) \n", 
+                descriptor_tag, getClass().getName()));
         Logger.d(String.format("\tdescriptor_length : 0x%x \n", descriptor_length));
     }
     

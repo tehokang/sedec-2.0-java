@@ -114,7 +114,7 @@ public class ApplicationDescriptor extends Descriptor {
     @Override
     public void PrintDescriptor() {
         Logger.d("\n");
-        super._PrintDescriptor_("ApplicationDescriptor");
+        super._PrintDescriptorHeader_();
 
         Logger.d(String.format("\tapplication_profiles_length : 0x%x \n", application_profiles_length));
         for ( int i=0 ; i<application_profiles.size(); i++ ) {

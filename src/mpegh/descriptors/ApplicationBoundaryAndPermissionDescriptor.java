@@ -33,7 +33,7 @@ public class ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("ApplicationBoundaryAndPermissionDescriptor");
+        super._PrintDescriptorHeader_();
         
         if ( 0 < descriptor_length ) {
             Logger.d(String.format("\tpermission_bitmap_count : 0x%x \n", permission_bitmap_count));
@@ -54,8 +54,33 @@ public class ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        // TODO Auto-generated method stub
+        descriptor_length = 1 + (permission_bitmap_count * 2) + 1;
+        
+        for ( int i=0; i<managed_URL_count; i++ ) {
+            descriptor_length += 1 + managed_URL_length[i];
+        }
+    }
 
+    @Override
+    public void WriteDescriptor(BitReadWriter brw) {
+        super.WriteDescriptor(brw);
+        
+        if ( 0 < descriptor_length ) {
+            brw.WriteOnBuffer(permission_bitmap_count, 8);
+            
+            for ( int i=0; i<permission_bitmap_count; i++ ) {
+                brw.WriteOnBuffer(permission_bitmap[i], 16);
+            }
+            
+            brw.WriteOnBuffer(managed_URL_count, 8);
+            for ( int i=0;i<managed_URL_count; i++ ) {
+                brw.WriteOnBuffer(managed_URL_length[i], 8);
+                
+                for ( int j=0; i<managed_URL_length[i]; j++ ) {
+                    brw.WriteOnBuffer(managed_URL_byte[i][j], 8);
+                }
+            }
+        }
     }
 
 }

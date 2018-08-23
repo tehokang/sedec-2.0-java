@@ -51,7 +51,7 @@ public class SimpleApplicationLocationDescriptor extends Descriptor {
 
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("SimpleApplicationLocationDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\t initial_path_bytes : %s \n", new String(initial_path_bytes)));
     }

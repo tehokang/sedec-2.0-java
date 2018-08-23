@@ -47,7 +47,7 @@ public class ExpireDescriptor extends Descriptor {
     
     @Override
     public void PrintDescriptor() {
-        super._PrintDescriptor_("ExpireDescriptor");
+        super._PrintDescriptorHeader_();
         
         Logger.d(String.format("\ttime_mode : 0x%x \n", time_mode));
         if ( 0x01 == time_mode ) {

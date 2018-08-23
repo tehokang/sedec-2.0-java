@@ -38,11 +38,13 @@ public class MpeghTableDecoder {
     
                 Table table = TableFactory.CreateTable(table_buffer);
                 
-                System.out.println(
-                        String.format("[%d] table information \n",  i));
-                
-                table.PrintRawTable();
-                table.PrintTable();
+                if ( null != table ) {
+                    System.out.println(
+                            String.format("[%d] table information \n",  i));
+
+                    table.PrintRawTable();
+                    table.PrintTable();
+                } 
                 
                 dataInputStream.close(); 
             } catch (FileNotFoundException e) {

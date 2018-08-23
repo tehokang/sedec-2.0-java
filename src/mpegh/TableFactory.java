@@ -1,6 +1,7 @@
 package mpegh;
 
 import base.Table;
+import base.UnknownTable;
 import mpegh.tables.ApplicationInformationTable;
 
 public class TableFactory {
@@ -21,6 +22,7 @@ public class TableFactory {
                 section = new ApplicationInformationTable(buffer);
                 break;
             default:
+                section = new UnknownTable(buffer);
                 break;
         }
         return section;
