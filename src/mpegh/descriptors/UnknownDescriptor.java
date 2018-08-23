@@ -1,4 +1,4 @@
-package dvb.descriptors;
+package mpegh.descriptors;
 
 import base.BitReadWriter;
 
@@ -14,7 +14,7 @@ public class UnknownDescriptor extends Descriptor {
     protected void updateDescriptorLength() {
         /**
          * @note NOTHING TO DO
-         */        
+         */
     }
 
     @Override
