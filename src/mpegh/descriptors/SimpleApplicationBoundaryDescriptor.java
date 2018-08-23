@@ -62,6 +62,7 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
             Logger.d(String.format("\tboundary_extension_byte[%d] : %s \n",
                     i, new String(boundary_extension_byte[i])));
         }
+        Logger.d("\n");
     }
 
     

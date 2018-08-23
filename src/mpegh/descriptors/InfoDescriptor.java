@@ -59,6 +59,7 @@ public class InfoDescriptor extends Descriptor {
                 ISO_639_language_code[1], ISO_639_language_code[2]));
         
         Logger.d(String.format("\ttext_char : %s \n", new String(text_char)));
+        Logger.d("\n");
     }
 
     @Override

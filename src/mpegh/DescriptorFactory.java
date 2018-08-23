@@ -48,8 +48,8 @@ public class DescriptorFactory {
                 return new TransportProtocolDescriptor(brw);
             case SIMPLE_APPLICATION_LOCATION_DESCRIPTOR:
                 return new SimpleApplicationLocationDescriptor(brw);
-//            case APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
-//                return new ApplicationBoundaryAndPermissionDescriptor(brw);
+            case APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
+                return new ApplicationBoundaryAndPermissionDescriptor(brw);
             case AUTOSTART_PRIORITY_DESCRIPTOR:
                 return new AutostartPriorityDescriptor(brw);
             case CACHE_CONTROL_INFO_DESCRIPTOR:

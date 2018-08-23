@@ -56,6 +56,7 @@ public class ExpireDescriptor extends Descriptor {
             Logger.d(String.format("\tpassed_seconds : 0x%x (%d) \n", 
                     passed_seconds, passed_seconds));
         }
+        Logger.d("\n");
     }
 
     @Override

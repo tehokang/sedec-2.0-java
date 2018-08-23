@@ -45,6 +45,7 @@ public class ParentalRatingDescriptor extends Descriptor {
             Logger.d(String.format("\t country_code[%d] : %s \n", j, new String(country_code)));
             Logger.d(String.format("\t rating[%d] : 0x%x \n", j, rating));
         }
+        Logger.d("\n");
     }
 
     

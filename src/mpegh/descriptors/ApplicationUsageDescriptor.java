@@ -41,5 +41,6 @@ public class ApplicationUsageDescriptor extends Descriptor {
         super._PrintDescriptor_("ApplicationUsageDescriptor");
         
         Logger.d(String.format("\tusage_type : 0x%x \n", usage_type));
+        Logger.d("\n");
     }
 }

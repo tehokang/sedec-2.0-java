@@ -41,6 +41,7 @@ public class LinkedPuDescriptor extends Descriptor {
         
         Logger.d(String.format("\tnum_of_linked_PU : 0x%x \n", num_of_linked_PU));
         Logger.d(String.format("\tlinked_PU_tag : %s \n", new String(linked_PU_tag)));
+        Logger.d("\n");
     }
 
     @Override

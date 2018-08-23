@@ -29,6 +29,7 @@ public class TypeDescriptor extends Descriptor {
         super._PrintDescriptor_("TypeDescriptor");
         
         Logger.d(String.format("\ttext_char : %s \n", new String(text_char)));
+        Logger.d("\n");
     }
 
     @Override

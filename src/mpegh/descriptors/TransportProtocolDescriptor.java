@@ -217,6 +217,7 @@ public class TransportProtocolDescriptor extends Descriptor {
                 brw.WriteOnBuffer(transport.component_tag, 8);
                 break;
             case PROTOCOL_HTTP:
+            case PROTOCOL_MMT_NON_TIMED:
                 brw.WriteOnBuffer(channel_transport.URL_base_length, 8);
                 for(int i=0;i<channel_transport.URL_base_length;i++)
                     brw.WriteOnBuffer(channel_transport.URL_base_byte[i], 8);
@@ -256,8 +257,7 @@ public class TransportProtocolDescriptor extends Descriptor {
         Logger.d(String.format("\tprotocol_id : 0x%x \n", protocol_id));
         Logger.d(String.format("\ttransport_protocol_label : 0x%x \n", transport_protocol_label));
 
-        switch(protocol_id)
-        {
+        switch(protocol_id) {
             case PROTOCOL_OBJECT_CAROUSEL:
                 {
                     Logger.d(String.format("\tremote_connection : 0x%x \n", 
@@ -276,6 +276,7 @@ public class TransportProtocolDescriptor extends Descriptor {
                 }
                 break;
             case PROTOCOL_HTTP:
+            case PROTOCOL_MMT_NON_TIMED:
                 {
                     Logger.d(String.format("\tURL_base_length : 0x%x \n", 
                             channel_transport.URL_base_length));
@@ -315,6 +316,6 @@ public class TransportProtocolDescriptor extends Descriptor {
             default:
                 break;
         }
+        Logger.d("\n");
     }
-
 }

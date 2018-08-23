@@ -182,6 +182,7 @@ public class ApplicationRecordingDescriptor extends Descriptor {
         for(int i=0; i<component_tag_list_length;i++) {
             Logger.d(String.format("\tcomponent_tag : 0x%x \n", component_tag[i]));
         }
+        Logger.d("\n");
     }
     
     

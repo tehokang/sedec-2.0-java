@@ -36,6 +36,7 @@ public class CompressionTypeDescriptor extends Descriptor {
         
         Logger.d(String.format("\tcompression_type : 0x%x \n",  compression_type));
         Logger.d(String.format("\toriginal_size : 0x%x (%d) \n", original_size, original_size));
+        Logger.d("\n");
     }
 
     @Override

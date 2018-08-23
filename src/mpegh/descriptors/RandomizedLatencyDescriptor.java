@@ -63,6 +63,7 @@ public class RandomizedLatencyDescriptor extends Descriptor {
         if ( 0 != randomization_end_time_flag ) {
             Logger.d(String.format("\trandomization_end_time : 0x%lf \n", randomization_end_time));
         }
+        Logger.d("\n");
     }
 
     @Override

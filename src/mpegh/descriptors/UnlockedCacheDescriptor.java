@@ -43,6 +43,7 @@ public class UnlockedCacheDescriptor extends Descriptor {
         for ( int i=0; i<num_of_unlocked_cache_node; i++ ) {
             Logger.d(String.format("\tnode_tag[%d] : 0x%x \n", i, node_tag[i]));
         }
+        Logger.d("\n");
     }
 
     @Override

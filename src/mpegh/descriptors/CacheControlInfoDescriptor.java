@@ -69,7 +69,7 @@ public class CacheControlInfoDescriptor extends Descriptor {
         Logger.d(String.format("\tpackage_flag : 0x%x \n", package_flag));
         Logger.d(String.format("\tapplication_version : 0x%x \n", application_version));
         Logger.d(String.format("\texpire_date : 0x%x \n", expire_date));
-
+        Logger.d("\n");
     }
 
     @Override
