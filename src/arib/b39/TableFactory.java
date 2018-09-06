@@ -2,7 +2,7 @@ package arib.b39;
 
 import base.Table;
 import base.UnknownTable;
-import arib.b39.tables.ApplicationInformationTable;
+import arib.b39.tables.MPEGH_ApplicationInformationTable;
 
 public class TableFactory {
     public final static int APPLICATION_INFORMATION_TABLE = 0x9c;
@@ -19,7 +19,7 @@ public class TableFactory {
              * @note It is related in ETSI TS 102 809 v1.4.1
              **/
             case APPLICATION_INFORMATION_TABLE:
-                section = new ApplicationInformationTable(buffer);
+                section = new MPEGH_ApplicationInformationTable(buffer);
                 break;
             default:
                 section = new UnknownTable(buffer);

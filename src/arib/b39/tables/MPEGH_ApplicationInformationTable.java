@@ -9,7 +9,7 @@ import arib.b39.descriptors.Application;
 import arib.b39.descriptors.Descriptor;
 import util.Logger;
 
-public class ApplicationInformationTable extends Table {
+public class MPEGH_ApplicationInformationTable extends Table {
 
     protected int application_type;
     protected int version_number;
@@ -21,7 +21,7 @@ public class ApplicationInformationTable extends Table {
     protected int application_loop_length;
     protected List<Application> applications = new ArrayList<>();
     
-    public ApplicationInformationTable(byte[] buffer) {
+    public MPEGH_ApplicationInformationTable(byte[] buffer) {
         super(buffer);
        
         System.out.println("AIT Buffer length : " + buffer.length);
