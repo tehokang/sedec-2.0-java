@@ -24,8 +24,6 @@ public class MPEGH_ApplicationInformationTable extends Table {
     public MPEGH_ApplicationInformationTable(byte[] buffer) {
         super(buffer);
        
-        System.out.println("AIT Buffer length : " + buffer.length);
-        
         __decode_table_body__();
     }
     
@@ -90,13 +88,11 @@ public class MPEGH_ApplicationInformationTable extends Table {
             i-=app.GetApplicationLength();
             applications.add(app);
         }
-        super.checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = ReadOnBuffer(32);
     }
 
     @Override
     public void PrintTable() {
-        Logger.d("= AIT Section's raw information is followings = \n");
-
         super.PrintTable();
         
         Logger.d(String.format("application_type : 0x%x \n", application_type));
@@ -117,6 +113,7 @@ public class MPEGH_ApplicationInformationTable extends Table {
             applications.get(i).PrintApplication();
             Logger.d("--------------------------------------\n");
         }
+        
         Logger.d(String.format("checksum_CRC32 : 0x%x%x%x%x \n", 
                 ((checksum_CRC32 >> 24) & 0xff), 
                 ((checksum_CRC32 >> 16) & 0xff), 

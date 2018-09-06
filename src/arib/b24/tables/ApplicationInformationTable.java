@@ -93,8 +93,6 @@ public class ApplicationInformationTable extends Table {
 
     @Override
     public void PrintTable() {
-        Logger.d("= AIT Section's raw information is followings = \n");
-
         super.PrintTable();
         
         Logger.d(String.format("application_type : 0x%x \n", application_type));
