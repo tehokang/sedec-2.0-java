@@ -30,6 +30,58 @@ public class MPEGH_ServiceDescriptionTable extends Table {
         __decode_table_body__();
     }
 
+    public int GetTlvStreamId() {
+        return tlv_stream_id;
+    }
+    
+    public byte GetVersionNumber() {
+        return version_number;
+    }
+    
+    public byte GetCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte GetSectionNumber() {
+        return section_number;
+    }
+    
+    public byte GetLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int GetOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public int GetServiceId() {
+        return service_id;
+    }
+    
+    public byte GetEITUserDefinedFlags() {
+        return EIT_user_defined_flags;
+    }
+    
+    public byte GetEITScheduleFlag() {
+        return EIT_schedule_flag;
+    }
+    
+    public byte GetEITPresentFollowingFlag() {
+        return EIT_present_following_flag;
+    }
+    
+    public byte GetRunningStatus() {
+        return running_status;
+    }
+    
+    public byte GetFreeCAMode() {
+        return free_CA_mode;
+    }
+    
+    public List<Descriptor> GetDescriptors() {
+        return descriptors;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         tlv_stream_id = ReadOnBuffer(16);
