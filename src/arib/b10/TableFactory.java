@@ -10,6 +10,8 @@ import arib.b10.tables.DownloadTable;
 import arib.b10.tables.EntitlementControlMessage;
 import arib.b10.tables.EntitlementManagementMessage;
 import arib.b10.tables.EventInformationTable;
+import arib.b10.tables.EventRelationTable;
+import arib.b10.tables.IndexTransmissionTable;
 import arib.b10.tables.LinkedDescriptionTable;
 import arib.b10.tables.LocalEventInformationTable;
 import arib.b10.tables.NetworkInformationTable;
@@ -19,6 +21,7 @@ import arib.b10.tables.ProgramMapTable;
 import arib.b10.tables.RunningStatusTable;
 import arib.b10.tables.SelectionInformationTable;
 import arib.b10.tables.ServiceDescriptionTable;
+import arib.b10.tables.SoftwareDownloadTriggerTable;
 import arib.b10.tables.StuffingTable;
 import arib.b10.tables.TimeDateTable;
 import arib.b10.tables.TimeOffsetTable;
@@ -103,13 +106,14 @@ public class TableFactory {
     /** @note LIT */
     public final static int LOCAL_EVENT_INFORMATION_TABLE = 0xd0;
     
-    /**
-     * @todo 
-     */
-    public final static int SOFTWARE_DOWNLOAD_TRIGGER_TABLE = 0xc3;
-    
+    /** @note ERT */
     public final static int EVENT_RELATION_TABLE = 0xd1;
-    public final static int INDEX_TRANSMISSION_INFORMATION_TABLE = 0xd2;
+    
+    /** @note ITT */
+    public final static int INDEX_TRANSMISSION_TABLE = 0xd2;
+    
+    /** @note SDTT */
+    public final static int SOFTWARE_DOWNLOAD_TRIGGER_TABLE = 0xc3;
     
     /** @note BIT */
     public final static int BROADCASTER_INFORMATION_TABLE = 0xc4;
@@ -173,6 +177,12 @@ public class TableFactory {
                 return new LinkedDescriptionTable(buffer);
             case LOCAL_EVENT_INFORMATION_TABLE:
                 return new LocalEventInformationTable(buffer);
+            case EVENT_RELATION_TABLE:
+                return new EventRelationTable(buffer);
+            case INDEX_TRANSMISSION_TABLE:
+                return new IndexTransmissionTable(buffer);
+            case SOFTWARE_DOWNLOAD_TRIGGER_TABLE:
+                return new SoftwareDownloadTriggerTable(buffer);
             default:
                 break;
         }

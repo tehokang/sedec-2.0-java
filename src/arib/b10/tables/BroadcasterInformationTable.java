@@ -87,9 +87,9 @@ public class BroadcasterInformationTable extends Table {
         for ( int i=0; i<broadcasters.size(); i++ ) {
             Broadcaster broadcaster = broadcasters.get(i);
             
-            Logger.d(String.format("[%d] broadcaster_id : 0x%x \n", 
+            Logger.d(String.format("\t[%d] broadcaster_id : 0x%x \n", 
                     i, broadcaster.broadcaster_id));
-            Logger.d(String.format("[%d] broadcaster_descriptors_length : 0x%x \n", 
+            Logger.d(String.format("\t[%d] broadcaster_descriptors_length : 0x%x \n", 
                     i, broadcaster.broadcaster_descriptors_length));
             
             for ( int j=0; j<broadcaster.descriptors.size(); j++ ) {

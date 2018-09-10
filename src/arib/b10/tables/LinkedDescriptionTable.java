@@ -76,9 +76,9 @@ public class LinkedDescriptionTable extends Table {
         
         for ( int i=0; i<linked_descriptions.size(); i++ ) {
             LinkedDescription linked_description = linked_descriptions.get(i);
-            Logger.d(String.format("[%d] description_id : 0x%x \n", 
+            Logger.d(String.format("\t[%d] description_id : 0x%x \n", 
                     i, linked_description.description_id));
-            Logger.d(String.format("[%d] descriptors_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t[%d] descriptors_loop_length : 0x%x \n", 
                     i, linked_description.descriptors_loop_length));
             
             for ( int j=0; j<linked_description.descriptors.size(); j++ ) {
