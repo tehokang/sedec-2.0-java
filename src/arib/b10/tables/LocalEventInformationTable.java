@@ -76,15 +76,15 @@ public class LocalEventInformationTable extends Table {
         Logger.d(String.format("transport_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         
-        for ( int i=0; i<linked_descriptions.size(); i++ ) {
-            LinkedDescription linked_description = linked_descriptions.get(i);
+        for ( int i=0; i<local_events.size(); i++ ) {
+            LocalEvent local_event = local_events.get(i);
             Logger.d(String.format("[%d] description_id : 0x%x \n", 
-                    i, linked_description.description_id));
+                    i, local_event.local_event_id));
             Logger.d(String.format("[%d] descriptors_loop_length : 0x%x \n", 
-                    i, linked_description.descriptors_loop_length));
+                    i, local_event.descriptors_loop_length));
             
-            for ( int j=0; j<linked_description.descriptors.size(); j++ ) {
-                linked_description.descriptors.get(j).PrintDescriptor();
+            for ( int j=0; j<local_event.descriptors.size(); j++ ) {
+                local_event.descriptors.get(j).PrintDescriptor();
             }
         }
         
