@@ -22,7 +22,8 @@ public class TableFactory {
     public final static int APPLICATION_INFORMATION_TABLE = 0x74;
     public final static int ACTUAL_NETWORK_INFORMATION_TABLE = 0x40;
     public final static int OTHER_NETWORK_INFORMATION_TABLE = 0x41;
-    public final static int SERVICE_DESCRIPTION_TABLE = 0x46;
+    public final static int ACTUAL_SERVICE_DESCRIPTION_TABLE = 0x42;
+    public final static int OTHER_SERVICE_DESCRIPTION_TABLE = 0x46;
     public final static int BOUQUET_ASSOCIATION_TABLE = 0x4a;
     public final static int ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4e;
     public final static int OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4f;
@@ -52,7 +53,8 @@ public class TableFactory {
             case ACTUAL_NETWORK_INFORMATION_TABLE:
             case OTHER_NETWORK_INFORMATION_TABLE:
                 return new NetworkInformationTable(buffer);
-            case SERVICE_DESCRIPTION_TABLE:
+            case ACTUAL_SERVICE_DESCRIPTION_TABLE:
+            case OTHER_SERVICE_DESCRIPTION_TABLE:
                 return new ServiceDescriptionTable(buffer);
             case ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE:
             case OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE:
