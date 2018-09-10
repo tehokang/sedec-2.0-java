@@ -2,9 +2,17 @@ package arib.b10;
 
 import arib.b10.tables.BouquetAssociationTable;
 import arib.b10.tables.ConditionalAccessTable;
+import arib.b10.tables.DiscontinuityInformationTable;
+import arib.b10.tables.EventInformationTable;
 import arib.b10.tables.NetworkInformationTable;
 import arib.b10.tables.ProgramAssociationTable;
 import arib.b10.tables.ProgramMapTable;
+import arib.b10.tables.RunningStatusTable;
+import arib.b10.tables.SelectionInformationTable;
+import arib.b10.tables.ServiceDescriptionTable;
+import arib.b10.tables.StuffingTable;
+import arib.b10.tables.TimeDateTable;
+import arib.b10.tables.TimeOffsetTable;
 import base.Table;
 
 public class TableFactory {
@@ -14,9 +22,16 @@ public class TableFactory {
     public final static int APPLICATION_INFORMATION_TABLE = 0x74;
     public final static int ACTUAL_NETWORK_INFORMATION_TABLE = 0x40;
     public final static int OTHER_NETWORK_INFORMATION_TABLE = 0x41;
+    public final static int SERVICE_DESCRIPTION_TABLE = 0x46;
     public final static int BOUQUET_ASSOCIATION_TABLE = 0x4a;
-    public final static int ACTUAL_TS_EVENT_INFORMATION_TABLE = 0x4e;
-    public final static int OTHER_TS_EVENT_INFORMATION_TABLE = 0x4f;
+    public final static int ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4e;
+    public final static int OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4f;
+    public final static int TIME_DATE_TABLE = 0x70;
+    public final static int RUNNING_STATUS_TABLE = 0x71;
+    public final static int STUFFING_TABLE = 0x72;
+    public final static int TIME_OFFSET_TABLE = 0x73;
+    public final static int DISCONTINUITY_INFORMATION_TABLE = 0x7e;
+    public final static int SELECTION_INFORMATION_TABLE = 0x7f;
     public final static int UNKNOWN_TABLE = 0xff;
     
     public static Table CreateTable(byte[] buffer) {
@@ -24,7 +39,7 @@ public class TableFactory {
         
         Table section = null;
 
-        switch(table_id)
+        switch ( table_id )
         {
             case PROGRAM_ASSOCIATION_TABLE:
                 return new ProgramAssociationTable(buffer);
@@ -37,6 +52,23 @@ public class TableFactory {
             case ACTUAL_NETWORK_INFORMATION_TABLE:
             case OTHER_NETWORK_INFORMATION_TABLE:
                 return new NetworkInformationTable(buffer);
+            case SERVICE_DESCRIPTION_TABLE:
+                return new ServiceDescriptionTable(buffer);
+            case ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE:
+            case OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE:
+                return new EventInformationTable(buffer);
+            case TIME_DATE_TABLE:
+                return new TimeDateTable(buffer);
+            case RUNNING_STATUS_TABLE:
+                return new RunningStatusTable(buffer);
+            case STUFFING_TABLE:
+                return new StuffingTable(buffer);
+            case TIME_OFFSET_TABLE:
+                return new TimeOffsetTable(buffer);
+            case DISCONTINUITY_INFORMATION_TABLE:
+                return new DiscontinuityInformationTable(buffer);
+            case SELECTION_INFORMATION_TABLE:
+                return new SelectionInformationTable(buffer);
             default:
                 break;
         }
