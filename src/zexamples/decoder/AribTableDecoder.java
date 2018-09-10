@@ -8,7 +8,6 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import base.Table;
-import arib.b24.TableFactory;
 
 public class AribTableDecoder {
     public static void main(String []args) {

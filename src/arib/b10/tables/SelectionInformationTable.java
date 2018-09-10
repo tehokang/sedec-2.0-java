@@ -47,7 +47,7 @@ public class SelectionInformationTable extends Table {
             descriptors.add(desc);
         }
         
-        for ( int i=section_length - 7 - transmission_info_loop_length); i>0; ) {
+        for ( int i=(section_length - 7 - transmission_info_loop_length); i>0; ) {
             Service service = new Service();
             service.service_id = ReadOnBuffer(16);
             SkipOnBuffer(1);

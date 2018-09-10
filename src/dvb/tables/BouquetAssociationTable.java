@@ -1,4 +1,4 @@
-package arib.b10.tables;
+package dvb.tables;
 
 import java.util.ArrayList;
 import java.util.List;
