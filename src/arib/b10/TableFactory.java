@@ -1,6 +1,7 @@
 package arib.b10;
 
 import arib.b10.tables.BouquetAssociationTable;
+import arib.b10.tables.BroadcasterInformationTable;
 import arib.b10.tables.ConditionalAccessTable;
 import arib.b10.tables.DiscontinuityInformationTable;
 import arib.b10.tables.EventInformationTable;
@@ -33,6 +34,7 @@ public class TableFactory {
     public final static int TIME_OFFSET_TABLE = 0x73;
     public final static int DISCONTINUITY_INFORMATION_TABLE = 0x7e;
     public final static int SELECTION_INFORMATION_TABLE = 0x7f;
+    public final static int BROADCASTER_INFORMATION_TABLE = 0xc4;
     public final static int UNKNOWN_TABLE = 0xff;
     
     public static Table CreateTable(byte[] buffer) {
@@ -71,6 +73,8 @@ public class TableFactory {
                 return new DiscontinuityInformationTable(buffer);
             case SELECTION_INFORMATION_TABLE:
                 return new SelectionInformationTable(buffer);
+            case BROADCASTER_INFORMATION_TABLE:
+                return new BroadcasterInformationTable(buffer);
             default:
                 break;
         }
