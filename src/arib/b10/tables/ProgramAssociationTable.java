@@ -46,7 +46,7 @@ public class ProgramAssociationTable extends Table {
         section_number = (byte) ReadOnBuffer(8);
         last_section_number = (byte) ReadOnBuffer(8);
 
-        for ( int i=(section_length-9); i>0; ) {
+        for ( int i=(section_length-5-4); i>0; ) {
             int program_number = ReadOnBuffer(16);
             SkipOnBuffer(3);
             int pid = ReadOnBuffer(13);

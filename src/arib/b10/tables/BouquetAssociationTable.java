@@ -8,6 +8,9 @@ import arib.b10.descriptors.Descriptor;
 import base.Table;
 import util.Logger;
 
+/**
+ * @brief ARIB-B10 BAT
+ */
 public class BouquetAssociationTable extends Table {
     protected int bouquet_id;
     protected byte version_number;

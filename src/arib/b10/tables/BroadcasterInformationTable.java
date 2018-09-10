@@ -8,6 +8,9 @@ import arib.b10.descriptors.Descriptor;
 import base.Table;
 import util.Logger;
 
+/**
+ * @brief ARIB-B10 BIT
+ */
 public class BroadcasterInformationTable extends Table {
     protected int original_network_id;
     protected byte version_number;
@@ -49,7 +52,7 @@ public class BroadcasterInformationTable extends Table {
             descriptors.add(desc);
         }
         
-        for ( int i=(section_length - 7 - first_descriptors_length); i>0 ; ) {
+        for ( int i=(section_length - 7 - first_descriptors_length - 4); i>0 ; ) {
             Broadcaster broadcaster = new Broadcaster();
             broadcaster.broadcaster_id = (byte) ReadOnBuffer(8);
             SkipOnBuffer(4);
