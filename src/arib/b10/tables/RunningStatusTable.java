@@ -38,6 +38,7 @@ public class RunningStatusTable extends Table {
             stream_status.event_id = ReadOnBuffer(16);
             SkipOnBuffer(5);
             stream_status.running_status = (byte) ReadOnBuffer(3);
+            stream_statuses.add(stream_status);
             i-=9;
         }
     }
