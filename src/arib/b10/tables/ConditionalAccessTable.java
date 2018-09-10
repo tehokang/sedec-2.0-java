@@ -4,8 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.Table;
-import dvb.DescriptorFactory;
-import dvb.descriptors.Descriptor;
+import arib.b10.DescriptorFactory;
+import arib.b10.descriptors.Descriptor;
 import util.Logger;
 
 public class ConditionalAccessTable extends Table {

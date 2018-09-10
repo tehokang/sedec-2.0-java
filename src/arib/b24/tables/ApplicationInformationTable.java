@@ -4,9 +4,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 import base.Table;
-import dvb.DescriptorFactory;
-import dvb.descriptors.Application;
-import dvb.descriptors.Descriptor;
+import arib.b24.DescriptorFactory;
+import arib.b24.descriptors.Application;
+import arib.b24.descriptors.Descriptor;
 import util.Logger;
 
 public class ApplicationInformationTable extends Table {
