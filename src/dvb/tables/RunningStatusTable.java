@@ -49,14 +49,14 @@ public class RunningStatusTable extends Table {
         
         for ( int i=0; i<stream_statuses.size(); i++ ) {
             StreamStatus stream_status = stream_statuses.get(i);
-            Logger.d(String.format("[%d] transport_stream_id : 0x%x \n", 
+            Logger.d(String.format("\t[%d] transport_stream_id : 0x%x \n", 
                     i, stream_status.transport_stream_id));
-            Logger.d(String.format("[%d] original_network_id : 0x%x \n", 
+            Logger.d(String.format("\t[%d] original_network_id : 0x%x \n", 
                     i, stream_status.orignal_network_id));
-            Logger.d(String.format("[%d] service_id : 0x%x \n", 
+            Logger.d(String.format("\t[%d] service_id : 0x%x \n", 
                     i, stream_status.service_id));
-            Logger.d(String.format("[%d] event_id : 0x%x \n", i, stream_status.event_id));
-            Logger.d(String.format("[%d] running_status : 0x%x \n", 
+            Logger.d(String.format("\t[%d] event_id : 0x%x \n", i, stream_status.event_id));
+            Logger.d(String.format("\t[%d] running_status : 0x%x \n", 
                     i, stream_status.running_status));
         }
     }

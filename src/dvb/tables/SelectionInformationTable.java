@@ -83,11 +83,11 @@ public class SelectionInformationTable extends Table {
         
         for ( int i=0; i<services.size(); i++ ) {
             Service service = services.get(i);
-            Logger.d(String.format("[%d] service_id : 0x%x \n", i, service.service_id));
-            Logger.d(String.format("[%d] running_status : 0x%x \n",  
+            Logger.d(String.format("\t[%d] service_id : 0x%x \n", i, service.service_id));
+            Logger.d(String.format("\t[%d] running_status : 0x%x \n",  
                     i, service.running_status));
             
-            Logger.d(String.format("[%d] service_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t[%d] service_loop_length : 0x%x \n", 
                     i, service.service_loop_length));
             
             for ( int j=0; j<service.descriptors.size(); j++ ) {

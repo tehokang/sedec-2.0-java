@@ -9,6 +9,9 @@ import dvb.descriptors.Application;
 import dvb.descriptors.Descriptor;
 import util.Logger;
 
+/**
+ * @brief TS 102-812 AIT
+ */
 public class ApplicationInformationTable extends Table {
 
     protected int test_application_flag;
