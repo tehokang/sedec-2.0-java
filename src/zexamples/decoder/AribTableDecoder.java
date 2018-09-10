@@ -36,17 +36,19 @@ public class AribTableDecoder {
     
                 dataInputStream.readFully(table_buffer);
     
-                Table table = TableFactory.CreateTable(table_buffer);
+                Table table = arib.b10.TableFactory.CreateTable(table_buffer);
+                if ( null == table ) {
+                    table = arib.b24.TableFactory.CreateTable(table_buffer);
+                    if ( null == table) {
+                        table = arib.b39.TableFactory.CreateTable(table_buffer);
+                    }
+                }
                 
-                if ( null != table ) {
-                    System.out.println(
-                            String.format("[%d] table information \n",  i));
-
-                    table.PrintRawTable();
-                    table.PrintTable();
-                } 
-                
-                dataInputStream.close(); 
+                System.out.println(
+                        String.format("[%d] table information \n",  i));
+                table.PrintRawTable();
+                table.PrintTable();
+                dataInputStream.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
