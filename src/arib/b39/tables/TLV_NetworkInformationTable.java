@@ -8,6 +8,9 @@ import arib.b10.DescriptorFactory;
 import base.Table;
 import util.Logger;
 
+/**
+ * @brief ARIB-B60 TLV-NIT
+ */
 public class TLV_NetworkInformationTable extends Table {
     protected int network_id;
     protected byte version_number;

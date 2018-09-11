@@ -5,7 +5,6 @@ import java.util.List;
 
 import arib.b10.DescriptorFactory;
 import arib.b10.descriptors.Descriptor;
-import arib.b10.tables.PartialContentAnnouncementTable.Schedule;
 import base.Table;
 import util.Logger;
 
