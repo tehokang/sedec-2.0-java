@@ -3,11 +3,11 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class CompressionTypeDescriptor extends Descriptor {
+public class MPEGH_CompressionTypeDescriptor extends Descriptor {
     private int compression_type;
     private int original_size;
     
-    public CompressionTypeDescriptor(BitReadWriter brw) {
+    public MPEGH_CompressionTypeDescriptor(BitReadWriter brw) {
         super(brw);
         
         compression_type = brw.ReadOnBuffer(8);

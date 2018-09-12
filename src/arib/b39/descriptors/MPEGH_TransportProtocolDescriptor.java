@@ -11,7 +11,7 @@ import util.Logger;
  * @brief TransportProtocolDescriptor
  * @note Verified
  */
-public class TransportProtocolDescriptor extends Descriptor {
+public class MPEGH_TransportProtocolDescriptor extends Descriptor {
     private static final int PROTOCOL_OBJECT_CAROUSEL = 0x0001;
     private static final int PROTOCOL_HTTP = 0x0003;
     private static final int PROTOCOL_DATA_CAROUSEL = 0x0004;
@@ -42,7 +42,7 @@ public class TransportProtocolDescriptor extends Descriptor {
         public byte URL_extension_count;
     }
     
-    public TransportProtocolDescriptor(BitReadWriter brw) {
+    public MPEGH_TransportProtocolDescriptor(BitReadWriter brw) {
         super(brw);
         
         protocol_id = brw.ReadOnBuffer(16);

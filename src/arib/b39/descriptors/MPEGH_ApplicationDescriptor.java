@@ -10,7 +10,7 @@ import util.Logger;
  * @brief ApplicationDescriptor
  * @note Verified
  */
-public class ApplicationDescriptor extends Descriptor {
+public class MPEGH_ApplicationDescriptor extends Descriptor {
     private int application_profiles_length;
     private List<ApplicationProfile> application_profiles = new ArrayList<ApplicationProfile>();
     private int service_bound_flag;
@@ -26,7 +26,7 @@ public class ApplicationDescriptor extends Descriptor {
         public int version_micro;
     };
     
-    public ApplicationDescriptor(BitReadWriter brw) {
+    public MPEGH_ApplicationDescriptor(BitReadWriter brw) {
         super(brw);
         
         application_profiles_length = brw.ReadOnBuffer(8);

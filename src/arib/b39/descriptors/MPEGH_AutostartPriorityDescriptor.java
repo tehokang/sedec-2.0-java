@@ -3,11 +3,11 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class AutostartPriorityDescriptor extends Descriptor {
+public class MPEGH_AutostartPriorityDescriptor extends Descriptor {
 
     private byte autostart_priority;
     
-    public AutostartPriorityDescriptor(BitReadWriter brw) {
+    public MPEGH_AutostartPriorityDescriptor(BitReadWriter brw) {
         super(brw);
         
         autostart_priority = (byte) brw.ReadOnBuffer(8);

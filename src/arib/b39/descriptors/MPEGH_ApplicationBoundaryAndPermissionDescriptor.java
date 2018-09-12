@@ -3,14 +3,14 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
+public class MPEGH_ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
     private byte permission_bitmap_count;
     private int[] permission_bitmap = new int[256];
     private byte managed_URL_count;
     private byte[] managed_URL_length = new byte[256];
     private byte[][] managed_URL_byte = new byte[256][256];
     
-    public ApplicationBoundaryAndPermissionDescriptor(BitReadWriter brw) {
+    public MPEGH_ApplicationBoundaryAndPermissionDescriptor(BitReadWriter brw) {
         super(brw);
         
         if ( 0 < descriptor_length ) {

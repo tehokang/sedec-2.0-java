@@ -7,10 +7,10 @@ import util.Logger;
  * @brief SimpleApplicationLocationDescriptor
  * @note Verified
  */
-public class SimpleApplicationLocationDescriptor extends Descriptor {
+public class MPEGH_SimpleApplicationLocationDescriptor extends Descriptor {
     private byte[] initial_path_bytes;
     
-    public SimpleApplicationLocationDescriptor(BitReadWriter brw) {
+    public MPEGH_SimpleApplicationLocationDescriptor(BitReadWriter brw) {
         super(brw);
         
         if ( 0 < descriptor_length ) {

@@ -3,13 +3,13 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class RandomizedLatencyDescriptor extends Descriptor {
+public class MPEGH_RandomizedLatencyDescriptor extends Descriptor {
     private int range;
     private int rate;
     private byte randomization_end_time_flag;
     private long randomization_end_time;
     
-    public RandomizedLatencyDescriptor(BitReadWriter brw) {
+    public MPEGH_RandomizedLatencyDescriptor(BitReadWriter brw) {
         super(brw);
         
         range = brw.ReadOnBuffer(16);

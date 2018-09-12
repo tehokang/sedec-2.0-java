@@ -3,22 +3,24 @@ package arib.b39;
 import base.BitReadWriter;
 import arib.b39.descriptors.UnknownDescriptor;
 import arib.b39.descriptors.UnlockedCacheDescriptor;
-import arib.b39.descriptors.ApplicationBoundaryAndPermissionDescriptor;
-import arib.b39.descriptors.ApplicationDescriptor;
-import arib.b39.descriptors.AutostartPriorityDescriptor;
-import arib.b39.descriptors.CacheControlInfoDescriptor;
-import arib.b39.descriptors.CompressionTypeDescriptor;
+import arib.b39.descriptors.MPEGH_ApplicationBoundaryAndPermissionDescriptor;
+import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
+import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
+import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
+import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
 import arib.b39.descriptors.Descriptor;
-import arib.b39.descriptors.ExpireDescriptor;
-import arib.b39.descriptors.InfoDescriptor;
+import arib.b39.descriptors.MPEGH_ExpireDescriptor;
+import arib.b39.descriptors.MPEGH_InfoDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
 import arib.b39.descriptors.LockedCacheDescriptor;
-import arib.b39.descriptors.RandomizedLatencyDescriptor;
-import arib.b39.descriptors.SimpleApplicationLocationDescriptor;
-import arib.b39.descriptors.TransportProtocolDescriptor;
-import arib.b39.descriptors.TypeDescriptor;
+import arib.b39.descriptors.MPEGH_TimestampDescriptor;
+import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
+import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
+import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
+import arib.b39.descriptors.MPEGH_TypeDescriptor;
 
 public class DescriptorFactory {
+    public final static int MPEGH_TIMESTAMP_DESCRIPTOR = 0x0000;
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
     public final static int MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR = 0x802b;
@@ -42,28 +44,30 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
+            case MPEGH_TIMESTAMP_DESCRIPTOR:
+                return new MPEGH_TimestampDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
-                return new ApplicationDescriptor(brw);
+                return new MPEGH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:
-                return new TransportProtocolDescriptor(brw);
+                return new MPEGH_TransportProtocolDescriptor(brw);
             case MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR:
-                return new SimpleApplicationLocationDescriptor(brw);
+                return new MPEGH_SimpleApplicationLocationDescriptor(brw);
             case MPEGH_APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
-                return new ApplicationBoundaryAndPermissionDescriptor(brw);
+                return new MPEGH_ApplicationBoundaryAndPermissionDescriptor(brw);
             case MPEGH_AUTOSTART_PRIORITY_DESCRIPTOR:
-                return new AutostartPriorityDescriptor(brw);
+                return new MPEGH_AutostartPriorityDescriptor(brw);
             case MPEGH_CACHE_CONTROL_INFO_DESCRIPTOR:
-                return new CacheControlInfoDescriptor(brw);
+                return new MPEGH_CacheControlInfoDescriptor(brw);
             case MPEGH_RANDOMIZED_LATENCY_DESCRIPTOR:
-                return new RandomizedLatencyDescriptor(brw);
+                return new MPEGH_RandomizedLatencyDescriptor(brw);
             case MPEGH_TYPE_DESCRIPTOR:
-                return new TypeDescriptor(brw);
+                return new MPEGH_TypeDescriptor(brw);
             case MPEGH_INFO_DESCRIPTOR:
-                return new InfoDescriptor(brw);
+                return new MPEGH_InfoDescriptor(brw);
             case MPEGH_EXPIRE_DESCRIPTOR:
-                return new ExpireDescriptor(brw);
+                return new MPEGH_ExpireDescriptor(brw);
             case MPEGH_COMPRESSION_TYPE_DESCRIPTOR:
-                return new CompressionTypeDescriptor(brw);
+                return new MPEGH_CompressionTypeDescriptor(brw);
             case LINKED_PU_DESCRIPTOR:
                 return new LinkedPuDescriptor(brw);
             case LOCKED_CACHE_DESCRIPTOR:

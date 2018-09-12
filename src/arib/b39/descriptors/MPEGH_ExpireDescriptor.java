@@ -3,12 +3,12 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class ExpireDescriptor extends Descriptor {
+public class MPEGH_ExpireDescriptor extends Descriptor {
     private int time_mode;
     private long UTC_time;
     private int passed_seconds;
     
-    public ExpireDescriptor(BitReadWriter brw) {
+    public MPEGH_ExpireDescriptor(BitReadWriter brw) {
         super(brw);
         
         time_mode = brw.ReadOnBuffer(8);

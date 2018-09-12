@@ -3,12 +3,12 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class InfoDescriptor extends Descriptor {
+public class MPEGH_InfoDescriptor extends Descriptor {
     private byte[] ISO_639_language_code = new byte[3];
     private int text_char_length;
     private byte[] text_char = new byte[256];
     
-    public InfoDescriptor(BitReadWriter brw) {
+    public MPEGH_InfoDescriptor(BitReadWriter brw) {
         super(brw);
         
         if ( 0 < descriptor_length ) {

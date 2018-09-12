@@ -3,14 +3,14 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class CacheControlInfoDescriptor extends Descriptor {
+public class MPEGH_CacheControlInfoDescriptor extends Descriptor {
     private int application_size;
     private byte cache_priority;
     private byte package_flag;
     private byte application_version;
     private int expire_date;
     
-    public CacheControlInfoDescriptor(BitReadWriter brw) {
+    public MPEGH_CacheControlInfoDescriptor(BitReadWriter brw) {
         super(brw);
         
         application_size = brw.ReadOnBuffer(16);

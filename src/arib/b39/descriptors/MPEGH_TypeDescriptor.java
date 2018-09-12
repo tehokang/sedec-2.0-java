@@ -3,10 +3,10 @@ package arib.b39.descriptors;
 import base.BitReadWriter;
 import util.Logger;
 
-public class TypeDescriptor extends Descriptor {
+public class MPEGH_TypeDescriptor extends Descriptor {
     private byte[] text_char = new byte[256];
     
-    public TypeDescriptor(BitReadWriter brw) {
+    public MPEGH_TypeDescriptor(BitReadWriter brw) {
         super(brw);
         
         if ( 0 < descriptor_length ) {
