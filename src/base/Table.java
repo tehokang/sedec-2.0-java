@@ -45,7 +45,7 @@ public abstract class Table extends BitReadWriter {
 
     protected abstract void __decode_table_body__();
     
-    private void __decode_table_header__() {
+    protected void __decode_table_header__() {
         table_id = ReadOnBuffer(8);
         section_syntax_indicator = ReadOnBuffer(1);
         SkipOnBuffer(3);
