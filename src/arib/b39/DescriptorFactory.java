@@ -3,25 +3,36 @@ package arib.b39;
 import base.BitReadWriter;
 import arib.b39.descriptors.UnknownDescriptor;
 import arib.b39.descriptors.UnlockedCacheDescriptor;
+import arib.b39.descriptors.VideoComponentDescriptor;
 import arib.b39.descriptors.MPEGH_ApplicationBoundaryAndPermissionDescriptor;
 import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
 import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
 import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
 import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
+import arib.b39.descriptors.MPEGH_ContentDescriptor;
+import arib.b39.descriptors.MPEGH_EventGroupDescriptor;
 import arib.b39.descriptors.AccessControlDescriptor;
 import arib.b39.descriptors.AssetGroupDescriptor;
 import arib.b39.descriptors.BackgroundColorDescriptor;
 import arib.b39.descriptors.DependencyDescriptor;
 import arib.b39.descriptors.Descriptor;
+import arib.b39.descriptors.EmergencyInformationDescriptor;
 import arib.b39.descriptors.EventPackageDescriptor;
 import arib.b39.descriptors.MPEGH_ExpireDescriptor;
+import arib.b39.descriptors.MPEGH_HEVCDescriptor;
 import arib.b39.descriptors.MPEGH_InfoDescriptor;
+import arib.b39.descriptors.MPEGH_MPEG4AudioDescriptor;
+import arib.b39.descriptors.MPEGH_MPEG4AudioExtensionDescriptor;
+import arib.b39.descriptors.MPEGH_ParentalRatingDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
 import arib.b39.descriptors.LockedCacheDescriptor;
 import arib.b39.descriptors.MPU_TimestampDescriptor;
+import arib.b39.descriptors.MessageAuthenticationMethodDescriptor;
 import arib.b39.descriptors.ScramblerDescriptor;
 import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
+import arib.b39.descriptors.MPEGH_ServiceListDescriptor;
 import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
+import arib.b39.descriptors.MPEGH_StreamIdentifierDescriptor;
 import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
 import arib.b39.descriptors.MPEGH_TypeDescriptor;
 import arib.b39.descriptors.MPU_PresentationRegionDescriptor;
@@ -36,6 +47,17 @@ public class DescriptorFactory {
     public final static int ACCESS_CONTROL_DESCRIPTOR = 0x8004;
     public final static int SCRAMBLER_DESCRIPTOR = 0x8005;
     public final static int MESSAGE_AUTHENTICATION_METHOD_DESCRIPTOR = 0x8006;
+    public final static int EMERGENCY_INFORMATION_DESCRIPTOR = 0x8007;
+    public final static int MPEGH_MPEG4_AUDIO_DESCRIPTOR = 0x8008;
+    public final static int MPEGH_MPEG4_AUDIO_EXTENSION_DESCRIPTOR = 0x8009;
+    public final static int MPEGH_HEVC_DESCRIPTOR = 0x800a;
+    public final static int MPEGH_EVENT_GROUP_DESCRIPTOR = 0x800c;
+    public final static int MPEGH_SERVICE_LIST_DESCRIPTOR = 0x800d;
+    public final static int VIDEO_COMPONENT_DESCRIPTOR = 0x8010;
+    public final static int MPEGH_STREAM_IDENTIFIER_DESCRIPTOR = 0x8011;
+    public final static int MPEGH_CONTENT_DESCRIPTOR = 0x8012;
+    public final static int MPEGH_PARENTAL_RATING_DESCRIPTOR = 0x8013;
+    // public final static int 0x8014; @todo
     
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
@@ -76,6 +98,28 @@ public class DescriptorFactory {
                 return new AccessControlDescriptor(brw);
             case SCRAMBLER_DESCRIPTOR:
                 return new ScramblerDescriptor(brw);
+            case MESSAGE_AUTHENTICATION_METHOD_DESCRIPTOR:
+                return new MessageAuthenticationMethodDescriptor(brw);
+            case EMERGENCY_INFORMATION_DESCRIPTOR:
+                return new EmergencyInformationDescriptor(brw);
+            case MPEGH_MPEG4_AUDIO_DESCRIPTOR:
+                return new MPEGH_MPEG4AudioDescriptor(brw);
+            case MPEGH_MPEG4_AUDIO_EXTENSION_DESCRIPTOR:
+                return new MPEGH_MPEG4AudioExtensionDescriptor(brw);
+            case MPEGH_HEVC_DESCRIPTOR:
+                return new MPEGH_HEVCDescriptor(brw);
+            case MPEGH_EVENT_GROUP_DESCRIPTOR:
+                return new MPEGH_EventGroupDescriptor(brw);
+            case MPEGH_SERVICE_LIST_DESCRIPTOR:
+                return new MPEGH_ServiceListDescriptor(brw);
+            case VIDEO_COMPONENT_DESCRIPTOR:
+                return new VideoComponentDescriptor(brw);
+            case MPEGH_STREAM_IDENTIFIER_DESCRIPTOR:
+                return new MPEGH_StreamIdentifierDescriptor(brw);
+            case MPEGH_CONTENT_DESCRIPTOR:
+                return new MPEGH_ContentDescriptor(brw);
+            case MPEGH_PARENTAL_RATING_DESCRIPTOR:
+                return new MPEGH_ParentalRatingDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
                 return new MPEGH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:
