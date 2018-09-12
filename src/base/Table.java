@@ -52,7 +52,7 @@ public abstract class Table extends BitReadWriter {
         section_length = ReadOnBuffer(12);
     }
 
-    private void __encode_prepare_buffer__() {
+    protected void __encode_prepare_buffer__() {
         if(m_buffer != null)
         {
             m_buffer = null;
@@ -62,7 +62,7 @@ public abstract class Table extends BitReadWriter {
         Arrays.fill(m_buffer, (byte)0xff);
     }
     
-    private void __encode_write_table_header__() {
+    protected void __encode_write_table_header__() {
         WriteOnBuffer( table_id, 8 );
         WriteOnBuffer( section_syntax_indicator, 1);
         WriteOnBuffer( 1, 1);
@@ -70,7 +70,7 @@ public abstract class Table extends BitReadWriter {
         WriteOnBuffer( section_length, 12);
     }
     
-    private void __encode_make_crc__() {
+    protected void __encode_make_crc__() {
         m_crc = Arrays.copyOf(m_buffer, section_length-1);
         checksum_CRC32 = CalculateCRC32( m_crc, section_length-1 );
         WriteOnBuffer(checksum_CRC32, 32);

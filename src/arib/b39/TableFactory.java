@@ -2,6 +2,7 @@ package arib.b39;
 
 import base.Table;
 import base.UnknownTable;
+import arib.b39.tables.LayoutConfigurationTable;
 import arib.b39.tables.MPEGH_ApplicationInformationTable;
 import arib.b39.tables.MPEGH_CommonDataTable;
 import arib.b39.tables.MPEGH_EventInformationTable;
@@ -28,6 +29,9 @@ public class TableFactory {
     /** MH-TOT */
     public final static int MPEGH_TIME_OFFSET_TABLE = 0xa1;
     
+    /** LCT */
+    public final static int LAYOUT_CONFIGURATION_TABLE = 0x81;
+    
     /** MH-EIT 0x8b, 0x8c~0x9b */
     public final static int ACTUAL_MPEGH_EVENT_INFORMATION_TABLE = 0x8b;
     public final static int AUTO_MPEGH_EVENT_INFORMATION_TABLE_1 = 0x8c;
@@ -52,7 +56,6 @@ public class TableFactory {
      *  - CRI 0x21
      *  - DCI 0x22
      *  - PLT 0x80
-     *  - LCT 0x81
      *  - ECM 0x82 0x83
      *  - EMM 0x84 0x85
      *  - CAT 0x86
@@ -64,6 +67,8 @@ public class TableFactory {
      *  - DAM 0xa4
      *  - DCC 0xa5
      *  - EMT 0xa6
+     *  - TLV-NIT 0x40 0x41
+     *  - AMT 0xfe
      */
     public static Table CreateTable(byte[] buffer) {
         int table_id = (buffer[0] & 0xff);
@@ -82,6 +87,8 @@ public class TableFactory {
                 return new MPEGH_CommonDataTable(buffer);
             case MPEGH_TIME_OFFSET_TABLE:
                 return new MPEGH_TimeOffsetTable(buffer);
+            case LAYOUT_CONFIGURATION_TABLE:
+                return new LayoutConfigurationTable(buffer);
             case ACTUAL_MPEGH_EVENT_INFORMATION_TABLE:
             case AUTO_MPEGH_EVENT_INFORMATION_TABLE_1:
             case AUTO_MPEGH_EVENT_INFORMATION_TABLE_2:
