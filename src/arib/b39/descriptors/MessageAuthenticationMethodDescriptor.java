@@ -41,8 +41,7 @@ public class MessageAuthenticationMethodDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        // TODO Auto-generated method stub
-
+        descriptor_length = 2 + private_data.length;
     }
 
 }
