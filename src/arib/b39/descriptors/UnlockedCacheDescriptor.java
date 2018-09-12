@@ -39,9 +39,9 @@ public class UnlockedCacheDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tnum_of_unlocked_cache_node : 0x%x \n", num_of_unlocked_cache_node));
+        Logger.d(String.format("\t num_of_unlocked_cache_node : 0x%x \n", num_of_unlocked_cache_node));
         for ( int i=0; i<num_of_unlocked_cache_node; i++ ) {
-            Logger.d(String.format("\tnode_tag[%d] : 0x%x \n", i, node_tag[i]));
+            Logger.d(String.format("\t node_tag[%d] : 0x%x \n", i, node_tag[i]));
         }
         Logger.d("\n");
     }

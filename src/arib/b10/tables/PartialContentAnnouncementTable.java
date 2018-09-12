@@ -104,23 +104,23 @@ public class PartialContentAnnouncementTable extends Table {
         for ( int i=0; i<content_versions.size(); i++ ) {
             ContentVersion content_version = content_versions.get(i);
             
-            Logger.d(String.format("\t[%d] content_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_version : 0x%x \n", 
                     content_version.content_version));
-            Logger.d(String.format("\t[%d] content_minor_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_minor_version : 0x%x \n", 
                     content_version.content_minor_version));
-            Logger.d(String.format("\t[%d] version_indicator : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_indicator : 0x%x \n", 
                     content_version.version_indicator));
-            Logger.d(String.format("\t[%d] content_descriptor_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_descriptor_length : 0x%x \n", 
                     content_version.content_descriptor_length));
-            Logger.d(String.format("\t[%d] schedule_description_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] schedule_description_length : 0x%x \n", 
                     content_version.schedule_description_length));
             
             for ( int j=0; j<content_version.schedule_descriptions.size(); j++ ) {
                 Schedule schedule_description = 
                         content_version.schedule_descriptions.get(j);
-                Logger.d(String.format("\t[%d] start_time : 0x%x \n", 
+                Logger.d(String.format("\t [%d] start_time : 0x%x \n", 
                         schedule_description.start_time));
-                Logger.d(String.format("\t[%d] duration : 0x%x \n", 
+                Logger.d(String.format("\t [%d] duration : 0x%x \n", 
                         schedule_description.duration));
             }
             

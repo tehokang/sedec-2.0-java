@@ -68,8 +68,8 @@ public class ProgramAssociationTable extends Table {
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
 
         for ( int i=0; i<programs.size(); i++ ) {
-            Logger.d(String.format("\tprogram_number : 0x%x \n", programs.get(i).getProgramNumber()));
-            Logger.d(String.format("\tpid : 0x%x \n", programs.get(i).getPid()));
+            Logger.d(String.format("\t program_number : 0x%x \n", programs.get(i).getProgramNumber()));
+            Logger.d(String.format("\t pid : 0x%x \n", programs.get(i).getPid()));
         }
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                         (checksum_CRC32 >> 24) & 0xff,

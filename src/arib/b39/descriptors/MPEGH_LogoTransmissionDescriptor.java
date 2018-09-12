@@ -71,19 +71,19 @@ public class MPEGH_LogoTransmissionDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("logo_transmission_type : 0x%x \n", logo_transmission_type));
+        Logger.d(String.format("\t logo_transmission_type : 0x%x \n", logo_transmission_type));
         
         switch ( logo_transmission_type ) {
             case 0x01:
-                Logger.d(String.format("logo_id : 0x%x \n", logo_id));
-                Logger.d(String.format("logo_version : 0x%x \n", logo_version));
-                Logger.d(String.format("download_data_id : 0x%x \n", download_data_id));
+                Logger.d(String.format("\t logo_id : 0x%x \n", logo_id));
+                Logger.d(String.format("\t logo_version : 0x%x \n", logo_version));
+                Logger.d(String.format("\t download_data_id : 0x%x \n", download_data_id));
                 break;
             case 0x02:
-                Logger.d(String.format("logo_id : 0x%x \n", logo_id));
+                Logger.d(String.format("\t logo_id : 0x%x \n", logo_id));
                 break;
             case 0x03:
-                Logger.d(String.format("logo_transmission_type : %s \n", new String(logo_char)));
+                Logger.d(String.format("\t logo_transmission_type : %s \n", new String(logo_char)));
                 break;
             default:
                 break;

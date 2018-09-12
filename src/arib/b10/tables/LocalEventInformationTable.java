@@ -78,9 +78,9 @@ public class LocalEventInformationTable extends Table {
         
         for ( int i=0; i<local_events.size(); i++ ) {
             LocalEvent local_event = local_events.get(i);
-            Logger.d(String.format("\t[%d] description_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] description_id : 0x%x \n", 
                     i, local_event.local_event_id));
-            Logger.d(String.format("\t[%d] descriptors_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] descriptors_loop_length : 0x%x \n", 
                     i, local_event.descriptors_loop_length));
             
             for ( int j=0; j<local_event.descriptors.size(); j++ ) {

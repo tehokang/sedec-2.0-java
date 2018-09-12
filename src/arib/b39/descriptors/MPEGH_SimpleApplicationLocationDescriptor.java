@@ -51,7 +51,7 @@ public class MPEGH_SimpleApplicationLocationDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tinitial_path_bytes : %s \n", 
+        Logger.d(String.format("\t initial_path_bytes : %s \n", 
                 new String(initial_path_bytes)));
         Logger.d("\n");
     }

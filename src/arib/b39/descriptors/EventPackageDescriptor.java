@@ -30,8 +30,8 @@ public class EventPackageDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tMMT_package_id_length : 0x%x \n", MMT_package_id_length));
-        Logger.d(String.format("\tMMT_package_id_byte : %s \n", new String(MMT_package_id_byte)));
+        Logger.d(String.format("\t MMT_package_id_length : 0x%x \n", MMT_package_id_length));
+        Logger.d(String.format("\t MMT_package_id_byte : %s \n", new String(MMT_package_id_byte)));
     }
 
     @Override

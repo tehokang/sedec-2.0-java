@@ -36,17 +36,17 @@ public class ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
         super._PrintDescriptorHeader_();
         
         if ( 0 < descriptor_length ) {
-            Logger.d(String.format("\tpermission_bitmap_count : 0x%x \n", permission_bitmap_count));
+            Logger.d(String.format("\t permission_bitmap_count : 0x%x \n", permission_bitmap_count));
             
             for ( int i=0; i<permission_bitmap_count; i++ ) {
-                Logger.d(String.format("\tpermission_bitmap[%d] : 0x%x \n", i, permission_bitmap[i]));
+                Logger.d(String.format("\t permission_bitmap[%d] : 0x%x \n", i, permission_bitmap[i]));
             }
             
-            Logger.d(String.format("\tmanaged_URL_count : 0x%x \n", managed_URL_count));
+            Logger.d(String.format("\t managed_URL_count : 0x%x \n", managed_URL_count));
             
             for ( int i=0;i<managed_URL_count; i++ ) {
-                Logger.d(String.format("\tmanaged_URL_count : 0x%x \n", managed_URL_length[i])); 
-                Logger.d(String.format("\tmanaged_URL_byte : %s \n", new String(managed_URL_byte[i])));
+                Logger.d(String.format("\t managed_URL_count : 0x%x \n", managed_URL_length[i])); 
+                Logger.d(String.format("\t managed_URL_byte : %s \n", new String(managed_URL_byte[i])));
             }
         }  
         

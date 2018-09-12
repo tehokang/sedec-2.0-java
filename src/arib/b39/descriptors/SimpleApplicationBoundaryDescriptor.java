@@ -51,13 +51,13 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tboundary_extension_count : 0x%x \n", 
+        Logger.d(String.format("\t boundary_extension_count : 0x%x \n", 
                 boundary_extension_count));
      
         for ( int i=0; i<boundary_extension_count; i++) {
-            Logger.d(String.format("\tboundary_extension_length[%d] : 0x%x \n",  
+            Logger.d(String.format("\t boundary_extension_length[%d] : 0x%x \n",  
                     i, boundary_extension_length[i]));
-            Logger.d(String.format("\tboundary_extension_byte[%d] : %s \n",
+            Logger.d(String.format("\t boundary_extension_byte[%d] : %s \n",
                     i, new String(boundary_extension_byte[i])));
         }
         Logger.d("\n");

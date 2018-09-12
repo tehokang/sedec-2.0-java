@@ -113,27 +113,27 @@ public class SoftwareDownloadTriggerTable extends Table {
         
         for ( int i=0; i<contents.size(); i++ ) {
             Content content = contents.get(i);
-            Logger.d(String.format("\t[%d] group : 0x%x \n", i, content.group));
-            Logger.d(String.format("\t[%d] target_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] group : 0x%x \n", i, content.group));
+            Logger.d(String.format("\t [%d] target_version : 0x%x \n", 
                     i, content.target_version));
-            Logger.d(String.format("\t[%d] new_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] new_version : 0x%x \n", 
                     i, content.new_version));
-            Logger.d(String.format("\t[%d] download_level : 0x%x \n", 
+            Logger.d(String.format("\t [%d] download_level : 0x%x \n", 
                     i, content.download_level));
-            Logger.d(String.format("\t[%d] version_indicator : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_indicator : 0x%x \n", 
                     i, content.version_indicator));
-            Logger.d(String.format("\t[%d] content_description_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_description_length : 0x%x \n", 
                     i, content.content_description_length));
-            Logger.d(String.format("\t[%d] schedule_description_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] schedule_description_length : 0x%x \n", 
                     i, content.schedule_description_length));
-            Logger.d(String.format("\t[%d] schedule_time_shift_information : 0x%x \n", 
+            Logger.d(String.format("\t [%d] schedule_time_shift_information : 0x%x \n", 
                     i, content.schedule_time_shift_information));
             
             for ( int j=0; j<content.schedules.size(); j++ ) {
                 Schedule schedule = content.schedules.get(j);
-                Logger.d(String.format("\t[%d] start_time : 0x%x \n", 
+                Logger.d(String.format("\t [%d] start_time : 0x%x \n", 
                         j, schedule.start_time));
-                Logger.d(String.format("\t[%d] duration : 0x%x \n", 
+                Logger.d(String.format("\t [%d] duration : 0x%x \n", 
                         j, schedule.duration));
             }
             

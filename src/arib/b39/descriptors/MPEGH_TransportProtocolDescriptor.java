@@ -254,41 +254,41 @@ public class MPEGH_TransportProtocolDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tprotocol_id : 0x%x \n", protocol_id));
-        Logger.d(String.format("\ttransport_protocol_label : 0x%x \n", transport_protocol_label));
+        Logger.d(String.format("\t protocol_id : 0x%x \n", protocol_id));
+        Logger.d(String.format("\t transport_protocol_label : 0x%x \n", transport_protocol_label));
 
         switch(protocol_id) {
             case PROTOCOL_OBJECT_CAROUSEL:
                 {
-                    Logger.d(String.format("\tremote_connection : 0x%x \n", 
+                    Logger.d(String.format("\t remote_connection : 0x%x \n", 
                             transport.remote_connection));;
                     if(0x01 == transport.remote_connection)
                     {
-                        Logger.d(String.format("\toriginal_network_id : 0x%x \n", 
+                        Logger.d(String.format("\t original_network_id : 0x%x \n", 
                                 transport.original_network_id));
-                        Logger.d(String.format("\ttransport_stream_id : 0x%x \n", 
+                        Logger.d(String.format("\t transport_stream_id : 0x%x \n", 
                                 transport.transport_stream_id));
-                        Logger.d(String.format("\tservice_id : 0x%x \n", 
+                        Logger.d(String.format("\t service_id : 0x%x \n", 
                                 transport.service_id));
                     }
-                    Logger.d(String.format("\tcomponent_tag : 0x%x \n", 
+                    Logger.d(String.format("\t component_tag : 0x%x \n", 
                             transport.component_tag));
                 }
                 break;
             case PROTOCOL_HTTP:
             case PROTOCOL_MMT_NON_TIMED:
                 {
-                    Logger.d(String.format("\tURL_base_length : 0x%x \n", 
+                    Logger.d(String.format("\t URL_base_length : 0x%x \n", 
                             channel_transport.URL_base_length));
-                    Logger.d(String.format("\tURL_base_byte : %s \n", 
+                    Logger.d(String.format("\t URL_base_byte : %s \n", 
                             new String(channel_transport.URL_base_byte)));
-                    Logger.d(String.format("\tURL_extension_count : 0x%x \n", 
+                    Logger.d(String.format("\t URL_extension_count : 0x%x \n", 
                             channel_transport.URL_extension_count));
 
                     for ( int i=0;i<url_extensions.size(); i++ ) {
-                        Logger.d(String.format("\tmanaged_URL_length : 0x%x \n", 
+                        Logger.d(String.format("\t managed_URL_length : 0x%x \n", 
                                 url_extensions.get(i).URL_extension_length));
-                        Logger.d(String.format("\tmanaged_URL_byte : %s \n", 
+                        Logger.d(String.format("\t managed_URL_byte : %s \n", 
                                 new String(url_extensions.get(i).URL_exntension_byte)));
                     }
                 }
@@ -298,18 +298,18 @@ public class MPEGH_TransportProtocolDescriptor extends Descriptor {
              **/
             case PROTOCOL_DATA_CAROUSEL:
                 {
-                    Logger.d(String.format("\tremote_connection : 0x%x \n", 
+                    Logger.d(String.format("\t remote_connection : 0x%x \n", 
                             transport.remote_connection));
                     if(0x01 == transport.remote_connection)
                     {
-                        Logger.d(String.format("\toriginal_network_id : 0x%x \n",
+                        Logger.d(String.format("\t original_network_id : 0x%x \n",
                                 transport.original_network_id));
-                        Logger.d(String.format("\ttransport_stream_id : 0x%x \n", 
+                        Logger.d(String.format("\t transport_stream_id : 0x%x \n", 
                                 transport.transport_stream_id));
-                        Logger.d(String.format("\tservice_id : 0x%x \n", 
+                        Logger.d(String.format("\t service_id : 0x%x \n", 
                                 transport.service_id));
                     }
-                    Logger.d(String.format("\tcomponent_tag : 0x%x \n", 
+                    Logger.d(String.format("\t component_tag : 0x%x \n", 
                             transport.component_tag));
                 }
                 break;

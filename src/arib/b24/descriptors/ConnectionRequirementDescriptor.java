@@ -46,7 +46,7 @@ public class ConnectionRequirementDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tIP_connection_requirement_flag : %d \n", IP_connection_requirement_flag));
+        Logger.d(String.format("\t IP_connection_requirement_flag : %d \n", IP_connection_requirement_flag));
     }
     
 }

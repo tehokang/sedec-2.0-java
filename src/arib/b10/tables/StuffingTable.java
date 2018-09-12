@@ -27,11 +27,11 @@ public class StuffingTable extends Table {
         
         int j=1;
         Logger.d("data_byte : \n");
-        Logger.d(String.format("\t%03d : ", j));
+        Logger.d(String.format("\t %03d : ", j));
         for(int i=0; i<data_byte.length; i++)
         {
             Logger.d(String.format("%02x ", data_byte[i]));
-            if(i%10 == 9) Logger.p(String.format("\n\t%03d : ", (++j)));
+            if(i%10 == 9) Logger.p(String.format("\n\t %03d : ", (++j)));
         }
     }
 }

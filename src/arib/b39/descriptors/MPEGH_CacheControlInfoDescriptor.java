@@ -64,11 +64,11 @@ public class MPEGH_CacheControlInfoDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tapplication_size : 0x%x \n", application_size));
-        Logger.d(String.format("\tcache_priority : 0x%x \n", cache_priority));
-        Logger.d(String.format("\tpackage_flag : 0x%x \n", package_flag));
-        Logger.d(String.format("\tapplication_version : 0x%x \n", application_version));
-        Logger.d(String.format("\texpire_date : 0x%x \n", expire_date));
+        Logger.d(String.format("\t application_size : 0x%x \n", application_size));
+        Logger.d(String.format("\t cache_priority : 0x%x \n", cache_priority));
+        Logger.d(String.format("\t package_flag : 0x%x \n", package_flag));
+        Logger.d(String.format("\t application_version : 0x%x \n", application_version));
+        Logger.d(String.format("\t expire_date : 0x%x \n", expire_date));
         Logger.d("\n");
     }
 

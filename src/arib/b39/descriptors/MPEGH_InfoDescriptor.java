@@ -52,11 +52,11 @@ public class MPEGH_InfoDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tISO_639_language_code : %c%c%c \n", 
+        Logger.d(String.format("\t ISO_639_language_code : %c%c%c \n", 
                 ISO_639_language_code[0], 
                 ISO_639_language_code[1], ISO_639_language_code[2]));
         
-        Logger.d(String.format("\ttext_char : %s \n", new String(text_char)));
+        Logger.d(String.format("\t text_char : %s \n", new String(text_char)));
         Logger.d("\n");
     }
 

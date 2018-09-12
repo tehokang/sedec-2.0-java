@@ -88,15 +88,15 @@ public class EventRelationTable extends Table {
         
         for ( int i=0; i<event_relations.size(); i++ ) {
             EventRelation event_relation = event_relations.get(i);
-            Logger.d(String.format("\t[%d] node_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] node_id : 0x%x \n", 
                     i, event_relation.node_id));
-            Logger.d(String.format("\t[%d] collection_mode : 0x%x \n",
+            Logger.d(String.format("\t [%d] collection_mode : 0x%x \n",
                     i, event_relation.collection_mode));
-            Logger.d(String.format("\t[%d] parent_node_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] parent_node_id : 0x%x \n", 
                     i, event_relation.parent_node_id));
-            Logger.d(String.format("\t[%d] reference_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] reference_number : 0x%x \n", 
                     i, event_relation.reference_number));
-            Logger.d(String.format("\t[%d] descriptors_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] descriptors_loop_length : 0x%x \n", 
                     i, event_relation.descriptors_loop_length));
             
             for ( int j=0; i<event_relation.descriptors.size(); j++ ) {

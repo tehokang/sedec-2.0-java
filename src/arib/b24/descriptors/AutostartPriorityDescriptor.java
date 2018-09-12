@@ -25,7 +25,7 @@ public class AutostartPriorityDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tautostart_priority : 0x%x \n", autostart_priority));
+        Logger.d(String.format("\t autostart_priority : 0x%x \n", autostart_priority));
     }
 
     @Override

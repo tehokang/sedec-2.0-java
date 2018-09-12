@@ -88,17 +88,17 @@ public class LayoutConfigurationTable extends Table {
             
             for ( int j=0; j<layout.regions.size(); j++ ) {
                 Region region = layout.regions.get(j);
-                Logger.d(String.format("\t[%d] region_number : 0x%x \n", 
+                Logger.d(String.format("\t [%d] region_number : 0x%x \n", 
                         j, region.region_number));
-                Logger.d(String.format("\t[%d] left_top_pos_x : 0x%x \n", 
+                Logger.d(String.format("\t [%d] left_top_pos_x : 0x%x \n", 
                         j, region.left_top_pos_x));
-                Logger.d(String.format("\t[%d] left_top_pos_y : 0x%x \n", 
+                Logger.d(String.format("\t [%d] left_top_pos_y : 0x%x \n", 
                         j, region.left_top_pos_y));
-                Logger.d(String.format("\t[%d] right_down_post_x : 0x%x \n", 
+                Logger.d(String.format("\t [%d] right_down_post_x : 0x%x \n", 
                         j, region.right_down_post_x));
-                Logger.d(String.format("\t[%d] right_down_post_y : 0x%x \n", 
+                Logger.d(String.format("\t [%d] right_down_post_y : 0x%x \n", 
                         j, region.right_down_pos_y));
-                Logger.d(String.format("\t[%d] layer_order : 0x%x \n", 
+                Logger.d(String.format("\t [%d] layer_order : 0x%x \n", 
                         j, region.layer_order));
             }
         }

@@ -55,14 +55,14 @@ public class ApplicationNameDescriptor extends Descriptor {
         super._PrintDescriptorHeader_();
         for ( int i=descriptor_length;i>0; )
         {
-            Logger.d(String.format("\tISO_639_language_code : %c%c%c \n", 
+            Logger.d(String.format("\t ISO_639_language_code : %c%c%c \n", 
                     ISO_639_language_code[0], 
                     ISO_639_language_code[1],
                     ISO_639_language_code[2]));
                 
-            Logger.d(String.format("\tapplication_name_length : 0x%x \n", 
+            Logger.d(String.format("\t application_name_length : 0x%x \n", 
                     application_name_length));
-            Logger.d(String.format("\tapplication_name : %s \n", new String(application_name)));
+            Logger.d(String.format("\t application_name : %s \n", new String(application_name)));
             i-=(4+application_name_length);
         }
         Logger.d("\n");

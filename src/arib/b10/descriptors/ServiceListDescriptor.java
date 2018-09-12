@@ -35,9 +35,9 @@ public class ServiceListDescriptor extends Descriptor {
         
         for ( int i=0; i<services.size(); i++ ) {
             Service service = services.get(i);
-            Logger.d(String.format("\t[%d] service_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] service_id : 0x%x \n", 
                     i, service.service_id));
-            Logger.d(String.format("\t[%d] service_type : 0x%x \n", 
+            Logger.d(String.format("\t [%d] service_type : 0x%x \n", 
                     i, service.service_type));
         }
     }

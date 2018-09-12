@@ -8,6 +8,7 @@ import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
 import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
 import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
 import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
+import arib.b39.descriptors.AccessControlDescriptor;
 import arib.b39.descriptors.AssetGroupDescriptor;
 import arib.b39.descriptors.BackgroundColorDescriptor;
 import arib.b39.descriptors.DependencyDescriptor;
@@ -18,6 +19,7 @@ import arib.b39.descriptors.MPEGH_InfoDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
 import arib.b39.descriptors.LockedCacheDescriptor;
 import arib.b39.descriptors.MPU_TimestampDescriptor;
+import arib.b39.descriptors.ScramblerDescriptor;
 import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
 import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
 import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
@@ -32,6 +34,8 @@ public class DescriptorFactory {
     public final static int BACKGROUND_COLOR_DESCRIPTOR = 0x8002;
     public final static int MPU_PRESENTATION_REGION_DESCRIPTOR = 0x8003;
     public final static int ACCESS_CONTROL_DESCRIPTOR = 0x8004;
+    public final static int SCRAMBLER_DESCRIPTOR = 0x8005;
+    public final static int MESSAGE_AUTHENTICATION_METHOD_DESCRIPTOR = 0x8006;
     
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
@@ -68,6 +72,10 @@ public class DescriptorFactory {
                 return new BackgroundColorDescriptor(brw);
             case MPU_PRESENTATION_REGION_DESCRIPTOR:
                 return new MPU_PresentationRegionDescriptor(brw);
+            case ACCESS_CONTROL_DESCRIPTOR:
+                return new AccessControlDescriptor(brw);
+            case SCRAMBLER_DESCRIPTOR:
+                return new ScramblerDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
                 return new MPEGH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:

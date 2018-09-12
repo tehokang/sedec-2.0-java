@@ -40,13 +40,13 @@ public class MPU_PresentationRegionDescriptor extends Descriptor {
         
         for ( int i=0; i<presentation_regions.size(); i++ ) {
             PresentationRegion region = presentation_regions.get(i);
-            Logger.d(String.format("\t[%d] mpu_sequence_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] mpu_sequence_number : 0x%x \n", 
                     i, region.mpu_sequence_number));
-            Logger.d(String.format("\t[%d] layout_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] layout_number : 0x%x \n", 
                     i, region.layout_number));
-            Logger.d(String.format("\t[%d] region_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] region_number : 0x%x \n", 
                     i, region.region_number));
-            Logger.d(String.format("\t[%d] length_of_reserved : 0x%x \n", 
+            Logger.d(String.format("\t [%d] length_of_reserved : 0x%x \n", 
                     i, region.length_of_reserved));
         }
     }

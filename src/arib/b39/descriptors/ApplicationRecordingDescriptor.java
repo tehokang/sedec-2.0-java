@@ -152,19 +152,19 @@ public class ApplicationRecordingDescriptor extends Descriptor {
        
         super._PrintDescriptorHeader_();
 
-        Logger.d(String.format("\tscheduled_recording_flag : 0x%x \n", 
+        Logger.d(String.format("\t scheduled_recording_flag : 0x%x \n", 
                 scheduled_recording_flag));
-        Logger.d(String.format("\ttrick_mode_aware_flag : 0x%x \n", 
+        Logger.d(String.format("\t trick_mode_aware_flag : 0x%x \n", 
                 trick_mode_aware_flag));
-        Logger.d(String.format("\ttime_shift_flag : 0x%x \n", 
+        Logger.d(String.format("\t time_shift_flag : 0x%x \n", 
                 time_shift_flag));
-        Logger.d(String.format("\tdynamic_flag : 0x%x \n", 
+        Logger.d(String.format("\t dynamic_flag : 0x%x \n", 
                 dynamic_flag));
-        Logger.d(String.format("\tav_synced_flag : 0x%x \n", 
+        Logger.d(String.format("\t av_synced_flag : 0x%x \n", 
                 av_synced_flag));
-        Logger.d(String.format("\tinitiating_replay_flag : 0x%x \n", 
+        Logger.d(String.format("\t initiating_replay_flag : 0x%x \n", 
                 initiating_replay_flag));
-        Logger.d(String.format("\tlabel_count : 0x%x \n", 
+        Logger.d(String.format("\t label_count : 0x%x \n", 
                 label_count));
         for(int i=0; i<label_count;i++) {
             Logger.d(String.format("\t  label_length[%d] : 0x%x \n", 
@@ -175,10 +175,10 @@ public class ApplicationRecordingDescriptor extends Descriptor {
                     storage_properties[i]));
         }
 
-        Logger.d(String.format("\tcomponent_tag_list_length : 0x%x \n", 
+        Logger.d(String.format("\t component_tag_list_length : 0x%x \n", 
                 component_tag_list_length));
         for(int i=0; i<component_tag_list_length;i++) {
-            Logger.d(String.format("\tcomponent_tag : 0x%x \n", component_tag[i]));
+            Logger.d(String.format("\t component_tag : 0x%x \n", component_tag[i]));
         }
         Logger.d("\n");
     }

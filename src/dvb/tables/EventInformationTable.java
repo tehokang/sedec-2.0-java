@@ -127,12 +127,12 @@ public class EventInformationTable extends Table {
         
         for ( int i=0; i<events.size(); i++ ) {
             Event event = events.get(i);
-            Logger.d(String.format("\t[%d] event_id : 0x%x \n", event.event_id));
-            Logger.d(String.format("\t[%d] start_time : 0x%x \n", event.start_time));
-            Logger.d(String.format("\t[%d] duration : 0x%x \n", event.duration));
-            Logger.d(String.format("\t[%d] running_status : 0x%x \n", event.running_status));
-            Logger.d(String.format("\t[%d] free_CA_mode : 0x%x \n", event.free_CA_mode));
-            Logger.d(String.format("\t[%d] descriptors_loop_length : 0x%x \n\n", 
+            Logger.d(String.format("\t [%d] event_id : 0x%x \n", event.event_id));
+            Logger.d(String.format("\t [%d] start_time : 0x%x \n", event.start_time));
+            Logger.d(String.format("\t [%d] duration : 0x%x \n", event.duration));
+            Logger.d(String.format("\t [%d] running_status : 0x%x \n", event.running_status));
+            Logger.d(String.format("\t [%d] free_CA_mode : 0x%x \n", event.free_CA_mode));
+            Logger.d(String.format("\t [%d] descriptors_loop_length : 0x%x \n\n", 
                     event.descriptors_loop_length));
             
             for ( int j=0; j<event.descriptors.size(); j++ ) {

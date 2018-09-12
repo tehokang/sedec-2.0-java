@@ -116,18 +116,18 @@ public class ApplicationDescriptor extends Descriptor {
         Logger.d("\n");
         super._PrintDescriptorHeader_();
 
-        Logger.d(String.format("\tapplication_profiles_length : 0x%x \n", application_profiles_length));
+        Logger.d(String.format("\t application_profiles_length : 0x%x \n", application_profiles_length));
         for ( int i=0 ; i<application_profiles.size(); i++ ) {
-            Logger.d(String.format("\tapplication_profile : 0x%x \n", application_profiles.get(i).application_profile));
-            Logger.d(String.format("\tversion_major : 0x%x \n", application_profiles.get(i).version_major));
-            Logger.d(String.format("\tversion_minor : 0x%x \n", application_profiles.get(i).version_minor));
-            Logger.d(String.format("\tversion_micro : 0x%x \n", application_profiles.get(i).version_micro));
+            Logger.d(String.format("\t application_profile : 0x%x \n", application_profiles.get(i).application_profile));
+            Logger.d(String.format("\t version_major : 0x%x \n", application_profiles.get(i).version_major));
+            Logger.d(String.format("\t version_minor : 0x%x \n", application_profiles.get(i).version_minor));
+            Logger.d(String.format("\t version_micro : 0x%x \n", application_profiles.get(i).version_micro));
         }
-        Logger.d(String.format("\tservice_bound_flag : 0x%x \n", service_bound_flag));
-        Logger.d(String.format("\tvisibility : 0x%x \n", visibility));
-        Logger.d(String.format("\tapplication_priority : 0x%x \n", application_priority));
+        Logger.d(String.format("\t service_bound_flag : 0x%x \n", service_bound_flag));
+        Logger.d(String.format("\t visibility : 0x%x \n", visibility));
+        Logger.d(String.format("\t application_priority : 0x%x \n", application_priority));
         for ( int i=0;i<transport_protocol_label_length;i++ ) {
-            Logger.d(String.format("\ttransport_protocol_label[%d] : 0x%x \n", i, transport_protocol_label[i]));
+            Logger.d(String.format("\t transport_protocol_label[%d] : 0x%x \n", i, transport_protocol_label[i]));
         }
         Logger.d("\n");
     }

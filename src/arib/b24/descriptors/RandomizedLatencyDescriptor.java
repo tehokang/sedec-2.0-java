@@ -57,11 +57,11 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\trange : 0x%x \n", range));
-        Logger.d(String.format("\trate : 0x%x \n", rate));
-        Logger.d(String.format("\trandomization_end_time_flag : 0x%x \n",  randomization_end_time_flag));
+        Logger.d(String.format("\t range : 0x%x \n", range));
+        Logger.d(String.format("\t rate : 0x%x \n", rate));
+        Logger.d(String.format("\t randomization_end_time_flag : 0x%x \n",  randomization_end_time_flag));
         if ( 0 != randomization_end_time_flag ) {
-            Logger.d(String.format("\trandomization_end_time : 0x%lf \n", randomization_end_time));
+            Logger.d(String.format("\t randomization_end_time : 0x%lf \n", randomization_end_time));
         }
     }
 

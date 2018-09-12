@@ -38,15 +38,15 @@ public class DependencyDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tnum_of_dependencies : 0x%x \n", num_of_dependencies));
+        Logger.d(String.format("\t num_of_dependencies : 0x%x \n", num_of_dependencies));
         
         for ( int i=0; i<assets.size(); i++ ) {
             Asset asset = assets.get(i);
-            Logger.d(String.format("\t[%d] asset_id_scheme : 0x%x \n", 
+            Logger.d(String.format("\t [%d] asset_id_scheme : 0x%x \n", 
                     asset.asset_id_scheme));
-            Logger.d(String.format("\t[%d] asset_id_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] asset_id_length : 0x%x \n", 
                     asset.asset_id_length));
-            Logger.d(String.format("\t[%d] asset_id_byte : %s \n", 
+            Logger.d(String.format("\t [%d] asset_id_byte : %s \n", 
                     new String(asset.asset_id_byte)));
         }
     }

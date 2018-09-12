@@ -18,8 +18,8 @@ public class AssetGroupDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("group_identification : 0x%x \n", group_identification));
-        Logger.d(String.format("selection_level : 0x%x \n", selection_level));
+        Logger.d(String.format("\t group_identification : 0x%x \n", group_identification));
+        Logger.d(String.format("\t selection_level : 0x%x \n", selection_level));
     }
 
     @Override

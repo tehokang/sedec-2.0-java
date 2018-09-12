@@ -108,19 +108,19 @@ public class AddressMapTable extends Table {
         
         for ( int i=0; i<services.size(); i++ ) {
             Service service = services.get(i);
-            Logger.d(String.format("\t[%d] service_id : 0x%x \n", i, service.service_id));
-            Logger.d(String.format("\t[%d] ip_version : 0x%x \n", i, service.ip_version));
-            Logger.d(String.format("\t[%d] service_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] service_id : 0x%x \n", i, service.service_id));
+            Logger.d(String.format("\t [%d] ip_version : 0x%x \n", i, service.ip_version));
+            Logger.d(String.format("\t [%d] service_loop_length : 0x%x \n", 
                     i, service.service_loop_length));
             
             if ( service.ip_version == 0 ) {
-                Logger.d(String.format("\t[%d] ipv4.src_address_32 : %d.%d.%d.%d \n", 
+                Logger.d(String.format("\t [%d] ipv4.src_address_32 : %d.%d.%d.%d \n", 
                         i, service.ipv4.src_address_32[0], service.ipv4.src_address_32[1],
                         service.ipv4.src_address_32[2], service.ipv4.src_address_32[3]));
-                Logger.d(String.format("\t[%d] ipv4.src_address_mask_32 : 0x%x \n", 
+                Logger.d(String.format("\t [%d] ipv4.src_address_mask_32 : 0x%x \n", 
                         i, service.ipv4.src_address_mask_32));
             } else if (service.ip_version == 1) {
-                Logger.d(String.format("\t[%d] ipv6.src_address_128 : "
+                Logger.d(String.format("\t [%d] ipv6.src_address_128 : "
                         + "%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x \n", 
                         i, service.ipv6.src_address_128[0], service.ipv6.src_address_128[1],
                         service.ipv6.src_address_128[2], service.ipv6.src_address_128[3], 
@@ -130,7 +130,7 @@ public class AddressMapTable extends Table {
                         service.ipv6.src_address_128[10], service.ipv6.src_address_128[11],
                         service.ipv6.src_address_128[12], service.ipv6.src_address_128[12],
                         service.ipv6.src_address_128[14], service.ipv6.src_address_128[15]));
-                Logger.d(String.format("\t[%d] ipv6.src_address_mask_128 : 0x%x \n", 
+                Logger.d(String.format("\t [%d] ipv6.src_address_mask_128 : 0x%x \n", 
                         i, service.ipv6.src_address_mask_128));
             }
             

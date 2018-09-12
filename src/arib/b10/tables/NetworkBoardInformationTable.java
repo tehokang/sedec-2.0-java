@@ -86,23 +86,23 @@ public class NetworkBoardInformationTable extends Table {
         for ( int i=0; i<board_informations.size(); i++) {
             BoardInformation board_information = board_informations.get(i);
             
-            Logger.d(String.format("\t[%d] information_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] information_id : 0x%x \n", 
                     i, board_information.information_id));
-            Logger.d(String.format("\t[%d] information_type : 0x%x \n", 
+            Logger.d(String.format("\t [%d] information_type : 0x%x \n", 
                     i, board_information.information_type));
-            Logger.d(String.format("\t[%d] description_body_location : 0x%x \n", 
+            Logger.d(String.format("\t [%d] description_body_location : 0x%x \n", 
                     i, board_information.description_body_location));
-            Logger.d(String.format("\t[%d] user_defined : 0x%x \n", 
+            Logger.d(String.format("\t [%d] user_defined : 0x%x \n", 
                     i, board_information.user_defined));
-            Logger.d(String.format("\t[%d] number_of_keys : 0x%x \n", 
+            Logger.d(String.format("\t [%d] number_of_keys : 0x%x \n", 
                     i, board_information.number_of_keys));
             
             for ( int j=0; j<board_information.key_id.length; j++ ) {
-                Logger.d(String.format("\t[%d] key_id[%d] : 0x%x \n", 
+                Logger.d(String.format("\t [%d] key_id[%d] : 0x%x \n", 
                         i, j, board_information.key_id[j]));
             }
             
-            Logger.d(String.format("\t[%d] descriptors_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] descriptors_loop_length : 0x%x \n", 
                     i, board_information.descriptors_loop_length));
             
             for ( int k=board_information.descriptors_loop_length; k>0; ) {

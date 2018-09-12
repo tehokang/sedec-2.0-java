@@ -49,11 +49,11 @@ public class MPEGH_ExpireDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\ttime_mode : 0x%x \n", time_mode));
+        Logger.d(String.format("\t time_mode : 0x%x \n", time_mode));
         if ( 0x01 == time_mode ) {
-            Logger.d(String.format("\tUTC_time : %lf \n", UTC_time));
+            Logger.d(String.format("\t UTC_time : %lf \n", UTC_time));
         } else if ( 0x04 == time_mode ) {
-            Logger.d(String.format("\tpassed_seconds : 0x%x (%d) \n", 
+            Logger.d(String.format("\t passed_seconds : 0x%x (%d) \n", 
                     passed_seconds, passed_seconds));
         }
         Logger.d("\n");

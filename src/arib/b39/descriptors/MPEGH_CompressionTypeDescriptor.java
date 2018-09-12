@@ -34,8 +34,8 @@ public class MPEGH_CompressionTypeDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tcompression_type : 0x%x \n",  compression_type));
-        Logger.d(String.format("\toriginal_size : 0x%x (%d) \n", original_size, original_size));
+        Logger.d(String.format("\t compression_type : 0x%x \n",  compression_type));
+        Logger.d(String.format("\t original_size : 0x%x (%d) \n", original_size, original_size));
         Logger.d("\n");
     }
 

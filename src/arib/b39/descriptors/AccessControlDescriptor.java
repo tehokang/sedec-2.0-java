@@ -31,7 +31,7 @@ public class AccessControlDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tCA_system_ID : 0x%x \n", CA_system_ID));
+        Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
         
         MMT_general_location_info.PrintInfo();
         

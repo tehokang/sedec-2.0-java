@@ -23,7 +23,7 @@ public class MPEGH_BroadcasterNameDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("char : %s \n", new String(broadcaster_name)));
+        Logger.d(String.format("\t char : %s \n", new String(broadcaster_name)));
     }
 
     @Override

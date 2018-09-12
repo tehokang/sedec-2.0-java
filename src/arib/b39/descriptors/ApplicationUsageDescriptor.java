@@ -40,7 +40,7 @@ public class ApplicationUsageDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\tusage_type : 0x%x \n", usage_type));
+        Logger.d(String.format("\t usage_type : 0x%x \n", usage_type));
         Logger.d("\n");
     }
 }

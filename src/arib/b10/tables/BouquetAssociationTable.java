@@ -96,11 +96,11 @@ public class BouquetAssociationTable extends Table {
         
         for ( int i=0; i<transport_streams.size(); i++ ) {
             TransportStream stream = transport_streams.get(i);
-            Logger.d(String.format("\t[%d] transport_stream_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] transport_stream_id : 0x%x \n", 
                     i, stream.transport_stream_id));
-            Logger.d(String.format("\t[%d] original_network_id : 0x%x \n", 
+            Logger.d(String.format("\t [%d] original_network_id : 0x%x \n", 
                     i, stream.original_network_id));
-            Logger.d(String.format("\t[%d] transport_descriptors_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] transport_descriptors_length : 0x%x \n", 
                     i, stream.transport_descriptors_length));
             
             for ( int j=0; j<stream.descriptors.size(); j++ ) {

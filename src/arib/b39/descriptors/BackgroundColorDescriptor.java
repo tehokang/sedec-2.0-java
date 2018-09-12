@@ -16,7 +16,7 @@ public class BackgroundColorDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("background_color : 0x%x", background_color));
+        Logger.d(String.format("\t background_color : 0x%x", background_color));
     }
 
     @Override

@@ -28,7 +28,7 @@ public class MPEGH_TypeDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("\ttext_char : %s \n", new String(text_char)));
+        Logger.d(String.format("\t text_char : %s \n", new String(text_char)));
         Logger.d("\n");
     }
 
