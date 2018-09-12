@@ -26,7 +26,7 @@ public class DependencyDescriptor extends Descriptor {
             asset.asset_id_scheme = brw.ReadOnBuffer(32);
             asset.asset_id_length = (byte) brw.ReadOnBuffer(8);
             
-            asset.asset_id_byte = new byte[asset.asset_id_length]
+            asset.asset_id_byte = new byte[asset.asset_id_length];
             for ( int j=0; j<asset.asset_id_length; j++ ) {
                 asset.asset_id_byte[j] = (byte) brw.ReadOnBuffer(8);
             }
@@ -53,7 +53,7 @@ public class DependencyDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length += 1;
+        descriptor_length = 1;
         for ( int i=0; i<assets.size(); i++ ) {
             descriptor_length += (4 + 1 + assets.get(i).asset_id_length);
         }

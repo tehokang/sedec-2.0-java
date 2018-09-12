@@ -8,8 +8,11 @@ import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
 import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
 import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
 import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
+import arib.b39.descriptors.AssetGroupDescriptor;
+import arib.b39.descriptors.BackgroundColorDescriptor;
 import arib.b39.descriptors.DependencyDescriptor;
 import arib.b39.descriptors.Descriptor;
+import arib.b39.descriptors.EventPackageDescriptor;
 import arib.b39.descriptors.MPEGH_ExpireDescriptor;
 import arib.b39.descriptors.MPEGH_InfoDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
@@ -19,10 +22,17 @@ import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
 import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
 import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
 import arib.b39.descriptors.MPEGH_TypeDescriptor;
+import arib.b39.descriptors.MPU_PresentationRegionDescriptor;
 
 public class DescriptorFactory {
     public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0000;
     public final static int DEPENDENCY_DESCRIPTOR = 0x0002;
+    public final static int ASSET_GROUP_DESCRIPTOR = 0x8000;
+    public final static int EVENT_PACKAGE_DESCRIPTOR = 0x8001;
+    public final static int BACKGROUND_COLOR_DESCRIPTOR = 0x8002;
+    public final static int MPU_PRESENTATION_REGION_DESCRIPTOR = 0x8003;
+    public final static int ACCESS_CONTROL_DESCRIPTOR = 0x8004;
+    
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
     public final static int MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR = 0x802b;
@@ -50,6 +60,14 @@ public class DescriptorFactory {
                 return new MPU_TimestampDescriptor(brw);
             case DEPENDENCY_DESCRIPTOR:
                 return new DependencyDescriptor(brw);
+            case ASSET_GROUP_DESCRIPTOR:
+                return new AssetGroupDescriptor(brw);
+            case EVENT_PACKAGE_DESCRIPTOR:
+                return new EventPackageDescriptor(brw);
+            case BACKGROUND_COLOR_DESCRIPTOR:
+                return new BackgroundColorDescriptor(brw);
+            case MPU_PRESENTATION_REGION_DESCRIPTOR:
+                return new MPU_PresentationRegionDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
                 return new MPEGH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:
