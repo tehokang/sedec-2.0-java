@@ -2,6 +2,7 @@ package arib.b39;
 
 import base.Table;
 import base.UnknownTable;
+import arib.b39.tables.AddressMapTable;
 import arib.b39.tables.LayoutConfigurationTable;
 import arib.b39.tables.MPEGH_ApplicationInformationTable;
 import arib.b39.tables.MPEGH_CommonDataTable;
@@ -31,6 +32,9 @@ public class TableFactory {
     
     /** LCT */
     public final static int LAYOUT_CONFIGURATION_TABLE = 0x81;
+    
+    /** AMT */
+    public final static int ADDRESS_MAP_TABLE = 0xfe;
     
     /** MH-EIT 0x8b, 0x8c~0x9b */
     public final static int ACTUAL_MPEGH_EVENT_INFORMATION_TABLE = 0x8b;
@@ -68,7 +72,6 @@ public class TableFactory {
      *  - DCC 0xa5
      *  - EMT 0xa6
      *  - TLV-NIT 0x40 0x41
-     *  - AMT 0xfe
      */
     public static Table CreateTable(byte[] buffer) {
         int table_id = (buffer[0] & 0xff);
@@ -107,6 +110,8 @@ public class TableFactory {
             case AUTO_MPEGH_EVENT_INFORMATION_TABLE_15:
             case AUTO_MPEGH_EVENT_INFORMATION_TABLE_16:
                 return new MPEGH_EventInformationTable(buffer);
+            case ADDRESS_MAP_TABLE:
+                return new AddressMapTable(buffer);
             default:
                 return new UnknownTable(buffer);
         }
