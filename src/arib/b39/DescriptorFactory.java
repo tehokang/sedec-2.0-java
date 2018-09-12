@@ -8,19 +8,21 @@ import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
 import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
 import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
 import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
+import arib.b39.descriptors.DependencyDescriptor;
 import arib.b39.descriptors.Descriptor;
 import arib.b39.descriptors.MPEGH_ExpireDescriptor;
 import arib.b39.descriptors.MPEGH_InfoDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
 import arib.b39.descriptors.LockedCacheDescriptor;
-import arib.b39.descriptors.MPEGH_TimestampDescriptor;
+import arib.b39.descriptors.MPU_TimestampDescriptor;
 import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
 import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
 import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
 import arib.b39.descriptors.MPEGH_TypeDescriptor;
 
 public class DescriptorFactory {
-    public final static int MPEGH_TIMESTAMP_DESCRIPTOR = 0x0000;
+    public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0000;
+    public final static int DEPENDENCY_DESCRIPTOR = 0x0002;
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
     public final static int MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR = 0x802b;
@@ -44,8 +46,10 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
-            case MPEGH_TIMESTAMP_DESCRIPTOR:
-                return new MPEGH_TimestampDescriptor(brw);
+            case MPU_TIMESTAMP_DESCRIPTOR:
+                return new MPU_TimestampDescriptor(brw);
+            case DEPENDENCY_DESCRIPTOR:
+                return new DependencyDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
                 return new MPEGH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:

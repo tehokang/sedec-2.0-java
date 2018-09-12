@@ -6,7 +6,7 @@ import java.util.List;
 import base.BitReadWriter;
 import util.Logger;
 
-public class MPEGH_TimestampDescriptor extends Descriptor {
+public class MPU_TimestampDescriptor extends Descriptor {
     protected List<MPU> mpus = new ArrayList<>();
 
     class MPU {
@@ -14,7 +14,7 @@ public class MPEGH_TimestampDescriptor extends Descriptor {
         public long mpu_presentation_time;
     }
 
-    public MPEGH_TimestampDescriptor(BitReadWriter brw) {
+    public MPU_TimestampDescriptor(BitReadWriter brw) {
         super(brw);
         
         for ( int i=descriptor_length; i>0; ) {
