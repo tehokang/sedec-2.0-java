@@ -139,7 +139,7 @@ public class AddressMapTable extends Table {
             for(int k=0; k<service.private_data_byte.length; k++)
             {
                 Logger.p(String.format("%02x ", service.private_data_byte[k]));
-                if(i%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
+                if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
             }
         }
         

@@ -17,7 +17,10 @@ public class DependencyDescriptor extends Descriptor {
     }
     
     public DependencyDescriptor(BitReadWriter brw) {
-        super(brw);
+        super();
+        
+        descriptor_tag = brw.ReadOnBuffer(16);
+        descriptor_length = brw.ReadOnBuffer(16);
         
         num_of_dependencies = (byte) brw.ReadOnBuffer(8);
         
