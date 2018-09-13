@@ -4,6 +4,10 @@ import base.BitReadWriter;
 
 public abstract class Descriptor extends base.Descriptor {
 
+    public Descriptor() {
+        /** NOTHING TO DO */
+    }
+    
     public Descriptor(BitReadWriter brw) {
         descriptor_tag = brw.ReadOnBuffer(16);
         descriptor_length = brw.ReadOnBuffer(8);

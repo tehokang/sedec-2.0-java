@@ -1,9 +1,14 @@
 package arib.b39;
 
-import base.BitReadWriter;
-import arib.b39.descriptors.UnknownDescriptor;
-import arib.b39.descriptors.UnlockedCacheDescriptor;
-import arib.b39.descriptors.VideoComponentDescriptor;
+import arib.b39.descriptors.AccessControlDescriptor;
+import arib.b39.descriptors.AssetGroupDescriptor;
+import arib.b39.descriptors.BackgroundColorDescriptor;
+import arib.b39.descriptors.DependencyDescriptor;
+import arib.b39.descriptors.Descriptor;
+import arib.b39.descriptors.EmergencyInformationDescriptor;
+import arib.b39.descriptors.EventPackageDescriptor;
+import arib.b39.descriptors.LinkedPuDescriptor;
+import arib.b39.descriptors.LockedCacheDescriptor;
 import arib.b39.descriptors.MPEGH_ApplicationBoundaryAndPermissionDescriptor;
 import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
 import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
@@ -12,13 +17,6 @@ import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
 import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
 import arib.b39.descriptors.MPEGH_ContentDescriptor;
 import arib.b39.descriptors.MPEGH_EventGroupDescriptor;
-import arib.b39.descriptors.AccessControlDescriptor;
-import arib.b39.descriptors.AssetGroupDescriptor;
-import arib.b39.descriptors.BackgroundColorDescriptor;
-import arib.b39.descriptors.DependencyDescriptor;
-import arib.b39.descriptors.Descriptor;
-import arib.b39.descriptors.EmergencyInformationDescriptor;
-import arib.b39.descriptors.EventPackageDescriptor;
 import arib.b39.descriptors.MPEGH_ExpireDescriptor;
 import arib.b39.descriptors.MPEGH_HEVCDescriptor;
 import arib.b39.descriptors.MPEGH_InfoDescriptor;
@@ -26,11 +24,6 @@ import arib.b39.descriptors.MPEGH_LogoTransmissionDescriptor;
 import arib.b39.descriptors.MPEGH_MPEG4AudioDescriptor;
 import arib.b39.descriptors.MPEGH_MPEG4AudioExtensionDescriptor;
 import arib.b39.descriptors.MPEGH_ParentalRatingDescriptor;
-import arib.b39.descriptors.LinkedPuDescriptor;
-import arib.b39.descriptors.LockedCacheDescriptor;
-import arib.b39.descriptors.MPU_TimestampDescriptor;
-import arib.b39.descriptors.MessageAuthenticationMethodDescriptor;
-import arib.b39.descriptors.ScramblerDescriptor;
 import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
 import arib.b39.descriptors.MPEGH_ServiceDescriptor;
 import arib.b39.descriptors.MPEGH_ServiceListDescriptor;
@@ -39,8 +32,24 @@ import arib.b39.descriptors.MPEGH_StreamIdentifierDescriptor;
 import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
 import arib.b39.descriptors.MPEGH_TypeDescriptor;
 import arib.b39.descriptors.MPU_PresentationRegionDescriptor;
+import arib.b39.descriptors.MPU_TimestampDescriptor;
+import arib.b39.descriptors.MessageAuthenticationMethodDescriptor;
+import arib.b39.descriptors.NetworkNameDescriptor;
+import arib.b39.descriptors.SateliteDeliverySystemDescriptor;
+import arib.b39.descriptors.ScramblerDescriptor;
+import arib.b39.descriptors.ServiceListDescriptor;
+import arib.b39.descriptors.SystemManagementDescriptor;
+import arib.b39.descriptors.UnknownDescriptor;
+import arib.b39.descriptors.UnlockedCacheDescriptor;
+import arib.b39.descriptors.VideoComponentDescriptor;
+import base.BitReadWriter;
 
 public class DescriptorFactory {
+    public final static int NETWORK_NAME_DESCRIPTOR = 0x40;
+    public final static int SERVICE_LIST_DESCRIPTOR = 0x41;
+    public final static int SATELITE_DELIVERY_SYSTEM_DESCRIPTOR = 0x43;
+    public final static int SYSTEM_MANAGEMENT_DESCRIPTOR = 0xfe;
+    
     public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0000;
     public final static int DEPENDENCY_DESCRIPTOR = 0x0002;
     public final static int ASSET_GROUP_DESCRIPTOR = 0x8000;
@@ -110,6 +119,14 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
+            case SYSTEM_MANAGEMENT_DESCRIPTOR:
+                return new SystemManagementDescriptor(brw);
+            case SATELITE_DELIVERY_SYSTEM_DESCRIPTOR:
+                return new SateliteDeliverySystemDescriptor(brw);
+            case NETWORK_NAME_DESCRIPTOR:
+                return new NetworkNameDescriptor(brw);
+            case SERVICE_LIST_DESCRIPTOR:
+                return new ServiceListDescriptor(brw);
             case MPU_TIMESTAMP_DESCRIPTOR:
                 return new MPU_TimestampDescriptor(brw);
             case DEPENDENCY_DESCRIPTOR:
