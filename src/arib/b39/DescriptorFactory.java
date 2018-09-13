@@ -31,6 +31,7 @@ import arib.b39.descriptors.MPEGH_LocalTimeOffsetDescriptor;
 import arib.b39.descriptors.MPEGH_LogoTransmissionDescriptor;
 import arib.b39.descriptors.MPEGH_MPEG4AudioDescriptor;
 import arib.b39.descriptors.MPEGH_MPEG4AudioExtensionDescriptor;
+import arib.b39.descriptors.MPEGH_NetworkDownloadContentDescriptor;
 import arib.b39.descriptors.MPEGH_ParentalRatingDescriptor;
 import arib.b39.descriptors.MPEGH_ProtectionDescriptor;
 import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
@@ -113,7 +114,7 @@ public class DescriptorFactory {
     public final static int MPEGH_LOGO_TRANSMISSION_DESCRIPTOR = 0x8025;
     public final static int MPEGH_EXTENDED_TIMESTAMP_DESCRIPTOR = 0x8026;
     public final static int MPU_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8027;
-    
+    public final static int MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int MPEGH_PROTECTION_DESCRIPTOR = 0x8033;
     
     public final static int MPEGH_LINKAGE_DESCRIPTOR = 0xf000;
@@ -124,7 +125,6 @@ public class DescriptorFactory {
     /**
      * @todo
      */
-    public final static int MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int APPLICATION_SERVICE_DESCRIPTOR = 0x8034;
     
     public final static int UNKNOWN_DESCRIPTOR = 0xffff;
@@ -245,6 +245,8 @@ public class DescriptorFactory {
                 return new MPEGH_LinkageDescriptor(brw);
             case MPEGH_PROTECTION_DESCRIPTOR:
                 return new MPEGH_ProtectionDescriptor(brw);
+            case MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR:
+                return new MPEGH_NetworkDownloadContentDescriptor(brw);
             case UNKNOWN_DESCRIPTOR:
             default:
                 return new UnknownDescriptor(brw);
