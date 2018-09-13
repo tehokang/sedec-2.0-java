@@ -1,6 +1,7 @@
 package arib.b39;
 
 import arib.b39.descriptors.AccessControlDescriptor;
+import arib.b39.descriptors.ApplicationServiceDescriptor;
 import arib.b39.descriptors.AssetGroupDescriptor;
 import arib.b39.descriptors.BackgroundColorDescriptor;
 import arib.b39.descriptors.DependencyDescriptor;
@@ -116,16 +117,13 @@ public class DescriptorFactory {
     public final static int MPU_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8027;
     public final static int MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int MPEGH_PROTECTION_DESCRIPTOR = 0x8033;
-    
+    public final static int APPLICATION_SERVICE_DESCRIPTOR = 0x8034;
+
     public final static int MPEGH_LINKAGE_DESCRIPTOR = 0xf000;
     public final static int MPEGH_SHORT_EVENT_DESCRIPTOR = 0xf001;
     public final static int MPEGH_EXTENDED_EVENT_DESCRIPTOR = 0xf002;
     public final static int EVENT_MESSAGE_DESCRIPTOR = 0xf003;
     
-    /**
-     * @todo
-     */
-    public final static int APPLICATION_SERVICE_DESCRIPTOR = 0x8034;
     
     public final static int UNKNOWN_DESCRIPTOR = 0xffff;
     
@@ -247,6 +245,8 @@ public class DescriptorFactory {
                 return new MPEGH_ProtectionDescriptor(brw);
             case MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR:
                 return new MPEGH_NetworkDownloadContentDescriptor(brw);
+            case APPLICATION_SERVICE_DESCRIPTOR:
+                return new ApplicationServiceDescriptor(brw);
             case UNKNOWN_DESCRIPTOR:
             default:
                 return new UnknownDescriptor(brw);
