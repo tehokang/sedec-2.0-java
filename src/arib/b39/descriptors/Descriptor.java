@@ -5,7 +5,10 @@ import base.BitReadWriter;
 public abstract class Descriptor extends base.Descriptor {
 
     public Descriptor() {
-        /** NOTHING TO DO */
+        /** 
+         * @note NOTHING TO DO, THIS IS ONLY FOR LEGACY DESCRIPTOR
+         * WHICH HAS DESCRIPTOR_TAG 8 bits and DESCRIPTOR_LENGTH 8 bits 
+         * */
     }
     
     public Descriptor(BitReadWriter brw) {
