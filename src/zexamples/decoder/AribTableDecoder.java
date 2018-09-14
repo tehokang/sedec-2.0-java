@@ -45,7 +45,7 @@ public class AribTableDecoder {
                 
                 System.out.println(
                         String.format("[%d] table information \n",  i));
-                table.PrintRawTable();
+                table.PrintBuffer();
                 table.PrintTable();
                 dataInputStream.close();
             } catch (FileNotFoundException e) {

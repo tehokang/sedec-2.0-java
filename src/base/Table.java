@@ -30,7 +30,7 @@ public abstract class Table extends BitReadWriter {
     public void SaveTable() {
         
     }
-         
+
     public void PrintTable() {
         Logger.d(String.format("======= Section Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("table_id : 0x%x \n", table_id));
@@ -39,6 +39,10 @@ public abstract class Table extends BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
+    public int GetTableLength() {
+        return 3 + section_length;
+    }
+    
     /**
      * @note internal functions to decode
      */

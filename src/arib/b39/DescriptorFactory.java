@@ -12,40 +12,40 @@ import arib.b39.descriptors.EventPackageDescriptor;
 import arib.b39.descriptors.IpDataFlowDescriptor;
 import arib.b39.descriptors.LinkedPuDescriptor;
 import arib.b39.descriptors.LockedCacheDescriptor;
-import arib.b39.descriptors.MPEGH_ApplicationBoundaryAndPermissionDescriptor;
-import arib.b39.descriptors.MPEGH_ApplicationDescriptor;
-import arib.b39.descriptors.MPEGH_AudioComponentDescriptor;
-import arib.b39.descriptors.MPEGH_AutostartPriorityDescriptor;
-import arib.b39.descriptors.MPEGH_BroadcasterNameDescriptor;
-import arib.b39.descriptors.MPEGH_CacheControlInfoDescriptor;
-import arib.b39.descriptors.MPEGH_CompressionTypeDescriptor;
-import arib.b39.descriptors.MPEGH_ContentDescriptor;
-import arib.b39.descriptors.MPEGH_DataComponentDescriptor;
-import arib.b39.descriptors.MPEGH_EventGroupDescriptor;
-import arib.b39.descriptors.MPEGH_ExpireDescriptor;
-import arib.b39.descriptors.MPEGH_ExtendedEventDescriptor;
-import arib.b39.descriptors.MPEGH_ExtendedTimestampDescriptor;
-import arib.b39.descriptors.MPEGH_HEVCDescriptor;
-import arib.b39.descriptors.MPEGH_InfoDescriptor;
-import arib.b39.descriptors.MPEGH_LinkageDescriptor;
-import arib.b39.descriptors.MPEGH_LocalTimeOffsetDescriptor;
-import arib.b39.descriptors.MPEGH_LogoTransmissionDescriptor;
-import arib.b39.descriptors.MPEGH_MPEG4AudioDescriptor;
-import arib.b39.descriptors.MPEGH_MPEG4AudioExtensionDescriptor;
-import arib.b39.descriptors.MPEGH_NetworkDownloadContentDescriptor;
-import arib.b39.descriptors.MPEGH_ParentalRatingDescriptor;
-import arib.b39.descriptors.MPEGH_ProtectionDescriptor;
-import arib.b39.descriptors.MPEGH_RandomizedLatencyDescriptor;
-import arib.b39.descriptors.MPEGH_SeriesDescriptor;
-import arib.b39.descriptors.MPEGH_ServiceDescriptor;
-import arib.b39.descriptors.MPEGH_ServiceListDescriptor;
-import arib.b39.descriptors.MPEGH_ShortEventDescriptor;
-import arib.b39.descriptors.MPEGH_SiParameterDescriptor;
-import arib.b39.descriptors.MPEGH_SimpleApplicationLocationDescriptor;
-import arib.b39.descriptors.MPEGH_StreamIdentifierDescriptor;
-import arib.b39.descriptors.MPEGH_TargetRegionDescriptor;
-import arib.b39.descriptors.MPEGH_TransportProtocolDescriptor;
-import arib.b39.descriptors.MPEGH_TypeDescriptor;
+import arib.b39.descriptors.MH_ApplicationBoundaryAndPermissionDescriptor;
+import arib.b39.descriptors.MH_ApplicationDescriptor;
+import arib.b39.descriptors.MH_AudioComponentDescriptor;
+import arib.b39.descriptors.MH_AutostartPriorityDescriptor;
+import arib.b39.descriptors.MH_BroadcasterNameDescriptor;
+import arib.b39.descriptors.MH_CacheControlInfoDescriptor;
+import arib.b39.descriptors.MH_CompressionTypeDescriptor;
+import arib.b39.descriptors.MH_ContentDescriptor;
+import arib.b39.descriptors.MH_DataComponentDescriptor;
+import arib.b39.descriptors.MH_EventGroupDescriptor;
+import arib.b39.descriptors.MH_ExpireDescriptor;
+import arib.b39.descriptors.MH_ExtendedEventDescriptor;
+import arib.b39.descriptors.MH_ExtendedTimestampDescriptor;
+import arib.b39.descriptors.MH_HEVCDescriptor;
+import arib.b39.descriptors.MH_InfoDescriptor;
+import arib.b39.descriptors.MH_LinkageDescriptor;
+import arib.b39.descriptors.MH_LocalTimeOffsetDescriptor;
+import arib.b39.descriptors.MH_LogoTransmissionDescriptor;
+import arib.b39.descriptors.MH_MPEG4AudioDescriptor;
+import arib.b39.descriptors.MH_MPEG4AudioExtensionDescriptor;
+import arib.b39.descriptors.MH_NetworkDownloadContentDescriptor;
+import arib.b39.descriptors.MH_ParentalRatingDescriptor;
+import arib.b39.descriptors.MH_ProtectionDescriptor;
+import arib.b39.descriptors.MH_RandomizedLatencyDescriptor;
+import arib.b39.descriptors.MH_SeriesDescriptor;
+import arib.b39.descriptors.MH_ServiceDescriptor;
+import arib.b39.descriptors.MH_ServiceListDescriptor;
+import arib.b39.descriptors.MH_ShortEventDescriptor;
+import arib.b39.descriptors.MH_SiParameterDescriptor;
+import arib.b39.descriptors.MH_SimpleApplicationLocationDescriptor;
+import arib.b39.descriptors.MH_StreamIdentifierDescriptor;
+import arib.b39.descriptors.MH_TargetRegionDescriptor;
+import arib.b39.descriptors.MH_TransportProtocolDescriptor;
+import arib.b39.descriptors.MH_TypeDescriptor;
 import arib.b39.descriptors.MPU_DownloadContentDescriptor;
 import arib.b39.descriptors.MPU_PresentationRegionDescriptor;
 import arib.b39.descriptors.MPU_TimestampDescriptor;
@@ -162,47 +162,47 @@ public class DescriptorFactory {
             case EMERGENCY_INFORMATION_DESCRIPTOR:
                 return new EmergencyInformationDescriptor(brw);
             case MPEGH_MPEG4_AUDIO_DESCRIPTOR:
-                return new MPEGH_MPEG4AudioDescriptor(brw);
+                return new MH_MPEG4AudioDescriptor(brw);
             case MPEGH_MPEG4_AUDIO_EXTENSION_DESCRIPTOR:
-                return new MPEGH_MPEG4AudioExtensionDescriptor(brw);
+                return new MH_MPEG4AudioExtensionDescriptor(brw);
             case MPEGH_HEVC_DESCRIPTOR:
-                return new MPEGH_HEVCDescriptor(brw);
+                return new MH_HEVCDescriptor(brw);
             case MPEGH_EVENT_GROUP_DESCRIPTOR:
-                return new MPEGH_EventGroupDescriptor(brw);
+                return new MH_EventGroupDescriptor(brw);
             case MPEGH_SERVICE_LIST_DESCRIPTOR:
-                return new MPEGH_ServiceListDescriptor(brw);
+                return new MH_ServiceListDescriptor(brw);
             case VIDEO_COMPONENT_DESCRIPTOR:
                 return new VideoComponentDescriptor(brw);
             case MPEGH_STREAM_IDENTIFIER_DESCRIPTOR:
-                return new MPEGH_StreamIdentifierDescriptor(brw);
+                return new MH_StreamIdentifierDescriptor(brw);
             case MPEGH_CONTENT_DESCRIPTOR:
-                return new MPEGH_ContentDescriptor(brw);
+                return new MH_ContentDescriptor(brw);
             case MPEGH_PARENTAL_RATING_DESCRIPTOR:
-                return new MPEGH_ParentalRatingDescriptor(brw);
+                return new MH_ParentalRatingDescriptor(brw);
             case MPEGH_AUDIO_COMPONENT_DESCRIPTOR:
-                return new MPEGH_AudioComponentDescriptor(brw);
+                return new MH_AudioComponentDescriptor(brw);
             case MPEGH_APPLICATION_DESCRIPTOR:
-                return new MPEGH_ApplicationDescriptor(brw);
+                return new MH_ApplicationDescriptor(brw);
             case MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR:
-                return new MPEGH_TransportProtocolDescriptor(brw);
+                return new MH_TransportProtocolDescriptor(brw);
             case MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR:
-                return new MPEGH_SimpleApplicationLocationDescriptor(brw);
+                return new MH_SimpleApplicationLocationDescriptor(brw);
             case MPEGH_APPLICATION_BOUNDARY_AND_PERMISSION_DESCRIPTOR:
-                return new MPEGH_ApplicationBoundaryAndPermissionDescriptor(brw);
+                return new MH_ApplicationBoundaryAndPermissionDescriptor(brw);
             case MPEGH_AUTOSTART_PRIORITY_DESCRIPTOR:
-                return new MPEGH_AutostartPriorityDescriptor(brw);
+                return new MH_AutostartPriorityDescriptor(brw);
             case MPEGH_CACHE_CONTROL_INFO_DESCRIPTOR:
-                return new MPEGH_CacheControlInfoDescriptor(brw);
+                return new MH_CacheControlInfoDescriptor(brw);
             case MPEGH_RANDOMIZED_LATENCY_DESCRIPTOR:
-                return new MPEGH_RandomizedLatencyDescriptor(brw);
+                return new MH_RandomizedLatencyDescriptor(brw);
             case MPEGH_TYPE_DESCRIPTOR:
-                return new MPEGH_TypeDescriptor(brw);
+                return new MH_TypeDescriptor(brw);
             case MPEGH_INFO_DESCRIPTOR:
-                return new MPEGH_InfoDescriptor(brw);
+                return new MH_InfoDescriptor(brw);
             case MPEGH_EXPIRE_DESCRIPTOR:
-                return new MPEGH_ExpireDescriptor(brw);
+                return new MH_ExpireDescriptor(brw);
             case MPEGH_COMPRESSION_TYPE_DESCRIPTOR:
-                return new MPEGH_CompressionTypeDescriptor(brw);
+                return new MH_CompressionTypeDescriptor(brw);
             case LINKED_PU_DESCRIPTOR:
                 return new LinkedPuDescriptor(brw);
             case LOCKED_CACHE_DESCRIPTOR:
@@ -210,41 +210,41 @@ public class DescriptorFactory {
             case UNLOCKED_CACHE_DESCRIPTOR:
                 return new UnlockedCacheDescriptor(brw);
             case MPEGH_BROADCASTER_NAME_DESCRIPTOR:
-                return new MPEGH_BroadcasterNameDescriptor(brw);
+                return new MH_BroadcasterNameDescriptor(brw);
             case MPEGH_SERIES_DESCRIPTOR:
-                return new MPEGH_SeriesDescriptor(brw);
+                return new MH_SeriesDescriptor(brw);
             case MPEGH_LOGO_TRANSMISSION_DESCRIPTOR:
-                return new MPEGH_LogoTransmissionDescriptor(brw);
+                return new MH_LogoTransmissionDescriptor(brw);
             case MPEGH_TARGET_REGION_DESCRIPTOR:
-                return new MPEGH_TargetRegionDescriptor(brw);
+                return new MH_TargetRegionDescriptor(brw);
             case MPEGH_SI_PARAMETER_DESCRIPTOR:
-                return new MPEGH_SiParameterDescriptor(brw);
+                return new MH_SiParameterDescriptor(brw);
             case IP_DATA_FLOW_DESCRIPTOR:
                 return new IpDataFlowDescriptor(brw);
             case MPEGH_DATA_COMPONENT_DESCRIPTOR:
-                return new MPEGH_DataComponentDescriptor(brw);
+                return new MH_DataComponentDescriptor(brw);
             case UTC_NPT_REFERENCE_DESCRIPTOR:
                 return new UtcNptReferenceDescriptor(brw);
             case MPEGH_LOCAL_TIME_OFFSET_DESCRIPTOR:
-                return new MPEGH_LocalTimeOffsetDescriptor(brw);
+                return new MH_LocalTimeOffsetDescriptor(brw);
             case MPEGH_SERVICE_DESCRIPTOR:
-                return new MPEGH_ServiceDescriptor(brw);
+                return new MH_ServiceDescriptor(brw);
             case MPEGH_EXTENDED_TIMESTAMP_DESCRIPTOR:
-                return new MPEGH_ExtendedTimestampDescriptor(brw);
+                return new MH_ExtendedTimestampDescriptor(brw);
             case MPU_DOWNLOAD_CONTENT_DESCRIPTOR:
                 return new MPU_DownloadContentDescriptor(brw);
             case EVENT_MESSAGE_DESCRIPTOR:
                 return new EventMessageDescriptor(brw);
             case MPEGH_EXTENDED_EVENT_DESCRIPTOR:
-                return new MPEGH_ExtendedEventDescriptor(brw);
+                return new MH_ExtendedEventDescriptor(brw);
             case MPEGH_SHORT_EVENT_DESCRIPTOR:
-                return new MPEGH_ShortEventDescriptor(brw);
+                return new MH_ShortEventDescriptor(brw);
             case MPEGH_LINKAGE_DESCRIPTOR:
-                return new MPEGH_LinkageDescriptor(brw);
+                return new MH_LinkageDescriptor(brw);
             case MPEGH_PROTECTION_DESCRIPTOR:
-                return new MPEGH_ProtectionDescriptor(brw);
+                return new MH_ProtectionDescriptor(brw);
             case MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR:
-                return new MPEGH_NetworkDownloadContentDescriptor(brw);
+                return new MH_NetworkDownloadContentDescriptor(brw);
             case APPLICATION_SERVICE_DESCRIPTOR:
                 return new ApplicationServiceDescriptor(brw);
             case UNKNOWN_DESCRIPTOR:

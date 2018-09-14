@@ -42,7 +42,7 @@ public class DvbTableDecoder {
                     System.out.println(
                             String.format("[%d] table information \n",  i));
 
-                    table.PrintRawTable();
+                    table.PrintBuffer();
                     table.PrintTable();
                 } 
                 

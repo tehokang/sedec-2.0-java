@@ -161,7 +161,7 @@ public class BitReadWriter {
         }
     }
 
-    public void PrintRawTable() {
+    public void PrintBuffer() {
         int j=1;
         System.out.print("########### Byte Align ########### \n");
         System.out.print(String.format("%03d : ", j));

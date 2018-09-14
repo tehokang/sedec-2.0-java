@@ -30,6 +30,10 @@ public abstract class Table extends base.Table {
         Logger.d(String.format("length : 0x%x (%d) \n", length, length));
         Logger.d("------------------------------ \n");
     }
+    
+    public int GetTableLength() {
+        return 4 + length;
+    }
 
     @Override
     protected void __decode_table_header__() {
