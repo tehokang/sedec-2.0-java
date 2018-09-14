@@ -32,14 +32,20 @@ public abstract class Message extends base.BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
+    /**
+     * @note internal functions to decode
+     */
     protected void __decode_message_header__() {
         message_id = ReadOnBuffer(16);
         version = ReadOnBuffer(8);
         length = ReadOnBuffer(32);
     }
     
-    protected abstract void __decode_table_body__();
+    protected abstract void __decode_message_body__();
     
+    /**
+     * @note internal functions to encode
+     */
     protected void __encode_update_message_length__() {};
     protected void __encode_preprare_message__() {};
     protected void __encode_prepare_buffer__() {

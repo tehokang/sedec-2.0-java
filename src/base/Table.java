@@ -39,6 +39,9 @@ public abstract class Table extends BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
+    /**
+     * @note internal functions to decode
+     */
     protected void __decode_table_header__() {
         table_id = ReadOnBuffer(8);
         section_syntax_indicator = ReadOnBuffer(1);
@@ -47,7 +50,10 @@ public abstract class Table extends BitReadWriter {
     }
     
     protected abstract void __decode_table_body__();
-    
+
+    /**
+     * @note internal functions to encode
+     */
     protected void __encode_update_table_length__() {};
     protected void __encode_prepare_table__() {};
     protected void __encode_prepare_buffer__() {
