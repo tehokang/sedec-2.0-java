@@ -1,11 +1,11 @@
 package arib.b39;
 
-import arib.b39.messages.CA_Message;
+import arib.b39.messages.CAMessage;
 import arib.b39.messages.DataTransmissionMessage;
 import arib.b39.messages.M2SectionMessage;
 import arib.b39.messages.M2ShortSectionMessage;
 import arib.b39.messages.Message;
-import arib.b39.messages.PA_Message;
+import arib.b39.messages.PAMessage;
 
 public class MessageFactory {
     /** PA */
@@ -28,9 +28,9 @@ public class MessageFactory {
         
         switch ( message_id ) {
             case PACKAGE_ACCESS_MESSAGE:
-                return new PA_Message(buffer);
+                return new PAMessage(buffer);
             case CONDITIONAL_ACCESS_MESSAGE:
-                return new CA_Message(buffer);
+                return new CAMessage(buffer);
             case M2_SECTION_MESSAGE:
                 return new M2SectionMessage(buffer);
             case M2_SHORT_SECTION_MESSAGE:

@@ -6,7 +6,7 @@ import java.util.List;
 import arib.b39.TableFactory;
 import arib.b39.tables.Table;
 
-public class PA_Message extends Message {
+public class PAMessage extends Message {
     protected byte number_of_tables;
     protected List<TableInfo> table_infos = new ArrayList<>();
     protected List<Table> tables = new ArrayList<>();
@@ -17,7 +17,7 @@ public class PA_Message extends Message {
         public int table_length;
     }
     
-    public PA_Message(byte[] buffer) {
+    public PAMessage(byte[] buffer) {
         super(buffer);
         
         __decode_message_body__();

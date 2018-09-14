@@ -6,10 +6,10 @@ import java.util.List;
 import arib.b39.TableFactory;
 import arib.b39.tables.Table;
 
-public class CA_Message extends Message {
+public class CAMessage extends Message {
     protected List<Table> tables = new ArrayList<>();
     
-    public CA_Message(byte[] buffer) {
+    public CAMessage(byte[] buffer) {
         super(buffer);
         
         __decode_message_body__();
