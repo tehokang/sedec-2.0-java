@@ -16,7 +16,7 @@ public class ApplicationInformationTableTranscoder extends ApplicationInformatio
     }
     
     @Override
-    protected void __encode_preprare_table__() {
+    protected void __encode_prepare_table__() {
         common_descriptors_length = 0;
         for ( int i=0; i<common_descriptors.size(); i++ ) {
             common_descriptors_length += common_descriptors.get(i).GetDescriptorLength();

@@ -15,7 +15,7 @@ public abstract class Table extends base.Table {
     
     public void EncodeTable() {
         __encode_update_table_length__();
-        __encode_preprare_table__();
+        __encode_prepare_table__();
 
         __encode_prepare_buffer__();
         __encode_write_table_header__();

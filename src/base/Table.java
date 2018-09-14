@@ -19,7 +19,7 @@ public abstract class Table extends BitReadWriter {
     
     public void EncodeTable() {
         __encode_update_table_length__();
-        __encode_preprare_table__();
+        __encode_prepare_table__();
 
         __encode_prepare_buffer__();
         __encode_write_table_header__();
@@ -39,19 +39,17 @@ public abstract class Table extends BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
-    protected void __encode_preprare_table__() {};
-    protected void __encode_write_table_body__() {};
-    protected void __encode_update_table_length__() {};
-
-    protected abstract void __decode_table_body__();
-    
     protected void __decode_table_header__() {
         table_id = ReadOnBuffer(8);
         section_syntax_indicator = ReadOnBuffer(1);
         SkipOnBuffer(3);
         section_length = ReadOnBuffer(12);
     }
-
+    
+    protected abstract void __decode_table_body__();
+    
+    protected void __encode_update_table_length__() {};
+    protected void __encode_prepare_table__() {};
     protected void __encode_prepare_buffer__() {
         if(m_buffer != null)
         {
@@ -69,7 +67,7 @@ public abstract class Table extends BitReadWriter {
         WriteOnBuffer( 3, 2);
         WriteOnBuffer( section_length, 12);
     }
-    
+    protected void __encode_write_table_body__() {};
     protected void __encode_make_crc__() {
         m_crc = Arrays.copyOf(m_buffer, section_length-1);
         checksum_CRC32 = CalculateCRC32( m_crc, section_length-1 );
