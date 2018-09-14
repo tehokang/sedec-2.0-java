@@ -4,8 +4,15 @@ import base.Table;
 import base.UnknownTable;
 import arib.b39.tables.AddressMapTable;
 import arib.b39.tables.ConditionalAccessTable;
+import arib.b39.tables.DataAssetManagementTable;
+import arib.b39.tables.DataContentConfigurationTable;
+import arib.b39.tables.DataDirectoryManagementTable;
+import arib.b39.tables.DownloadControlMessage;
+import arib.b39.tables.DownloadManagementMessage;
+import arib.b39.tables.EntitlementControlMessage;
 import arib.b39.tables.EventMessageTable;
 import arib.b39.tables.LayoutConfigurationTable;
+import arib.b39.tables.MMT_PackageTable;
 import arib.b39.tables.MPEGH_ApplicationInformationTable;
 import arib.b39.tables.MPEGH_BroadcasterInformationTable;
 import arib.b39.tables.MPEGH_CommonDataTable;
@@ -17,12 +24,31 @@ import arib.b39.tables.PackageListTable;
 import arib.b39.tables.TLV_NetworkInformationTable;
 
 public class TableFactory {
+    /** MMT-PT */
+    public final static int MMT_PACKAGE_TABLE = 0x20;
+    
     /** TLV-NIT */
     public final static int ACTUAL_TLV_NETWORK_INFORMATION_TABLE = 0x40;
     public final static int OTHER_TLV_NETWORK_INFORMATION_TABLE = 0x41;
     
     /** PLT */
     public final static int PACKAGE_LIST_TABLE = 0x80;
+    
+    /** ECM */
+    public final static int ENTITLEMENT_CONTROL_MESSAGE_1 = 0x82;
+    public final static int ENTITLEMENT_CONTROL_MESSAGE_2 = 0x83;
+    
+    /** EMM */
+    public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_1 = 0x84;
+    public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_2 = 0x85;
+    
+    /** DCM */
+    public final static int DOWNLOAD_CONTROL_MESSAGE_1 = 0x87;
+    public final static int DOWNLOAD_CONTROL_MESSAGE_2 = 0x88;
+    
+    /** DMM */
+    public final static int DOWNLOAD_MANAGEMENT_MESSAGE_1 = 0x89;
+    public final static int DOWNLOAD_MANAGEMENT_MESSAGE_2 = 0x8a;
     
     /** CAT */
     public final static int CONDITIONAL_ACCESS_TABLE = 0x86;
@@ -45,6 +71,15 @@ public class TableFactory {
     
     /** MH-TOT */
     public final static int MPEGH_TIME_OFFSET_TABLE = 0xa1;
+    
+    /** DDMT */
+    public final static int DATA_DIRECTORY_MANAGEMENT_TABLE = 0xa3;
+    
+    /** DAMT */
+    public final static int DATA_ASSET_MANAGEMENT_TABLE = 0xa4;
+    
+    /** DCCT */
+    public final static int DATA_CONTENT_CONFIGURATION_TABLE = 0xa5;
     
     /** EMT */
     public final static int EVENT_MESSAGE_TABLE = 0xa6;
@@ -81,18 +116,28 @@ public class TableFactory {
      *  - PA 0x00
      *  - CRI 0x21
      *  - DCI 0x22
-     *  - ECM 0x82 0x83
-     *  - EMM 0x84 0x85
-     *  - DCM 0x87 0x88
-     *  - DMM 0x89 0x8a
-     *  - DDM 0xa3
-     *  - DAM 0xa4
-     *  - DCC 0xa5
      */
     public static Table CreateTable(byte[] buffer) {
         int table_id = (buffer[0] & 0xff);
         
         switch(table_id) {
+            case DATA_CONTENT_CONFIGURATION_TABLE:
+                return new DataContentConfigurationTable(buffer);
+            case DATA_ASSET_MANAGEMENT_TABLE:
+                return new DataAssetManagementTable(buffer);
+            case DATA_DIRECTORY_MANAGEMENT_TABLE:
+                return new DataDirectoryManagementTable(buffer);
+            case DOWNLOAD_MANAGEMENT_MESSAGE_1:
+            case DOWNLOAD_MANAGEMENT_MESSAGE_2:
+                return new DownloadManagementMessage(buffer);
+            case DOWNLOAD_CONTROL_MESSAGE_1:
+            case DOWNLOAD_CONTROL_MESSAGE_2:
+                return new DownloadControlMessage(buffer);
+            case ENTITLEMENT_CONTROL_MESSAGE_1:
+            case ENTITLEMENT_CONTROL_MESSAGE_2:
+                return new EntitlementControlMessage(buffer);
+            case MMT_PACKAGE_TABLE:
+                return new MMT_PackageTable(buffer);
             case EVENT_MESSAGE_TABLE:
                 return new EventMessageTable(buffer);
             case CONDITIONAL_ACCESS_TABLE:

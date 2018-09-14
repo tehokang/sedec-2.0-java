@@ -6,8 +6,6 @@ public abstract class Table extends base.Table {
     protected int table_id;
     protected int version;
     protected int length;
-    protected byte[] m_crc;
-    protected int checksum_CRC32;
     
     public Table(byte[] buffer) {
         super(buffer);
@@ -25,10 +23,6 @@ public abstract class Table extends base.Table {
         __encode_make_crc__();
     }
     
-    public void SaveTable() {
-        
-    }
-         
     public void PrintTable() {
         Logger.d(String.format("======= Section Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("table_id : 0x%x \n", table_id));
