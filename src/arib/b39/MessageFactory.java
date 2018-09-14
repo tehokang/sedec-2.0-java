@@ -11,13 +11,28 @@ public class MessageFactory {
     /** PA */
     public final static int PACKAGE_ACCESS_MESSAGE = 0x0000;
     
-    /** M2 SECTION */
+    /** 
+     * @note M2 SECTION has 
+     *  - ECM
+     *  - EMM
+     *  - DCM
+     *  - DMM
+     *  - MH-EIT
+     *  - MH-AIT
+     *  - MH-BIT
+     *  - MH-SDTT
+     *  - MH-SDT
+     *  - MH-CDT 
+     **/
     public final static int M2_SECTION_MESSAGE = 0x8000;
     
     /** CA */
     public final static int CONDITIONAL_ACCESS_MESSAGE = 0x8001;
     
-    /** M2 SHORT SECTION */
+    /** 
+     * @note M2 SHORT SECTION has
+     *  - MH-TOT 
+     **/
     public final static int M2_SHORT_SECTION_MESSAGE = 0x8002;
     
     /** DT */
