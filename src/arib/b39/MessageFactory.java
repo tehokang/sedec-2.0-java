@@ -12,7 +12,7 @@ public class MessageFactory {
     public final static int PACKAGE_ACCESS_MESSAGE = 0x0000;
     
     /** 
-     * @note M2 SECTION has 
+     * @note M2 SECTION could have
      *  - ECM
      *  - EMM
      *  - DCM
@@ -30,7 +30,7 @@ public class MessageFactory {
     public final static int CONDITIONAL_ACCESS_MESSAGE = 0x8001;
     
     /** 
-     * @note M2 SHORT SECTION has
+     * @note M2 SHORT SECTION could have
      *  - MH-TOT 
      **/
     public final static int M2_SHORT_SECTION_MESSAGE = 0x8002;
