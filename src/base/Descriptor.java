@@ -31,9 +31,9 @@ public abstract class Descriptor {
     }
     
     protected void _PrintDescriptorHeader_() {
-        Logger.d(String.format("\tdescriptor_tag : 0x%x (%s) \n", 
+        Logger.d(String.format("\t descriptor_tag : 0x%x (%s) \n", 
                 descriptor_tag, getClass().getName()));
-        Logger.d(String.format("\tdescriptor_length : 0x%x \n", descriptor_length));
+        Logger.d(String.format("\t descriptor_length : 0x%x \n", descriptor_length));
     }
     
     public abstract void PrintDescriptor();
