@@ -34,8 +34,10 @@ Every Tables and Descriptors are based on base/Table or arib/Table and so on wha
 
 
 # How To Run
+After building via Eclipse(or ANT), you can run one of examples which should have a parameter as section.
 <pre>
-$java -classpath . .....
+$cd bin
+$java -classpath . zexamples.decoder.AribTableDecoder ../tables-dumped/dvb/ait/133_10_117
 </pre>
 
 
