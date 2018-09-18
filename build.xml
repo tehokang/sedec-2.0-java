@@ -15,7 +15,6 @@
     <property name="lib.dir" value="libs"/>
     <property name="src.dir" value="src"/>
     <property name="doc.dir" value="${release.dir}/doc"/>
-    <property name="project.name" value="sedec2"/>
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
             <include name="**/*.jar" />
@@ -124,8 +123,8 @@
         <javadoc destdir="${doc.dir}" 
                 classpathref="project.classpath" 
                 version="true"
-                windowtitle="${project.name} SDK Document" 
-                doctitle="${project.name} SDK Document"
+                windowtitle="${ant.project.name} SDK Document" 
+                doctitle="${ant.project.name} SDK Document"
                 linksource="yes"
                 encoding="utf-8"
                 charset="utf-8"
