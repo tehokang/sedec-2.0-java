@@ -43,7 +43,9 @@ Every Tables and Descriptors are based on base/Table or arib/Table and so on wha
 * Table : base class of all of table.
 * Descriptor : base class of all of descriptor
 
-<img src="https://github.com/tehokang/documents/blob/master/sedec/sedec-2.0-overview-general.png?raw=true"/>
+<center>
+    <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec-2.0-overview-general.png?raw=true"/>
+</center>
 
 ## Package Tree
 
