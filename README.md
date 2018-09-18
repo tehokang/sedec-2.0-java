@@ -142,4 +142,5 @@ If you have any questions and if the app is misbehaving or missing critical feat
 # To Do
 
 * I'm not sure what encoding of CRC32 is working correctly, the shift model can be wrong.
+* Getter/Setter of tables and descriptors, all of table and descriptor can be decoded BTW interfaces like getter of tables/descriptors are not enough
 * More tables what you could know
