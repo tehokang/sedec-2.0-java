@@ -88,16 +88,16 @@ To use this in android, you could just import this library in your gradle of pro
 
 After building a target, release-arib-example-decoder via Eclipse(or ANT), you can run with a parameter as section path dumped.
 
-* 1st case of run
+* 1st method of run
 <pre>
 $cd bin
 $java -classpath . zexamples.decoder.AribTableDecoder ../tables-dumped/arib/b39/ait/mh-ait.bin
 </pre>
 
-* 2nd case of run
+* 2nd method of run
 <pre>
 $cd dist
-$java -jar sedec2-2.0-example-arib-decoder.jar ../tables-dumped/arib/b39/ait/mh-ait.bin
+$java -jar sedec2-2.0-example-arib-decoder.jar ../tables-dumped/arib/b10/pat/pat_dump_0
 </pre>
 
 As a result, the example will show up like below,
@@ -142,8 +142,4 @@ If you have any questions and if the app is misbehaving or missing critical feat
 # To Do
 
 * I'm not sure what encoding of CRC32 is working correctly, the shift model can be wrong.
-* Many kinds of table not including here
-
-# References
-
-
+* More tables what you could know
