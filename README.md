@@ -60,9 +60,7 @@ Every Tables and Descriptors are based on base/Table or arib/Table and so on wha
 
 # How To Build
 
-- We could build with Apache Ant as build tool, please install ant in your system.
-- Following is explaining with prerequisite you already installed.
-- Obviously ant build tool has almost same mechanism with make tool like make has target, dependencies and command.
+We could build with Apache Ant as build tool, please install ant in your system. Following is explaining with prerequisite you already installed. Obviously ant build tool has almost same mechanism with make tool like make has target, dependencies and command.
 
 * Basically our ant has targets below
  * build (default)
@@ -88,15 +86,15 @@ $ant release-arib-example-decoder
 
 After building a target, release-arib-example-decoder via Eclipse(or ANT), you can run with a parameter as section path dumped.
 
-* Method 1
+* 1st case of run
 <pre>
 $cd bin
 $java -classpath . zexamples.decoder.AribTableDecoder ../tables-dumped/arib/b39/ait/mh-ait.bin
 </pre>
 
-* Method 2
+* 2nd case of run
 <pre>
-$ cd dist
+$cd dist
 $java -jar sedec2-2.0-example-arib-decoder.jar ../tables-dumped/arib/b39/ait/mh-ait.bin
 </pre>
 
