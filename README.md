@@ -7,7 +7,7 @@
 	* [Package Tree](#Package-Tree)
 * [How To Build](#How-To-Build)
 * [How To Run](#How-To-Run)
-* [TODO](#TODO)
+* [To Do](#To-Do)
 
 
 # Introduction
@@ -22,11 +22,11 @@ You could get started to make a kind of sections to decode like following easy s
 
 Currently SEDEC-2.0-java is including sections like below,
 
-## DVB 
+## DVB
 
 Tables as known as section : PAT, PMT, CAT, AIT, BAT, DIT, EIT, NIT, RST, SIT, SDT, ST, TDT, TOT
 
-## ARIB 
+## ARIB
 
 Tables of based on B10 : BAT, BIT, CAT, DIT, DCM, ECM, EMM, EIT, ERT, ITT, LDT, LET, NBT, NIT, PCAT, PAT, PMT, RST, SIT, SDT, SDTT, ST, TDT, TOT
 
@@ -143,3 +143,7 @@ If you have any questions and if the app is misbehaving or missing critical feat
 
 * I'm not sure what encoding of CRC32 is working correctly, the shift model can be wrong.
 * Many kinds of table not including here
+
+# References
+
+
