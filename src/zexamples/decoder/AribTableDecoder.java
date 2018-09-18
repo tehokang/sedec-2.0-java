@@ -7,7 +7,7 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import base.Table;
+import sedec2.base.Table;
 
 public class AribTableDecoder {
     public static void main(String []args) {
@@ -35,11 +35,11 @@ public class AribTableDecoder {
     
                 dataInputStream.readFully(table_buffer);
     
-                Table table = arib.b10.TableFactory.CreateTable(table_buffer);
+                Table table = sedec2.arib.b10.TableFactory.CreateTable(table_buffer);
                 if ( null == table ) {
-                    table = arib.b24.TableFactory.CreateTable(table_buffer);
+                    table = sedec2.arib.b24.TableFactory.CreateTable(table_buffer);
                     if ( null == table) {
-                        table = arib.b39.TableFactory.CreateTable(table_buffer);
+                        table = sedec2.arib.b39.TableFactory.CreateTable(table_buffer);
                     }
                 }
                 

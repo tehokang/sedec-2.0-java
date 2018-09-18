@@ -7,8 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
-import base.Table;
-import dvb.TableFactory;
+import sedec2.base.Table;
+import sedec2.dvb.TableFactory;
 
 public class DvbTableDecoder {
     public static void main(String []args) {
