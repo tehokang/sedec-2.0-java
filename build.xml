@@ -61,20 +61,29 @@
         </javac>
     </target>
               
-    <target name="release-unittest-application">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-unittest.jar" 
+    <target name="release-arib-example-decoder">
+        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-decoder.jar" 
             basedir="${bin.dir}" 
             includes="**">
             <manifest>
-                <attribute name="Main-Class" value="zexamples.AribTableDecoder"/>
-            </manifest>
-            <manifest>
-                <attribute name="Main-Class" value="zexamples.DvbTableDecoder"/>
+                <attribute name="Main-Class" value="zexamples.decoder.AribTableDecoder"/>
             </manifest>
             <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
         </jar>
     </target>
-              
+
+    <target name="release-dvb-example-decoder">
+        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-dvb-decoder.jar" 
+            basedir="${bin.dir}" 
+            includes="**">
+            <manifest>
+                <attribute name="Main-Class" value="zexamples.decoder.DvbTableDecoder"/>
+            </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
+        </jar>
+    </target>
+
+            	
     <target depends="init,build-project" name="release-sdk">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
             basedir="${bin.dir}" 
