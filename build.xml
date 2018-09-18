@@ -61,7 +61,7 @@
         </javac>
     </target>
               
-    <target name="release-arib-example-decoder">
+    <target depends="init, build" name="release-arib-example-decoder">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-decoder.jar" 
             basedir="${bin.dir}" 
             includes="**">
@@ -72,7 +72,7 @@
         </jar>
     </target>
 
-    <target name="release-dvb-example-decoder">
+    <target depends="init, build" name="release-dvb-example-decoder">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-dvb-decoder.jar" 
             basedir="${bin.dir}" 
             includes="**">
