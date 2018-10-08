@@ -38,6 +38,34 @@ public class AddressMapTable extends Table {
         public byte dst_address_mask_128;
     }
     
+    public int GetTableIdExtension() {
+        return table_id_extension;
+    }
+    
+    public byte GetVersionNumber() {
+        return version_number;
+    }
+    
+    public byte GetCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte GetSectionNumber() {
+        return section_number;
+    }
+    
+    public byte GetLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int GetNumOfService() {
+        return num_of_service_id;
+    }
+    
+    public List<Service> GetServices() {
+        return services;
+    }
+    
     public AddressMapTable(byte[] buffer) {
         super(buffer);
         
