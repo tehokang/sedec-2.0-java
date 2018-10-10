@@ -15,6 +15,10 @@ public class ConditionalAccessTable extends Table {
         __decode_table_body__();
     }
 
+    public List<Descriptor> GetDescriptors() {
+        return descriptors;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         

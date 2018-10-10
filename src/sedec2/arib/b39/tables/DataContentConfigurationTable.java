@@ -37,11 +37,18 @@ public class DataContentConfigurationTable extends Table {
         public List<Descriptor> pu_desctiptors = new ArrayList<>();
     }
     
-    
     public DataContentConfigurationTable(byte[] buffer) {
         super(buffer);
         
         __decode_table_body__();
+    }
+    
+    public byte GetNumOfContents() {
+        return num_of_contents;
+    }
+    
+    public List<Content> GetContents() {
+        return contents;
     }
 
     @Override

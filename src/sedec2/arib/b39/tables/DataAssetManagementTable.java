@@ -46,6 +46,14 @@ public class DataAssetManagementTable extends Table {
         __decode_table_body__();
     }
 
+    public byte GetNumOfDataComponents() {
+        return num_of_data_components;
+    }
+    
+    public List<DataComponent> GetDataComponents() {
+        return data_components;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         num_of_data_components = (byte) ReadOnBuffer(8);

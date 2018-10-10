@@ -37,6 +37,14 @@ public class DataDirectoryManagementTable extends Table {
         __decode_table_body__();
     }
 
+    public byte GetNumOfBaseDirectory() {
+        return num_of_base_directory;
+    }
+    
+    public List<BaseDirectory> GetBaseDirectories() {
+        return base_directories;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         num_of_base_directory = (byte) ReadOnBuffer(8);
