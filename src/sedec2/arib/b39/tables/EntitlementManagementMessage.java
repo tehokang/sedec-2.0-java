@@ -17,6 +17,30 @@ public class EntitlementManagementMessage extends Table {
         __decode_table_body__();
     }
     
+    public int GetTableIdExtension() {
+        return table_id_extension;
+    }
+    
+    public byte GetVersionNumber() {
+        return version_number;
+    }
+    
+    public byte GetCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte GetSectionNumber() {
+        return section_number;
+    }
+    
+    public byte GetLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public byte[] GetEMMData() {
+        return EMM_data;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         table_id_extension = ReadOnBuffer(16);
