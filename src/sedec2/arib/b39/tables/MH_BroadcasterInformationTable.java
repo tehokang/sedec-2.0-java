@@ -34,6 +34,42 @@ public class MH_BroadcasterInformationTable extends Table {
         __decode_table_body__();
     }
 
+    public int GetOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public byte GetVersionNumber() {
+        return version_number;
+    }
+    
+    public byte GetCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte GetSectionNumber() {
+        return section_number;
+    }
+    
+    public byte GetLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public byte GetBroadcastViewPriority() {
+        return broadcast_view_priority;
+    }
+    
+    public int GetFirstDescriptorsLength() {
+        return first_descriptors_length;
+    }
+    
+    public List<Descriptor> GetDescriptors() {
+        return descriptors;
+    }
+    
+    public List<Broadcaster> GetBroadcasters() {
+        return broadcasters;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         original_network_id = ReadOnBuffer(16);

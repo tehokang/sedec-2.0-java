@@ -36,6 +36,34 @@ public class MMT_PackageTable extends Table {
         
         __decode_table_body__();
     }
+    
+    public byte GetMPTMode() {
+        return MPT_mode;
+    }
+    
+    public byte GetMMTPackageIdLength() {
+        return MMT_package_id_length;
+    }
+    
+    public byte[] GetMMTPackageIdByte() {
+        return MMT_package_id_byte;
+    }
+    
+    public int GetMPTDescriptorLength() {
+        return MPT_descriptor_length;
+    }
+    
+    public List<Descriptor> GetDescriptors() {
+        return descriptors;
+    }
+    
+    public byte GetNumberOfAssets() {
+        return number_of_assets;
+    }
+    
+    public List<Asset> GetAssets() {
+        return assets;
+    }
 
     @Override
     protected void __decode_table_body__() {

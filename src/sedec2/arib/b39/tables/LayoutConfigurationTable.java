@@ -39,6 +39,26 @@ public class LayoutConfigurationTable extends Table {
         __decode_table_body__();
     }
 
+    public byte GetVersion() {
+        return version;
+    }
+    
+    public int GetLength() {
+        return length;
+    }
+    
+    public byte GetNumberOfLoop() {
+        return number_of_loop;
+    }
+    
+    public List<Layout> GetLayouts() {
+        return layouts;
+    }
+    
+    public List<Descriptor> GetDescriptors() {
+        return descriptors;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         number_of_loop = (byte) ReadOnBuffer(8);

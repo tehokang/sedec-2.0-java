@@ -49,6 +49,22 @@ public class PackageListTable extends Table {
         __decode_table_body__();
     }
 
+    public byte GetNumberOfPackage() {
+        return num_of_package;
+    }
+    
+    public List<Package> GetPackages() {
+        return packages;
+    }
+    
+    public byte GetNumberOfDelivery() {
+        return num_of_ip_delivery;
+    }
+    
+    public List<Delivery> GetDeliveries() {
+        return deliveries;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         num_of_package = (byte) ReadOnBuffer(8);

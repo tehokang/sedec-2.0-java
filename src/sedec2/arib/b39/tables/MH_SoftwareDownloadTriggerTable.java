@@ -47,6 +47,46 @@ public class MH_SoftwareDownloadTriggerTable extends Table {
         __decode_table_body__();
     }
 
+    public int GetTableIdExtension() {
+        return table_id_ext;
+    }
+    
+    public byte GetVersionNumber() {
+        return version_number;
+    }
+    
+    public byte GetCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte GetSectionNumber() {
+        return section_number;
+    }
+    
+    public byte GetLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int GetTlvStreamId() {
+        return tlv_stream_id;
+    }
+    
+    public int GetOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public int GetServiceId() {
+        return service_id;
+    }
+    
+    public byte GetNumberOfContenst() {
+        return num_of_contents;
+    }
+    
+    public List<Content> GetContents() {
+        return contents;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         table_id_ext = ReadOnBuffer(16);
