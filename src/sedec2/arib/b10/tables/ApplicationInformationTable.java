@@ -1,12 +1,12 @@
-package sedec2.arib.b24.tables;
+package sedec2.arib.b10.tables;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.arib.b10.DescriptorFactory;
+import sedec2.arib.b10.descriptors.Application;
+import sedec2.arib.b10.descriptors.Descriptor;
 import sedec2.base.Table;
-import sedec2.arib.b24.DescriptorFactory;
-import sedec2.arib.b24.descriptors.Application;
-import sedec2.arib.b24.descriptors.Descriptor;
 import sedec2.util.Logger;
 
 public class ApplicationInformationTable extends Table {

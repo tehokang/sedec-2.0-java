@@ -1,6 +1,6 @@
 package sedec2.arib.b10;
 
-import sedec2.arib.b10.tables.NetworkBoardInformationTable;
+import sedec2.arib.b10.tables.ApplicationInformationTable;
 import sedec2.arib.b10.tables.BouquetAssociationTable;
 import sedec2.arib.b10.tables.BroadcasterInformationTable;
 import sedec2.arib.b10.tables.ConditionalAccessTable;
@@ -14,6 +14,7 @@ import sedec2.arib.b10.tables.EventRelationTable;
 import sedec2.arib.b10.tables.IndexTransmissionTable;
 import sedec2.arib.b10.tables.LinkedDescriptionTable;
 import sedec2.arib.b10.tables.LocalEventInformationTable;
+import sedec2.arib.b10.tables.NetworkBoardInformationTable;
 import sedec2.arib.b10.tables.NetworkInformationTable;
 import sedec2.arib.b10.tables.PartialContentAnnouncementTable;
 import sedec2.arib.b10.tables.ProgramAssociationTable;
@@ -36,9 +37,6 @@ public class TableFactory {
     
     /** @note PMT */
     public final static int PROGRAM_MAP_TABLE = 0x02;
-    
-    /** @note AIT */
-    public final static int APPLICATION_INFORMATION_TABLE = 0x74;
     
     /** @note NIT for actual */
     public final static int ACTUAL_NETWORK_INFORMATION_TABLE = 0x40;
@@ -72,6 +70,9 @@ public class TableFactory {
     
     /** @note TOT */
     public final static int TIME_OFFSET_TABLE = 0x73;
+    
+    /** @note AIT */
+    public final static int APPLICATION_INFORMATION_TABLE = 0x74;
     
     /** @note DIT */
     public final static int DISCONTINUITY_INFORMATION_TABLE = 0x7e;
@@ -183,6 +184,8 @@ public class TableFactory {
                 return new IndexTransmissionTable(buffer);
             case SOFTWARE_DOWNLOAD_TRIGGER_TABLE:
                 return new SoftwareDownloadTriggerTable(buffer);
+            case APPLICATION_INFORMATION_TABLE:
+                return new ApplicationInformationTable(buffer);
             default:
                 break;
         }

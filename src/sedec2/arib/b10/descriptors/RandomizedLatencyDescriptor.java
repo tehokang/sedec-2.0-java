@@ -1,4 +1,4 @@
-package sedec2.arib.b24.descriptors;
+package sedec2.arib.b10.descriptors;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;

@@ -1,10 +1,10 @@
-package sedec2.arib.b24.descriptors;
+package sedec2.arib.b10.descriptors;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.arib.b10.DescriptorFactory;
 import sedec2.base.BitReadWriter;
-import sedec2.arib.b24.DescriptorFactory;
 import sedec2.util.Logger;
 
 public class Application {
