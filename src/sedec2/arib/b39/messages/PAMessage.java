@@ -23,6 +23,18 @@ public class PAMessage extends Message {
         __decode_message_body__();
     }
 
+    public byte GetNumberOfTables() {
+        return number_of_tables;
+    }
+    
+    public List<TableInfo> GetTableInfo() {
+        return table_infos;
+    }
+    
+    public List<Table> GetTables() {
+        return tables;
+    }
+    
     @Override
     protected void __decode_message_body__() {
         number_of_tables = (byte) ReadOnBuffer(8);

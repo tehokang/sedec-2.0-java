@@ -15,6 +15,18 @@ public abstract class Message extends sedec2.base.BitReadWriter {
         __decode_message_header__();
     }
     
+    public int GetMessageId() {
+        return message_id;
+    }
+    
+    public int GetVersion() {
+        return version;
+    }
+    
+    public int GetLength() {
+        return length;
+    }
+    
     public void EncodeMessage() {
         __encode_update_message_length__();
         __encode_preprare_message__();

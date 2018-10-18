@@ -14,7 +14,11 @@ public class CAMessage extends Message {
         
         __decode_message_body__();
     }
-
+    
+    public List<Table> GetTables() {
+        return tables;
+    }
+    
     @Override
     protected void __decode_message_body__() {
         for ( int i=length; i>0; ) {

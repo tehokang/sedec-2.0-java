@@ -12,6 +12,10 @@ public class M2ShortSectionMessage extends Message {
         __decode_message_body__();
     }
 
+    public Table GetTable() {
+        return table;
+    }
+    
     @Override
     protected void __decode_message_body__() {
         table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
