@@ -37,7 +37,10 @@ public class AribTableDecoder {
     
                 Table table = sedec2.arib.b10.TableFactory.CreateTable(table_buffer);
                 if ( null == table ) {
-                    table = sedec2.arib.mmt.si.TableFactory.CreateTable(table_buffer);
+                    table = sedec2.arib.tlv.si.TableFactory.CreateTable(table_buffer);
+                    if ( null == table ) {
+                        table = sedec2.arib.mmt.si.TableFactory.CreateTable(table_buffer);
+                    }
                 }
                 
                 System.out.println(

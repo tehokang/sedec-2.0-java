@@ -24,9 +24,12 @@ public class TableFactory {
                 return new TLV_NetworkInformationTable(buffer);
             case ADDRESS_MAP_TABLE:
                 return new AddressMapTable(buffer);
-            default:
+            case UNKNOWN_TABLE:
                 return new UnknownTable(buffer);
+            default:
+                break;
         }
+        return null;
     }
     
     private TableFactory() {

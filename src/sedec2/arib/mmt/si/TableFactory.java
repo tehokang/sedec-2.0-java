@@ -46,20 +46,7 @@ public class TableFactory {
     
     /** CAT */
     public final static int CONDITIONAL_ACCESS_TABLE = 0x86;
-    
-    /** MH-SDT */
-    public final static int ACTUAL_MPEGH_SERVICE_DESCRIPTION_TABLE = 0x9f;
-    public final static int OTHER_MPEGH_SERVICE_DESCRIPTION_TABLE = 0xa0;
-    
-    /** MH-AIT */
-    public final static int MPEGH_APPLICATION_INFORMATION_TABLE = 0x9c;
-    
-    /** MH-BIT */
-    public final static int MPEGH_BROADCASTER_INFORMATION_TABLE = 0x9d;
-    
-    /** MH-SDTT */
-    public final static int MPEGH_SOFTWARE_DOWNLOAD_TRIGGER_TABLE = 0x9e;
-    
+         
     /** MH-CDT */
     public final static int MPEGH_COMMON_DATA_TABLE = 0xa2;
     
@@ -99,6 +86,19 @@ public class TableFactory {
     public final static int AUTO_MPEGH_EVENT_INFORMATION_TABLE_14 = 0x99;
     public final static int AUTO_MPEGH_EVENT_INFORMATION_TABLE_15 = 0x9a;
     public final static int AUTO_MPEGH_EVENT_INFORMATION_TABLE_16 = 0x9b;
+    
+    /** MH-AIT */
+    public final static int MPEGH_APPLICATION_INFORMATION_TABLE = 0x9c;
+    
+    /** MH-BIT */
+    public final static int MPEGH_BROADCASTER_INFORMATION_TABLE = 0x9d;
+    
+    /** MH-SDTT */
+    public final static int MPEGH_SOFTWARE_DOWNLOAD_TRIGGER_TABLE = 0x9e;
+
+    /** MH-SDT */
+    public final static int ACTUAL_MPEGH_SERVICE_DESCRIPTION_TABLE = 0x9f;
+    public final static int OTHER_MPEGH_SERVICE_DESCRIPTION_TABLE = 0xa0;
     
     public final static int UNKNOWN_TABLE = 0xff;
 
