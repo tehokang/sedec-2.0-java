@@ -26,6 +26,10 @@ public class MH_ServiceListDescriptor extends Descriptor {
         }
     }
 
+    public List<Service> GetServices() {
+        return services;
+    }
+    
     @Override
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();

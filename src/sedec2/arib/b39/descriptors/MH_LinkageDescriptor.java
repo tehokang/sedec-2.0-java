@@ -27,6 +27,22 @@ public class MH_LinkageDescriptor extends Descriptor {
         }
     }
 
+    public int GetTlvStreamId() {
+        return tlv_stream_id;
+    }
+    
+    public int GetOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public int GetServiceId() {
+        return service_id;
+    }
+    
+    public int GetLinkageType() {
+        return linkage_type;
+    }
+    
     @Override
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();

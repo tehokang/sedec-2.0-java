@@ -19,6 +19,10 @@ public class NetworkNameDescriptor extends Descriptor {
         }
     }
 
+    public String GetNetworkName() {
+        return new String(network_name);
+    }
+    
     @Override
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
