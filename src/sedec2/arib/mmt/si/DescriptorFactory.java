@@ -4,6 +4,7 @@ import sedec2.arib.mmt.si.descriptors.AccessControlDescriptor;
 import sedec2.arib.mmt.si.descriptors.ApplicationServiceDescriptor;
 import sedec2.arib.mmt.si.descriptors.AssetGroupDescriptor;
 import sedec2.arib.mmt.si.descriptors.BackgroundColorDescriptor;
+import sedec2.arib.mmt.si.descriptors.ContentCopyControlDescriptor;
 import sedec2.arib.mmt.si.descriptors.DependencyDescriptor;
 import sedec2.arib.mmt.si.descriptors.Descriptor;
 import sedec2.arib.mmt.si.descriptors.EmergencyInformationDescriptor;
@@ -27,6 +28,7 @@ import sedec2.arib.mmt.si.descriptors.MH_ExpireDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_ExtendedEventDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_ExtendedTimestampDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_HEVCDescriptor;
+import sedec2.arib.mmt.si.descriptors.MH_HierachyDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_InfoDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_LinkageDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_LocalTimeOffsetDescriptor;
@@ -47,9 +49,11 @@ import sedec2.arib.mmt.si.descriptors.MH_TargetRegionDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_TransportProtocolDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_TypeDescriptor;
 import sedec2.arib.mmt.si.descriptors.MPU_DownloadContentDescriptor;
+import sedec2.arib.mmt.si.descriptors.MPU_NodeDescriptor;
 import sedec2.arib.mmt.si.descriptors.MPU_PresentationRegionDescriptor;
 import sedec2.arib.mmt.si.descriptors.MPU_TimestampDescriptor;
 import sedec2.arib.mmt.si.descriptors.MessageAuthenticationMethodDescriptor;
+import sedec2.arib.mmt.si.descriptors.PUStructureDescriptor;
 import sedec2.arib.mmt.si.descriptors.ScramblerDescriptor;
 import sedec2.arib.mmt.si.descriptors.UnknownDescriptor;
 import sedec2.arib.mmt.si.descriptors.UnlockedCacheDescriptor;
@@ -58,8 +62,9 @@ import sedec2.arib.mmt.si.descriptors.VideoComponentDescriptor;
 import sedec2.base.BitReadWriter;
 
 public class DescriptorFactory {
-    public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0000;
+    public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0001;
     public final static int DEPENDENCY_DESCRIPTOR = 0x0002;
+    
     public final static int ASSET_GROUP_DESCRIPTOR = 0x8000;
     public final static int EVENT_PACKAGE_DESCRIPTOR = 0x8001;
     public final static int BACKGROUND_COLOR_DESCRIPTOR = 0x8002;
@@ -73,6 +78,7 @@ public class DescriptorFactory {
     public final static int MPEGH_HEVC_DESCRIPTOR = 0x800a;
     public final static int MPEGH_EVENT_GROUP_DESCRIPTOR = 0x800c;
     public final static int MPEGH_SERVICE_LIST_DESCRIPTOR = 0x800d;
+    
     public final static int VIDEO_COMPONENT_DESCRIPTOR = 0x8010;
     public final static int MPEGH_STREAM_IDENTIFIER_DESCRIPTOR = 0x8011;
     public final static int MPEGH_CONTENT_DESCRIPTOR = 0x8012;
@@ -81,6 +87,8 @@ public class DescriptorFactory {
     public final static int MPEGH_TARGET_REGION_DESCRIPTOR = 0x8015;
     public final static int MPEGH_SERIES_DESCRIPTOR = 0x8016;
     public final static int MPEGH_SI_PARAMETER_DESCRIPTOR = 0x8017;
+    public final static int MPEGH_BROADCASTER_NAME_DESCRIPTOR = 0x8018;
+    public final static int MPEGH_SERVICE_DESCRIPTOR = 0x8019;
     public final static int IP_DATA_FLOW_DESCRIPTOR = 0x801a;
     public final static int MPEGH_CA_STARTUP_DESCRIPTOR = 0x801b;
     public final static int MPEGH_TYPE_DESCRIPTOR = 0x801c;
@@ -89,6 +97,12 @@ public class DescriptorFactory {
     public final static int MPEGH_COMPRESSION_TYPE_DESCRIPTOR = 0x801f;
     public final static int MPEGH_DATA_COMPONENT_DESCRIPTOR = 0x8020;
     public final static int UTC_NPT_REFERENCE_DESCRIPTOR = 0x8021;
+    public final static int MPEGH_LOCAL_TIME_OFFSET_DESCRIPTOR = 0x8023;
+    public final static int MPEGH_COMPONENT_GROUP_DESCRIPTOR = 0x8024;
+    public final static int MPEGH_LOGO_TRANSMISSION_DESCRIPTOR = 0x8025;
+    public final static int MPEGH_EXTENDED_TIMESTAMP_DESCRIPTOR = 0x8026;
+    public final static int MPU_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8027;
+    public final static int MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int MPEGH_APPLICATION_DESCRIPTOR = 0x8029;
     public final static int MPEGH_TRANSPORT_PROTOCOL_DESCRIPTOR = 0x802a;
     public final static int MPEGH_SIMPLE_APPLICATION_LOCATION_DESCRIPTOR = 0x802b;
@@ -99,17 +113,24 @@ public class DescriptorFactory {
     public final static int LINKED_PU_DESCRIPTOR = 0x8030;
     public final static int LOCKED_CACHE_DESCRIPTOR = 0x8031;
     public final static int UNLOCKED_CACHE_DESCRIPTOR = 0x8032;
-    public final static int MPEGH_BROADCASTER_NAME_DESCRIPTOR = 0x8018;
-    public final static int MPEGH_SERVICE_DESCRIPTOR = 0x8019;
-    public final static int MPEGH_LOCAL_TIME_OFFSET_DESCRIPTOR = 0x8023;
-    public final static int MPEGH_COMPONENT_GROUP_DESCRIPTOR = 0x8024;
-    public final static int MPEGH_LOGO_TRANSMISSION_DESCRIPTOR = 0x8025;
-    public final static int MPEGH_EXTENDED_TIMESTAMP_DESCRIPTOR = 0x8026;
-    public final static int MPU_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8027;
-    public final static int MPEGH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int MPEGH_DOWNLOAD_PROTECTION_DESCRIPTOR = 0x8033;
     public final static int APPLICATION_SERVICE_DESCRIPTOR = 0x8034;
-
+    public final static int MPU_NODE_DESCRIPTOR = 0x8035;
+    public final static int PU_STRUCTURE_DESCRIPTOR = 0x8036;
+    public final static int MPEGH_HIERACHY_DESCRIPTOR = 0x8037;
+    public final static int CONTENT_COPY_CONTROL_DESCRIPTOR = 0x8038;
+    
+    0x8039;
+    0x803a;
+    0x803b;
+    0x803c;
+    0x803d;
+    0x803e;
+    0x803f;
+    0x8040;
+    0x8041;
+    0x8042;
+    
     public final static int MPEGH_LINKAGE_DESCRIPTOR = 0xf000;
     public final static int MPEGH_SHORT_EVENT_DESCRIPTOR = 0xf001;
     public final static int MPEGH_EXTENDED_EVENT_DESCRIPTOR = 0xf002;
@@ -124,6 +145,14 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
+            case CONTENT_COPY_CONTROL_DESCRIPTOR:
+                return new ContentCopyControlDescriptor(brw);
+            case MPEGH_HIERACHY_DESCRIPTOR:
+                return new MH_HierachyDescriptor(brw);
+            case PU_STRUCTURE_DESCRIPTOR:
+                return new PUStructureDescriptor(brw);
+            case MPU_NODE_DESCRIPTOR:
+                return new MPU_NodeDescriptor(brw);
             case MPU_TIMESTAMP_DESCRIPTOR:
                 return new MPU_TimestampDescriptor(brw);
             case DEPENDENCY_DESCRIPTOR:
