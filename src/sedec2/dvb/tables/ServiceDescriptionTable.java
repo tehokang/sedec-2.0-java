@@ -3,9 +3,9 @@ package sedec2.dvb.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b39.DescriptorFactory;
-import sedec2.arib.b39.descriptors.Descriptor;
 import sedec2.base.Table;
+import sedec2.dvb.DescriptorFactory;
+import sedec2.dvb.descriptors.Descriptor;
 import sedec2.util.Logger;
 
 public class ServiceDescriptionTable extends Table {

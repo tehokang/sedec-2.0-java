@@ -1,21 +1,22 @@
-package sedec2.arib.b10.tables;
+package sedec2.arib.mmt.si.tables;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b10.DescriptorFactory;
-import sedec2.arib.b10.descriptors.Descriptor;
+import sedec2.arib.mmt.si.DescriptorFactory;
+import sedec2.arib.mmt.si.descriptors.Descriptor;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
-public class ServiceDescriptionTable extends Table {
-    protected int transport_stream_id;
+public class MH_ServiceDescriptionTable extends Table {
+    protected int tlv_stream_id;
     protected byte version_number;
     protected byte current_next_indicator;
     protected byte section_number;
     protected byte last_section_number;
     protected int original_network_id;
     protected int service_id;
+    protected byte EIT_user_defined_flags;
     protected byte EIT_schedule_flag;
     protected byte EIT_present_following_flag;
     protected byte running_status;
@@ -23,14 +24,14 @@ public class ServiceDescriptionTable extends Table {
     protected int descriptors_loop_length;
     protected List<Descriptor> descriptors = new ArrayList<>();
     
-    public ServiceDescriptionTable(byte[] buffer) {
+    public MH_ServiceDescriptionTable(byte[] buffer) {
         super(buffer);
         
         __decode_table_body__();
     }
 
     public int GetTlvStreamId() {
-        return transport_stream_id;
+        return tlv_stream_id;
     }
     
     public byte GetVersionNumber() {
@@ -57,6 +58,10 @@ public class ServiceDescriptionTable extends Table {
         return service_id;
     }
     
+    public byte GetEITUserDefinedFlags() {
+        return EIT_user_defined_flags;
+    }
+    
     public byte GetEITScheduleFlag() {
         return EIT_schedule_flag;
     }
@@ -79,7 +84,7 @@ public class ServiceDescriptionTable extends Table {
     
     @Override
     protected void __decode_table_body__() {
-        transport_stream_id = ReadOnBuffer(16);
+        tlv_stream_id = ReadOnBuffer(16);
         SkipOnBuffer(2);
         version_number = (byte) ReadOnBuffer(5);
         current_next_indicator = (byte) ReadOnBuffer(1);
@@ -89,7 +94,8 @@ public class ServiceDescriptionTable extends Table {
         SkipOnBuffer(8);
         
         service_id = ReadOnBuffer(16);
-        SkipOnBuffer(6);
+        SkipOnBuffer(3);
+        EIT_user_defined_flags = (byte) ReadOnBuffer(3);
         EIT_schedule_flag = (byte) ReadOnBuffer(1);
         EIT_present_following_flag = (byte) ReadOnBuffer(1);
         running_status = (byte) ReadOnBuffer(3);
@@ -109,7 +115,7 @@ public class ServiceDescriptionTable extends Table {
     public void PrintTable() {
         super.PrintTable();
         
-        Logger.d(String.format("tlv_stream_id : 0x%x \n", transport_stream_id));
+        Logger.d(String.format("tlv_stream_id : 0x%x \n", tlv_stream_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", 
                 current_next_indicator));
@@ -120,8 +126,10 @@ public class ServiceDescriptionTable extends Table {
                 original_network_id));
         
         Logger.d(String.format("service_id : 0x%x \n",  service_id));
+        Logger.d(String.format("EIT_user_defined_flags : 0x%x \n", 
+                EIT_user_defined_flags));
         Logger.d(String.format("EIT_schedule_flag : 0x%x \n", 
-                EIT_schedule_flag));
+                EIT_user_defined_flags));
         Logger.d(String.format("EIT_presen_following_flag : 0x%x \n",  
                 EIT_present_following_flag));
         Logger.d(String.format("running_status : 0x%x \n", running_status));

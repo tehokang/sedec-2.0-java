@@ -3,8 +3,8 @@ package sedec2.arib.b10.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b39.DescriptorFactory;
-import sedec2.arib.b39.descriptors.Descriptor;
+import sedec2.arib.b10.DescriptorFactory;
+import sedec2.arib.b10.descriptors.Descriptor;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 

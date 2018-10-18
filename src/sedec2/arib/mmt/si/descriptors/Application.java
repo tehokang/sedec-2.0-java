@@ -1,9 +1,9 @@
-package sedec2.arib.b10.descriptors;
+package sedec2.arib.mmt.si.descriptors;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b10.DescriptorFactory;
+import sedec2.arib.mmt.si.DescriptorFactory;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
@@ -18,8 +18,8 @@ public class Application {
     private int m_application_length;
     
     public Application(BitReadWriter brw) {
-        organization_id = brw.ReadOnBuffer(32);
-        application_id = brw.ReadOnBuffer(16);
+        organization_id = brw.ReadOnBuffer(16);
+        application_id = brw.ReadOnBuffer(32);
         
         application_control_code = brw.ReadOnBuffer(8);
         brw.SkipOnBuffer(4);

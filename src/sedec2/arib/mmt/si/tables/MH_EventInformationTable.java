@@ -1,20 +1,20 @@
-package sedec2.dvb.tables;
+package sedec2.arib.mmt.si.tables;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.arib.mmt.si.DescriptorFactory;
+import sedec2.arib.mmt.si.descriptors.Descriptor;
 import sedec2.base.Table;
-import sedec2.dvb.DescriptorFactory;
-import sedec2.dvb.descriptors.Descriptor;
 import sedec2.util.Logger;
 
-public class EventInformationTable extends Table {
+public class MH_EventInformationTable extends Table {
     protected int service_id;
     protected byte version_number;
     protected byte current_next_indicator;
     protected byte section_number;
     protected byte last_section_number;
-    protected int transport_stream_id;
+    protected int tlv_stream_id;
     protected int original_network_id;
     protected byte segment_last_section_number;
     protected byte last_table_id;
@@ -30,7 +30,7 @@ public class EventInformationTable extends Table {
         public List<Descriptor> descriptors = new ArrayList<>();
     }
     
-    public EventInformationTable(byte[] buffer) {
+    public MH_EventInformationTable(byte[] buffer) {
         super(buffer);
         
         __decode_table_body__();
@@ -57,7 +57,7 @@ public class EventInformationTable extends Table {
     }
     
     public int GetTlvStreamId() {
-        return transport_stream_id;
+        return tlv_stream_id;
     }
     
     public int GetOriginalNetworkId() {
@@ -84,7 +84,7 @@ public class EventInformationTable extends Table {
         current_next_indicator = (byte) ReadOnBuffer(1);
         section_number = (byte) ReadOnBuffer(8);
         last_section_number = (byte) ReadOnBuffer(8);
-        transport_stream_id = ReadOnBuffer(16);
+        tlv_stream_id = ReadOnBuffer(16);
         original_network_id = ReadOnBuffer(16);
         segment_last_section_number = (byte) ReadOnBuffer(8);
         last_table_id = (byte) ReadOnBuffer(8);
@@ -119,7 +119,7 @@ public class EventInformationTable extends Table {
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
-        Logger.d(String.format("tlv_stream_id : 0x%x \n", transport_stream_id));
+        Logger.d(String.format("tlv_stream_id : 0x%x \n", tlv_stream_id));
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("segment_last_section_number : 0x%x \n", 
                 segment_last_section_number));
@@ -127,13 +127,13 @@ public class EventInformationTable extends Table {
         
         for ( int i=0; i<events.size(); i++ ) {
             Event event = events.get(i);
-            Logger.d(String.format("\t [%d] event_id : 0x%x \n", event.event_id));
-            Logger.d(String.format("\t [%d] start_time : 0x%x \n", event.start_time));
-            Logger.d(String.format("\t [%d] duration : 0x%x \n", event.duration));
-            Logger.d(String.format("\t [%d] running_status : 0x%x \n", event.running_status));
-            Logger.d(String.format("\t [%d] free_CA_mode : 0x%x \n", event.free_CA_mode));
+            Logger.d(String.format("\t [%d] event_id : 0x%x \n", i, event.event_id));
+            Logger.d(String.format("\t [%d] start_time : 0x%x \n", i, event.start_time));
+            Logger.d(String.format("\t [%d] duration : 0x%x \n", i, event.duration));
+            Logger.d(String.format("\t [%d] running_status : 0x%x \n", i, event.running_status));
+            Logger.d(String.format("\t [%d] free_CA_mode : 0x%x \n", i, event.free_CA_mode));
             Logger.d(String.format("\t [%d] descriptors_loop_length : 0x%x \n\n", 
-                    event.descriptors_loop_length));
+                    i, event.descriptors_loop_length));
             
             for ( int j=0; j<event.descriptors.size(); j++ ) {
                 Descriptor desc = event.descriptors.get(j);
