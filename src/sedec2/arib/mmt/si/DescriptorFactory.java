@@ -5,6 +5,7 @@ import sedec2.arib.mmt.si.descriptors.ApplicationServiceDescriptor;
 import sedec2.arib.mmt.si.descriptors.AssetGroupDescriptor;
 import sedec2.arib.mmt.si.descriptors.BackgroundColorDescriptor;
 import sedec2.arib.mmt.si.descriptors.ContentCopyControlDescriptor;
+import sedec2.arib.mmt.si.descriptors.ContentUsageControlDescriptor;
 import sedec2.arib.mmt.si.descriptors.DependencyDescriptor;
 import sedec2.arib.mmt.si.descriptors.Descriptor;
 import sedec2.arib.mmt.si.descriptors.EmergencyInformationDescriptor;
@@ -120,7 +121,7 @@ public class DescriptorFactory {
     public final static int MPEGH_HIERACHY_DESCRIPTOR = 0x8037;
     public final static int CONTENT_COPY_CONTROL_DESCRIPTOR = 0x8038;
     
-    0x8039;
+    public final static int CONTENT_USAGE_CONTROL_DESCRIPTOR = 0x8039;
     0x803a;
     0x803b;
     0x803c;
@@ -145,6 +146,8 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
+            case CONTENT_USAGE_CONTROL_DESCRIPTOR:
+                return new ContentUsageControlDescriptor(brw);
             case CONTENT_COPY_CONTROL_DESCRIPTOR:
                 return new ContentCopyControlDescriptor(brw);
             case MPEGH_HIERACHY_DESCRIPTOR:
