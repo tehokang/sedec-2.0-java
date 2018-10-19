@@ -34,7 +34,7 @@ public class TlvPacketDecoder {
                 final int TLV_HEADER_LENGTH = 4;
                 int sample_counter = 0;
                 
-                while ( true ) {
+                while ( dataInputStream.available() > 0) {
                     
                     byte[] tlv_header_buffer = new byte[(int) TLV_HEADER_LENGTH];
                     dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
