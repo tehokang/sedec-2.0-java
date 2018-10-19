@@ -97,7 +97,7 @@ public class TLV_NetworkInformationTable extends Table {
             for ( int j=tlv_stream.tlv_stream_descriptors_length; j>0; ) {
                 Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
                 j-=desc.GetDescriptorLength();
-                descriptors.add(desc);                
+                tlv_stream.descriptors.add(desc);                
             }
             
             i-= (6 + tlv_stream.tlv_stream_descriptors_length);
@@ -128,11 +128,11 @@ public class TLV_NetworkInformationTable extends Table {
         
         for ( int i=0; i<tlv_streams.size(); i++ ) {
             TLVStream tlv_stream = tlv_streams.get(i);
-            Logger.d(String.format("\t [%d] tlv_stream_id : 0x%x \n", i, 
+            Logger.d(String.format("[%d] tlv_stream_id : 0x%x \n", i, 
                     tlv_stream.tlv_stream_id));
-            Logger.d(String.format("\t [%d] original_network_id : 0x%x \n", i, 
+            Logger.d(String.format("[%d] original_network_id : 0x%x \n", i, 
                     tlv_stream.original_network_id));
-            Logger.d(String.format("\t [%d] tlv_stream_descriptors_length : 0x%x \n", 
+            Logger.d(String.format("[%d] tlv_stream_descriptors_length : 0x%x \n", 
                     i, tlv_stream.tlv_stream_descriptors_length));
             
             for (int j=0; j<tlv_stream.descriptors.size(); j++ ) {

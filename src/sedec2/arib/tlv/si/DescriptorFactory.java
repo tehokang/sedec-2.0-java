@@ -1,5 +1,6 @@
 package sedec2.arib.tlv.si;
 
+import sedec2.arib.tlv.si.descriptors.ChannelBondingCableDeliverySystemDescriptor;
 import sedec2.arib.tlv.si.descriptors.Descriptor;
 import sedec2.arib.tlv.si.descriptors.ServiceListDescriptor;
 import sedec2.arib.tlv.si.descriptors.UnknownDescriptor;
@@ -12,6 +13,8 @@ public class DescriptorFactory {
     public final static int NETWORK_NAME_DESCRIPTOR = 0x40;
     public final static int SERVICE_LIST_DESCRIPTOR = 0x41;
     public final static int SATELITE_DELIVERY_SYSTEM_DESCRIPTOR = 0x43;
+    
+    public final static int CHANNEL_BONDING_CABLE_DELIVERY_SYSTEM_DESCRIPTOR = 0xf3;
     public final static int SYSTEM_MANAGEMENT_DESCRIPTOR = 0xfe;
     
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
@@ -28,6 +31,8 @@ public class DescriptorFactory {
                 return new NetworkNameDescriptor(brw);
             case SERVICE_LIST_DESCRIPTOR:
                 return new ServiceListDescriptor(brw);
+            case CHANNEL_BONDING_CABLE_DELIVERY_SYSTEM_DESCRIPTOR:
+                return new ChannelBondingCableDeliverySystemDescriptor(brw);
             case UNKNOWN_DESCRIPTOR:
             default:
                 return new UnknownDescriptor(brw);
