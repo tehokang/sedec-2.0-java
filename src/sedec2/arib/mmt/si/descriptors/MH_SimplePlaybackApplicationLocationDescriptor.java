@@ -20,7 +20,7 @@ public class MH_SimplePlaybackApplicationLocationDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("initial_path : %s \n", new String(initial_path_byte)));
+        Logger.d(String.format("\t initial_path : %s \n", new String(initial_path_byte)));
     }
 
     @Override

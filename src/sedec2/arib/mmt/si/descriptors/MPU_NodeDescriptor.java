@@ -20,7 +20,7 @@ public class MPU_NodeDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("node_tag : 0x%x \n", node_tag));
+        Logger.d(String.format("\t node_tag : 0x%x \n", node_tag));
     }
 
     @Override

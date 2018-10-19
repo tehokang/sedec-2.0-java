@@ -41,17 +41,17 @@ public class MH_HierachyDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("temporal_scalability_flag : 0x%x \n",  
+        Logger.d(String.format("\t temporal_scalability_flag : 0x%x \n",  
                 temporal_scalability_flag));
-        Logger.d(String.format("spatial_scalability_flag : 0x%x \n", 
+        Logger.d(String.format("\t spatial_scalability_flag : 0x%x \n", 
                 spatial_scalability_flag));
-        Logger.d(String.format("quality_scalability_flag : 0x%x \n", 
+        Logger.d(String.format("\t quality_scalability_flag : 0x%x \n", 
                 quality_scalability_flag));
-        Logger.d(String.format("hierachy_type : 0x%x \n", hierachy_type));
-        Logger.d(String.format("hierachy_layer_index : 0x%x \n", hierachy_layer_index));
-        Logger.d(String.format("tref_present_flag : 0x%x \n", tref_present_flag));
-        Logger.d(String.format("hierachy_embedded_layer_index : 0x%x \n", hierachy_layer_index));
-        Logger.d(String.format("hierachy_channel : 0x%x \n", hierachy_channel));
+        Logger.d(String.format("\t hierachy_type : 0x%x \n", hierachy_type));
+        Logger.d(String.format("\t hierachy_layer_index : 0x%x \n", hierachy_layer_index));
+        Logger.d(String.format("\t tref_present_flag : 0x%x \n", tref_present_flag));
+        Logger.d(String.format("\t hierachy_embedded_layer_index : 0x%x \n", hierachy_layer_index));
+        Logger.d(String.format("\t hierachy_channel : 0x%x \n", hierachy_channel));
     }
 
     @Override

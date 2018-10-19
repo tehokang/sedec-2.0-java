@@ -36,7 +36,7 @@ public class AccessControlDescriptor extends Descriptor {
         MMT_general_location_info.PrintInfo();
         
         int j=1;
-        Logger.d("private_data : \n");
+        Logger.d("\t private_data : \n");
         Logger.p(String.format("%03d : ", j));
         for(int i=0; i<private_data.length; i++)
         {

@@ -38,11 +38,11 @@ public class Application {
     }
     
     public void PrintApplication() {
-        Logger.d(String.format("organization_id : 0x%x \n", organization_id));
-        Logger.d(String.format("application_id : 0x%x \n", application_id));
-        Logger.d(String.format("application_control_code : 0x%x \n", 
+        Logger.d(String.format("\t organization_id : 0x%x \n", organization_id));
+        Logger.d(String.format("\t application_id : 0x%x \n", application_id));
+        Logger.d(String.format("\t application_control_code : 0x%x \n", 
                 application_control_code));
-        Logger.d(String.format("application_descriptors_loop_length : 0x%x \n", 
+        Logger.d(String.format("\t application_descriptors_loop_length : 0x%x \n", 
                 application_descriptors_loop_length));
 
         for ( int i=0; i<application_descriptors.size(); i++ ) {

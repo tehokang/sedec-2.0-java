@@ -21,9 +21,9 @@ public class UtcNptReferenceDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("UTC_Reference : 0x%x \n", UTC_Reference));
-        Logger.d(String.format("NPT_Reference : 0x%x \n", NPT_Reference));
-        Logger.d(String.format("scale : 0x%x \n", scale));
+        Logger.d(String.format("\t UTC_Reference : 0x%x \n", UTC_Reference));
+        Logger.d(String.format("\t NPT_Reference : 0x%x \n", NPT_Reference));
+        Logger.d(String.format("\t scale : 0x%x \n", scale));
     }
 
     @Override

@@ -43,24 +43,24 @@ public class MH_CAContractInfoDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("CA_system_ID : 0x%x \n", CA_system_ID));
-        Logger.d(String.format("CA_unit_id : 0x%x \n", CA_unit_id));
-        Logger.d(String.format("num_of_component : 0x%x \n", num_of_component));
+        Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
+        Logger.d(String.format("\t CA_unit_id : 0x%x \n", CA_unit_id));
+        Logger.d(String.format("\t num_of_component : 0x%x \n", num_of_component));
         
         for ( int i=0; i<component_tag.length; i++ ) {
-            Logger.d(String.format("[%d] compoent_tag : 0x%x \n", i, component_tag[i]));
+            Logger.d(String.format("\t [%d] compoent_tag : 0x%x \n", i, component_tag[i]));
         }
         
-        Logger.d(String.format("contract_vertification_info_length : 0x%x \n", 
+        Logger.d(String.format("\t contract_vertification_info_length : 0x%x \n", 
                 contract_verification_info_length));
         
         for ( int i=0; i<contract_verification_info.length; i++ ) {
-            Logger.d(String.format("[%d] contract_verification_info : 0x%x \n", 
+            Logger.d(String.format("\t [%d] contract_verification_info : 0x%x \n", 
                     i, contract_verification_info[i]));
         }
         
-        Logger.d(String.format("fee_name_length : 0x%x \n",  fee_name_length));
-        Logger.d(String.format("fee_name : %s \n", new String(fee_name)));
+        Logger.d(String.format("\t fee_name_length : 0x%x \n",  fee_name_length));
+        Logger.d(String.format("\t fee_name : %s \n", new String(fee_name)));
     }
 
     @Override

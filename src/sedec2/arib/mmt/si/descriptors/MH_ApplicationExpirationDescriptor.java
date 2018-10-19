@@ -16,7 +16,7 @@ public class MH_ApplicationExpirationDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("expiration_date_and_time : 0x%x \n", 
+        Logger.d(String.format("\t expiration_date_and_time : 0x%x \n", 
                 expiration_date_and_time));
     }
 

@@ -60,17 +60,17 @@ public class ContentCopyControlDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("digital_recording_control_data : 0x%x \n", 
+        Logger.d(String.format("\t digital_recording_control_data : 0x%x \n", 
                 digital_recording_control_data));
-        Logger.d(String.format("maximum_bit_rate_flag : 0x%x \n", maximum_bit_rate_flag));
-        Logger.d(String.format("component_control_flag : 0x%x \n", component_control_flag));
+        Logger.d(String.format("\t maximum_bit_rate_flag : 0x%x \n", maximum_bit_rate_flag));
+        Logger.d(String.format("\t component_control_flag : 0x%x \n", component_control_flag));
         
         if ( maximum_bit_rate_flag == 1) {
-            Logger.d(String.format("maximum_bitrate : 0x%x \n", maximum_bitrate));
+            Logger.d(String.format("\t maximum_bitrate : 0x%x \n", maximum_bitrate));
         }
         
         if ( component_control_flag == 1 ) {
-            Logger.d(String.format("component_control_length : 0x%x \n", 
+            Logger.d(String.format("\t component_control_length : 0x%x \n", 
                     component_control_length));
             
             for ( int i=0; i<component_controls.size(); i++ ) {

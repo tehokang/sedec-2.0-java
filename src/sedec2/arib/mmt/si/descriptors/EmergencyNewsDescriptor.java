@@ -21,7 +21,7 @@ public class EmergencyNewsDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("transmit_timestamp : 0x%x \n", transmit_timestamp));
+        Logger.d(String.format("\t transmit_timestamp : 0x%x \n", transmit_timestamp));
 
     }
 

@@ -50,24 +50,24 @@ public class MH_PlaybackApplicationDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("application_profiles_length : 0x%x \n", 
+        Logger.d(String.format("\t application_profiles_length : 0x%x \n", 
                 application_profiles_length));
         for ( int i=0; i<application_profiles.size(); i++ ) {
             ApplicationProfile app_profile = application_profiles.get(i);
-            Logger.d(String.format("[%d] application_profile : 0x%x \n", 
+            Logger.d(String.format("\t [%d] application_profile : 0x%x \n", 
                     i, app_profile.application_profile));
-            Logger.d(String.format("[%d] version_major : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_major : 0x%x \n", 
                     i, app_profile.version_major));
-            Logger.d(String.format("[%d] version_minor : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_minor : 0x%x \n", 
                     i, app_profile.version_minor));
-            Logger.d(String.format("[%d] version_micro : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_micro : 0x%x \n", 
                     i, app_profile.version_micro));
         }
         
-        Logger.d(String.format("service_bound_flag : 0x%x \n",  service_bound_flag));
-        Logger.d(String.format("vilsibility : 0x%x \n", visibility));
-        Logger.d(String.format("application_priority : 0x%x \n", application_priority));
-        Logger.d(String.format("transport_protocol_label : %s \n", 
+        Logger.d(String.format("\t service_bound_flag : 0x%x \n",  service_bound_flag));
+        Logger.d(String.format("\t vilsibility : 0x%x \n", visibility));
+        Logger.d(String.format("\t application_priority : 0x%x \n", application_priority));
+        Logger.d(String.format("\t transport_protocol_label : %s \n", 
                 new String(transport_protocol_label)));
     }
 

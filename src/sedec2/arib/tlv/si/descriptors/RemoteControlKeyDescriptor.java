@@ -32,13 +32,13 @@ public class RemoteControlKeyDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("num_of_remote_control_key_id : %d \n", 
+        Logger.d(String.format("\t num_of_remote_control_key_id : %d \n", 
                 num_of_remote_control_key_id));
         
         for ( int i=0; i<remote_control_key_ids.size(); i++ ) {
-            Logger.d(String.format("[%d] remote_control_key_id : %d \n", 
+            Logger.d(String.format("\t [%d] remote_control_key_id : %d \n", 
                     i, remote_control_key_ids.get(i).remote_control_key_id));
-            Logger.d(String.format("[%d] service_id : %d \n", 
+            Logger.d(String.format("\t [%d] service_id : %d \n", 
                     i, remote_control_key_ids.get(i).service_id));
         }
     }

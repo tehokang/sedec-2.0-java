@@ -28,12 +28,12 @@ public class MH_CAServiceDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("CA_system_ID : 0x%x \n", CA_system_ID));
-        Logger.d(String.format("ca_broadcaster_group_id : 0x%x \n", ca_broadcaster_group_id));
-        Logger.d(String.format("message_control : 0x%x \n", message_control));
+        Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
+        Logger.d(String.format("\t ca_broadcaster_group_id : 0x%x \n", ca_broadcaster_group_id));
+        Logger.d(String.format("\t message_control : 0x%x \n", message_control));
         
         for ( int i=0; i<service_id.length; i++ ) {
-            Logger.d(String.format("[%d] service_id : 0x%x \n", i, service_id[i]));
+            Logger.d(String.format("\t [%d] service_id : 0x%x \n", i, service_id[i]));
         }
     }
 

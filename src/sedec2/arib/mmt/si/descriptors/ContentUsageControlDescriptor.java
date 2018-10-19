@@ -35,13 +35,13 @@ public class ContentUsageControlDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("remote_view_mode : 0x%x \n", remote_view_mode));
-        Logger.d(String.format("copy_restriction_mode : 0x%x \n", copy_restriction_mode));
-        Logger.d(String.format("image_constraint_token : 0x%x \n", 
+        Logger.d(String.format("\t remote_view_mode : 0x%x \n", remote_view_mode));
+        Logger.d(String.format("\t copy_restriction_mode : 0x%x \n", copy_restriction_mode));
+        Logger.d(String.format("\t image_constraint_token : 0x%x \n", 
                 image_constraint_token));
-        Logger.d(String.format("retention_mode : 0x%x \n", retention_mode));
-        Logger.d(String.format("retention_state : 0x%x \n", retention_state));
-        Logger.d(String.format("encryption_mode : 0x%x \n", encryption_mode));
+        Logger.d(String.format("\t retention_mode : 0x%x \n", retention_mode));
+        Logger.d(String.format("\t retention_state : 0x%x \n", retention_state));
+        Logger.d(String.format("\t encryption_mode : 0x%x \n", encryption_mode));
     }
 
     @Override

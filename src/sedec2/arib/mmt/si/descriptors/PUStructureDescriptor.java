@@ -21,10 +21,10 @@ public class PUStructureDescriptor extends Descriptor {
     public void PrintDescriptor() {
         super._PrintDescriptorHeader_();
         
-        Logger.d(String.format("num_of_MPU : %d \n", num_of_MPU));
+        Logger.d(String.format("\t num_of_MPU : %d \n", num_of_MPU));
         
         for ( int i=0; i<MPU_sequence_number.length; i++ ) {
-            Logger.d(String.format("[%d] MPU_sequence_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] MPU_sequence_number : 0x%x \n", 
                     i, MPU_sequence_number[i]));
         }
     }
