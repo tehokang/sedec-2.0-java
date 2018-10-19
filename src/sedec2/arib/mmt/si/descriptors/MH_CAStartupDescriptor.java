@@ -3,7 +3,7 @@ package sedec2.arib.mmt.si.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-public class MH_CaStartupDescriptor extends Descriptor {
+public class MH_CAStartupDescriptor extends Descriptor {
     protected int CA_system_ID;
     protected int CA_program_ID;
     protected byte second_load_flag;
@@ -14,7 +14,7 @@ public class MH_CaStartupDescriptor extends Descriptor {
     protected byte[] load_security_info_byte;
     protected byte[] private_data_byte;
     
-    public MH_CaStartupDescriptor(BitReadWriter brw) {
+    public MH_CAStartupDescriptor(BitReadWriter brw) {
         super(brw);
         
         CA_system_ID = brw.ReadOnBuffer(16);
