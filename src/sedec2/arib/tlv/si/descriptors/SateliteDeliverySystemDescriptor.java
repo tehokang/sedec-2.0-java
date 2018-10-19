@@ -15,9 +15,6 @@ public class SateliteDeliverySystemDescriptor extends Descriptor {
     public SateliteDeliverySystemDescriptor(BitReadWriter brw) {
         super(brw);
         
-        descriptor_tag = (byte) brw.ReadOnBuffer(8);
-        descriptor_length = (byte) brw.ReadOnBuffer(8);
-        
         frequency = brw.ReadOnBuffer(32);
         orbital_position = brw.ReadOnBuffer(16);
         west_east_flag = (byte) brw.ReadOnBuffer(1);

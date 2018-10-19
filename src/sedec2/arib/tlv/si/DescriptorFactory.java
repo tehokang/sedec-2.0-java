@@ -17,9 +17,7 @@ public class DescriptorFactory {
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
     
     public static Descriptor CreateDescriptor(BitReadWriter brw) {
-        int descriptor_tag = 
-                (((brw.GetCurrentBuffer()[0] & 0xff) << 8) |
-                (brw.GetCurrentBuffer()[1] & 0xff));
+        int descriptor_tag = brw.GetCurrentBuffer()[0] & 0x0000ff;
         
         switch ( descriptor_tag ) {
             case SYSTEM_MANAGEMENT_DESCRIPTOR:

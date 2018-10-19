@@ -3,8 +3,8 @@ package sedec2.arib.tlv.si.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b10.descriptors.Descriptor;
-import sedec2.arib.b10.DescriptorFactory;
+import sedec2.arib.tlv.si.DescriptorFactory;
+import sedec2.arib.tlv.si.descriptors.Descriptor;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
@@ -83,6 +83,7 @@ public class TLV_NetworkInformationTable extends Table {
             i-=desc.GetDescriptorLength();
             descriptors.add(desc);
         }
+        
         SkipOnBuffer(4);
         TLV_stream_loop_length = ReadOnBuffer(12);
         
@@ -98,8 +99,11 @@ public class TLV_NetworkInformationTable extends Table {
                 j-=desc.GetDescriptorLength();
                 descriptors.add(desc);                
             }
+            
+            i-= (6 + tlv_stream.tlv_stream_descriptors_length);
             tlv_streams.add(tlv_stream);
         }
+        
         checksum_CRC32 = ReadOnBuffer(32);
     }
 

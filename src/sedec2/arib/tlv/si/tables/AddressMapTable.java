@@ -109,6 +109,7 @@ public class AddressMapTable extends Table {
                     for ( int j=0; j<16; j++ ) 
                         ipv6.dst_address_128[j] = (byte) ReadOnBuffer(8);
                     ipv6.dst_address_mask_128 = (byte) ReadOnBuffer(8);
+                    service.ipv6 = ipv6;
                     k-=34;
                 }
                 
@@ -169,6 +170,7 @@ public class AddressMapTable extends Table {
                 Logger.p(String.format("%02x ", service.private_data_byte[k]));
                 if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
             }
+            Logger.d("\n");
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

@@ -9,9 +9,6 @@ public class NetworkNameDescriptor extends Descriptor {
     public NetworkNameDescriptor(BitReadWriter brw) {
         super(brw);
         
-        descriptor_tag = (byte) brw.ReadOnBuffer(8);
-        descriptor_length = (byte) brw.ReadOnBuffer(8);
-        
         network_name = new byte[descriptor_length];
         
         for ( int i=0; i<network_name.length; i++ ) {

@@ -53,7 +53,7 @@ public class SystemManagementDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 1 + additional_identification_info.length;
+        descriptor_length = 2 + additional_identification_info.length;
     }
 
 }

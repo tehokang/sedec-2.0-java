@@ -1,12 +1,13 @@
 package sedec2.arib.tlv.si.descriptors;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
 public class ServiceListDescriptor extends Descriptor {
-    protected List<Service> services;
+    protected List<Service> services = new ArrayList<>();
     
     class Service {
         public int service_id;
