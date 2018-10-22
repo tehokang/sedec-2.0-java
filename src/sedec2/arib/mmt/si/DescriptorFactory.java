@@ -23,7 +23,9 @@ import sedec2.arib.mmt.si.descriptors.MH_AutostartPriorityDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_BroadcasterNameDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_CAContractInfoDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_CAServiceDescriptor;
+import sedec2.arib.mmt.si.descriptors.MH_CAStartupDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_CacheControlInfoDescriptor;
+import sedec2.arib.mmt.si.descriptors.MH_ComponentGroupDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_CompressionTypeDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_ContentDescriptor;
 import sedec2.arib.mmt.si.descriptors.MH_DataComponentDescriptor;
@@ -155,6 +157,10 @@ public class DescriptorFactory {
                 (brw.GetCurrentBuffer()[1] & 0xff));
         
         switch ( descriptor_tag ) {
+            case MH_CA_STARTUP_DESCRIPTOR:
+                return new MH_CAStartupDescriptor(brw);
+            case MH_COMPONENT_GROUP_DESCRIPTOR:
+                return new MH_ComponentGroupDescriptor(brw);
             case MH_CA_SERVICE_DESCRIPTOR:
                 return new MH_CAServiceDescriptor(brw);
             case MH_CA_CONTRACT_INFORMATION_DESCRIPTOR:

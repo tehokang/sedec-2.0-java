@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.arib.mmt.si.TableFactory;
+import sedec2.arib.mmt.si.messages.PAMessage.TableInfo;
 import sedec2.arib.mmt.si.tables.Table;
 
 public class DataTransmissionMessage extends Message {
@@ -27,7 +28,7 @@ public class DataTransmissionMessage extends Message {
         return number_of_tables;
     }
     
-    public List<TableInfo> GetTableInfos() {
+    public List<TableInfo> GetTableInfo() {
         return table_infos;
     }
     
@@ -47,9 +48,10 @@ public class DataTransmissionMessage extends Message {
             table_infos.add(table_info);
         }
         
-        for ( int j=(length-(number_of_tables*4)); j>0; ) {
+        for ( int j=(length-1-(number_of_tables*4)); j>0; ) {
             Table table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
             tables.add(table);
+            j-=table.GetTableLength();
         }
     }
 }

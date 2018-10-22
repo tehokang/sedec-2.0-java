@@ -47,9 +47,10 @@ public class PAMessage extends Message {
             table_infos.add(table_info);
         }
         
-        for ( int j=(length-(number_of_tables*4)); j>0; ) {
+        for ( int j=(length-1-(number_of_tables*4)); j>0; ) {
             Table table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
             tables.add(table);
+            j-=table.GetTableLength();
         }
     }
 }

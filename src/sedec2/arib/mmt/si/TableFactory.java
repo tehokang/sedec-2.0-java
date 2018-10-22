@@ -28,6 +28,9 @@ public class TableFactory {
     /** PLT */
     public final static int PACKAGE_LIST_TABLE = 0x80;
     
+    /** LCT */
+    public final static int LAYOUT_CONFIGURATION_TABLE = 0x81;
+
     /** ECM */
     public final static int ENTITLEMENT_CONTROL_MESSAGE_1 = 0x82;
     public final static int ENTITLEMENT_CONTROL_MESSAGE_2 = 0x83;
@@ -35,7 +38,10 @@ public class TableFactory {
     /** EMM */
     public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_1 = 0x84;
     public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_2 = 0x85;
-    
+
+    /** CAT */
+    public final static int CONDITIONAL_ACCESS_TABLE = 0x86;
+
     /** DCM */
     public final static int DOWNLOAD_CONTROL_MESSAGE_1 = 0x87;
     public final static int DOWNLOAD_CONTROL_MESSAGE_2 = 0x88;
@@ -43,31 +49,7 @@ public class TableFactory {
     /** DMM */
     public final static int DOWNLOAD_MANAGEMENT_MESSAGE_1 = 0x89;
     public final static int DOWNLOAD_MANAGEMENT_MESSAGE_2 = 0x8a;
-    
-    /** CAT */
-    public final static int CONDITIONAL_ACCESS_TABLE = 0x86;
-         
-    /** MH-CDT */
-    public final static int MPEGH_COMMON_DATA_TABLE = 0xa2;
-    
-    /** MH-TOT */
-    public final static int MPEGH_TIME_OFFSET_TABLE = 0xa1;
-    
-    /** DDMT */
-    public final static int DATA_DIRECTORY_MANAGEMENT_TABLE = 0xa3;
-    
-    /** DAMT */
-    public final static int DATA_ASSET_MANAGEMENT_TABLE = 0xa4;
-    
-    /** DCCT */
-    public final static int DATA_CONTENT_CONFIGURATION_TABLE = 0xa5;
-    
-    /** EMT */
-    public final static int EVENT_MESSAGE_TABLE = 0xa6;
-    
-    /** LCT */
-    public final static int LAYOUT_CONFIGURATION_TABLE = 0x81;
-    
+
     /** MH-EIT 0x8b, 0x8c~0x9b */
     public final static int ACTUAL_MPEGH_EVENT_INFORMATION_TABLE = 0x8b;
     public final static int AUTO_MPEGH_EVENT_INFORMATION_TABLE_1 = 0x8c;
@@ -99,6 +81,24 @@ public class TableFactory {
     /** MH-SDT */
     public final static int ACTUAL_MPEGH_SERVICE_DESCRIPTION_TABLE = 0x9f;
     public final static int OTHER_MPEGH_SERVICE_DESCRIPTION_TABLE = 0xa0;
+
+    /** MH-TOT */
+    public final static int MPEGH_TIME_OFFSET_TABLE = 0xa1;
+
+    /** MH-CDT */
+    public final static int MPEGH_COMMON_DATA_TABLE = 0xa2;
+        
+    /** DDMT */
+    public final static int DATA_DIRECTORY_MANAGEMENT_TABLE = 0xa3;
+    
+    /** DAMT */
+    public final static int DATA_ASSET_MANAGEMENT_TABLE = 0xa4;
+    
+    /** DCCT */
+    public final static int DATA_CONTENT_CONFIGURATION_TABLE = 0xa5;
+    
+    /** EMT */
+    public final static int EVENT_MESSAGE_TABLE = 0xa6;
     
     public final static int UNKNOWN_TABLE = 0xff;
 

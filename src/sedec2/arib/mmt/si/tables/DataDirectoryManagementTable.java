@@ -3,6 +3,7 @@ package sedec2.arib.mmt.si.tables;
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public class DataDirectoryManagementTable extends Table {
