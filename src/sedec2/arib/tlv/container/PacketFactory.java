@@ -15,9 +15,9 @@ public class PacketFactory {
     public final static int NULL_PACKET = 0xff;
 
     public static TypeLengthValue CreatePacket(byte[] buffer) {
-        int table_id = (buffer[1] & 0xff);
+        int packet_type = (buffer[1] & 0xff);
         
-        switch(table_id) {
+        switch ( packet_type ) {
             case IPV4_PACKET:
                 return new IPv4Packet(buffer);
             case IPV6_PACKET:

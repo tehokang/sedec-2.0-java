@@ -150,7 +150,7 @@ public class AddressMapTable extends Table {
                         i, service.ipv4.src_address_mask_32));
             } else if (service.ip_version == 1) {
                 Logger.d(String.format("\t [%d] ipv6.src_address_128 : "
-                        + "%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x \n", 
+                        + "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x \n", 
                         i, service.ipv6.src_address_128[0], service.ipv6.src_address_128[1],
                         service.ipv6.src_address_128[2], service.ipv6.src_address_128[3], 
                         service.ipv6.src_address_128[4], service.ipv6.src_address_128[5],

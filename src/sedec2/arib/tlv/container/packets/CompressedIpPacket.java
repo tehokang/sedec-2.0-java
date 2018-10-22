@@ -57,7 +57,16 @@ public class CompressedIpPacket extends TypeLengthValue {
             Logger.d(String.format("version : 0x%x \n", version));
             Logger.d(String.format("traffic_class : 0x%x \n", traffic_class));
             Logger.d(String.format("flow_label : 0x%x \n", flow_label));
-            Logger.d(String.format("next_header : 0x%x \n", next_header));
+            
+            String header_type = "unknown";
+            if ( next_header == 0x06 ) {
+                header_type = "tcp";
+            } else if ( next_header == 0x11 ) {
+                header_type = "udp";
+            }
+            
+            Logger.d(String.format("next_header : 0x%x (%s) \n", 
+                    next_header, header_type));
             Logger.d(String.format("hop_limit : 0x%x \n", hop_limit));
             Logger.d(String.format("source_address : "
                     + "%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x:%x%x \n", 
@@ -166,6 +175,7 @@ public class CompressedIpPacket extends TypeLengthValue {
             for ( int i=0; i<packet_data_byte.data.length; i++ ) {
                 packet_data_byte.data[i] = (byte) ReadOnBuffer(8);
             }
+            
         } else if ( CID_header_type == 0x61 ) {
             packet_data_byte.data = new byte[length-3];
             for ( int i=0; i<packet_data_byte.data.length; i++ ) {
@@ -174,6 +184,38 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
 
+    public int GetCID() {
+        return CID;
+    }
+    
+    public byte GetSN() {
+        return SN;
+    }
+    
+    public byte GetCIDHeaderType() {
+        return CID_header_type;
+    }
+    
+    public IPv4HeaderWoLength GetIpv4HeaderWoLength() {
+        return ipv4_header_wo_length;
+    }
+    
+    public UDPHeaderWoLength GetUdpHeaderWoLength() {
+        return udp_header_wo_length;
+    }
+    
+    public IPv6HeaderWoLength GetIpv6HeaderWoLength() {
+        return ipv6_header_wo_length;
+    }
+    
+    public int GetIdentification() {
+        return identification;
+    }
+    
+    public PacketDataByte GetPacketDataByte() {
+        return packet_data_byte;
+    }
+    
     @Override
     public void PrintTypeLengthValue() {
         super.PrintTypeLengthValue();
