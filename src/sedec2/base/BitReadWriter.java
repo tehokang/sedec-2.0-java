@@ -24,7 +24,12 @@ public class BitReadWriter {
     }
     
     public byte[] GetCurrentBuffer() {
-        return Arrays.copyOfRange(m_buffer, m_pos, m_buffer.length);
+        try {
+            return Arrays.copyOfRange(m_buffer, m_pos, m_buffer.length);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
     }
     
     public int CalculateCRC32(byte[] temp, int real_data_length) {

@@ -60,8 +60,10 @@ public class MH_SiParameterDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        // TODO Auto-generated method stub
-
+        descriptor_length = 3;
+        
+        for ( int i=0; i<si_parameters.size(); i++ ) {
+            descriptor_length += ( 2 + si_parameters.get(i).table_description_length );
+        }
     }
-
 }

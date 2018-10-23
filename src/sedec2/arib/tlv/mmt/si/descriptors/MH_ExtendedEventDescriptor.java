@@ -10,7 +10,7 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
     protected byte descriptor_number;
     protected byte last_descriptor_number;
     protected byte[] ISO_639_language_code = new byte[3];
-    protected byte length_of_items;
+    protected int length_of_items;
     protected List<Item> items = new ArrayList<>();
     protected int text_length;
     protected byte[] text_char;
@@ -27,7 +27,6 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
         
         descriptor_tag = brw.ReadOnBuffer(16);
         descriptor_length = brw.ReadOnBuffer(16);
-        
         descriptor_number = (byte) brw.ReadOnBuffer(4);
         last_descriptor_number = (byte) brw.ReadOnBuffer(4);
         
@@ -35,28 +34,30 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
         ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
         ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
         
-        length_of_items = (byte) brw.ReadOnBuffer(8);
+        length_of_items = (byte) brw.ReadOnBuffer(16);
         
-        for ( int i=0; i<length_of_items; i++ ) {
+        for ( int i=length_of_items; i>0; ) {
             Item item = new Item();
             item.item_description_length = (byte) brw.ReadOnBuffer(8);
             item.item_description_char = new byte[item.item_description_length];
-            for ( int j=0; j<item.item_description_length; j++ ) {
+            for ( int j=0; j<item.item_description_char.length; j++ ) {
                 item.item_description_char[j] = (byte) brw.ReadOnBuffer(8);
             }
+            
             item.item_length = brw.ReadOnBuffer(16);
             item.item_char = new byte[item.item_length];
             
-            for ( int j=0; j<item.item_length; j++ ) {
+            for ( int j=0; j<item.item_char.length; j++ ) {
                 item.item_char[j] = (byte) brw.ReadOnBuffer(8);
             }
+            i-= (3 + item.item_description_length + item.item_length);
             items.add(item);
         }
         
         text_length = brw.ReadOnBuffer(16);
         text_char = new byte[text_length];
         
-        for ( int i=0; i<text_length; i++ ) {
+        for ( int i=0; i<text_char.length; i++ ) {
             text_char[i] = (byte) brw.ReadOnBuffer(8);
         }
     }
@@ -79,7 +80,7 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
                     i, new String(item.item_description_char)));
             Logger.d(String.format("\t [%d] item_length : 0x%x \n", 
                     i, item.item_length));
-            Logger.d(String.format("\t [%d] length_of_items : 0x%x \n", 
+            Logger.d(String.format("\t [%d] length_of_items : %s \n", 
                     i, new String(item.item_char)));
         }
         Logger.d(String.format("\t text_length : 0x%x \n", text_length));
@@ -87,8 +88,14 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
     }
 
     @Override
+    public int GetDescriptorLength() {
+        updateDescriptorLength();
+        return descriptor_length + 4;
+    }
+    
+    @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 5;
+        descriptor_length = 6;
         
         for ( int i=0; i<items.size(); i++ ) {
             Item item = items.get(i);

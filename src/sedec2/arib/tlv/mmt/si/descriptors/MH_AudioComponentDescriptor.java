@@ -63,8 +63,10 @@ public class MH_AudioComponentDescriptor extends Descriptor {
         Logger.d(String.format("\t sampling_rate : 0x%x \n", sampling_rate));
         Logger.d(String.format("\t ISO_639_language_code : %s \n", 
                 new String(ISO_639_language_code)));
-        Logger.d(String.format("\t ISO_639_language_code_2 : %s \n", 
-                new String(ISO_639_language_code_2)));
+        if ( ES_multi_lingual_flag == 1 ) {
+            Logger.d(String.format("\t ISO_639_language_code_2 : %s \n", 
+                    new String(ISO_639_language_code_2)));
+        }
         Logger.d(String.format("\t text_char : %s \n", new String(text_char)));
     }
 

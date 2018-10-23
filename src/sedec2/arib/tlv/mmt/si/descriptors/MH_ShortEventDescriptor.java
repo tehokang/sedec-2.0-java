@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_ShortEventDescriptor extends Descriptor {
@@ -23,14 +24,14 @@ public class MH_ShortEventDescriptor extends Descriptor {
         event_name_length = (byte) brw.ReadOnBuffer(8);
         event_name_char = new byte[event_name_length];
         
-        for ( int i=0; i<event_name_length; i++ ) {
+        for ( int i=0; i<event_name_char.length; i++ ) {
             event_name_char[i] = (byte) brw.ReadOnBuffer(8);
         }
         
         text_length = brw.ReadOnBuffer(16);
         text_char = new byte[text_length];
         
-        for ( int i=0; i<text_length; i++ ) {
+        for ( int i=0; i<text_char.length; i++ ) {
             text_char[i] = (byte) brw.ReadOnBuffer(8);
         }
     }
@@ -46,6 +47,12 @@ public class MH_ShortEventDescriptor extends Descriptor {
         Logger.d(String.format("\t text_char : %s \n", new String(text_char)));
     }
 
+    @Override
+    public int GetDescriptorLength() {
+        updateDescriptorLength();
+        return descriptor_length + 4;
+    }
+    
     @Override
     protected void updateDescriptorLength() {
         descriptor_length = 4 + event_name_char.length + 2 + text_char.length;

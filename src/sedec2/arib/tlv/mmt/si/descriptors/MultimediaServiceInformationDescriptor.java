@@ -26,7 +26,7 @@ public class MultimediaServiceInformationDescriptor extends Descriptor {
             text_length = (byte) brw.ReadOnBuffer(8);
             
             text_char = new byte[text_length];
-            for ( int i=0; i<text_length; i++ ) {
+            for ( int i=0; i<text_char.length; i++ ) {
                 text_char[i] = (byte) brw.ReadOnBuffer(8);
             }
         }
@@ -38,7 +38,7 @@ public class MultimediaServiceInformationDescriptor extends Descriptor {
         
         selector_length = (byte) brw.ReadOnBuffer(8);
         selector_byte = new byte[selector_length];
-        for ( int i=0; i<selector_length; i++ ) {
+        for ( int i=0; i<selector_byte.length; i++ ) {
             selector_byte[i] = (byte) brw.ReadOnBuffer(8);
         }
     }

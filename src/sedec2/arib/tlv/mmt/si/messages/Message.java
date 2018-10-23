@@ -11,8 +11,6 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     
     public Message(byte[] buffer) {
         super(buffer);
-        
-        __decode_message_header__();
     }
     
     public int GetMessageLength() {
@@ -48,15 +46,6 @@ public abstract class Message extends sedec2.base.BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
-    /**
-     * @note internal functions to decode
-     */
-    protected void __decode_message_header__() {
-        message_id = ReadOnBuffer(16);
-        version = ReadOnBuffer(8);
-        length = ReadOnBuffer(32);
-    }
-    
     protected abstract void __decode_message_body__();
     
     /**
@@ -65,18 +54,19 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     protected void __encode_update_message_length__() {};
     protected void __encode_preprare_message__() {};
     protected void __encode_prepare_buffer__() {
-        if(m_buffer != null)
-        {
+        if(m_buffer != null) {
             m_buffer = null;
         }
         m_buffer = new byte[length + 3];
 
         Arrays.fill(m_buffer, (byte)0xff);
     }
+    
     protected void __encode_write_message_header__() {
         WriteOnBuffer( message_id, 16 );
         WriteOnBuffer( version, 8);
         WriteOnBuffer( length, 32);
     }    
+    
     protected void __encode_write_message_body__() {};
 }

@@ -20,6 +20,10 @@ public class DataTransmissionMessage extends Message {
     public DataTransmissionMessage(byte[] buffer) {
         super(buffer);
         
+        message_id = ReadOnBuffer(16);
+        version = ReadOnBuffer(8);
+        length = ReadOnBuffer(32);
+        
         __decode_message_body__();
     }
 

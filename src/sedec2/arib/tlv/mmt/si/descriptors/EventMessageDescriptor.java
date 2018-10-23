@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class EventMessageDescriptor extends Descriptor {
@@ -53,14 +54,15 @@ public class EventMessageDescriptor extends Descriptor {
         Logger.d(String.format("\t event_msg_relativeTime : 0x%x \n", event_msg_relativeTime));
         Logger.d(String.format("\t event_msg_type : 0x%x \n", event_msg_type));
         Logger.d(String.format("\t event_msg_id : 0x%x \n", event_msg_id));
+        Logger.d(String.format("\t private_data_byte : \n"));
         
-        int j=1;
-        Logger.p(String.format("%03d : ", j));
-        for(int k=0; k<private_data_byte.length; k++)
-        {
-            Logger.p(String.format("%02x ", private_data_byte[k]));
-            if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
+        BinaryLogger.Print(private_data_byte);
+    }
+
+    @Override
+    public int GetDescriptorLength() {
+        updateDescriptorLength();
+        return descriptor_length + 4;
     }
 
     @Override

@@ -39,7 +39,7 @@ public class MH_ServiceDescriptor extends Descriptor {
         Logger.d(String.format("\t service_provider_name : %s \n", 
                 new String(service_provider_name)));
         Logger.d(String.format("\t service_name_length : 0x%x \n", service_name_length));
-        Logger.d(String.format("\t service_name : 0x%x \n", new String(service_name)));
+        Logger.d(String.format("\t service_name : %s \n", new String(service_name)));
     }
 
     @Override

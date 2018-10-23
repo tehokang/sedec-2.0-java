@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.tables;
 
 import sedec2.base.Table;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class EntitlementManagementMessage extends Table {
@@ -67,13 +68,7 @@ public class EntitlementManagementMessage extends Table {
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
         
-        int j=1;
-        Logger.p(String.format("%03d : ", j));
-        for(int i=0; i<EMM_data.length; i++)
-        {
-            Logger.p(String.format("%02x ", EMM_data[i]));
-            if(i%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
+        BinaryLogger.Print(EMM_data);
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,

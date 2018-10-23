@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class AccessControlDescriptor extends Descriptor {
@@ -35,15 +36,8 @@ public class AccessControlDescriptor extends Descriptor {
         
         MMT_general_location_info.PrintInfo();
         
-        int j=1;
         Logger.d("\t private_data : \n");
-        Logger.p(String.format("%03d : ", j));
-        for(int i=0; i<private_data.length; i++)
-        {
-            Logger.p(String.format("%02x ", private_data[i]));
-            if(i%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
-        
+        BinaryLogger.Print(private_data);
     }
 
     @Override

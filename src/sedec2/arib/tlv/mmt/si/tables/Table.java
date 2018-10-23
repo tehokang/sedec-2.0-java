@@ -9,8 +9,6 @@ public abstract class Table extends sedec2.base.Table {
     
     public Table(byte[] buffer) {
         super(buffer);
-        
-        __decode_table_header__();
     }
     
     public void EncodeTable() {
@@ -31,6 +29,7 @@ public abstract class Table extends sedec2.base.Table {
         Logger.d("------------------------------ \n");
     }
     
+    @Override
     public int GetTableLength() {
         return 4 + length;
     }

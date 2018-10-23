@@ -6,6 +6,7 @@ import java.util.List;
 import sedec2.arib.tlv.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
 import sedec2.base.Table;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_EventInformationTable extends Table {
@@ -91,22 +92,28 @@ public class MH_EventInformationTable extends Table {
         
         for ( int i=(section_length-11-4); i>0; ) {
             Event event = new Event();
+            Logger.d(String.format("Event i : %d \n", i));
             event.event_id = ReadOnBuffer(16);
             event.start_time = ReadOnBuffer(40);
             event.duration = ReadOnBuffer(24);
             event.running_status = (byte) ReadOnBuffer(3);
             event.free_CA_mode = (byte) ReadOnBuffer(1);
             event.descriptors_loop_length = ReadOnBuffer(12);
-            
+
             for ( int j=event.descriptors_loop_length; j>0; ) {
                 Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
+                desc.PrintDescriptor();
                 j-=desc.GetDescriptorLength();
                 event.descriptors.add(desc);
             }
             
+            Logger.d(String.format("event-length : %d \n", 
+                    (12 + event.descriptors_loop_length)));
+            i-= (12 + event.descriptors_loop_length);
+            
             events.add(event);
+            Logger.d(String.format("\n"));
         }
-        
         checksum_CRC32 = ReadOnBuffer(32);
     }
 

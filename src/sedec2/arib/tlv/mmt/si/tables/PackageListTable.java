@@ -45,7 +45,7 @@ public class PackageListTable extends Table {
     
     public PackageListTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
@@ -126,6 +126,7 @@ public class PackageListTable extends Table {
                 j-=desc.GetDescriptorLength();
                 delivery.descriptors.add(desc);
             }
+            deliveries.add(delivery);
         }
     }
 

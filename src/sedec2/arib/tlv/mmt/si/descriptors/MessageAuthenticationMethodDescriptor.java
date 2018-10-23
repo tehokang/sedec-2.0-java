@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MessageAuthenticationMethodDescriptor extends Descriptor {
@@ -29,14 +30,8 @@ public class MessageAuthenticationMethodDescriptor extends Descriptor {
         Logger.d(String.format("\t message_authentication_system_id : 0x%x \n",
                 message_authentication_system_id));
         
-        int j=1;
-        Logger.d("private_data : \n");
-        Logger.p(String.format("%03d : ", j));
-        for(int i=0; i<private_data.length; i++)
-        {
-            Logger.p(String.format("%02x ", private_data[i]));
-            if(i%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
+        Logger.d("\t private_data : \n");
+        BinaryLogger.Print(private_data);
     }
 
     @Override

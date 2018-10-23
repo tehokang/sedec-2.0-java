@@ -9,6 +9,7 @@ public class VideoComponentDescriptor extends Descriptor {
     protected byte video_scan_flag;
     protected byte video_frame_rate;
     protected int component_tag;
+    protected byte video_transfer_characteristics;
     protected byte[] ISO_639_language_code = new byte[3];
     protected byte[] text_char;
     
@@ -21,12 +22,14 @@ public class VideoComponentDescriptor extends Descriptor {
         brw.SkipOnBuffer(2);
         video_frame_rate = (byte) brw.ReadOnBuffer(5);
         component_tag = brw.ReadOnBuffer(16);
+        video_transfer_characteristics = (byte) brw.ReadOnBuffer(4);
+        brw.SkipOnBuffer(4);
         
         ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
         ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
         ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
         
-        text_char = new byte[descriptor_length-7];
+        text_char = new byte[descriptor_length-8];
         for ( int i=0; i<text_char.length; i++ ) {
             text_char[i] = (byte) brw.ReadOnBuffer(8);
         }
@@ -41,9 +44,9 @@ public class VideoComponentDescriptor extends Descriptor {
         Logger.d(String.format("\t video_scan_flag : 0x%x \n", video_scan_flag));
         Logger.d(String.format("\t video_frame_rate : 0x%x \n", video_frame_rate));
         Logger.d(String.format("\t component_tag : 0x%x \n", component_tag));
-        Logger.d(String.format("\t ISO_639_language_code : 0x%x \n", 
+        Logger.d(String.format("\t ISO_639_language_code : %s \n", 
                 new String(ISO_639_language_code)));
-        Logger.d(String.format("\t text_char : 0x%x \n",  new String(text_char)));
+        Logger.d(String.format("\t text_char : %s \n",  new String(text_char)));
     }
 
     @Override

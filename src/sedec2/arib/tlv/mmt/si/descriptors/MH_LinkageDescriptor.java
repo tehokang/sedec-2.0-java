@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_LinkageDescriptor extends Descriptor {
@@ -52,13 +53,14 @@ public class MH_LinkageDescriptor extends Descriptor {
         Logger.d(String.format("\t service_id : 0x%x \n", service_id));
         Logger.d(String.format("\t linkage_type : 0x%x \n", linkage_type));
         
-        int j=1;
-        Logger.p(String.format("%03d : ", j));
-        for(int k=0; k<private_data_byte.length; k++)
-        {
-            Logger.p(String.format("%02x ", private_data_byte[k]));
-            if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
+        BinaryLogger.Print(private_data_byte);
+    }
+
+    
+    @Override
+    public int GetDescriptorLength() {
+        updateDescriptorLength();
+        return descriptor_length + 4;
     }
 
     @Override

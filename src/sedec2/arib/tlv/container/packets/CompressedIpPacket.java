@@ -1,5 +1,8 @@
 package sedec2.arib.tlv.container.packets;
 
+import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
+import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class CompressedIpPacket extends TypeLengthValue {
@@ -10,7 +13,7 @@ public class CompressedIpPacket extends TypeLengthValue {
     protected UDPHeaderWoLength udp_header_wo_length = new UDPHeaderWoLength();
     protected IPv6HeaderWoLength ipv6_header_wo_length = new IPv6HeaderWoLength();
     protected int identification;
-    protected PacketDataByte packet_data_byte = new PacketDataByte();
+    protected PacketDataByte packet_data_byte = null;
     
     class IPv4HeaderWoLength {
         public byte version;
@@ -104,16 +107,23 @@ public class CompressedIpPacket extends TypeLengthValue {
     
     class PacketDataByte {
         public byte[] data;
+        public MMTP_Packet mmtp_packet = null;
+        
+        public PacketDataByte(int length, BitReadWriter brw) {
+            data = new byte[length];
+            for ( int i=0; i<data.length; i++ ) {
+                data[i] = (byte) brw.ReadOnBuffer(8);
+            }
+            
+            mmtp_packet = new MMTP_Packet(data);
+        }
         
         public void Print() {
-            Logger.d(String.format("packate_data_byte : \n" ));
-            int j=1;
-            Logger.p(String.format("%03d : ", j));
-            for(int k=0; k<data.length; k++)
-            {
-                Logger.p(String.format("%02x ", data[k]));
-                if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
+            if ( mmtp_packet != null ) {
+                mmtp_packet.Print();
             }
+            
+            BinaryLogger.Print(data);
         }
     }
     
@@ -143,17 +153,11 @@ public class CompressedIpPacket extends TypeLengthValue {
             udp_header_wo_length.source_port = ReadOnBuffer(16);
             udp_header_wo_length.destination_port = ReadOnBuffer(16);
             
-            packet_data_byte.data = new byte[length-3-20];
-            for ( int i=0; i<packet_data_byte.data.length; i++ ) {
-                packet_data_byte.data[i] = (byte) ReadOnBuffer(8);
-            }
+            packet_data_byte = new PacketDataByte(length-3-20, this);
             
         } else if ( CID_header_type == 0x21 ) {
             identification = ReadOnBuffer(16);
-            packet_data_byte.data = new byte[length-3-2];
-            for ( int i=0; i<packet_data_byte.data.length; i++ ) {
-                packet_data_byte.data[i] = (byte) ReadOnBuffer(8);
-            }
+            packet_data_byte = new PacketDataByte(length-3-2, this);
             
         } else if ( CID_header_type == 0x60 ) {
             ipv6_header_wo_length.version = (byte) ReadOnBuffer(4);
@@ -171,16 +175,10 @@ public class CompressedIpPacket extends TypeLengthValue {
             udp_header_wo_length.source_port = ReadOnBuffer(16);
             udp_header_wo_length.destination_port = ReadOnBuffer(16);
             
-            packet_data_byte.data = new byte[length-3-6-16-16-4];
-            for ( int i=0; i<packet_data_byte.data.length; i++ ) {
-                packet_data_byte.data[i] = (byte) ReadOnBuffer(8);
-            }
+            packet_data_byte = new PacketDataByte(length-3-6-16-16-4, this);
             
         } else if ( CID_header_type == 0x61 ) {
-            packet_data_byte.data = new byte[length-3];
-            for ( int i=0; i<packet_data_byte.data.length; i++ ) {
-                packet_data_byte.data[i] = (byte) ReadOnBuffer(8);
-            }
+            packet_data_byte = new PacketDataByte(length-3, this);
         }
     }
 

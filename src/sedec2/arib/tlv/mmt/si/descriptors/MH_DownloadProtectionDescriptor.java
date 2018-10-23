@@ -1,6 +1,7 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_DownloadProtectionDescriptor extends Descriptor {
@@ -33,15 +34,8 @@ public class MH_DownloadProtectionDescriptor extends Descriptor {
         Logger.d(String.format("\t encrypt_protocol_number : 0x%x \n", 
                 encrypt_protocol_number));
         
-        int j=1;
-        Logger.d("encrypt_info : \n");
-        Logger.p(String.format("%03d : ", j));
-        for(int k=0; k<encrypt_info.length; k++)
-        {
-            Logger.p(String.format("%02x ", encrypt_info[k]));
-            if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
-        
+        Logger.d("\t encrypt_info : \n");
+        BinaryLogger.Print(encrypt_info);
     }
 
     @Override

@@ -5,6 +5,7 @@ import java.util.List;
 
 import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.arib.tlv.mmt.si.tables.Table;
+import sedec2.util.Logger;
 
 public class PAMessage extends Message {
     protected byte number_of_tables;
@@ -19,6 +20,10 @@ public class PAMessage extends Message {
     
     public PAMessage(byte[] buffer) {
         super(buffer);
+        
+        message_id = ReadOnBuffer(16);
+        version = ReadOnBuffer(8);
+        length = ReadOnBuffer(32);
         
         __decode_message_body__();
     }
@@ -51,6 +56,27 @@ public class PAMessage extends Message {
             Table table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
             tables.add(table);
             j-=table.GetTableLength();
+        }
+    }
+
+    @Override
+    public void PrintMessage() {
+        super.PrintMessage();
+        
+        Logger.d(String.format("number_of_tables : %d \n", number_of_tables));
+        
+        for ( int i=0; i<table_infos.size(); i++ ) {
+            TableInfo table_info = table_infos.get(i);
+            
+            Logger.d(String.format("[%d] table_id : 0x%x \n", i, table_info.table_id));
+            Logger.d(String.format("[%d] table_version : 0x%x \n", 
+                    i, table_info.table_version));
+            Logger.d(String.format("[%d] table_length : 0x%x \n", 
+                    i, table_info.table_length));
+        }
+        
+        for ( int i=0; i<tables.size(); i++ ) {
+            tables.get(i).PrintTable();
         }
     }
 }

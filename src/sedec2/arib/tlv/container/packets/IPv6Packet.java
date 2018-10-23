@@ -1,5 +1,7 @@
 package sedec2.arib.tlv.container.packets;
 
+import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class IPv6Packet extends TypeLengthValue {
@@ -14,6 +16,7 @@ public class IPv6Packet extends TypeLengthValue {
     protected byte[] transport_layer_data;
     
     protected NetworkTimeProtocolData ntp = null;
+    protected MMTP_Packet mmtp_packet = null;
     
     public IPv6Packet(byte[] buffer) {
         super(buffer);
@@ -42,6 +45,8 @@ public class IPv6Packet extends TypeLengthValue {
         if ( next_header == 0x11 && 
                 destination_address[14] == 0x01 && destination_address[15] == 0x01 ) {
             ntp = new NetworkTimeProtocolData(transport_layer_data);
+        } else {
+            mmtp_packet = new MMTP_Packet(transport_layer_data);
         }
     }
 
@@ -126,13 +131,10 @@ public class IPv6Packet extends TypeLengthValue {
             ntp.Print();
         }
         
-        Logger.d(String.format("data_byte : \n" ));
-        int j=1;
-        Logger.p(String.format("%03d : ", j));
-        for(int k=0; k<transport_layer_data.length; k++)
-        {
-            Logger.p(String.format("%02x ", transport_layer_data[k]));
-            if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
+        if ( null != mmtp_packet ) {
+            mmtp_packet.Print();
         }
+        
+        BinaryLogger.Print(transport_layer_data);
     }
 }

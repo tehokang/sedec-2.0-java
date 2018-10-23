@@ -3,8 +3,8 @@ package sedec2.arib.tlv.mmt.si.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b10.DescriptorFactory;
-import sedec2.arib.b10.descriptors.Descriptor;
+import sedec2.arib.tlv.mmt.si.DescriptorFactory;
+import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
@@ -88,15 +88,17 @@ public class MH_BroadcasterInformationTable extends Table {
             descriptors.add(desc);
         }
         
-        for ( int i=(section_length - 7 - first_descriptors_length - 4); i>0 ; ) {
+        for ( int i=(section_length - 7 - first_descriptors_length - 4); i>0; ) {
             Broadcaster broadcaster = new Broadcaster();
             broadcaster.broadcaster_id = (byte) ReadOnBuffer(8);
             SkipOnBuffer(4);
             broadcaster.broadcaster_descriptors_length = ReadOnBuffer(12);
+            i-=3;
             
             for ( int j=broadcaster.broadcaster_descriptors_length; j>0; ) {
                 Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
                 j-=desc.GetDescriptorLength();
+                i-=desc.GetDescriptorLength();
                 broadcaster.descriptors.add(desc);
             }
             broadcasters.add(broadcaster);

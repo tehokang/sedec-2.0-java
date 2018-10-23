@@ -5,6 +5,7 @@ import java.util.List;
 
 import sedec2.arib.tlv.mmt.si.DescriptorFactory;
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MPU_DownloadContentDescriptor extends Descriptor {
@@ -131,14 +132,9 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         }
         
         Logger.d(String.format("\t private_data_length : 0x%x \n", private_data_length));
+        Logger.d(String.format("\t private_data_byte : \n"));
         
-        int j=1;
-        Logger.p(String.format("%03d : ", j));
-        for(int k=0; k<private_data_byte.length; k++)
-        {
-            Logger.p(String.format("%02x ", private_data_byte[k]));
-            if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-        }
+        BinaryLogger.Print(private_data_byte);
         
         if ( text_info_flag == 1) {
             Logger.d(String.format("\t ISO_639_language_code : 0x%x \n", 

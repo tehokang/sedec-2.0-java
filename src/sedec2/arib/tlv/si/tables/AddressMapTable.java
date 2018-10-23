@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.Table;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class AddressMapTable extends Table {
@@ -163,14 +164,7 @@ public class AddressMapTable extends Table {
                         i, service.ipv6.src_address_mask_128));
             }
             
-            int j=1;
-            Logger.p(String.format("%03d : ", j));
-            for(int k=0; k<service.private_data_byte.length; k++)
-            {
-                Logger.p(String.format("%02x ", service.private_data_byte[k]));
-                if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
-            }
-            Logger.d("\n");
+            BinaryLogger.Print(service.private_data_byte);
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

@@ -12,6 +12,10 @@ public class CAMessage extends Message {
     public CAMessage(byte[] buffer) {
         super(buffer);
         
+        message_id = ReadOnBuffer(16);
+        version = ReadOnBuffer(8);
+        length = ReadOnBuffer(16);
+        
         __decode_message_body__();
     }
     
@@ -25,6 +29,15 @@ public class CAMessage extends Message {
             Table table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
             i-=table.GetTableLength();
             tables.add(table);
+        }
+    }
+    
+    @Override
+    public void PrintMessage() {
+        super.PrintMessage();
+        
+        for ( int i=0; i<tables.size(); i++ ) {
+            tables.get(i).PrintTable();
         }
     }
 }
