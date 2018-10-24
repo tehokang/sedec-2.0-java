@@ -33,5 +33,4 @@ public class M2SectionMessage extends Message {
             table.print();
         }
     }
-
 }

@@ -114,7 +114,7 @@ public class MMTP_Payload_MPU {
     }
     
     public void print() {
-        Logger.d(String.format("------- MMTP ------- (%s)\n", getClass().getName()));
+        Logger.d(String.format("------- MMTP Payload ------- (%s)\n", getClass().getName()));
         Logger.d(String.format("payload_length : 0x%x \n", payload_length));
         Logger.d(String.format("fragment_type : 0x%x \n", fragment_type));
         Logger.d(String.format("timed_flag : 0x%x \n", timed_flag));

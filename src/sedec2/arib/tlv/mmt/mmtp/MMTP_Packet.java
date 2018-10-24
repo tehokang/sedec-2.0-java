@@ -151,6 +151,7 @@ public class MMTP_Packet extends BitReadWriter {
                     mmtp_payload_signalling_message = new MMTP_Payload_SignallingMessage(this);        
                     break;
                 default:
+                    Logger.d(String.format("Unknown packet_id (0x%x)\n", packet_id));
                     break;
             }
         }
@@ -204,9 +205,10 @@ public class MMTP_Packet extends BitReadWriter {
                 case 0x8005:
                 case 0x8006:
                 case 0x8007:
-                    mmtp_payload_signalling_message.print();        
+                    mmtp_payload_signalling_message.print();
                     break;
                 default:
+                    Logger.d(String.format("Unknown packet_id (0x%x)\n", packet_id));
                     break;
             }
         }

@@ -29,6 +29,8 @@ public class M2ShortSectionMessage extends Message {
     public void print() {
         super.print();
         
-        table.print();
+        if ( table != null ) {
+            table.print();
+        }
     }
 }

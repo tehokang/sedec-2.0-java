@@ -5,6 +5,7 @@ import java.util.List;
 
 import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.arib.tlv.mmt.si.tables.Table;
+import sedec2.util.Logger;
 
 public class DataTransmissionMessage extends Message {
     protected byte number_of_tables;
@@ -55,6 +56,27 @@ public class DataTransmissionMessage extends Message {
             Table table = (Table) TableFactory.createTable(getCurrentBuffer());
             tables.add(table);
             j-=table.getTableLength();
+        }
+    }
+
+    @Override
+    public void print() {
+        super.print();
+        
+        Logger.d(String.format("number_of_tables : %d \n", number_of_tables));
+        
+        for ( int i=0; i<table_infos.size(); i++ ) {
+            TableInfo table_info = table_infos.get(i);
+            
+            Logger.d(String.format("[%d] table_id : 0x%x \n", i, table_info.table_id));
+            Logger.d(String.format("[%d] table_version : 0x%x \n", 
+                    i, table_info.table_version));
+            Logger.d(String.format("[%d] table_length : 0x%x \n", 
+                    i, table_info.table_length));
+        }
+        
+        for ( int i=0; i<tables.size(); i++ ) {
+            tables.get(i).print();
         }
     }
 }

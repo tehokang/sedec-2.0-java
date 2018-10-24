@@ -40,7 +40,7 @@ public class MMTP_Payload_SignallingMessage {
     }
     
     public void print() {
-        Logger.d(String.format("------- MMTP ------- (%s)\n", getClass().getName()));
+        Logger.d(String.format("------- MMTP Payload ------- (%s)\n", getClass().getName()));
         Logger.d(String.format("fragmentation_indicator : 0x%x \n", fragmentation_indicator));
         Logger.d(String.format("length_extension_flag : 0x%x \n", length_extension_flag));
         Logger.d(String.format("aggregation_flag : 0x%x \n", aggregation_flag));
