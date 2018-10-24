@@ -16,34 +16,34 @@ public class RelatedBroadcasterDescriptor extends Descriptor {
     public RelatedBroadcasterDescriptor(BitReadWriter brw) {
         super(brw);
         
-        num_of_broadcaster_id = (byte) brw.ReadOnBuffer(4);
-        num_of_affiliation_id = (byte) brw.ReadOnBuffer(4);
-        num_of_original_network_id = (byte) brw.ReadOnBuffer(4);
+        num_of_broadcaster_id = (byte) brw.readOnBuffer(4);
+        num_of_affiliation_id = (byte) brw.readOnBuffer(4);
+        num_of_original_network_id = (byte) brw.readOnBuffer(4);
         
-        brw.SkipOnBuffer(4);
+        brw.skipOnBuffer(4);
         
         network_id = new int[num_of_broadcaster_id];
         broadcaster_id = new byte[num_of_broadcaster_id];
         
         for ( int i=0; i<num_of_broadcaster_id; i++ ) {
-            network_id[i] = brw.ReadOnBuffer(16);
-            broadcaster_id[i] = (byte) brw.ReadOnBuffer(8);
+            network_id[i] = brw.readOnBuffer(16);
+            broadcaster_id[i] = (byte) brw.readOnBuffer(8);
         }
         
         affiliation_id = new byte[num_of_affiliation_id];
         for ( int i=0; i<num_of_affiliation_id; i++ ) {
-            affiliation_id[i] = (byte) brw.ReadOnBuffer(8);
+            affiliation_id[i] = (byte) brw.readOnBuffer(8);
         }
         
         original_network_id = new int[num_of_original_network_id];
         for ( int i=0; i<num_of_original_network_id; i++ ) {
-            original_network_id[i] = brw.ReadOnBuffer(16);
+            original_network_id[i] = brw.readOnBuffer(16);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_broadcaster_id : 0x%x \n", num_of_broadcaster_id));
         Logger.d(String.format("\t num_of_affiliation_id : 0x%x \n", num_of_affiliation_id));

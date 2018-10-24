@@ -10,16 +10,16 @@ public class PUStructureDescriptor extends Descriptor {
     public PUStructureDescriptor(BitReadWriter brw) {
         super(brw);
         
-        num_of_MPU = (byte) brw.ReadOnBuffer(8);
+        num_of_MPU = (byte) brw.readOnBuffer(8);
         MPU_sequence_number = new int[num_of_MPU];
         for ( int i=0; i<num_of_MPU; i++ ) {
-            MPU_sequence_number[i] = brw.ReadOnBuffer(32);
+            MPU_sequence_number[i] = brw.readOnBuffer(32);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_MPU : %d \n", num_of_MPU));
         

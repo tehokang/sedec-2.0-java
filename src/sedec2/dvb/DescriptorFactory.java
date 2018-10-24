@@ -25,8 +25,8 @@ public class DescriptorFactory {
     public final static int CONNECTION_REQUIREMENT_DESCRIPTOR = 0x72;
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
     
-    public static Descriptor CreateDescriptor(BitReadWriter brw) {
-        int descriptor_tag = brw.GetCurrentBuffer()[0] & 0x0000ff;
+    public static Descriptor createDescriptor(BitReadWriter brw) {
+        int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
         
         switch ( descriptor_tag ) {
             case APPLICATION_DESCRIPTOR:

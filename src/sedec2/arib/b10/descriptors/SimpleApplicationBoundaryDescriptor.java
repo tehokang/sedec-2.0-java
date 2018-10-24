@@ -15,12 +15,12 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     public SimpleApplicationBoundaryDescriptor(BitReadWriter brw) {
         super(brw);
         
-        boundary_extension_count = (byte) brw.ReadOnBuffer(8);
+        boundary_extension_count = (byte) brw.readOnBuffer(8);
         
         for ( int i=0;i<boundary_extension_count; i++ ) {
-            boundary_extension_length[i] = (byte) brw.ReadOnBuffer(8);
+            boundary_extension_length[i] = (byte) brw.readOnBuffer(8);
             for ( int j=0;j<boundary_extension_length[i]; j++) {
-                boundary_extension_byte[i][j] = (byte) brw.ReadOnBuffer(8);
+                boundary_extension_byte[i][j] = (byte) brw.readOnBuffer(8);
             }
         }
     }
@@ -35,21 +35,21 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(boundary_extension_count, 8);
+        brw.writeOnBuffer(boundary_extension_count, 8);
         for(int i=0;i<boundary_extension_count;i++) {
-            brw.WriteOnBuffer(boundary_extension_length[i], 8);
+            brw.writeOnBuffer(boundary_extension_length[i], 8);
             for(int j=0;j<boundary_extension_length[i];j++) {
-                brw.WriteOnBuffer(boundary_extension_byte[i][j], 8);
+                brw.writeOnBuffer(boundary_extension_byte[i][j], 8);
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t boundary_extension_count : 0x%x \n", 
                 boundary_extension_count));

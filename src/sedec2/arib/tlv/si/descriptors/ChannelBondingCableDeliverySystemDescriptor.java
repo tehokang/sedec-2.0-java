@@ -24,14 +24,14 @@ public class ChannelBondingCableDeliverySystemDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             ChannelBondingInfo ch = new ChannelBondingInfo();
-            ch.frequency = brw.ReadOnBuffer(32);
-            brw.SkipOnBuffer(8);
-            ch.frame_type = (byte) brw.ReadOnBuffer(4);
-            ch.FEC_outer = (byte) brw.ReadOnBuffer(4);
-            ch.modulation = (byte) brw.ReadOnBuffer(8);
-            ch.symbol_rate = brw.ReadOnBuffer(28);
-            ch.FEC_inner = (byte) brw.ReadOnBuffer(4);
-            ch.group_id = (byte) brw.ReadOnBuffer(8);
+            ch.frequency = brw.readOnBuffer(32);
+            brw.skipOnBuffer(8);
+            ch.frame_type = (byte) brw.readOnBuffer(4);
+            ch.FEC_outer = (byte) brw.readOnBuffer(4);
+            ch.modulation = (byte) brw.readOnBuffer(8);
+            ch.symbol_rate = brw.readOnBuffer(28);
+            ch.FEC_inner = (byte) brw.readOnBuffer(4);
+            ch.group_id = (byte) brw.readOnBuffer(8);
             
             i-=12; 
             channel_bonding_infos.add(ch);
@@ -39,8 +39,8 @@ public class ChannelBondingCableDeliverySystemDescriptor extends Descriptor {
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<channel_bonding_infos.size(); i++ ) {
             ChannelBondingInfo ch = channel_bonding_infos.get(i);

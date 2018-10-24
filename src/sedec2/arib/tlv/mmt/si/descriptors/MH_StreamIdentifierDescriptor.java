@@ -9,12 +9,12 @@ public class MH_StreamIdentifierDescriptor extends Descriptor {
     public MH_StreamIdentifierDescriptor(BitReadWriter brw) {
         super(brw);
         
-        component_tag = brw.ReadOnBuffer(16);
+        component_tag = brw.readOnBuffer(16);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t component_tag : 0x%x \n", component_tag));
     }

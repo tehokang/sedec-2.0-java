@@ -20,41 +20,41 @@ public class DataTransmissionMessage extends Message {
     public DataTransmissionMessage(byte[] buffer) {
         super(buffer);
         
-        message_id = ReadOnBuffer(16);
-        version = ReadOnBuffer(8);
-        length = ReadOnBuffer(32);
+        message_id = readOnBuffer(16);
+        version = readOnBuffer(8);
+        length = readOnBuffer(32);
         
         __decode_message_body__();
     }
 
-    public byte GetNumberOfTables() {
+    public byte getNumberOfTables() {
         return number_of_tables;
     }
     
-    public List<TableInfo> GetTableInfo() {
+    public List<TableInfo> getTableInfo() {
         return table_infos;
     }
     
-    public List<Table> GetTables() {
+    public List<Table> getTables() {
         return tables;
     }
     
     @Override
     protected void __decode_message_body__() {
-        number_of_tables = (byte) ReadOnBuffer(8);
+        number_of_tables = (byte) readOnBuffer(8);
         
         for ( int i=0; i<number_of_tables; i++ ) {
             TableInfo table_info = new TableInfo();
-            table_info.table_id = (byte) ReadOnBuffer(8);
-            table_info.table_version = (byte) ReadOnBuffer(8);
-            table_info.table_length = ReadOnBuffer(16);
+            table_info.table_id = (byte) readOnBuffer(8);
+            table_info.table_version = (byte) readOnBuffer(8);
+            table_info.table_length = readOnBuffer(16);
             table_infos.add(table_info);
         }
         
         for ( int j=(length-1-(number_of_tables*4)); j>0; ) {
-            Table table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
+            Table table = (Table) TableFactory.createTable(getCurrentBuffer());
             tables.add(table);
-            j-=table.GetTableLength();
+            j-=table.getTableLength();
         }
     }
 }

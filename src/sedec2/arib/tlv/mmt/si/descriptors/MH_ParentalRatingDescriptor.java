@@ -19,8 +19,8 @@ public class MH_ParentalRatingDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             Rating rating = new Rating();
-            rating.country_code = brw.ReadOnBuffer(24);
-            rating.rating = (byte) brw.ReadOnBuffer(8);
+            rating.country_code = brw.readOnBuffer(24);
+            rating.rating = (byte) brw.readOnBuffer(8);
             ratings.add(rating);
             
             i-=3;
@@ -28,8 +28,8 @@ public class MH_ParentalRatingDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<ratings.size(); i++ ) {
             Logger.d(String.format("\t [%d] country_code : 0x%x \n", 

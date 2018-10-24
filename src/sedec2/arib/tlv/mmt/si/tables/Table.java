@@ -11,7 +11,7 @@ public abstract class Table extends sedec2.base.Table {
         super(buffer);
     }
     
-    public void EncodeTable() {
+    public void encode() {
         __encode_update_table_length__();
         __encode_prepare_table__();
 
@@ -21,7 +21,7 @@ public abstract class Table extends sedec2.base.Table {
         __encode_make_crc__();
     }
     
-    public void PrintTable() {
+    public void print() {
         Logger.d(String.format("======= Section Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("table_id : 0x%x \n", table_id));
         Logger.d(String.format("version : 0x%x \n", version));
@@ -30,21 +30,21 @@ public abstract class Table extends sedec2.base.Table {
     }
     
     @Override
-    public int GetTableLength() {
+    public int getTableLength() {
         return 4 + length;
     }
 
     @Override
     protected void __decode_table_header__() {
-        table_id = ReadOnBuffer(8);
-        version = ReadOnBuffer(8);
-        length = ReadOnBuffer(16);
+        table_id = readOnBuffer(8);
+        version = readOnBuffer(8);
+        length = readOnBuffer(16);
     }
     
     @Override
     protected void __encode_write_table_header__() {
-        WriteOnBuffer( table_id, 8 );
-        WriteOnBuffer( version, 8);
-        WriteOnBuffer( length, 16);
+        writeOnBuffer( table_id, 8 );
+        writeOnBuffer( version, 8);
+        writeOnBuffer( length, 16);
     }
 }

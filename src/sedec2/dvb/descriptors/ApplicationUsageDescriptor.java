@@ -13,14 +13,14 @@ public class ApplicationUsageDescriptor extends Descriptor {
     public ApplicationUsageDescriptor(BitReadWriter brw) {
         super(brw);
         
-        usage_type = (byte) brw.ReadOnBuffer(8);
+        usage_type = (byte) brw.readOnBuffer(8);
     }
 
-    public byte GetUsageType() {
+    public byte getUsageType() {
         return usage_type;
     }
     
-    public void SetUsageType(byte value) {
+    public void setUsageType(byte value) {
         usage_type = value;
     }
     
@@ -30,15 +30,15 @@ public class ApplicationUsageDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(usage_type, 8);
+        brw.writeOnBuffer(usage_type, 8);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t usage_type : 0x%x \n", usage_type));
     }

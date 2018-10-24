@@ -13,19 +13,19 @@ public class ConnectionRequirementDescriptor extends Descriptor {
     public ConnectionRequirementDescriptor(BitReadWriter brw) {
         super(brw);
         
-        brw.SkipOnBuffer(7);
-        IP_connection_requirement_flag = brw.ReadOnBuffer(1) == 1 ? true : false;
+        brw.skipOnBuffer(7);
+        IP_connection_requirement_flag = brw.readOnBuffer(1) == 1 ? true : false;
         
         for ( int i=0; i<descriptor_length-1; i++ ) {
-            brw.SkipOnBuffer(8);
+            brw.skipOnBuffer(8);
         }
     }
 
-    public boolean GetIPConnectionRequirementFlag() {
+    public boolean getIPConnectionRequirementFlag() {
         return IP_connection_requirement_flag;
     }
     
-    public void SetIPConnectionRequirementFlag(boolean value) {
+    public void setIPConnectionRequirementFlag(boolean value) {
         IP_connection_requirement_flag = value;
     }
     
@@ -35,16 +35,16 @@ public class ConnectionRequirementDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(0x7f, 7);
-        brw.WriteOnBuffer(IP_connection_requirement_flag == true ? 1 : 0, 1);
+        brw.writeOnBuffer(0x7f, 7);
+        brw.writeOnBuffer(IP_connection_requirement_flag == true ? 1 : 0, 1);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t IP_connection_requirement_flag : %d \n", IP_connection_requirement_flag));
     }

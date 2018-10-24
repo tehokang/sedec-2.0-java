@@ -38,51 +38,51 @@ public class DataDirectoryManagementTable extends Table {
         __decode_table_body__();
     }
 
-    public byte GetNumOfBaseDirectory() {
+    public byte getNumOfBaseDirectory() {
         return num_of_base_directory;
     }
     
-    public List<BaseDirectory> GetBaseDirectories() {
+    public List<BaseDirectory> getBaseDirectories() {
         return base_directories;
     }
     
     @Override
     protected void __decode_table_body__() {
-        num_of_base_directory = (byte) ReadOnBuffer(8);
+        num_of_base_directory = (byte) readOnBuffer(8);
         
         for ( int i=0; i<num_of_base_directory; i++ ) {
             BaseDirectory base_directory = new BaseDirectory();
-            base_directory.base_directory_path_length = (byte) ReadOnBuffer(8);
+            base_directory.base_directory_path_length = (byte) readOnBuffer(8);
             base_directory.base_directory_path_byte = 
                     new byte[base_directory.base_directory_path_length];
             
             for ( int j=0; j<base_directory.base_directory_path_length; j++ ) {
-                base_directory.base_directory_path_byte[j] = (byte) ReadOnBuffer(8);
+                base_directory.base_directory_path_byte[j] = (byte) readOnBuffer(8);
             }
             
-            base_directory.num_of_directory_nodes = ReadOnBuffer(16);
+            base_directory.num_of_directory_nodes = readOnBuffer(16);
             
             for ( int j=0; j<base_directory.num_of_directory_nodes; j++ ) {
                 DirectoryNode node = new DirectoryNode();
-                node.node_tag = ReadOnBuffer(16);
-                node.directory_node_version = (byte) ReadOnBuffer(8);
-                node.directory_node_path_length = (byte) ReadOnBuffer(8);
+                node.node_tag = readOnBuffer(16);
+                node.directory_node_version = (byte) readOnBuffer(8);
+                node.directory_node_path_length = (byte) readOnBuffer(8);
                 node.directory_node_path_byte = new byte[node.directory_node_path_length];
                 
                 for ( int k=0; k<node.directory_node_path_length; k++ ) {
-                    node.directory_node_path_byte[k] = (byte) ReadOnBuffer(8);
+                    node.directory_node_path_byte[k] = (byte) readOnBuffer(8);
                 }
                 
-                node.num_of_files = ReadOnBuffer(16);
+                node.num_of_files = readOnBuffer(16);
                 
                 for ( int k=0; k<node.num_of_files; k++ ) {
                     File file = new File();
-                    file.node_tag = ReadOnBuffer(16);
-                    file.file_name_length = (byte) ReadOnBuffer(8);
+                    file.node_tag = readOnBuffer(16);
+                    file.file_name_length = (byte) readOnBuffer(8);
                     
                     file.file_name_byte = new byte[file.file_name_length];
                     for ( int m=0; m<file.file_name_length; m++ ) {
-                        file.file_name_byte[m] = (byte) ReadOnBuffer(8);
+                        file.file_name_byte[m] = (byte) readOnBuffer(8);
                     }
                     node.files.add(file);
                 }
@@ -93,8 +93,8 @@ public class DataDirectoryManagementTable extends Table {
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("num_of_base_directory : 0x%x \n", num_of_base_directory));
         

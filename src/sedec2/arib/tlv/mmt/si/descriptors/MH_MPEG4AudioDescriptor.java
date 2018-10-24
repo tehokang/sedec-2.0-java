@@ -9,12 +9,12 @@ public class MH_MPEG4AudioDescriptor extends Descriptor {
     public MH_MPEG4AudioDescriptor(BitReadWriter brw) {
         super(brw);
         
-        MPEG4_audio_profile_and_level = (byte) brw.ReadOnBuffer(8);
+        MPEG4_audio_profile_and_level = (byte) brw.readOnBuffer(8);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t MPEG4_audio_profile_and_level : 0x%x \n", 
                 MPEG4_audio_profile_and_level));

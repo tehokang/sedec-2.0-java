@@ -39,46 +39,46 @@ public class LayoutConfigurationTable extends Table {
         __decode_table_body__();
     }
 
-    public byte GetVersion() {
+    public byte getVersion() {
         return version;
     }
     
-    public int GetLength() {
+    public int getLength() {
         return length;
     }
     
-    public byte GetNumberOfLoop() {
+    public byte getNumberOfLoop() {
         return number_of_loop;
     }
     
-    public List<Layout> GetLayouts() {
+    public List<Layout> getLayouts() {
         return layouts;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
     @Override
     protected void __decode_table_body__() {
-        number_of_loop = (byte) ReadOnBuffer(8);
+        number_of_loop = (byte) readOnBuffer(8);
         
         int read_bytes = 0;
         for ( int i=0; i<number_of_loop; i++) {
             Layout layout = new Layout();
-            layout.layout_number = (byte) ReadOnBuffer(8);
-            layout.device_id = (byte) ReadOnBuffer(8);
-            layout.number_of_region = (byte) ReadOnBuffer(8);
+            layout.layout_number = (byte) readOnBuffer(8);
+            layout.device_id = (byte) readOnBuffer(8);
+            layout.number_of_region = (byte) readOnBuffer(8);
             read_bytes += 3;
             
             for ( int j=0; j<layout.number_of_region; j++ ) {
                 Region region = new Region();
-                region.region_number = (byte) ReadOnBuffer(8);
-                region.left_top_pos_x = (byte) ReadOnBuffer(8);
-                region.left_top_pos_y = (byte) ReadOnBuffer(8);
-                region.right_down_post_x = (byte) ReadOnBuffer(8);
-                region.right_down_pos_y = (byte) ReadOnBuffer(8);
-                region.layer_order = (byte) ReadOnBuffer(8);
+                region.region_number = (byte) readOnBuffer(8);
+                region.left_top_pos_x = (byte) readOnBuffer(8);
+                region.left_top_pos_y = (byte) readOnBuffer(8);
+                region.right_down_post_x = (byte) readOnBuffer(8);
+                region.right_down_pos_y = (byte) readOnBuffer(8);
+                region.layer_order = (byte) readOnBuffer(8);
                 layout.regions.add(region);
                 
                 read_bytes += 6;
@@ -87,15 +87,15 @@ public class LayoutConfigurationTable extends Table {
         }
         
         for ( int i=length-1-read_bytes; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("number_of_loop : 0x%x \n", number_of_loop));
         for ( int i=0; i<layouts.size(); i++ ) {
@@ -124,7 +124,7 @@ public class LayoutConfigurationTable extends Table {
         }
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
     }
 }

@@ -36,37 +36,37 @@ public class LocalEventInformationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        event_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        service_id = ReadOnBuffer(16);
-        transport_stream_id = ReadOnBuffer(16);
-        original_network_id = ReadOnBuffer(16);
+        event_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        service_id = readOnBuffer(16);
+        transport_stream_id = readOnBuffer(16);
+        original_network_id = readOnBuffer(16);
         
         for ( int i=(section_length-11-4); i>0; ) {
             LocalEvent local_event = new LocalEvent();
-            local_event.local_event_id = ReadOnBuffer(16);
-            SkipOnBuffer(4);
-            local_event.descriptors_loop_length = ReadOnBuffer(12);
+            local_event.local_event_id = readOnBuffer(16);
+            skipOnBuffer(4);
+            local_event.descriptors_loop_length = readOnBuffer(12);
             
             for ( int j=local_event.descriptors_loop_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 local_event.descriptors.add(desc);
             }
             i-=(4 + local_event.descriptors_loop_length);
             local_events.add(local_event);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("original_service_id : 0x%x \n", event_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -84,7 +84,7 @@ public class LocalEventInformationTable extends Table {
                     i, local_event.descriptors_loop_length));
             
             for ( int j=0; j<local_event.descriptors.size(); j++ ) {
-                local_event.descriptors.get(j).PrintDescriptor();
+                local_event.descriptors.get(j).print();
             }
         }
         

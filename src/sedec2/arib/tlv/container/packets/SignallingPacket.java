@@ -14,19 +14,19 @@ public class SignallingPacket extends TypeLengthValue {
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(buffer, 4, buffer.length-4);
         
-        table = TableFactory.CreateTable(outputStream.toByteArray());
+        table = TableFactory.createTable(outputStream.toByteArray());
         
         if ( null != table ) {
-            SkipOnBuffer(table.GetTableLength());
+            skipOnBuffer(table.getTableLength());
         }
     }
 
     @Override
-    public void PrintTypeLengthValue() {
-        super.PrintTypeLengthValue();
+    public void print() {
+        super.print();
         
         if ( table != null ) {
-            table.PrintTable();
+            table.print();
         }
     }
 }

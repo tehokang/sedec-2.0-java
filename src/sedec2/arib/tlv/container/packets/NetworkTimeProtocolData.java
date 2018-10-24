@@ -21,24 +21,24 @@ public class NetworkTimeProtocolData extends BitReadWriter {
     public NetworkTimeProtocolData(byte[] buffer) {
         super(buffer);
         
-        leap_indicator = (byte) ReadOnBuffer(2);
-        version = (byte) ReadOnBuffer(3);
-        mode = (byte) ReadOnBuffer(3);
-        stratum = (byte) ReadOnBuffer(8);
-        poll = (byte) ReadOnBuffer(8);
-        precision = (byte) ReadOnBuffer(8);
+        leap_indicator = (byte) readOnBuffer(2);
+        version = (byte) readOnBuffer(3);
+        mode = (byte) readOnBuffer(3);
+        stratum = (byte) readOnBuffer(8);
+        poll = (byte) readOnBuffer(8);
+        precision = (byte) readOnBuffer(8);
         
-        root_delay = ReadOnBuffer(32);
-        root_dispersion = ReadOnBuffer(32);
-        reference_identification = ReadOnBuffer(32);
+        root_delay = readOnBuffer(32);
+        root_dispersion = readOnBuffer(32);
+        reference_identification = readOnBuffer(32);
         
-        reference_timestamp = ReadOnBuffer(64);
-        origin_timestamp = ReadOnBuffer(64);
-        receive_timestamp = ReadOnBuffer(64);
-        transmit_timestamp = ReadOnBuffer(64);
+        reference_timestamp = readOnBuffer(64);
+        origin_timestamp = readOnBuffer(64);
+        receive_timestamp = readOnBuffer(64);
+        transmit_timestamp = readOnBuffer(64);
     }
 
-    public void Print() {
+    public void print() {
         Logger.d(String.format("=============== NTP =============== (%s)\n", getClass().getName()));
         Logger.d(String.format("leap_indicator : 0x%x \n", leap_indicator));
         Logger.d(String.format("version : 0x%x \n", version));

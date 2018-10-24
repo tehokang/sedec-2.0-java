@@ -16,36 +16,36 @@ public class MultimediaServiceInformationDescriptor extends Descriptor {
     public MultimediaServiceInformationDescriptor(BitReadWriter brw) {
         super(brw);
         
-        data_component_id = brw.ReadOnBuffer(16);
+        data_component_id = brw.readOnBuffer(16);
         
         if ( data_component_id == 0x0020 ) {
-            component_tag = brw.ReadOnBuffer(16);
-            ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
-            text_length = (byte) brw.ReadOnBuffer(8);
+            component_tag = brw.readOnBuffer(16);
+            ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
+            text_length = (byte) brw.readOnBuffer(8);
             
             text_char = new byte[text_length];
             for ( int i=0; i<text_char.length; i++ ) {
-                text_char[i] = (byte) brw.ReadOnBuffer(8);
+                text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
         
         if ( data_component_id == 0x0021 ) {
-            associated_contents_flag = (byte) brw.ReadOnBuffer(1);
-            brw.SkipOnBuffer(7);
+            associated_contents_flag = (byte) brw.readOnBuffer(1);
+            brw.skipOnBuffer(7);
         }
         
-        selector_length = (byte) brw.ReadOnBuffer(8);
+        selector_length = (byte) brw.readOnBuffer(8);
         selector_byte = new byte[selector_length];
         for ( int i=0; i<selector_byte.length; i++ ) {
-            selector_byte[i] = (byte) brw.ReadOnBuffer(8);
+            selector_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t data_component_id : 0x%x \n", data_component_id));
         

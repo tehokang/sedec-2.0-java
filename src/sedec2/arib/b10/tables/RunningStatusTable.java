@@ -23,7 +23,7 @@ public class RunningStatusTable extends Table {
         __decode_table_body__();
     }
 
-    public List<StreamStatus> GetStreamStatus() {
+    public List<StreamStatus> getStreamStatus() {
         return stream_statuses;
     }
     
@@ -32,20 +32,20 @@ public class RunningStatusTable extends Table {
         
         for ( int i=section_length; i>0; ) {
             StreamStatus stream_status = new StreamStatus();
-            stream_status.transport_stream_id = ReadOnBuffer(16);
-            stream_status.orignal_network_id = ReadOnBuffer(16);
-            stream_status.service_id = ReadOnBuffer(16);
-            stream_status.event_id = ReadOnBuffer(16);
-            SkipOnBuffer(5);
-            stream_status.running_status = (byte) ReadOnBuffer(3);
+            stream_status.transport_stream_id = readOnBuffer(16);
+            stream_status.orignal_network_id = readOnBuffer(16);
+            stream_status.service_id = readOnBuffer(16);
+            stream_status.event_id = readOnBuffer(16);
+            skipOnBuffer(5);
+            stream_status.running_status = (byte) readOnBuffer(3);
             stream_statuses.add(stream_status);
             i-=9;
         }
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         for ( int i=0; i<stream_statuses.size(); i++ ) {
             StreamStatus stream_status = stream_statuses.get(i);

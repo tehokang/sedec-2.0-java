@@ -37,55 +37,55 @@ public class MH_ExternalApplicationControlDescriptor extends Descriptor {
     public MH_ExternalApplicationControlDescriptor(BitReadWriter brw) {
         super(brw);
         
-        specific_scope_flag = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(7);
+        specific_scope_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(7);
         
         if ( specific_scope_flag == 1) {
-            target_application_class = brw.ReadOnBuffer(16);
-            target_application_count = (byte) brw.ReadOnBuffer(8);
+            target_application_class = brw.readOnBuffer(16);
+            target_application_count = (byte) brw.readOnBuffer(8);
             
             for ( int i=0; i<target_application_count; i++ ) {
                 ApplicationIdentifier app = new ApplicationIdentifier();
-                app.organization_id = brw.ReadOnBuffer(16);
-                app.application_id = brw.ReadOnBuffer(32);
+                app.organization_id = brw.readOnBuffer(16);
+                app.application_id = brw.readOnBuffer(32);
                 target_applications.add(app);
             }
         }
         
-        permission_bitmap_count = (byte) brw.ReadOnBuffer(8);
+        permission_bitmap_count = (byte) brw.readOnBuffer(8);
         permission_bitmap = new int[permission_bitmap_count];
         
         for ( int i=0; i<permission_bitmap_count; i++ ) {
-            permission_bitmap[i] = brw.ReadOnBuffer(16);
+            permission_bitmap[i] = brw.readOnBuffer(16);
         }
         
-        overlay_admission_polarity = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(3);
-        overlay_controlled_area_count = (byte) brw.ReadOnBuffer(4);
+        overlay_admission_polarity = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(3);
+        overlay_controlled_area_count = (byte) brw.readOnBuffer(4);
         
         for ( int i=0; i<overlay_controlled_area_count; i++ ) {
             OverlayControlledArea area = new OverlayControlledArea();
-            area.overlay_controlled_area_tag = (byte) brw.ReadOnBuffer(8);
-            area.horizontal_pos = brw.ReadOnBuffer(16);
-            area.vertical_pos = brw.ReadOnBuffer(16);
-            area.horizontal_size = brw.ReadOnBuffer(16);
-            area.vertical_size = brw.ReadOnBuffer(16);
+            area.overlay_controlled_area_tag = (byte) brw.readOnBuffer(8);
+            area.horizontal_pos = brw.readOnBuffer(16);
+            area.vertical_pos = brw.readOnBuffer(16);
+            area.horizontal_size = brw.readOnBuffer(16);
+            area.vertical_size = brw.readOnBuffer(16);
             
             overlay_controlled_areas.add(area);
         }
         
-        blocked_application_count = (byte) brw.ReadOnBuffer(8);
+        blocked_application_count = (byte) brw.readOnBuffer(8);
         for ( int i=0; i<blocked_application_count; i++ ) {
             ApplicationIdentifier app = new ApplicationIdentifier();
-            app.organization_id = brw.ReadOnBuffer(16);
-            app.application_id = brw.ReadOnBuffer(32);
+            app.organization_id = brw.readOnBuffer(16);
+            app.application_id = brw.readOnBuffer(32);
             blocked_applications.add(app);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t specific_scope_flag : 0x%x \n", specific_scope_flag)); 
         

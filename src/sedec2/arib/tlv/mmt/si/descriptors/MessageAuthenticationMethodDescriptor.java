@@ -12,26 +12,26 @@ public class MessageAuthenticationMethodDescriptor extends Descriptor {
     public MessageAuthenticationMethodDescriptor(BitReadWriter brw) {
         super(brw);
         
-        layer_type = (byte) brw.ReadOnBuffer(2);
-        brw.SkipOnBuffer(6);
-        message_authentication_system_id = (byte) brw.ReadOnBuffer(8);
+        layer_type = (byte) brw.readOnBuffer(2);
+        brw.skipOnBuffer(6);
+        message_authentication_system_id = (byte) brw.readOnBuffer(8);
         
         private_data = new byte[descriptor_length - 2];
         for ( int i=0; i<private_data.length; i++ ) {
-            private_data[i] = (byte) brw.ReadOnBuffer(8);
+            private_data[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t layer_type : 0x%x \n", layer_type));
         Logger.d(String.format("\t message_authentication_system_id : 0x%x \n",
                 message_authentication_system_id));
         
         Logger.d("\t private_data : \n");
-        BinaryLogger.Print(private_data);
+        BinaryLogger.print(private_data);
     }
 
     @Override

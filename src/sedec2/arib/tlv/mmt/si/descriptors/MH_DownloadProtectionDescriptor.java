@@ -13,34 +13,33 @@ public class MH_DownloadProtectionDescriptor extends Descriptor {
     public MH_DownloadProtectionDescriptor(BitReadWriter brw) {
         super(brw);
         
-        DL_system_ID = (byte) brw.ReadOnBuffer(8);
+        DL_system_ID = (byte) brw.readOnBuffer(8);
         info = new MMTGeneralLocationInfo(brw);
-        encrypt_protocol_number = (byte) brw.ReadOnBuffer(8);
+        encrypt_protocol_number = (byte) brw.readOnBuffer(8);
         
         encrypt_info = new byte[encrypt_protocol_number];
         for ( int i=0; i<encrypt_protocol_number; i++ ) {
-            encrypt_info[i] = (byte) brw.ReadOnBuffer(8);
+            encrypt_info[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t DL_system_ID : 0x%x \n", DL_system_ID));
         
-        info.PrintInfo();
+        info.print();
         
         Logger.d(String.format("\t encrypt_protocol_number : 0x%x \n", 
                 encrypt_protocol_number));
         
         Logger.d("\t encrypt_info : \n");
-        BinaryLogger.Print(encrypt_info);
+        BinaryLogger.print(encrypt_info);
     }
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 1 + info.GetLength() + 1 + encrypt_info.length;
+        descriptor_length = 1 + info.getLength() + 1 + encrypt_info.length;
     }
-
 }

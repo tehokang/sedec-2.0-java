@@ -50,66 +50,66 @@ public class MMTGeneralLocationInfo {
     }
     
     public MMTGeneralLocationInfo(BitReadWriter brw) {
-        location_type = (byte) brw.ReadOnBuffer(8);
+        location_type = (byte) brw.readOnBuffer(8);
         
         switch ( location_type ) {
             case 0x00:
-                type0.packet_id = brw.ReadOnBuffer(16);
+                type0.packet_id = brw.readOnBuffer(16);
                 length = 2;
                 break;
             case 0x01:
                 for ( int i=0; i<4; i++ ) 
-                    type1.ipv4_src_addr[i] = (byte) brw.ReadOnBuffer(8);
+                    type1.ipv4_src_addr[i] = (byte) brw.readOnBuffer(8);
                 for ( int i=0; i<4; i++ )
-                    type1.ipv4_dst_addr[i] = (byte) brw.ReadOnBuffer(8);
-                type1.dst_port = brw.ReadOnBuffer(16);
-                type1.packet_id = brw.ReadOnBuffer(16);
+                    type1.ipv4_dst_addr[i] = (byte) brw.readOnBuffer(8);
+                type1.dst_port = brw.readOnBuffer(16);
+                type1.packet_id = brw.readOnBuffer(16);
                 length=12;
                 break;
             case 0x02:
                 for ( int j=0; j<16; j++ ) 
                     type2.ipv6_src_addr[j] = 
-                            (byte) brw.ReadOnBuffer(8);
+                            (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<16; j++ ) 
                     type2.ipv6_dst_addr[j] = 
-                            (byte) brw.ReadOnBuffer(8);
-                type2.dst_port = brw.ReadOnBuffer(16);
-                type2.packet_id = brw.ReadOnBuffer(16);
+                            (byte) brw.readOnBuffer(8);
+                type2.dst_port = brw.readOnBuffer(16);
+                type2.packet_id = brw.readOnBuffer(16);
                 length=40;
                 break;
             case 0x03:
-                type3.network_id = brw.ReadOnBuffer(16);
+                type3.network_id = brw.readOnBuffer(16);
                 type3.MPEG_2_transport_stream_id = 
-                        brw.ReadOnBuffer(16);
-                brw.SkipOnBuffer(3);
-                type3.MPEG_2_PID = brw.ReadOnBuffer(13);
+                        brw.readOnBuffer(16);
+                brw.skipOnBuffer(3);
+                type3.MPEG_2_PID = brw.readOnBuffer(13);
                 length=6;
                 break;
             case 0x04:
                 for ( int j=0; j<16; j++ ) 
                     type4.ipv6_src_addr[j] = 
-                            (byte) brw.ReadOnBuffer(8);
+                            (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<16; j++ ) 
                     type4.ipv6_dst_addr[j] = 
-                            (byte) brw.ReadOnBuffer(8);
-                type4.dst_port = brw.ReadOnBuffer(16);
-                brw.SkipOnBuffer(3);
-                type4.MPEG_2_PID = brw.ReadOnBuffer(13);
+                            (byte) brw.readOnBuffer(8);
+                type4.dst_port = brw.readOnBuffer(16);
+                brw.skipOnBuffer(3);
+                type4.MPEG_2_PID = brw.readOnBuffer(13);
                 length=36;
                 break;
             case 0x05:
-                type5.URL_length = (byte) brw.ReadOnBuffer(8);
+                type5.URL_length = (byte) brw.readOnBuffer(8);
                 type5.URL_byte = 
                         new byte[type5.URL_length];
                 for ( int j=0; j<type5.URL_length; j++ ) {
-                    type5.URL_byte[j] = (byte) brw.ReadOnBuffer(8);
+                    type5.URL_byte[j] = (byte) brw.readOnBuffer(8);
                 }
                 length=(8+type5.URL_length);
                 break;
         }
     }
     
-    public void PrintInfo() {
+    public void print() {
         Logger.d(String.format("\t location_type : 0x%x \n", location_type));
         
         switch ( location_type ) {
@@ -189,7 +189,7 @@ public class MMTGeneralLocationInfo {
         }
     }
     
-    public byte GetLocationType() {
+    public byte getLocationType() {
         return location_type;
     }
     
@@ -217,7 +217,7 @@ public class MMTGeneralLocationInfo {
         return type5;
     }
     
-    public int GetLength() {
+    public int getLength() {
         return length;
     }
 }

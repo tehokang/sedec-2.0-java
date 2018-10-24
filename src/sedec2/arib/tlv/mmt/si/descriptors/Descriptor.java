@@ -12,19 +12,19 @@ public abstract class Descriptor extends sedec2.base.Descriptor {
     }
     
     public Descriptor(BitReadWriter brw) {
-        descriptor_tag = brw.ReadOnBuffer(16);
-        descriptor_length = brw.ReadOnBuffer(8);
+        descriptor_tag = brw.readOnBuffer(16);
+        descriptor_length = brw.readOnBuffer(8);
     }
 
     @Override
-    public int GetDescriptorLength() {
+    public int getDescriptorLength() {
         updateDescriptorLength();
         return descriptor_length + 3;
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        brw.WriteOnBuffer(descriptor_tag, 16);
-        brw.WriteOnBuffer(descriptor_length, 8);
+    public void writeDescriptor(BitReadWriter brw) {
+        brw.writeOnBuffer(descriptor_tag, 16);
+        brw.writeOnBuffer(descriptor_length, 8);
     }
 }

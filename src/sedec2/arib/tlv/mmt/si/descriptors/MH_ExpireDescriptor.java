@@ -11,43 +11,43 @@ public class MH_ExpireDescriptor extends Descriptor {
     public MH_ExpireDescriptor(BitReadWriter brw) {
         super(brw);
         
-        time_mode = brw.ReadOnBuffer(8);
+        time_mode = brw.readOnBuffer(8);
         
         if ( 0x01 == time_mode ) {
-            UTC_time = brw.ReadOnBuffer(64);
+            UTC_time = brw.readOnBuffer(64);
         } else if ( 0x04 == time_mode ) {
-            brw.SkipOnBuffer(8);
-            passed_seconds = brw.ReadOnBuffer(32);
+            brw.skipOnBuffer(8);
+            passed_seconds = brw.readOnBuffer(32);
         }
     }
 
-    public int GetTimeMode() {
+    public int getTimeMode() {
         return time_mode;
     }
     
-    public double GetUTCTime() {
+    public double getUTCTime() {
         return UTC_time;
     }
     
-    public int GetPassedSeconds() {
+    public int getPassedSeconds() {
         return passed_seconds;
     }
     
-    public void SetTimeMode(int value) {
+    public void setTimeMode(int value) {
         time_mode =  value;
     }
     
-    public void SetUTCTime(long value) {
+    public void setUTCTime(long value) {
         UTC_time = value;
     }
     
-    public void SetPassedSeconds(int value) {
+    public void setPassedSeconds(int value) {
         passed_seconds = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t time_mode : 0x%x \n", time_mode));
         if ( 0x01 == time_mode ) {
@@ -69,17 +69,17 @@ public class MH_ExpireDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(time_mode, 8);
+            brw.writeOnBuffer(time_mode, 8);
             
             if ( 0x01 == time_mode ) {
-                brw.WriteOnBuffer(UTC_time, 64);
+                brw.writeOnBuffer(UTC_time, 64);
             } else if ( 0x04 == time_mode ) {
-                brw.WriteOnBuffer(0x0f, 8);
-                brw.WriteOnBuffer(passed_seconds, 32);
+                brw.writeOnBuffer(0x0f, 8);
+                brw.writeOnBuffer(passed_seconds, 32);
             }
         }
     }

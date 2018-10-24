@@ -16,32 +16,32 @@ public class MH_CAContractInfoDescriptor extends Descriptor {
     public MH_CAContractInfoDescriptor(BitReadWriter brw) {
         super(brw);
         
-        CA_system_ID = brw.ReadOnBuffer(16);
-        CA_unit_id = (byte) brw.ReadOnBuffer(4);
-        num_of_component = (byte) brw.ReadOnBuffer(4);
+        CA_system_ID = brw.readOnBuffer(16);
+        CA_unit_id = (byte) brw.readOnBuffer(4);
+        num_of_component = (byte) brw.readOnBuffer(4);
         component_tag = new int[num_of_component];
         
         for ( int i=0; i<num_of_component; i++ ) {
-            component_tag[i] = brw.ReadOnBuffer(16);
+            component_tag[i] = brw.readOnBuffer(16);
         }
         
-        contract_verification_info_length = (byte) brw.ReadOnBuffer(8);
+        contract_verification_info_length = (byte) brw.readOnBuffer(8);
         contract_verification_info = new byte[contract_verification_info_length];
         for ( int i=0; i<contract_verification_info_length; i++ ) {
-            contract_verification_info[i] = (byte) brw.ReadOnBuffer(8);
+            contract_verification_info[i] = (byte) brw.readOnBuffer(8);
         }
         
-        fee_name_length = (byte) brw.ReadOnBuffer(8);
+        fee_name_length = (byte) brw.readOnBuffer(8);
         fee_name = new byte[fee_name_length];
         
         for ( int i=0; i<fee_name_length; i++ ) {
-            fee_name[i] = (byte) brw.ReadOnBuffer(8);
+            fee_name[i] = (byte) brw.readOnBuffer(8);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
         Logger.d(String.format("\t CA_unit_id : 0x%x \n", CA_unit_id));

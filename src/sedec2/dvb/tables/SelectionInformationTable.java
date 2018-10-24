@@ -32,42 +32,42 @@ public class SelectionInformationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        SkipOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(4);
-        transmission_info_loop_length = ReadOnBuffer(12);
+        skipOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(4);
+        transmission_info_loop_length = readOnBuffer(12);
         
         for ( int i=transmission_info_loop_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
         for ( int i=(section_length - 7 - transmission_info_loop_length); i>0; ) {
             Service service = new Service();
-            service.service_id = ReadOnBuffer(16);
-            SkipOnBuffer(1);
-            service.running_status = (byte) ReadOnBuffer(3);
-            service.service_loop_length = ReadOnBuffer(12);
+            service.service_id = readOnBuffer(16);
+            skipOnBuffer(1);
+            service.running_status = (byte) readOnBuffer(3);
+            service.service_loop_length = readOnBuffer(12);
             
             for ( int j=service.service_loop_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 service.descriptors.add(desc);
             }
             services.add(service);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("version_number : 0x%x \n",  version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", 
@@ -78,7 +78,7 @@ public class SelectionInformationTable extends Table {
                 transmission_info_loop_length));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         for ( int i=0; i<services.size(); i++ ) {
@@ -91,7 +91,7 @@ public class SelectionInformationTable extends Table {
                     i, service.service_loop_length));
             
             for ( int j=0; j<service.descriptors.size(); j++ ) {
-                service.descriptors.get(j).PrintDescriptor();
+                service.descriptors.get(j).print();
             }
         }
     }

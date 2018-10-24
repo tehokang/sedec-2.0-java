@@ -10,13 +10,13 @@ public class AssetGroupDescriptor extends Descriptor {
     public AssetGroupDescriptor(BitReadWriter brw) {
         super(brw);
         
-        group_identification = (byte) brw.ReadOnBuffer(8);
-        selection_level = (byte) brw.ReadOnBuffer(8);
+        group_identification = (byte) brw.readOnBuffer(8);
+        selection_level = (byte) brw.readOnBuffer(8);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t group_identification : 0x%x \n", group_identification));
         Logger.d(String.format("\t selection_level : 0x%x \n", selection_level));

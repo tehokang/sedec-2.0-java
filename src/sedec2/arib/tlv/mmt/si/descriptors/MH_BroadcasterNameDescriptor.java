@@ -11,17 +11,17 @@ public class MH_BroadcasterNameDescriptor extends Descriptor {
         
         broadcaster_name = new byte[descriptor_length];
         for ( int i=0; i<descriptor_length; i++ ) {
-            broadcaster_name[i] = (byte) brw.ReadOnBuffer(8);
+            broadcaster_name[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
-    public String GetBroadcasterName() {
+    public String getBroadcasterName() {
         return new String(broadcaster_name);
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t char : %s \n", new String(broadcaster_name)));
     }

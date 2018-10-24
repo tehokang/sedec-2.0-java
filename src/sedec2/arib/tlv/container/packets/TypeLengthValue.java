@@ -11,22 +11,22 @@ public class TypeLengthValue extends BitReadWriter {
     public TypeLengthValue(byte[] buffer) {
         super(buffer);
     
-        sync = (byte) ReadOnBuffer(2);
-        SkipOnBuffer(6);
+        sync = (byte) readOnBuffer(2);
+        skipOnBuffer(6);
             
-        packet_type = (byte) ReadOnBuffer(8);
-        length = ReadOnBuffer(16);
+        packet_type = (byte) readOnBuffer(8);
+        length = readOnBuffer(16);
     }
     
-    public byte GetPacketType() {
+    public byte getPacketType() {
         return packet_type;
     }
     
-    public int GetLength() {
+    public int getLength() {
         return 4 + length;
     }
     
-    public void PrintTypeLengthValue() {
+    public void print() {
         Logger.d(String.format("======= TLV Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("sync : 0x%x \n", sync));
         Logger.d(String.format("packet_type : 0x%x \n", packet_type));

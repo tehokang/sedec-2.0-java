@@ -16,16 +16,16 @@ public class MH_SimpleApplicationLocationDescriptor extends Descriptor {
         if ( 0 < descriptor_length ) {
             initial_path_bytes = new byte[descriptor_length];
             for ( int i=0; i<descriptor_length; i++ ) {
-                initial_path_bytes[i] = (byte) brw.ReadOnBuffer(8);
+                initial_path_bytes[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
 
-    public byte[] GetInitialPathBytes() {
+    public byte[] getInitialPathBytes() {
         return initial_path_bytes;
     }
     
-    public void SetInitialPathBytes(byte[] value) {
+    public void setInitialPathBytes(byte[] value) {
         initial_path_bytes = null;
         System.arraycopy(value, 0, initial_path_bytes, 0, value.length);
     }
@@ -37,19 +37,19 @@ public class MH_SimpleApplicationLocationDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
             for ( int i=0; i<descriptor_length; i++ ) {
-                brw.WriteOnBuffer(initial_path_bytes[i], 8);
+                brw.writeOnBuffer(initial_path_bytes[i], 8);
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t initial_path_bytes : %s \n", 
                 new String(initial_path_bytes)));

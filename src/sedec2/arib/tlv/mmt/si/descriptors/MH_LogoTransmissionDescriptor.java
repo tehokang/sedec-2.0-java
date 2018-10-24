@@ -14,25 +14,25 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
     public MH_LogoTransmissionDescriptor(BitReadWriter brw) {
         super(brw);
         
-        logo_transmission_type = (byte) brw.ReadOnBuffer(8);
+        logo_transmission_type = (byte) brw.readOnBuffer(8);
         
         switch ( logo_transmission_type ) {
             case 0x01:
-                brw.SkipOnBuffer(7);
-                logo_id = brw.ReadOnBuffer(9);
-                brw.SkipOnBuffer(4);;
-                logo_version = brw.ReadOnBuffer(12);
-                download_data_id = brw.ReadOnBuffer(16);
+                brw.skipOnBuffer(7);
+                logo_id = brw.readOnBuffer(9);
+                brw.skipOnBuffer(4);;
+                logo_version = brw.readOnBuffer(12);
+                download_data_id = brw.readOnBuffer(16);
                 break;
             case 0x02:
-                brw.SkipOnBuffer(7);
-                logo_id = brw.ReadOnBuffer(9);
+                brw.skipOnBuffer(7);
+                logo_id = brw.readOnBuffer(9);
                 break;
             case 0x03:
                 {
                     logo_char = new byte[descriptor_length-1];
                     for ( int i=0; i<logo_char.length; i++ ) {
-                        logo_char[i] = (byte) brw.ReadOnBuffer(8);
+                        logo_char[i] = (byte) brw.readOnBuffer(8);
                     }
                 }
                 break;
@@ -40,36 +40,36 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 {
                     reserved_future_use = new byte[descriptor_length-1];
                     for ( int i=0; i<descriptor_length-1; i++) {
-                        brw.SkipOnBuffer(8);
+                        brw.skipOnBuffer(8);
                     }
                 }
                 break;
         }
     }
     
-    public byte GetLogoTransmissionType() {
+    public byte getLogoTransmissionType() {
         return logo_transmission_type;
     }
     
-    public int GetLogoId() {
+    public int getLogoId() {
         return logo_id;
     }
     
-    public int GetLogoVersion() {
+    public int getLogoVersion() {
         return logo_version;
     }
     
-    public int GetDownloadDataId() {
+    public int getDownloadDataId() {
         return download_data_id;
     }
     
-    public byte[] GetLogoChar() {
+    public byte[] getLogoChar() {
         return logo_char;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t logo_transmission_type : 0x%x \n", logo_transmission_type));
         

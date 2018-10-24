@@ -21,8 +21,8 @@ public class MMTP_Packet extends BitReadWriter {
     protected int extension_type;
     protected int extension_length;
     protected List<HeaderExtensionByte> header_extension_bytes = new ArrayList<>(); 
-    protected MMTP_Payload_Type_MPU mmtp_payload_type_mpu = null;
-    protected MMTP_Payload_Type_SignallingMessage mmtp_payload_type_signalling_message = null;
+    protected MMTP_Payload_MPU mmtp_payload_mpu = null;
+    protected MMTP_Payload_SignallingMessage mmtp_payload_signalling_message = null;
     
     class HeaderExtensionByte {
         public byte hdr_ext_end_flag;
@@ -31,40 +31,96 @@ public class MMTP_Packet extends BitReadWriter {
         public byte[] hdr_ext_byte;
     }
     
+    public MMTP_Payload_MPU getMPU() {
+        return mmtp_payload_mpu;
+    }
+    
+    public MMTP_Payload_SignallingMessage getSignallingMessage() {
+        return mmtp_payload_signalling_message;
+    }
+    
+    public byte getVersion() {
+        return version;
+    }
+    
+    public byte getPacketCounterFlag() {
+        return packet_counter_flag;
+    }
+    
+    public byte getFECType() {
+        return FEC_type;
+    }
+    
+    public byte getExtensionFlag() {
+        return extension_flag;
+    }
+    
+    public byte getRAPFlag() {
+        return RAP_flag;
+    }
+    
+    public byte getPayloadType() {
+        return payload_type;
+    }
+    
+    public int getPacketId() {
+        return packet_id;
+    }
+    
+    public int getTimestamp() {
+        return timestamp;
+    }
+    
+    public int getPacketSequenceNumber() {
+        return packet_sequence_number;
+    }
+    
+    public int getPacketCounter() {
+        return packet_counter;
+    }
+    
+    public int getExtensionType() {
+        return extension_type;
+    }
+    
+    public int getExtensionLength() {
+        return extension_length;
+    }
+    
     public MMTP_Packet(byte[] buffer) {
         super(buffer);
         
-        version = (byte) ReadOnBuffer(2);
-        packet_counter_flag = (byte) ReadOnBuffer(1);
-        FEC_type = (byte) ReadOnBuffer(2);
-        SkipOnBuffer(1);
-        extension_flag = (byte) ReadOnBuffer(1);
-        RAP_flag = (byte) ReadOnBuffer(1);
-        SkipOnBuffer(2);
-        payload_type = (byte) ReadOnBuffer(6);
-        packet_id = ReadOnBuffer(16);
-        timestamp = ReadOnBuffer(32);
-        packet_sequence_number = ReadOnBuffer(32);
+        version = (byte) readOnBuffer(2);
+        packet_counter_flag = (byte) readOnBuffer(1);
+        FEC_type = (byte) readOnBuffer(2);
+        skipOnBuffer(1);
+        extension_flag = (byte) readOnBuffer(1);
+        RAP_flag = (byte) readOnBuffer(1);
+        skipOnBuffer(2);
+        payload_type = (byte) readOnBuffer(6);
+        packet_id = readOnBuffer(16);
+        timestamp = readOnBuffer(32);
+        packet_sequence_number = readOnBuffer(32);
         
         if ( packet_counter_flag == 0x01 ) {
-            packet_counter = ReadOnBuffer(32);
+            packet_counter = readOnBuffer(32);
         }
         
         if ( extension_flag == 0x01 ) {
-            extension_type = ReadOnBuffer(16);
-            extension_length = ReadOnBuffer(16);
+            extension_type = readOnBuffer(16);
+            extension_length = readOnBuffer(16);
             
             if ( extension_type == 0x0000 ) {
                 for ( int i=extension_length; i>0; ) {
                     HeaderExtensionByte heb = new HeaderExtensionByte();
-                    heb.hdr_ext_end_flag = (byte) ReadOnBuffer(1);
-                    heb.hdr_ext_type = ReadOnBuffer(15);
-                    heb.hdr_ext_length = ReadOnBuffer(16);
+                    heb.hdr_ext_end_flag = (byte) readOnBuffer(1);
+                    heb.hdr_ext_type = readOnBuffer(15);
+                    heb.hdr_ext_length = readOnBuffer(16);
                     heb.hdr_ext_byte = new byte[heb.hdr_ext_length];
                     i-=4;
                     
                     for ( int j=0; j<heb.hdr_ext_byte.length; j++ ) {
-                        heb.hdr_ext_byte[j] = (byte) ReadOnBuffer(8);
+                        heb.hdr_ext_byte[j] = (byte) readOnBuffer(8);
                         i-=1;
                     }
                     header_extension_bytes.add(heb);
@@ -73,13 +129,13 @@ public class MMTP_Packet extends BitReadWriter {
                 HeaderExtensionByte heb = new HeaderExtensionByte();
                 heb.hdr_ext_byte = new byte[extension_length];
                 for ( int j=0; j<heb.hdr_ext_byte.length; j++ ) {
-                    heb.hdr_ext_byte[j] = (byte) ReadOnBuffer(8);
+                    heb.hdr_ext_byte[j] = (byte) readOnBuffer(8);
                 }
             }
         }
         
         if ( payload_type == 0x00 ) {
-            mmtp_payload_type_mpu = new MMTP_Payload_Type_MPU(this);
+            mmtp_payload_mpu = new MMTP_Payload_MPU(this);
         } else if ( payload_type == 0x02 ) {
             switch ( packet_id ) {
                 case 0x0000:
@@ -92,7 +148,7 @@ public class MMTP_Packet extends BitReadWriter {
                 case 0x8005:
                 case 0x8006:
                 case 0x8007:
-                    mmtp_payload_type_signalling_message = new MMTP_Payload_Type_SignallingMessage(this);        
+                    mmtp_payload_signalling_message = new MMTP_Payload_SignallingMessage(this);        
                     break;
                 default:
                     break;
@@ -100,7 +156,7 @@ public class MMTP_Packet extends BitReadWriter {
         }
     }
     
-    public void Print() {
+    public void print() {
         Logger.d(String.format("======= MMTP Packet ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("version : 0x%x \n", version));
         Logger.d(String.format("packet_counter_flag : 0x%x \n", packet_counter_flag));
@@ -130,13 +186,13 @@ public class MMTP_Packet extends BitReadWriter {
                         i, heb.hdr_ext_length));
                 Logger.d(String.format("[%d] hdr_ext_byte : \n", i));
                 
-                BinaryLogger.Print(heb.hdr_ext_byte);
+                BinaryLogger.print(heb.hdr_ext_byte);
             }
         }
         
-        if ( payload_type == 0x00 && mmtp_payload_type_mpu != null ) {
-            mmtp_payload_type_mpu.Print();
-        } else if (payload_type == 0x02 && mmtp_payload_type_signalling_message != null ) {
+        if ( payload_type == 0x00 && mmtp_payload_mpu != null ) {
+            mmtp_payload_mpu.print();
+        } else if (payload_type == 0x02 && mmtp_payload_signalling_message != null ) {
             switch ( packet_id ) {
                 case 0x0000:
                 case 0x0001:
@@ -148,7 +204,7 @@ public class MMTP_Packet extends BitReadWriter {
                 case 0x8005:
                 case 0x8006:
                 case 0x8007:
-                    mmtp_payload_type_signalling_message.Print();        
+                    mmtp_payload_signalling_message.print();        
                     break;
                 default:
                     break;

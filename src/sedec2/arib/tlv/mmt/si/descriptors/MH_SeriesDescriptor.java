@@ -16,23 +16,23 @@ public class MH_SeriesDescriptor extends Descriptor {
     public MH_SeriesDescriptor(BitReadWriter brw) {
         super(brw);
         
-        series_id = brw.ReadOnBuffer(16);
-        repeat_label = (byte) brw.ReadOnBuffer(4);
-        program_pattern = (byte) brw.ReadOnBuffer(3);
-        expire_date_valid_flag = (byte) brw.ReadOnBuffer(1);
-        expire_date = brw.ReadOnBuffer(16);
-        episode_number = brw.ReadOnBuffer(12);
-        last_episode_number = brw.ReadOnBuffer(12);
+        series_id = brw.readOnBuffer(16);
+        repeat_label = (byte) brw.readOnBuffer(4);
+        program_pattern = (byte) brw.readOnBuffer(3);
+        expire_date_valid_flag = (byte) brw.readOnBuffer(1);
+        expire_date = brw.readOnBuffer(16);
+        episode_number = brw.readOnBuffer(12);
+        last_episode_number = brw.readOnBuffer(12);
         
         series_name_char = new byte[descriptor_length-8];
         for ( int i=0; i<series_name_char.length; i++ ) {
-            series_name_char[i] = (byte) brw.ReadOnBuffer(8);
+            series_name_char[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t series_id : 0x%x \n", series_id));
         Logger.d(String.format("\t repeat_label : 0x%x \n", repeat_label));

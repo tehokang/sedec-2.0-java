@@ -11,33 +11,33 @@ public class LockedCacheDescriptor extends Descriptor {
         super(brw);
         
         if ( 0 < descriptor_length ) {
-            num_of_locked_cache_node = brw.ReadOnBuffer(8);
+            num_of_locked_cache_node = brw.readOnBuffer(8);
             
             for ( int i=0; i<num_of_locked_cache_node; i++ ) {
-                node_tag[i] = brw.ReadOnBuffer(16);
+                node_tag[i] = brw.readOnBuffer(16);
             }
         }
     }
 
-    public int GetNumOfLockedCache() {
+    public int getNumOfLockedCache() {
         return num_of_locked_cache_node;
     }
     
-    public int[] GetNodeTag() {
+    public int[] getNodeTag() {
         return node_tag;
     }
     
-    public void SetNumOfLockedCache(int value) {
+    public void setNumOfLockedCache(int value) {
         num_of_locked_cache_node = value;
     }
     
-    public void SetNodeTag(int []value) {
+    public void setNodeTag(int []value) {
         node_tag = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_locked_cache_node : 0x%x \n", num_of_locked_cache_node));
         for ( int i=0;i<num_of_locked_cache_node; i++ ) {
@@ -53,14 +53,14 @@ public class LockedCacheDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(num_of_locked_cache_node, 8);
+            brw.writeOnBuffer(num_of_locked_cache_node, 8);
             
             for ( int i=0; i<num_of_locked_cache_node; i++ ) {
-                brw.WriteOnBuffer(node_tag[i], 16);
+                brw.writeOnBuffer(node_tag[i], 16);
             }
         }
     }

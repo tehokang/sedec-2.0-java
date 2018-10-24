@@ -36,14 +36,14 @@ public class DvbTableDecoder {
     
                 dataInputStream.readFully(table_buffer);
     
-                Table table = TableFactory.CreateTable(table_buffer);
+                Table table = TableFactory.createTable(table_buffer);
                 
                 if ( null != table ) {
                     System.out.println(
                             String.format("[%d] table information \n",  i));
 
-                    table.PrintBuffer();
-                    table.PrintTable();
+                    table.printBuffer();
+                    table.print();
                 } 
                 
                 dataInputStream.close(); 

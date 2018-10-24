@@ -14,51 +14,51 @@ public class MH_LinkageDescriptor extends Descriptor {
     public MH_LinkageDescriptor(BitReadWriter brw) {
         super();
         
-        descriptor_tag = brw.ReadOnBuffer(16);
-        descriptor_length = brw.ReadOnBuffer(16);
+        descriptor_tag = brw.readOnBuffer(16);
+        descriptor_length = brw.readOnBuffer(16);
         
-        tlv_stream_id = brw.ReadOnBuffer(16);
-        original_network_id = brw.ReadOnBuffer(16);
-        service_id = brw.ReadOnBuffer(16);
-        linkage_type = brw.ReadOnBuffer(16);
+        tlv_stream_id = brw.readOnBuffer(16);
+        original_network_id = brw.readOnBuffer(16);
+        service_id = brw.readOnBuffer(16);
+        linkage_type = brw.readOnBuffer(16);
         
         private_data_byte = new byte[descriptor_length - 7];
         for ( int i=0; i<private_data_byte.length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
-    public int GetTlvStreamId() {
+    public int getTlvStreamId() {
         return tlv_stream_id;
     }
     
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return original_network_id;
     }
     
-    public int GetServiceId() {
+    public int getServiceId() {
         return service_id;
     }
     
-    public int GetLinkageType() {
+    public int getLinkageType() {
         return linkage_type;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t tlv_stream_id : 0x%x \n", tlv_stream_id));
         Logger.d(String.format("\t original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("\t service_id : 0x%x \n", service_id));
         Logger.d(String.format("\t linkage_type : 0x%x \n", linkage_type));
         
-        BinaryLogger.Print(private_data_byte);
+        BinaryLogger.print(private_data_byte);
     }
 
     
     @Override
-    public int GetDescriptorLength() {
+    public int getDescriptorLength() {
         updateDescriptorLength();
         return descriptor_length + 4;
     }

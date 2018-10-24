@@ -7,7 +7,7 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
-public class MMTP_Payload_Type_MPU {
+public class MMTP_Payload_MPU {
     protected int payload_length;
     protected byte fragment_type;
     protected byte timed_flag;
@@ -38,14 +38,14 @@ public class MMTP_Payload_Type_MPU {
         public byte[] MFU_data_byte;
     }
     
-    public MMTP_Payload_Type_MPU(BitReadWriter brw) {
-        payload_length = brw.ReadOnBuffer(16);
-        fragment_type = (byte) brw.ReadOnBuffer(4);
-        timed_flag = (byte) brw.ReadOnBuffer(1);
-        fragmentation_indicator = (byte) brw.ReadOnBuffer(2);
-        aggregation_flag = (byte) brw.ReadOnBuffer(1);
-        fragment_counter = (byte) brw.ReadOnBuffer(8);
-        MPU_sequence_number = brw.ReadOnBuffer(32);
+    public MMTP_Payload_MPU(BitReadWriter brw) {
+        payload_length = brw.readOnBuffer(16);
+        fragment_type = (byte) brw.readOnBuffer(4);
+        timed_flag = (byte) brw.readOnBuffer(1);
+        fragmentation_indicator = (byte) brw.readOnBuffer(2);
+        aggregation_flag = (byte) brw.readOnBuffer(1);
+        fragment_counter = (byte) brw.readOnBuffer(8);
+        MPU_sequence_number = brw.readOnBuffer(32);
         
         if ( fragment_type == 0x02 ) {
             mfu = new MFU();
@@ -53,31 +53,31 @@ public class MMTP_Payload_Type_MPU {
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
                     TimedData td = new TimedData();
-                    td.movie_fragment_sequence_number = brw.ReadOnBuffer(32);
-                    td.sample_number = brw.ReadOnBuffer(32);
-                    td.offset = brw.ReadOnBuffer(32);
-                    td.priority = (byte) brw.ReadOnBuffer(8);
-                    td.dependency_counter = (byte) brw.ReadOnBuffer(8);
+                    td.movie_fragment_sequence_number = brw.readOnBuffer(32);
+                    td.sample_number = brw.readOnBuffer(32);
+                    td.offset = brw.readOnBuffer(32);
+                    td.priority = (byte) brw.readOnBuffer(8);
+                    td.dependency_counter = (byte) brw.readOnBuffer(8);
                     td.MFU_data_byte = new byte[payload_length - 20];
                     
                     for ( int i=0; i<td.MFU_data_byte.length; i++ ) {
-                        td.MFU_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+                        td.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                     }
                     mfu.timed_data.add(td);
                     
                 } else {
                     for ( int k=payload_length-6; k>0; ) {
                         TimedData td = new TimedData();
-                        td.data_unit_length = brw.ReadOnBuffer(16);
-                        td.movie_fragment_sequence_number = brw.ReadOnBuffer(32);
-                        td.sample_number = brw.ReadOnBuffer(32);
-                        td.offset = brw.ReadOnBuffer(32);
-                        td.priority = (byte) brw.ReadOnBuffer(8);
-                        td.dependency_counter = (byte) brw.ReadOnBuffer(8);
+                        td.data_unit_length = brw.readOnBuffer(16);
+                        td.movie_fragment_sequence_number = brw.readOnBuffer(32);
+                        td.sample_number = brw.readOnBuffer(32);
+                        td.offset = brw.readOnBuffer(32);
+                        td.priority = (byte) brw.readOnBuffer(8);
+                        td.dependency_counter = (byte) brw.readOnBuffer(8);
                         td.MFU_data_byte = new byte[td.data_unit_length-14];
                         
                         for ( int i=0; i<td.MFU_data_byte.length; i++ ) {
-                            td.MFU_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+                            td.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                         }
                         k-= (2 + td.data_unit_length);
                         mfu.timed_data.add(td);
@@ -87,23 +87,23 @@ public class MMTP_Payload_Type_MPU {
             } else {
                 if ( aggregation_flag == 0x00 ) {
                     NonTimedData ntd = new NonTimedData();
-                    ntd.item_id = brw.ReadOnBuffer(32);
+                    ntd.item_id = brw.readOnBuffer(32);
                     ntd.MFU_data_byte = new byte[payload_length - 10];
                     
                     for ( int i=0; i<ntd.MFU_data_byte.length; i++ ) {
-                        ntd.MFU_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+                        ntd.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                     }
                     mfu.non_timed_data.add(ntd);
                     
                 } else {
                     for ( int k=payload_length-6; k>0; ) {
                         NonTimedData ntd = new NonTimedData();
-                        ntd.data_unit_length = brw.ReadOnBuffer(16);
-                        ntd.item_id = brw.ReadOnBuffer(32);
+                        ntd.data_unit_length = brw.readOnBuffer(16);
+                        ntd.item_id = brw.readOnBuffer(32);
                         ntd.MFU_data_byte = new byte[payload_length-4];
                         
                         for ( int i=0; i<ntd.MFU_data_byte.length; i++ ) {
-                            ntd.MFU_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+                            ntd.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                         }
                         mfu.non_timed_data.add(ntd);
                         k-= (2 + ntd.data_unit_length);
@@ -113,9 +113,8 @@ public class MMTP_Payload_Type_MPU {
         }
     }
     
-    public void Print() {
+    public void print() {
         Logger.d(String.format("------- MMTP ------- (%s)\n", getClass().getName()));
-        
         Logger.d(String.format("payload_length : 0x%x \n", payload_length));
         Logger.d(String.format("fragment_type : 0x%x \n", fragment_type));
         Logger.d(String.format("timed_flag : 0x%x \n", timed_flag));
@@ -125,7 +124,6 @@ public class MMTP_Payload_Type_MPU {
         Logger.d(String.format("MPU_sequence_number : 0x%x \n", MPU_sequence_number));
         
         if ( fragment_type == 0x02 ) {
-            
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
                     
@@ -143,7 +141,7 @@ public class MMTP_Payload_Type_MPU {
                                 i, td.dependency_counter));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.Print(td.MFU_data_byte);
+                        BinaryLogger.print(td.MFU_data_byte);
                     }
                     
                 } else {
@@ -163,7 +161,7 @@ public class MMTP_Payload_Type_MPU {
                                 i, td.dependency_counter));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.Print(td.MFU_data_byte);
+                        BinaryLogger.print(td.MFU_data_byte);
                     }
                 }
                 
@@ -176,7 +174,7 @@ public class MMTP_Payload_Type_MPU {
                         
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.Print(ntd.MFU_data_byte);
+                        BinaryLogger.print(ntd.MFU_data_byte);
                     }
                     
                 } else {
@@ -188,7 +186,7 @@ public class MMTP_Payload_Type_MPU {
                                 i, ntd.item_id));
                         Logger.d(String.format("[%d] MFU_data_byte : \n",i ));
                         
-                        BinaryLogger.Print(ntd.MFU_data_byte);
+                        BinaryLogger.print(ntd.MFU_data_byte);
                     }
                 }
             }

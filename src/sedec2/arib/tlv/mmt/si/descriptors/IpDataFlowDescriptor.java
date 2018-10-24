@@ -24,29 +24,29 @@ public class IpDataFlowDescriptor extends Descriptor {
     public IpDataFlowDescriptor(BitReadWriter brw) {
         super(brw);
         
-        ip_version = (byte) brw.ReadOnBuffer(1);
-        number_of_flow = (byte) brw.ReadOnBuffer(7);
+        ip_version = (byte) brw.readOnBuffer(1);
+        number_of_flow = (byte) brw.readOnBuffer(7);
         
         for ( int i=descriptor_length-1; i>0; ) {
             IpDataFlow ip_data_flow = new IpDataFlow();
-            ip_data_flow.ip_data_flow_id = (byte) brw.ReadOnBuffer(8);
+            ip_data_flow.ip_data_flow_id = (byte) brw.readOnBuffer(8);
             
             i-=1;
             if ( ip_version == '0' ) {
                 for ( int j=0; j<4; j++ ) 
-                    ip_data_flow.src_address_32[j] = (byte) brw.ReadOnBuffer(8);
+                    ip_data_flow.src_address_32[j] = (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<4; j++ ) 
-                    ip_data_flow.dst_address_32[j] = (byte) brw.ReadOnBuffer(8);
+                    ip_data_flow.dst_address_32[j] = (byte) brw.readOnBuffer(8);
                 i-=8;
             } else if ( ip_version == '1' ) {
                 for ( int j=0; j<16; j++ ) 
-                    ip_data_flow.src_address_128[j] = (byte) brw.ReadOnBuffer(8);
+                    ip_data_flow.src_address_128[j] = (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<16; j++ ) 
-                    ip_data_flow.dst_address_128[j] = (byte) brw.ReadOnBuffer(8);
+                    ip_data_flow.dst_address_128[j] = (byte) brw.readOnBuffer(8);
                 i-=32;
             }
-            ip_data_flow.src_port = brw.ReadOnBuffer(16);
-            ip_data_flow.dst_port = brw.ReadOnBuffer(16);
+            ip_data_flow.src_port = brw.readOnBuffer(16);
+            ip_data_flow.dst_port = brw.readOnBuffer(16);
             i-=4;
             
             ip_data_flows.add(ip_data_flow);
@@ -54,8 +54,8 @@ public class IpDataFlowDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t ip_version : 0x%x \n", ip_version));
         Logger.d(String.format("\t number_of_flow : 0x%x \n", number_of_flow));

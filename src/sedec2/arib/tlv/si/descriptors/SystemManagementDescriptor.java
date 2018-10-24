@@ -17,29 +17,29 @@ public class SystemManagementDescriptor extends Descriptor {
         super(brw);
         
         system_management_id = new SystemManagementId();
-        system_management_id.broadcasting_flag = (byte) brw.ReadOnBuffer(2);
-        system_management_id.broadcasting_identifier = (byte) brw.ReadOnBuffer(6);
+        system_management_id.broadcasting_flag = (byte) brw.readOnBuffer(2);
+        system_management_id.broadcasting_identifier = (byte) brw.readOnBuffer(6);
         system_management_id.additional_broadcasting_indentification = 
-                (byte) brw.ReadOnBuffer(8);
+                (byte) brw.readOnBuffer(8);
 
         additional_identification_info = new byte[descriptor_length-2];
         
         for ( int i=0; i<additional_identification_info.length; i++ ) {
-            additional_identification_info[i] = (byte) brw.ReadOnBuffer(8);
+            additional_identification_info[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
-    public SystemManagementId GetSystemManagementId() {
+    public SystemManagementId getSystemManagementId() {
         return system_management_id;
     }
     
-    public byte[] GetAdditionalIdentificationInfo() {
+    public byte[] getAdditionalIdentificationInfo() {
         return additional_identification_info;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t broadcasting_flag : 0x%x \n", 
                 system_management_id.broadcasting_flag));

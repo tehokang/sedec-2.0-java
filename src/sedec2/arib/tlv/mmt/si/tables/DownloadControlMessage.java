@@ -18,49 +18,49 @@ public class DownloadControlMessage extends Table {
         __decode_table_body__();
     }
     
-    public int GetTableIdExtension() {
+    public int getTableIdExtension() {
         return table_id_extension;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public byte[] GetDCMData() {
+    public byte[] getDCMData() {
         return DCM_data;
     }
     
     @Override
     protected void __decode_table_body__() {
-        table_id_extension = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
+        table_id_extension = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
         
         DCM_data = new byte[section_length - 5 - 4];
         for ( int i=0; i<DCM_data.length; i++ ) {
-            DCM_data[i] = (byte) ReadOnBuffer(8);
+            DCM_data[i] = (byte) readOnBuffer(8);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("table_id_extension : 0x%x \n", table_id_extension));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -68,7 +68,7 @@ public class DownloadControlMessage extends Table {
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
         
-        BinaryLogger.Print(DCM_data);
+        BinaryLogger.print(DCM_data);
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,

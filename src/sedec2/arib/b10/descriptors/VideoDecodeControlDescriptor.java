@@ -11,15 +11,15 @@ public class VideoDecodeControlDescriptor extends Descriptor {
     public VideoDecodeControlDescriptor(BitReadWriter brw) {
         super(brw);
         
-        still_picture_flag = (byte) brw.ReadOnBuffer(1);
-        sequence_end_code_flag = (byte) brw.ReadOnBuffer(1);
-        video_encode_format = (byte) brw.ReadOnBuffer(4);
-        brw.SkipOnBuffer(2);
+        still_picture_flag = (byte) brw.readOnBuffer(1);
+        sequence_end_code_flag = (byte) brw.readOnBuffer(1);
+        video_encode_format = (byte) brw.readOnBuffer(4);
+        brw.skipOnBuffer(2);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t still_picture_flag : 0x%x \n", still_picture_flag));
         Logger.d(String.format("\t sequence_end_code_flag : 0x%x \n", sequence_end_code_flag));

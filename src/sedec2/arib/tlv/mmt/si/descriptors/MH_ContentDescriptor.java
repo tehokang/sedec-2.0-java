@@ -7,7 +7,7 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
 public class MH_ContentDescriptor extends Descriptor {
-    List<Content> contents = new ArrayList<>();
+    protected List<Content> contents = new ArrayList<>();
     
     class Content {
         public byte content_nibble_level_1;
@@ -21,19 +21,23 @@ public class MH_ContentDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             Content content = new Content();
-            content.content_nibble_level_1 = (byte) brw.ReadOnBuffer(4);
-            content.content_nibble_level_2 = (byte) brw.ReadOnBuffer(4);
-            content.user_nibble_1 = (byte) brw.ReadOnBuffer(4);
-            content.user_nibble_2 = (byte) brw.ReadOnBuffer(4);
+            content.content_nibble_level_1 = (byte) brw.readOnBuffer(4);
+            content.content_nibble_level_2 = (byte) brw.readOnBuffer(4);
+            content.user_nibble_1 = (byte) brw.readOnBuffer(4);
+            content.user_nibble_2 = (byte) brw.readOnBuffer(4);
             
             contents.add(content);
             i-=2;
         }
     }
 
+    public List<Content> getContent() {
+        return contents;
+    }
+    
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<contents.size(); i++ ) {
             Content content = contents.get(i);

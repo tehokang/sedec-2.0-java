@@ -6,7 +6,6 @@ import java.util.List;
 import sedec2.arib.tlv.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
 import sedec2.base.Table;
-import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_EventInformationTable extends Table {
@@ -37,89 +36,84 @@ public class MH_EventInformationTable extends Table {
         __decode_table_body__();
     }
 
-    public int GetServiceId() {
+    public int getServiceId() {
         return service_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public int GetTlvStreamId() {
+    public int getTlvStreamId() {
         return tlv_stream_id;
     }
     
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return original_network_id;
     }
     
-    public byte GetSegmentLastSectionNumber() {
+    public byte getSegmentLastSectionNumber() {
         return segment_last_section_number;
     }
     
-    public byte GetLastTableId() {
+    public byte getLastTableId() {
         return last_table_id;
     }
     
-    public List<Event> GetEvents() {
+    public List<Event> getEvents() {
         return events;
     }
     
     @Override
     protected void __decode_table_body__() {
-        service_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        tlv_stream_id = ReadOnBuffer(16);
-        original_network_id = ReadOnBuffer(16);
-        segment_last_section_number = (byte) ReadOnBuffer(8);
-        last_table_id = (byte) ReadOnBuffer(8);
+        service_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        tlv_stream_id = readOnBuffer(16);
+        original_network_id = readOnBuffer(16);
+        segment_last_section_number = (byte) readOnBuffer(8);
+        last_table_id = (byte) readOnBuffer(8);
         
         for ( int i=(section_length-11-4); i>0; ) {
             Event event = new Event();
-            Logger.d(String.format("Event i : %d \n", i));
-            event.event_id = ReadOnBuffer(16);
-            event.start_time = ReadOnBuffer(40);
-            event.duration = ReadOnBuffer(24);
-            event.running_status = (byte) ReadOnBuffer(3);
-            event.free_CA_mode = (byte) ReadOnBuffer(1);
-            event.descriptors_loop_length = ReadOnBuffer(12);
+            event.event_id = readOnBuffer(16);
+            event.start_time = readOnBuffer(40);
+            event.duration = readOnBuffer(24);
+            event.running_status = (byte) readOnBuffer(3);
+            event.free_CA_mode = (byte) readOnBuffer(1);
+            event.descriptors_loop_length = readOnBuffer(12);
 
             for ( int j=event.descriptors_loop_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                desc.PrintDescriptor();
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 event.descriptors.add(desc);
             }
             
-            Logger.d(String.format("event-length : %d \n", 
-                    (12 + event.descriptors_loop_length)));
             i-= (12 + event.descriptors_loop_length);
             
             events.add(event);
-            Logger.d(String.format("\n"));
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("service_id : 0x%x \n", service_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -144,7 +138,7 @@ public class MH_EventInformationTable extends Table {
             
             for ( int j=0; j<event.descriptors.size(); j++ ) {
                 Descriptor desc = event.descriptors.get(j);
-                desc.PrintDescriptor();
+                desc.print();
             }
         }
         

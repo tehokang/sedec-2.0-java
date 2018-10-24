@@ -18,16 +18,16 @@ public class StuffingTable extends Table {
         data_byte = new byte[section_length];
         
         for ( int i=0; i<section_length; i++ ) {
-            data_byte[i] = (byte) ReadOnBuffer(8);
+            data_byte[i] = (byte) readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d("data_byte : \n");
         
-        BinaryLogger.Print(data_byte);
+        BinaryLogger.print(data_byte);
     }
 }

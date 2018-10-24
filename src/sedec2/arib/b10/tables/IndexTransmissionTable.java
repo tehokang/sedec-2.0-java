@@ -25,26 +25,26 @@ public class IndexTransmissionTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        event_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(4);
-        descriptors_loop_length = ReadOnBuffer(12);
+        event_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(4);
+        descriptors_loop_length = readOnBuffer(12);
         
         for ( int i=descriptors_loop_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("event_id : 0x%x \n", event_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -57,7 +57,7 @@ public class IndexTransmissionTable extends Table {
                 descriptors_loop_length));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

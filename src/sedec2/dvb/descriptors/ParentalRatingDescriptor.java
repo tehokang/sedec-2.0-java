@@ -13,10 +13,10 @@ public class ParentalRatingDescriptor extends Descriptor {
         
         int j=0;
         for ( int i=descriptor_length; i>0; j++ ) {
-            country_code[0] = (byte) brw.ReadOnBuffer(8);
-            country_code[1] = (byte) brw.ReadOnBuffer(8);
-            country_code[2] = (byte) brw.ReadOnBuffer(8);
-            rating = (byte) brw.ReadOnBuffer(8);
+            country_code[0] = (byte) brw.readOnBuffer(8);
+            country_code[1] = (byte) brw.readOnBuffer(8);
+            country_code[2] = (byte) brw.readOnBuffer(8);
+            rating = (byte) brw.readOnBuffer(8);
             i-=4;
             parent_rating_count = j+1;
         }
@@ -28,18 +28,18 @@ public class ParentalRatingDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         for ( int i=0; i<parent_rating_count; i++ ) {
-            brw.WriteOnBuffer(country_code[i], 24);
-            brw.WriteOnBuffer(rating, 8);
+            brw.writeOnBuffer(country_code[i], 24);
+            brw.writeOnBuffer(rating, 8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int j=0; j<parent_rating_count; j++ ) {
             Logger.d(String.format("\t country_code[%d] : %s \n", j, new String(country_code)));

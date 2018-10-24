@@ -36,7 +36,7 @@ public class TableFactory {
     public final static int SELECTION_INFORMATION_TABLE = 0x7f;
     public final static int UNKNOWN_TABLE = 0xff;
     
-    public static Table CreateTable(byte[] buffer) {
+    public static Table createTable(byte[] buffer) {
         int table_id = (buffer[0] & 0xff);
         
         Table section = null;

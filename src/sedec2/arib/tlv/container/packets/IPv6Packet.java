@@ -21,25 +21,25 @@ public class IPv6Packet extends TypeLengthValue {
     public IPv6Packet(byte[] buffer) {
         super(buffer);
         
-        version = (byte) ReadOnBuffer(4);
-        traffic_class = (byte) ReadOnBuffer(8);
-        flow_label = ReadOnBuffer(20);
-        payload_length = ReadOnBuffer(16);
-        next_header = (byte) ReadOnBuffer(8);
-        hop_limit = (byte) ReadOnBuffer(8);
+        version = (byte) readOnBuffer(4);
+        traffic_class = (byte) readOnBuffer(8);
+        flow_label = readOnBuffer(20);
+        payload_length = readOnBuffer(16);
+        next_header = (byte) readOnBuffer(8);
+        hop_limit = (byte) readOnBuffer(8);
         
         for ( int i=0; i<16; i++ ) {
-            source_address[i] = (byte) ReadOnBuffer(8);
+            source_address[i] = (byte) readOnBuffer(8);
         }
         
         for ( int i=0; i<16; i++ ) {
-            destination_address[i] = (byte) ReadOnBuffer(8);
+            destination_address[i] = (byte) readOnBuffer(8);
         }
         
         transport_layer_data = new byte[payload_length];
         
         for ( int i=0; i<transport_layer_data.length; i++ ) {
-            transport_layer_data[i] = (byte) ReadOnBuffer(8);
+            transport_layer_data[i] = (byte) readOnBuffer(8);
         }
         
         if ( next_header == 0x11 && 
@@ -50,45 +50,45 @@ public class IPv6Packet extends TypeLengthValue {
         }
     }
 
-    public byte GetVersion() {
+    public byte getVersion() {
         return version;
     }
     
-    public byte GetTrafficClass() {
+    public byte getTrafficClass() {
         return traffic_class;
     }
     
-    public int GetFlowLabel() {
+    public int getFlowLabel() {
         return flow_label;
     }
     
-    public int GetPayloadLength() {
+    public int getPayloadLength() {
         return payload_length;
     }
     
-    public byte GetNextHeader() {
+    public byte getNextHeader() {
         return next_header;
     }
     
-    public byte GetHopLimit() {
+    public byte getHopLimit() {
         return hop_limit;
     }
     
-    public byte[] GetSourceAddress() {
+    public byte[] getSourceAddress() {
         return source_address;
     }
     
-    public byte[] GetDestinationAddress() {
+    public byte[] getDestinationAddress() {
         return destination_address;
     }
     
-    public byte[] GetTransportLayerData() {
+    public byte[] getTransportLayerData() {
         return transport_layer_data;
     }
     
     @Override
-    public void PrintTypeLengthValue() {
-        super.PrintTypeLengthValue();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("version : 0x%x \n",  version));
         Logger.d(String.format("traffic_class : 0x%x \n", traffic_class));
@@ -128,13 +128,13 @@ public class IPv6Packet extends TypeLengthValue {
                 destination_address[14], destination_address[15]));
         
         if ( null != ntp ) {
-            ntp.Print();
+            ntp.print();
         }
         
         if ( null != mmtp_packet ) {
-            mmtp_packet.Print();
+            mmtp_packet.print();
         }
         
-        BinaryLogger.Print(transport_layer_data);
+        BinaryLogger.print(transport_layer_data);
     }
 }

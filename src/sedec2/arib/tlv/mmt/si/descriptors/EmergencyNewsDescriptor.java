@@ -9,17 +9,17 @@ public class EmergencyNewsDescriptor extends Descriptor {
     public EmergencyNewsDescriptor(BitReadWriter brw) {
         super(brw);
         
-        transmit_timestamp = brw.ReadOnBuffer(64);
-        brw.SkipOnBuffer(8);
+        transmit_timestamp = brw.readOnBuffer(64);
+        brw.skipOnBuffer(8);
     }
     
-    public long GetTransmitTimestamp() {
+    public long getTransmitTimestamp() {
         return transmit_timestamp;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t transmit_timestamp : 0x%x \n", transmit_timestamp));
 

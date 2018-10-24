@@ -46,50 +46,50 @@ public class PartialContentAnnouncementTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        service_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        transport_stream_id = ReadOnBuffer(16);
-        original_network_id = ReadOnBuffer(16);
-        content_id = ReadOnBuffer(32);
-        num_of_content_version = (byte) ReadOnBuffer(8);
+        service_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        transport_stream_id = readOnBuffer(16);
+        original_network_id = readOnBuffer(16);
+        content_id = readOnBuffer(32);
+        num_of_content_version = (byte) readOnBuffer(8);
         
         for ( int i=0; i<num_of_content_version; i++ ) {
             ContentVersion content_version = new ContentVersion();
-            content_version.content_version = ReadOnBuffer(16);
-            content_version.content_minor_version = ReadOnBuffer(16);
-            content_version.version_indicator = (byte) ReadOnBuffer(2);
-            SkipOnBuffer(2);
-            content_version.content_descriptor_length = ReadOnBuffer(12);
-            SkipOnBuffer(4);
-            content_version.schedule_description_length = ReadOnBuffer(12);
+            content_version.content_version = readOnBuffer(16);
+            content_version.content_minor_version = readOnBuffer(16);
+            content_version.version_indicator = (byte) readOnBuffer(2);
+            skipOnBuffer(2);
+            content_version.content_descriptor_length = readOnBuffer(12);
+            skipOnBuffer(4);
+            content_version.schedule_description_length = readOnBuffer(12);
             
             for ( int j=content_version.schedule_description_length; j>0; ) {
                 Schedule schedule_description = new Schedule();
-                schedule_description.start_time = ReadOnBuffer(40);
-                schedule_description.duration = ReadOnBuffer(24);
+                schedule_description.start_time = readOnBuffer(40);
+                schedule_description.duration = readOnBuffer(24);
                 content_version.schedule_descriptions.add(schedule_description);
                 j-=8;
             }
             
             for ( int k=(content_version.content_descriptor_length-
                     content_version.schedule_description_length); k>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                k-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                k-=desc.getDescriptorLength();
                 content_version.descriptors.add(desc);
             }
             content_versions.add(content_version);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("service_id : 0x%x \n", service_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -125,7 +125,7 @@ public class PartialContentAnnouncementTable extends Table {
             }
             
             for ( int j=0; j<content_version.descriptors.size(); j++ ) {
-                content_version.descriptors.get(j).PrintDescriptor();
+                content_version.descriptors.get(j).print();
             }
         }
         

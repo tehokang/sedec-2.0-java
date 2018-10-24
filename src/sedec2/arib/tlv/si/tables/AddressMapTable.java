@@ -39,31 +39,31 @@ public class AddressMapTable extends Table {
         public byte dst_address_mask_128;
     }
     
-    public int GetTableIdExtension() {
+    public int getTableIdExtension() {
         return table_id_extension;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public int GetNumOfService() {
+    public int getNumOfService() {
         return num_of_service_id;
     }
     
-    public List<Service> GetServices() {
+    public List<Service> getServices() {
         return services;
     }
     
@@ -75,59 +75,59 @@ public class AddressMapTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        table_id_extension = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        num_of_service_id = ReadOnBuffer(10);
-        SkipOnBuffer(6);
+        table_id_extension = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        num_of_service_id = readOnBuffer(10);
+        skipOnBuffer(6);
         
         for ( int i=0; i<num_of_service_id; i++) {
             Service service = new Service();
-            service.service_id = ReadOnBuffer(16);
-            service.ip_version = (byte) ReadOnBuffer(1);
-            SkipOnBuffer(5);
-            service.service_loop_length = ReadOnBuffer(10);
+            service.service_id = readOnBuffer(16);
+            service.ip_version = (byte) readOnBuffer(1);
+            skipOnBuffer(5);
+            service.service_loop_length = readOnBuffer(10);
             
             for ( int k=service.service_loop_length; k>0; ) {
                 if ( service.ip_version == 0 ) {
                     IPv4 ipv4 = new IPv4();
                     for ( int j=0; j<4; j++ ) 
-                        ipv4.src_address_32[j] = (byte) ReadOnBuffer(8);
-                    ipv4.src_address_mask_32 = (byte) ReadOnBuffer(8);
+                        ipv4.src_address_32[j] = (byte) readOnBuffer(8);
+                    ipv4.src_address_mask_32 = (byte) readOnBuffer(8);
                     for ( int j=0; j<4; j++ ) 
-                        ipv4.dst_address_32[j] = (byte) ReadOnBuffer(8);
-                    ipv4.dst_address_mask_32 = (byte) ReadOnBuffer(8);
+                        ipv4.dst_address_32[j] = (byte) readOnBuffer(8);
+                    ipv4.dst_address_mask_32 = (byte) readOnBuffer(8);
                     service.ipv4 = ipv4;
                     k-=10;
                 } else if ( service.ip_version == 1 ) {
                     IPv6 ipv6 = new IPv6();
                     for ( int j=0; j<16; j++ ) 
-                        ipv6.src_address_128[j] = (byte) ReadOnBuffer(8);
-                    ipv6.src_address_mask_128 = (byte) ReadOnBuffer(8);
+                        ipv6.src_address_128[j] = (byte) readOnBuffer(8);
+                    ipv6.src_address_mask_128 = (byte) readOnBuffer(8);
                     for ( int j=0; j<16; j++ ) 
-                        ipv6.dst_address_128[j] = (byte) ReadOnBuffer(8);
-                    ipv6.dst_address_mask_128 = (byte) ReadOnBuffer(8);
+                        ipv6.dst_address_128[j] = (byte) readOnBuffer(8);
+                    ipv6.dst_address_mask_128 = (byte) readOnBuffer(8);
                     service.ipv6 = ipv6;
                     k-=34;
                 }
                 
                 service.private_data_byte = new byte[k];
                 for ( int n=0; n<k; n++ ) {
-                    service.private_data_byte[n] = (byte) ReadOnBuffer(8);
+                    service.private_data_byte[n] = (byte) readOnBuffer(8);
                 }
             }
             services.add(service);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("table_id_extension : 0x%x \n", table_id_extension));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -164,7 +164,7 @@ public class AddressMapTable extends Table {
                         i, service.ipv6.src_address_mask_128));
             }
             
-            BinaryLogger.Print(service.private_data_byte);
+            BinaryLogger.print(service.private_data_byte);
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

@@ -13,56 +13,56 @@ public class CacheControlInfoDescriptor extends Descriptor {
     public CacheControlInfoDescriptor(BitReadWriter brw) {
         super(brw);
         
-        application_size = brw.ReadOnBuffer(16);
-        cache_priority = (byte) brw.ReadOnBuffer(8);
-        package_flag = (byte) brw.ReadOnBuffer(1);
-        application_version = (byte) brw.ReadOnBuffer(7);
-        expire_date = brw.ReadOnBuffer(16);
+        application_size = brw.readOnBuffer(16);
+        cache_priority = (byte) brw.readOnBuffer(8);
+        package_flag = (byte) brw.readOnBuffer(1);
+        application_version = (byte) brw.readOnBuffer(7);
+        expire_date = brw.readOnBuffer(16);
     }
 
-    public void SetApplicationSize(int value) {
+    public void setApplicationSize(int value) {
         application_size = value;
     }
     
-    public void SetCachePriority(byte value) {
+    public void setCachePriority(byte value) {
         cache_priority = value;
     }
     
-    public void SetPackageFlag(byte value) {
+    public void setPackageFlag(byte value) {
         package_flag = value;
     }
     
-    public void SetApplicationVersion(byte value) {
+    public void setApplicationVersion(byte value) {
         application_version = value;
     }
     
-    public void SetExpireDate(int value) {
+    public void setExpireDate(int value) {
         expire_date = value;
     }
     
-    public int GetApplicationSize() {
+    public int getApplicationSize() {
         return application_size;
     }
     
-    public byte GetCachePriority() {
+    public byte getCachePriority() {
         return cache_priority;
     }
     
-    public byte GetPackageFlag() {
+    public byte getPackageFlag() {
         return package_flag;
     }
     
-    public byte GetApplicationVersion() {
+    public byte getApplicationVersion() {
         return application_version;
     }
     
-    public int GetExpireDate() {
+    public int getExpireDate() {
         return expire_date;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t application_size : 0x%x \n", application_size));
         Logger.d(String.format("\t cache_priority : 0x%x \n", cache_priority));
@@ -78,13 +78,13 @@ public class CacheControlInfoDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(application_size, 16);
-        brw.WriteOnBuffer(cache_priority, 8);
-        brw.WriteOnBuffer(package_flag, 1);
-        brw.WriteOnBuffer(application_version, 7);
-        brw.WriteOnBuffer(expire_date, 16);
+        brw.writeOnBuffer(application_size, 16);
+        brw.writeOnBuffer(cache_priority, 8);
+        brw.writeOnBuffer(package_flag, 1);
+        brw.writeOnBuffer(application_version, 7);
+        brw.writeOnBuffer(expire_date, 16);
     }
 }

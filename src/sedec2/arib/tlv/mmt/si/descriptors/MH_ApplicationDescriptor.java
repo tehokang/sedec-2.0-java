@@ -29,22 +29,22 @@ public class MH_ApplicationDescriptor extends Descriptor {
     public MH_ApplicationDescriptor(BitReadWriter brw) {
         super(brw);
         
-        application_profiles_length = brw.ReadOnBuffer(8);
+        application_profiles_length = brw.readOnBuffer(8);
         for ( int i=application_profiles_length; i>0; i-=5) {
             ApplicationProfile application_profile = new ApplicationProfile();
             
-            application_profile.application_profile = brw.ReadOnBuffer(16);
-            application_profile.version_major = brw.ReadOnBuffer(8);
-            application_profile.version_minor = brw.ReadOnBuffer(8);
-            application_profile.version_micro = brw.ReadOnBuffer(8);
+            application_profile.application_profile = brw.readOnBuffer(16);
+            application_profile.version_major = brw.readOnBuffer(8);
+            application_profile.version_minor = brw.readOnBuffer(8);
+            application_profile.version_micro = brw.readOnBuffer(8);
             
             application_profiles.add(application_profile);
         }
         
-        service_bound_flag = brw.ReadOnBuffer(1);
-        visibility = brw.ReadOnBuffer(2);
-        brw.SkipOnBuffer(5);
-        application_priority = brw.ReadOnBuffer(8);
+        service_bound_flag = brw.readOnBuffer(1);
+        visibility = brw.readOnBuffer(2);
+        brw.skipOnBuffer(5);
+        application_priority = brw.readOnBuffer(8);
         
         transport_protocol_label_length = 
                 descriptor_length - 1 - (application_profiles_length > 0 ? 5:0) - 2;
@@ -52,12 +52,12 @@ public class MH_ApplicationDescriptor extends Descriptor {
         if ( 0 < transport_protocol_label_length ) {
             transport_protocol_label = new byte[transport_protocol_label_length];
             for ( int i=0; i<transport_protocol_label_length; i++ ) {
-                transport_protocol_label[i] = (byte) brw.ReadOnBuffer(8);
+                transport_protocol_label[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
     
-    public void SetApplicationVersion(int major, int minor, int micro)
+    public void setApplicationVersion(int major, int minor, int micro)
     {
         for ( int i=application_profiles_length; i>0; i-=5) {
             application_profiles.get(i).version_major = major;
@@ -66,54 +66,54 @@ public class MH_ApplicationDescriptor extends Descriptor {
         }
     }
     
-    public void SetVisibility(int value) {
+    public void setVisibility(int value) {
         visibility = value;
     }
     
-    public void SetApplicationPriority(int value ) {
+    public void setApplicationPriority(int value ) {
         application_priority = value;
     }
     
-    public void SetTransportProtocolLabel(byte[] value) {
+    public void setTransportProtocolLabel(byte[] value) {
         transport_protocol_label_length = value.length;
         System.arraycopy(value, 0, transport_protocol_label, 0, value.length);
     }
     
-    public int GetApplicationVersionMajor(int application_index) {
+    public int getApplicationVersionMajor(int application_index) {
         return application_profiles.get(application_index).version_major;
     }
     
-    public int GetApplicationVersionMinor(int application_index) {
+    public int getApplicationVersionMinor(int application_index) {
         return application_profiles.get(application_index).version_minor;
     }
     
-    public int GetApplicationVersionMicro(int application_index) {
+    public int getApplicationVersionMicro(int application_index) {
         return application_profiles.get(application_index).version_micro;
     }
     
-    public int GetServiceBoundFlag() {
+    public int getServiceBoundFlag() {
         return service_bound_flag;
     }
     
-    public int GetVisility() {
+    public int getVisility() {
         return visibility;
     }
     
-    public int GetApplicationPriority() {
+    public int getApplicationPriority() {
         return application_priority;
     }
     
-    public byte[] GetTransportProtocolLabel() {
+    public byte[] getTransportProtocolLabel() {
         return transport_protocol_label;
     }
     
-    public int GetTransportProtocolLabelLength() {
+    public int getTransportProtocolLabelLength() {
         return transport_protocol_label_length;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
 
         Logger.d(String.format("\t application_profiles_length : 0x%x \n", application_profiles_length));
         for ( int i=0 ; i<application_profiles.size(); i++ ) {
@@ -139,25 +139,25 @@ public class MH_ApplicationDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(application_profiles_length, 8);
+        brw.writeOnBuffer(application_profiles_length, 8);
         for(int i=application_profiles_length;i>0;i-=5)
         {
-            brw.WriteOnBuffer(application_profiles.get(i).application_profile, 16);
-            brw.WriteOnBuffer(application_profiles.get(i).version_major, 8);
-            brw.WriteOnBuffer(application_profiles.get(i).version_minor, 8);
-            brw.WriteOnBuffer(application_profiles.get(i).version_micro, 8);
+            brw.writeOnBuffer(application_profiles.get(i).application_profile, 16);
+            brw.writeOnBuffer(application_profiles.get(i).version_major, 8);
+            brw.writeOnBuffer(application_profiles.get(i).version_minor, 8);
+            brw.writeOnBuffer(application_profiles.get(i).version_micro, 8);
         }
-        brw.WriteOnBuffer(service_bound_flag, 1);
-        brw.WriteOnBuffer(visibility, 2);
-        brw.WriteOnBuffer(0x1f, 5);
-        brw.WriteOnBuffer(application_priority, 8);
+        brw.writeOnBuffer(service_bound_flag, 1);
+        brw.writeOnBuffer(visibility, 2);
+        brw.writeOnBuffer(0x1f, 5);
+        brw.writeOnBuffer(application_priority, 8);
 
         for(int i=0;i<transport_protocol_label_length;i++)
         {
-            brw.WriteOnBuffer(transport_protocol_label[i], 8);
+            brw.writeOnBuffer(transport_protocol_label[i], 8);
         }
     }
 }

@@ -35,36 +35,36 @@ public class LinkedDescriptionTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        original_service_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        transport_stream_id = ReadOnBuffer(16);
-        original_network_id = ReadOnBuffer(16);
+        original_service_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        transport_stream_id = readOnBuffer(16);
+        original_network_id = readOnBuffer(16);
         
         for ( int i=(section_length-9-4); i>0; ) {
             LinkedDescription linked_description = new LinkedDescription();
-            linked_description.description_id = ReadOnBuffer(16);
-            SkipOnBuffer(12);
-            linked_description.descriptors_loop_length = ReadOnBuffer(12);
+            linked_description.description_id = readOnBuffer(16);
+            skipOnBuffer(12);
+            linked_description.descriptors_loop_length = readOnBuffer(12);
             
             for ( int j=linked_description.descriptors_loop_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 linked_description.descriptors.add(desc);
             }
             i-=(5 + linked_description.descriptors_loop_length);
             linked_descriptions.add(linked_description);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("original_service_id : 0x%x \n", original_service_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -82,7 +82,7 @@ public class LinkedDescriptionTable extends Table {
                     i, linked_description.descriptors_loop_length));
             
             for ( int j=0; j<linked_description.descriptors.size(); j++ ) {
-                linked_description.descriptors.get(j).PrintDescriptor();
+                linked_description.descriptors.get(j).print();
             }
         }
         
@@ -92,6 +92,4 @@ public class LinkedDescriptionTable extends Table {
                 (checksum_CRC32 >> 8) & 0xff,
                 checksum_CRC32 & 0xff));
     }
-    
-    
 }

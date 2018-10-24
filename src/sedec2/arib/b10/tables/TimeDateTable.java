@@ -1,10 +1,13 @@
 package sedec2.arib.b10.tables;
 
 import sedec2.base.Table;
+import sedec2.util.JSTTime;
 import sedec2.util.Logger;
 
 public class TimeDateTable extends Table {
-    protected long JST_time;
+    protected long JST_time_bits;
+    protected JSTTime JST_time;
+    
     protected long MJD;
     protected int year;
     protected int month;
@@ -19,57 +22,50 @@ public class TimeDateTable extends Table {
         __decode_table_body__();
     }
 
-    public long GetJSTTime() {
-        return JST_time;
+    public long getJSTTime() {
+        return JST_time_bits;
     }
     
-    public long GetMJD() {
-        return MJD;
+    public long getMJD() {
+        return JST_time.getMJD();
     }
     
-    public int GetYear() {
-        return year;
+    public int getYear() {
+        return JST_time.getYear();
     }
     
-    public int GetMonth() {
-        return month;
+    public int getMonth() {
+        return JST_time.getMonth();
     }
     
-    public int GetDay() {
-        return day;
+    public int getDay() {
+        return JST_time.getDay();
     }
     
-    public int GetHour() {
-        return hour;
+    public int getHour() {
+        return JST_time.getHour();
     }
     
-    public int GetMinute() {
-        return minute;
+    public int getMinute() {
+        return JST_time.getMinute();
     }
     
-    public int GetSecond() {
-        return second;
+    public int getSecond() {
+        return JST_time.getSecond();
     }
     
     @Override
     protected void __decode_table_body__() {
-        JST_time = ReadOnBuffer(40);
-        MJD = 0xffff & (JST_time >> 24);
-        year = (int) ((MJD - 15078.2) / 365.25);
-        month = (int) (( MJD - 14956.1 ) - (( year * 365.25 ) / 30.6001));
-        day = (int) (MJD - 14956 - (int) ( year * 365.25 ) - (int) ( month * 30.6001));
-        hour = (int) (0xff & (JST_time >> 16));
-        minute = (int) (0xff & (JST_time >> 8));
-        second = (int) (0xff & JST_time);
+        JST_time_bits = readOnBuffer(40);
+        JST_time = new JSTTime(JST_time_bits);
     }
-
+    
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("JST_time : %d/%d/%d %d:%d:%d \n",
-                year, month, day, hour, minute, second));
-                
+                JST_time.getYear(), JST_time.getMonth(), JST_time.getDay(), 
+                JST_time.getHour(), JST_time.getMinute(), JST_time.getSecond()));
     }
-
 }

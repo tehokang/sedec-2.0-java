@@ -16,13 +16,13 @@ public class ApplicationNameDescriptor extends Descriptor {
         super(brw);
         
         for ( int i=descriptor_length; i>0 ; ) {
-            ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
-            application_name_length = brw.ReadOnBuffer(8);
+            ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
+            application_name_length = brw.readOnBuffer(8);
             application_name = new byte[application_name_length];
             for ( int j=0; j<application_name_length; j++) {
-                application_name[j] = (byte) brw.ReadOnBuffer(8);
+                application_name[j] = (byte) brw.readOnBuffer(8);
             }
             i-=(4+application_name_length);
         }
@@ -35,24 +35,24 @@ public class ApplicationNameDescriptor extends Descriptor {
 
     
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(ISO_639_language_code[0], 8);
-            brw.WriteOnBuffer(ISO_639_language_code[1], 8);
-            brw.WriteOnBuffer(ISO_639_language_code[2], 8);
-            brw.WriteOnBuffer(application_name_length, 8);
+            brw.writeOnBuffer(ISO_639_language_code[0], 8);
+            brw.writeOnBuffer(ISO_639_language_code[1], 8);
+            brw.writeOnBuffer(ISO_639_language_code[2], 8);
+            brw.writeOnBuffer(application_name_length, 8);
 
             for ( int i=0;i<application_name_length;i++ ) {
-                brw.WriteOnBuffer(application_name[i], 8);
+                brw.writeOnBuffer(application_name[i], 8);
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         for ( int i=descriptor_length;i>0; )
         {
             Logger.d(String.format("\t ISO_639_language_code : %c%c%c \n", 
@@ -68,25 +68,25 @@ public class ApplicationNameDescriptor extends Descriptor {
         Logger.d("\n");
     }
 
-    public byte[] GetLanguageCode() {
+    public byte[] getLanguageCode() {
         return ISO_639_language_code;
     }
     
-    public int GetApplicationNameLength() {
+    public int getApplicationNameLength() {
         return application_name_length;
     }
     
-    public byte[] GetApplicationName() {
+    public byte[] getApplicationName() {
         return application_name;
     }
     
-    public void SetApplicationName(String name) {
+    public void setApplicationName(String name) {
         application_name = null;
         application_name = new byte[name.length()];
         System.arraycopy(name, 0, application_name, 0, name.length());
     }
     
-    public void SetLanguageCode(String code) {
+    public void setLanguageCode(String code) {
         ISO_639_language_code = null;
         ISO_639_language_code = new byte[code.length()];
         System.arraycopy(code, 0, ISO_639_language_code, 0, code.length());

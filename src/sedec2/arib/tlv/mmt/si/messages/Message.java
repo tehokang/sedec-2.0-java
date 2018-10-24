@@ -13,23 +13,23 @@ public abstract class Message extends sedec2.base.BitReadWriter {
         super(buffer);
     }
     
-    public int GetMessageLength() {
+    public int getMessageLength() {
         return length + 7;
     }
     
-    public int GetMessageId() {
+    public int getMessageId() {
         return message_id;
     }
     
-    public int GetVersion() {
+    public int getVersion() {
         return version;
     }
     
-    public int GetLength() {
+    public int getLength() {
         return length;
     }
     
-    public void EncodeMessage() {
+    public void encode() {
         __encode_update_message_length__();
         __encode_preprare_message__();
 
@@ -38,7 +38,7 @@ public abstract class Message extends sedec2.base.BitReadWriter {
         __encode_write_message_body__();
     }
     
-    public void PrintMessage() {
+    public void print() {
         Logger.d(String.format("======= Message Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("message_id : 0x%x \n", message_id));
         Logger.d(String.format("version : 0x%x \n", version));
@@ -63,9 +63,9 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     }
     
     protected void __encode_write_message_header__() {
-        WriteOnBuffer( message_id, 16 );
-        WriteOnBuffer( version, 8);
-        WriteOnBuffer( length, 32);
+        writeOnBuffer( message_id, 16 );
+        writeOnBuffer( version, 8);
+        writeOnBuffer( length, 32);
     }    
     
     protected void __encode_write_message_body__() {};

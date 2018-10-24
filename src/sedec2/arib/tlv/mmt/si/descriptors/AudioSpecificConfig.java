@@ -18,7 +18,7 @@ public class AudioSpecificConfig {
     
     protected byte bits_length = 0;
     
-    public byte GetLength() {
+    public byte getLength() {
         return (byte) (bits_length/8);
     }
     
@@ -49,27 +49,27 @@ public class AudioSpecificConfig {
     
     AudioSpecificConfig(BitReadWriter brw) {
         bits_length = 0;
-        audioObjectType = (byte) brw.ReadOnBuffer(5);
-        samplingFrequencyIndex = (byte) brw.ReadOnBuffer(4);
+        audioObjectType = (byte) brw.readOnBuffer(5);
+        samplingFrequencyIndex = (byte) brw.readOnBuffer(4);
         
         bits_length += 9;
         if ( samplingFrequencyIndex == 0x0f ) {
-            samplingFrequency = brw.ReadOnBuffer(24);
+            samplingFrequency = brw.readOnBuffer(24);
             bits_length += 24;
             
         }
-        channelConfiguration = (byte) brw.ReadOnBuffer(4);
+        channelConfiguration = (byte) brw.readOnBuffer(4);
         bits_length += 4;
         
         if ( audioObjectType == 5 ) {
             extensionAudioObjectType = audioObjectType;
-            extensionSamplingFrequencyIndex = (byte) brw.ReadOnBuffer(4);
+            extensionSamplingFrequencyIndex = (byte) brw.readOnBuffer(4);
             bits_length += 4;
             if ( extensionSamplingFrequencyIndex == 0x0f ) {
-                extensionSamplingFrequency = brw.ReadOnBuffer(24);
+                extensionSamplingFrequency = brw.readOnBuffer(24);
                 bits_length += 24;
             }
-            audioObjectType = (byte) brw.ReadOnBuffer(5);
+            audioObjectType = (byte) brw.readOnBuffer(5);
             bits_length += 5;
         } else {
             extensionAudioObjectType = 0;
@@ -80,29 +80,29 @@ public class AudioSpecificConfig {
                 audioObjectType == 22 || audioObjectType == 23 ||
                 audioObjectType == 24 || audioObjectType == 25 ||
                 audioObjectType == 26 || audioObjectType == 27 ) {
-            epConfig = (byte) brw.ReadOnBuffer(2);
+            epConfig = (byte) brw.readOnBuffer(2);
             bits_length += 2;
         }
         
         if ( epConfig == 3 ) {
-            directMapping = (byte) brw.ReadOnBuffer(1);
+            directMapping = (byte) brw.readOnBuffer(1);
             bits_length += 1;
         }
         
         if ( extensionAudioObjectType != 5 ) {
-            syncExtensionType = brw.ReadOnBuffer(11);
+            syncExtensionType = brw.readOnBuffer(11);
             bits_length += 11;
             if (syncExtensionType == 0x2b7) {
-                extensionAudioObjectType = (byte) brw.ReadOnBuffer(5);
+                extensionAudioObjectType = (byte) brw.readOnBuffer(5);
                 bits_length += 5;
                 if ( extensionAudioObjectType == 5 ) {
-                    sbrPresentFlag = (byte) brw.ReadOnBuffer(1);
+                    sbrPresentFlag = (byte) brw.readOnBuffer(1);
                     bits_length += 1;
                     if (sbrPresentFlag == 1) {
-                        extensionSamplingFrequencyIndex = (byte) brw.ReadOnBuffer(4);
+                        extensionSamplingFrequencyIndex = (byte) brw.readOnBuffer(4);
                         bits_length += 4;
                         if ( extensionSamplingFrequencyIndex == 0xf )
-                            extensionSamplingFrequency = brw.ReadOnBuffer(24);
+                            extensionSamplingFrequency = brw.readOnBuffer(24);
                         bits_length += 24;
                     }
                 }

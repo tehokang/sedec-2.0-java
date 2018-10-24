@@ -12,17 +12,17 @@ public class NetworkNameDescriptor extends Descriptor {
         network_name = new byte[descriptor_length];
         
         for ( int i=0; i<network_name.length; i++ ) {
-            network_name[i] = (byte) brw.ReadOnBuffer(8);
+            network_name[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
-    public String GetNetworkName() {
+    public String getNetworkName() {
         return new String(network_name);
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t network_name : %s \n", new String(network_name)));
     }

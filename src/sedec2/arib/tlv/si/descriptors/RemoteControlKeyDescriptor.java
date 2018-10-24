@@ -18,19 +18,19 @@ public class RemoteControlKeyDescriptor extends Descriptor {
     public RemoteControlKeyDescriptor(BitReadWriter brw) {
         super(brw);
         
-        num_of_remote_control_key_id = (byte) brw.ReadOnBuffer(8);
+        num_of_remote_control_key_id = (byte) brw.readOnBuffer(8);
         for ( int i=0; i<num_of_remote_control_key_id; i++ ) {
             RemoteControlKeyId key = new RemoteControlKeyId();
-            key.remote_control_key_id = (byte) brw.ReadOnBuffer(8);
-            key.service_id = brw.ReadOnBuffer(16);
+            key.remote_control_key_id = (byte) brw.readOnBuffer(8);
+            key.service_id = brw.readOnBuffer(16);
             remote_control_key_ids.add(key);
-            brw.SkipOnBuffer(16);
+            brw.skipOnBuffer(16);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_remote_control_key_id : %d \n", 
                 num_of_remote_control_key_id));

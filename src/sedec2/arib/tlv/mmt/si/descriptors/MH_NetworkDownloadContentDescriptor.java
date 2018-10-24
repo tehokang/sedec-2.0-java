@@ -42,65 +42,65 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
     public MH_NetworkDownloadContentDescriptor(BitReadWriter brw) {
         super(brw);
         
-        reboot = (byte) brw.ReadOnBuffer(1);
-        add_on = (byte) brw.ReadOnBuffer(1);
-        compatibility_flag = (byte) brw.ReadOnBuffer(1);
-        text_info_flag = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(4);
-        component_size = brw.ReadOnBuffer(32);
-        session_protocol_number = (byte) brw.ReadOnBuffer(8);
-        session_id = brw.ReadOnBuffer(32);
-        retry = (byte) brw.ReadOnBuffer(8);
+        reboot = (byte) brw.readOnBuffer(1);
+        add_on = (byte) brw.readOnBuffer(1);
+        compatibility_flag = (byte) brw.readOnBuffer(1);
+        text_info_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(4);
+        component_size = brw.readOnBuffer(32);
+        session_protocol_number = (byte) brw.readOnBuffer(8);
+        session_id = brw.readOnBuffer(32);
+        retry = (byte) brw.readOnBuffer(8);
         
         if ( address_type == 0x00 ) {
             for ( int j=0; j<4; j++ ) 
-                ipv4.address[j] = (byte) brw.ReadOnBuffer(8);
-            ipv4.port_number = brw.ReadOnBuffer(16);
+                ipv4.address[j] = (byte) brw.readOnBuffer(8);
+            ipv4.port_number = brw.readOnBuffer(16);
         }
         
         if ( address_type == 0x01 ) {
             for ( int j=0; j<16; j++ ) 
-                ipv6.address[j] = (byte) brw.ReadOnBuffer(8);
-            ipv6.port_number = brw.ReadOnBuffer(16);
+                ipv6.address[j] = (byte) brw.readOnBuffer(8);
+            ipv6.port_number = brw.readOnBuffer(16);
         }
         
         if ( address_type == 0x02 ) {
-            URL_length = (byte) brw.ReadOnBuffer(8);
+            URL_length = (byte) brw.readOnBuffer(8);
             URL_byte = new byte[URL_length];
             
             for ( int i=0; i<URL_length; i++ ) {
-                URL_byte[i] = (byte) brw.ReadOnBuffer(8);
+                URL_byte[i] = (byte) brw.readOnBuffer(8);
             }
         }
         
         if ( compatibility_flag == 1 ) {
-            compatibilityDescriptor = (Descriptor) DescriptorFactory.CreateDescriptor(brw);
+            compatibilityDescriptor = (Descriptor) DescriptorFactory.createDescriptor(brw);
         }
         
-        private_data_length = (byte) brw.ReadOnBuffer(8);
+        private_data_length = (byte) brw.readOnBuffer(8);
         private_data_byte = new byte[private_data_length];
         
         for ( int i=0; i<private_data_length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
         
         if ( text_info_flag == 1 ) {
-            ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
+            ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
             
-            text_length = (byte) brw.ReadOnBuffer(8);
+            text_length = (byte) brw.readOnBuffer(8);
             text_char = new byte[text_length];
             
             for ( int i=0; i<text_length; i++ ) {
-                text_char[i] = (byte) brw.ReadOnBuffer(8);
+                text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t reboot : 0x%x \n", reboot)); 
         Logger.d(String.format("\t add_on : 0x%x \n", add_on));
@@ -137,12 +137,12 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
         }
         
         if ( compatibility_flag == 1 ) {
-            compatibilityDescriptor.PrintDescriptor();
+            compatibilityDescriptor.print();
         }
         
         Logger.d(String.format("\t private_data_length : 0x%x \n", private_data_length));
         Logger.d(String.format("\t private_data_byte : \n"));
-        BinaryLogger.Print(private_data_byte);
+        BinaryLogger.print(private_data_byte);
         
         if ( text_info_flag == 1 ) {
             Logger.d(String.format("\t ISO_639_language_code : %s \n", 
@@ -170,7 +170,7 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
         }
         
         if ( compatibility_flag == 1 ) {
-            descriptor_length += compatibilityDescriptor.GetDescriptorLength();
+            descriptor_length += compatibilityDescriptor.getDescriptorLength();
         }
         
         descriptor_length += (1 + private_data_byte.length);

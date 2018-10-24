@@ -18,45 +18,45 @@ public class MH_CAStartupDescriptor extends Descriptor {
     public MH_CAStartupDescriptor(BitReadWriter brw) {
         super(brw);
         
-        CA_system_ID = brw.ReadOnBuffer(16);
-        brw.SkipOnBuffer(3);
-        CA_program_ID = (byte) brw.ReadOnBuffer(13);
-        second_load_flag = (byte) brw.ReadOnBuffer(1);
-        load_indicator = (byte) brw.ReadOnBuffer(7);
+        CA_system_ID = brw.readOnBuffer(16);
+        brw.skipOnBuffer(3);
+        CA_program_ID = (byte) brw.readOnBuffer(13);
+        second_load_flag = (byte) brw.readOnBuffer(1);
+        load_indicator = (byte) brw.readOnBuffer(7);
         
         if ( second_load_flag == '1' ) {
-            brw.SkipOnBuffer(3);
-            CA_program_ID = brw.ReadOnBuffer(13);
-            brw.SkipOnBuffer(1);
-            load_indicator = (byte) brw.ReadOnBuffer(7);
+            brw.skipOnBuffer(3);
+            CA_program_ID = brw.readOnBuffer(13);
+            brw.skipOnBuffer(1);
+            load_indicator = (byte) brw.readOnBuffer(7);
         }
         
-        exclusion_ID_num = (byte) brw.ReadOnBuffer(8);
+        exclusion_ID_num = (byte) brw.readOnBuffer(8);
         exclusion_CA_program_ID = new int[exclusion_ID_num];
         
         for ( int i=0; i<exclusion_CA_program_ID.length; i++ ) {
-            brw.SkipOnBuffer(3);
-            exclusion_CA_program_ID[i] = brw.ReadOnBuffer(13);
+            brw.skipOnBuffer(3);
+            exclusion_CA_program_ID[i] = brw.readOnBuffer(13);
         }
         
-        load_security_info_len = (byte) brw.ReadOnBuffer(8);
+        load_security_info_len = (byte) brw.readOnBuffer(8);
         load_security_info_byte = new byte[load_security_info_len];
         
         for ( int i=0; i<load_security_info_byte.length; i++ ) {
-            load_security_info_byte[i] = (byte) brw.ReadOnBuffer(8);
+            load_security_info_byte[i] = (byte) brw.readOnBuffer(8);
         }
         
         private_data_byte = new byte[(descriptor_length - 5 - (second_load_flag=='1'?3:0) 
                 - 1 - (exclusion_ID_num*2) - 1 - load_security_info_len)];
         
         for ( int i=0; i<private_data_byte.length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
         Logger.d(String.format("\t CA_program_ID : 0x%x \n", CA_program_ID));
@@ -75,7 +75,7 @@ public class MH_CAStartupDescriptor extends Descriptor {
                     i, load_security_info_byte[i]));
         }
         
-        BinaryLogger.Print(private_data_byte);
+        BinaryLogger.print(private_data_byte);
     }
 
     @Override

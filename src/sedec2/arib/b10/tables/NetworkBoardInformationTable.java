@@ -38,44 +38,44 @@ public class NetworkBoardInformationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        original_network_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
+        original_network_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
         
         for ( int i=(section_length-5-4); i>0; ) {
             BoardInformation board_information = new BoardInformation();
-            board_information.information_id = ReadOnBuffer(16);
-            board_information.information_type = (byte) ReadOnBuffer(4);
-            board_information.description_body_location = (byte) ReadOnBuffer(2);
-            SkipOnBuffer(2);
-            board_information.user_defined = (byte) ReadOnBuffer(8);
-            board_information.number_of_keys = (byte) ReadOnBuffer(8);
+            board_information.information_id = readOnBuffer(16);
+            board_information.information_type = (byte) readOnBuffer(4);
+            board_information.description_body_location = (byte) readOnBuffer(2);
+            skipOnBuffer(2);
+            board_information.user_defined = (byte) readOnBuffer(8);
+            board_information.number_of_keys = (byte) readOnBuffer(8);
             
             board_information.key_id = new int[board_information.number_of_keys];
             for ( int j=0; j<board_information.key_id.length; j++ ) {
-                board_information.key_id[j] = ReadOnBuffer(16);
+                board_information.key_id[j] = readOnBuffer(16);
             }
-            SkipOnBuffer(4);
-            board_information.descriptors_loop_length = ReadOnBuffer(12);
+            skipOnBuffer(4);
+            board_information.descriptors_loop_length = readOnBuffer(12);
             
             for ( int k=board_information.descriptors_loop_length; k>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                k-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                k-=desc.getDescriptorLength();
                 board_information.descriptors.add(desc);
             }
             i-= ( 5 + board_information.key_id.length*2 + 
                     2 + board_information.description_body_location);
             board_informations.add(board_information);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -106,7 +106,7 @@ public class NetworkBoardInformationTable extends Table {
                     i, board_information.descriptors_loop_length));
             
             for ( int k=board_information.descriptors_loop_length; k>0; ) {
-                board_information.descriptors.get(k).PrintDescriptor();
+                board_information.descriptors.get(k).print();
             }
         }
         

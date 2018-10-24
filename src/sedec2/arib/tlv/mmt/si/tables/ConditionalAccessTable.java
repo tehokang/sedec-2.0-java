@@ -15,7 +15,7 @@ public class ConditionalAccessTable extends Table {
         __decode_table_body__();
     }
 
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
@@ -23,17 +23,17 @@ public class ConditionalAccessTable extends Table {
     protected void __decode_table_body__() {
         
         for ( int i=length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
         }
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
     }
 }

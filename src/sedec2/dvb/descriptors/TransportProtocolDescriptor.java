@@ -44,115 +44,115 @@ public class TransportProtocolDescriptor extends Descriptor {
     public TransportProtocolDescriptor(BitReadWriter brw) {
         super(brw);
         
-        protocol_id = brw.ReadOnBuffer(16);
-        transport_protocol_label = (byte) brw.ReadOnBuffer(8);
+        protocol_id = brw.readOnBuffer(16);
+        transport_protocol_label = (byte) brw.readOnBuffer(8);
         
         if ( 0 < descriptor_length-3 ) {
             switch ( protocol_id ) {
                 case PROTOCOL_OBJECT_CAROUSEL:
-                    transport.remote_connection = (byte) brw.ReadOnBuffer(1);
-                    brw.SkipOnBuffer(7);
+                    transport.remote_connection = (byte) brw.readOnBuffer(1);
+                    brw.skipOnBuffer(7);
                     if ( 0x01 == transport.remote_connection ) {
-                        transport.original_network_id = brw.ReadOnBuffer(16);
-                        transport.transport_stream_id = brw.ReadOnBuffer(16);
-                        transport.service_id = brw.ReadOnBuffer(16);
+                        transport.original_network_id = brw.readOnBuffer(16);
+                        transport.transport_stream_id = brw.readOnBuffer(16);
+                        transport.service_id = brw.readOnBuffer(16);
                     }
-                    transport.component_tag = (byte) brw.ReadOnBuffer(8);
+                    transport.component_tag = (byte) brw.readOnBuffer(8);
                     break;
                 case PROTOCOL_HTTP:
-                    channel_transport.URL_base_length = (byte) brw.ReadOnBuffer(8);
+                    channel_transport.URL_base_length = (byte) brw.readOnBuffer(8);
                     for ( int i=0; i<channel_transport.URL_base_length; i++ ) {
-                        channel_transport.URL_base_byte[i] = (byte) brw.ReadOnBuffer(8);
+                        channel_transport.URL_base_byte[i] = (byte) brw.readOnBuffer(8);
                     }
-                    channel_transport.URL_extension_count = (byte) brw.ReadOnBuffer(8);
+                    channel_transport.URL_extension_count = (byte) brw.readOnBuffer(8);
                     
                     for ( int i=0; i<channel_transport.URL_extension_count; i++ ) {
                         UrlExtension ext = new UrlExtension();
-                        ext.URL_extension_length = (byte) brw.ReadOnBuffer(8);
+                        ext.URL_extension_length = (byte) brw.readOnBuffer(8);
                         for ( int j=0; j<ext.URL_extension_length; j++ ) {
-                            ext.URL_exntension_byte[j] = (byte) brw.ReadOnBuffer(8);
+                            ext.URL_exntension_byte[j] = (byte) brw.readOnBuffer(8);
                         }
                         url_extensions.add(ext);
                     }
                     break;
                 case PROTOCOL_DATA_CAROUSEL:
-                    transport.remote_connection = (byte) brw.ReadOnBuffer(1);
-                    brw.SkipOnBuffer(7);
+                    transport.remote_connection = (byte) brw.readOnBuffer(1);
+                    brw.skipOnBuffer(7);
                     if ( 0x01 == transport.remote_connection ) {
-                        transport.original_network_id = brw.ReadOnBuffer(16);
-                        transport.transport_stream_id = brw.ReadOnBuffer(16);
-                        transport.service_id = brw.ReadOnBuffer(16);
+                        transport.original_network_id = brw.readOnBuffer(16);
+                        transport.transport_stream_id = brw.readOnBuffer(16);
+                        transport.service_id = brw.readOnBuffer(16);
                     }
-                    transport.component_tag = (byte) brw.ReadOnBuffer(8);
+                    transport.component_tag = (byte) brw.readOnBuffer(8);
                     break;
             }
         }
     }
 
-    public byte[] GetBaseUrl() { 
+    public byte[] getBaseUrl() { 
         return channel_transport.URL_base_byte;
     }
     
-    public int GetProtocolId() {
+    public int getProtocolId() {
         return protocol_id;
     }
     
-    public byte GetTransportProtocolLabel() {
+    public byte getTransportProtocolLabel() {
         return transport_protocol_label;
     }
     
-    public byte GetRemoteConnection() {
+    public byte getRemoteConnection() {
         return transport.remote_connection;
     }
     
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return transport.original_network_id;
     }
     
-    public int GetTransportStreamId() {
+    public int getTransportStreamId() {
         return transport.transport_stream_id;
     }
     
-    public int GetServiceId() {
+    public int getServiceId() {
         return transport.service_id;
     }
     
-    public byte GetComponentTag() {
+    public byte getComponentTag() {
         return transport.component_tag;
     }
     
-    public void SetBaseUrl(byte[] base_url) {
+    public void setBaseUrl(byte[] base_url) {
         channel_transport.URL_base_length = (byte) Arrays.toString(base_url).length();
         System.arraycopy(base_url, 0, channel_transport.URL_base_byte, 0, 
                 channel_transport.URL_base_length);
         channel_transport.URL_extension_count = 0;
     }
     
-    public void SetProtocolId(int value) {
+    public void setProtocolId(int value) {
         protocol_id = value;
     }
     
-    public void SetTransportProtocolLabel(byte value) {
+    public void setTransportProtocolLabel(byte value) {
         transport_protocol_label = value;
     }
     
-    public void SetRemoteConnection(byte value) {
+    public void setRemoteConnection(byte value) {
         transport.remote_connection = value;
     }
     
-    public void SetOriginalNetworkId(int value) {
+    public void setOriginalNetworkId(int value) {
         transport.original_network_id = value;
     }
     
-    public void SetTransportStreamId(int value) {
+    public void setTransportStreamId(int value) {
         transport.transport_stream_id = value;
     }
     
-    public void SetServiceId(int value) {
+    public void setServiceId(int value) {
         transport.service_id = value;
     }
     
-    public void SetComponentTag(byte value) {
+    public void setComponentTag(byte value) {
         transport.component_tag = value;
     }
     
@@ -194,36 +194,36 @@ public class TransportProtocolDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(protocol_id, 16);
-        brw.WriteOnBuffer(transport_protocol_label, 8);
+        brw.writeOnBuffer(protocol_id, 16);
+        brw.writeOnBuffer(transport_protocol_label, 8);
 
         switch(protocol_id)
         {
             case PROTOCOL_OBJECT_CAROUSEL:
-                brw.WriteOnBuffer(transport.remote_connection, 1);
-                brw.WriteOnBuffer(0x7f, 7);
+                brw.writeOnBuffer(transport.remote_connection, 1);
+                brw.writeOnBuffer(0x7f, 7);
                 if(0x01 == transport.remote_connection)
                 {
-                    brw.WriteOnBuffer(transport.original_network_id, 16);
-                    brw.WriteOnBuffer(transport.transport_stream_id, 16);
-                    brw.WriteOnBuffer(transport.service_id, 16);
+                    brw.writeOnBuffer(transport.original_network_id, 16);
+                    brw.writeOnBuffer(transport.transport_stream_id, 16);
+                    brw.writeOnBuffer(transport.service_id, 16);
                 }
-                brw.WriteOnBuffer(transport.component_tag, 8);
+                brw.writeOnBuffer(transport.component_tag, 8);
                 break;
             case PROTOCOL_HTTP:
-                brw.WriteOnBuffer(channel_transport.URL_base_length, 8);
+                brw.writeOnBuffer(channel_transport.URL_base_length, 8);
                 for(int i=0;i<channel_transport.URL_base_length;i++)
-                    brw.WriteOnBuffer(channel_transport.URL_base_byte[i], 8);
+                    brw.writeOnBuffer(channel_transport.URL_base_byte[i], 8);
 
-                brw.WriteOnBuffer(channel_transport.URL_extension_count, 8);
+                brw.writeOnBuffer(channel_transport.URL_extension_count, 8);
                 
                 for ( int i=0; i<url_extensions.size(); i++ ) { 
-                    brw.WriteOnBuffer(url_extensions.get(i).URL_extension_length, 8);
+                    brw.writeOnBuffer(url_extensions.get(i).URL_extension_length, 8);
                     for ( int j=0;j<url_extensions.get(i).URL_extension_length;j++ ) {
-                        brw.WriteOnBuffer(url_extensions.get(i).URL_exntension_byte[j], 8);
+                        brw.writeOnBuffer(url_extensions.get(i).URL_exntension_byte[j], 8);
                     }
                 }
                 break;
@@ -231,15 +231,15 @@ public class TransportProtocolDescriptor extends Descriptor {
              * @note It is related in IPTVFJ STD-0010 version 2.0
              **/
             case PROTOCOL_DATA_CAROUSEL:
-                brw.WriteOnBuffer(transport.remote_connection, 1);
-                brw.WriteOnBuffer(0x7f, 7);
+                brw.writeOnBuffer(transport.remote_connection, 1);
+                brw.writeOnBuffer(0x7f, 7);
                 if(0x01 == transport.remote_connection)
                 {
-                    brw.WriteOnBuffer(transport.original_network_id, 16);
-                    brw.WriteOnBuffer(transport.transport_stream_id, 16);
-                    brw.WriteOnBuffer(transport.service_id, 16);
+                    brw.writeOnBuffer(transport.original_network_id, 16);
+                    brw.writeOnBuffer(transport.transport_stream_id, 16);
+                    brw.writeOnBuffer(transport.service_id, 16);
                 }
-                brw.WriteOnBuffer(transport.component_tag, 8);
+                brw.writeOnBuffer(transport.component_tag, 8);
                 break;
             default:
                 break;
@@ -247,8 +247,8 @@ public class TransportProtocolDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t protocol_id : 0x%x \n", protocol_id));
         Logger.d(String.format("\t transport_protocol_label : 0x%x \n", transport_protocol_label));

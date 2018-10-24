@@ -12,45 +12,45 @@ public class MH_InfoDescriptor extends Descriptor {
         super(brw);
         
         if ( 0 < descriptor_length ) {
-            ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
+            ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
             
             for ( int i=0; i<(descriptor_length-3); i++ ) {
-                text_char[i] = (byte) brw.ReadOnBuffer(8);
+                text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
 
-    public byte[] GetLanguageCode() {
+    public byte[] getLanguageCode() {
         return ISO_639_language_code;
     }
     
-    public int GetTextCharLength() {
+    public int getTextCharLength() {
         return text_char_length;
     }
     
-    public byte[] GetTextChar() {
+    public byte[] getTextChar() {
         return text_char;
     }
     
-    public void SetLanguageCode(byte[] value) {
+    public void setLanguageCode(byte[] value) {
         ISO_639_language_code[0] = value[0];
         ISO_639_language_code[1] = value[1];
         ISO_639_language_code[2] = value[2];
     }
     
-    public void SetTextCharLength(int value) {
+    public void setTextCharLength(int value) {
         text_char_length = value;
     }
     
-    public void SetTextChar(byte[] value) {
+    public void setTextChar(byte[] value) {
         System.arraycopy(value, 0, text_char, 0, value.length);
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t ISO_639_language_code : %c%c%c \n", 
                 ISO_639_language_code[0], 
@@ -66,16 +66,16 @@ public class MH_InfoDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(ISO_639_language_code[0], 8);
-            brw.WriteOnBuffer(ISO_639_language_code[1], 8);
-            brw.WriteOnBuffer(ISO_639_language_code[2], 8);
+            brw.writeOnBuffer(ISO_639_language_code[0], 8);
+            brw.writeOnBuffer(ISO_639_language_code[1], 8);
+            brw.writeOnBuffer(ISO_639_language_code[2], 8);
             
             for ( int i=0; i<(descriptor_length-3); i++ ) {
-                brw.WriteOnBuffer(text_char[i], 8);
+                brw.writeOnBuffer(text_char[i], 8);
             }
         }
     }

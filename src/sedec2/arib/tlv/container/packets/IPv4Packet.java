@@ -26,34 +26,34 @@ public class IPv4Packet extends TypeLengthValue {
     public IPv4Packet(byte[] buffer) {
         super(buffer);
         
-        version = (byte) ReadOnBuffer(4);
-        header_length = (byte) ReadOnBuffer(4);
-        type_of_service = (byte) ReadOnBuffer(8);
-        total_length = ReadOnBuffer(16);
+        version = (byte) readOnBuffer(4);
+        header_length = (byte) readOnBuffer(4);
+        type_of_service = (byte) readOnBuffer(8);
+        total_length = readOnBuffer(16);
         
-        identification = ReadOnBuffer(16);
-        flags = (byte) ReadOnBuffer(3);
-        fragment_offset = ReadOnBuffer(13);
-        time_to_live = (byte) ReadOnBuffer(8);
-        protocol = (byte) ReadOnBuffer(8);
-        header_checksum = ReadOnBuffer(16);
+        identification = readOnBuffer(16);
+        flags = (byte) readOnBuffer(3);
+        fragment_offset = readOnBuffer(13);
+        time_to_live = (byte) readOnBuffer(8);
+        protocol = (byte) readOnBuffer(8);
+        header_checksum = readOnBuffer(16);
         
-        source_address[0] = (byte) ReadOnBuffer(8);
-        source_address[1] = (byte) ReadOnBuffer(8);
-        source_address[2] = (byte) ReadOnBuffer(8);
-        source_address[3] = (byte) ReadOnBuffer(8);
+        source_address[0] = (byte) readOnBuffer(8);
+        source_address[1] = (byte) readOnBuffer(8);
+        source_address[2] = (byte) readOnBuffer(8);
+        source_address[3] = (byte) readOnBuffer(8);
         
-        destination_address[0] = (byte) ReadOnBuffer(8);
-        destination_address[1] = (byte) ReadOnBuffer(8);
-        destination_address[2] = (byte) ReadOnBuffer(8);
-        destination_address[3] = (byte) ReadOnBuffer(8);
+        destination_address[0] = (byte) readOnBuffer(8);
+        destination_address[1] = (byte) readOnBuffer(8);
+        destination_address[2] = (byte) readOnBuffer(8);
+        destination_address[3] = (byte) readOnBuffer(8);
         
-        options = ReadOnBuffer(32);
+        options = readOnBuffer(32);
 
         transport_layer_data = new byte[total_length-8-4-4-4];
 
         for ( int i=0; i<transport_layer_data.length; i++ ) {
-            transport_layer_data[i] = (byte) ReadOnBuffer(8);
+            transport_layer_data[i] = (byte) readOnBuffer(8);
         }
         
         if ( protocol == 0x11 &&
@@ -65,69 +65,69 @@ public class IPv4Packet extends TypeLengthValue {
         }
     }
 
-    public byte GetVersion() {
+    public byte getVersion() {
         return version;
     }
     
-    public byte GetHeaderLength() {
+    public byte getHeaderLength() {
         return header_length;
     }
     
-    public byte GetTypeOfService() {
+    public byte getTypeOfService() {
         return type_of_service;
     }
     
-    public int GetTotalLength() {
+    public int getTotalLength() {
         return total_length;
     }
     
-    public int GetIdentification() {
+    public int getIdentification() {
         return identification;
     }
     
-    public byte GetFlags() {
+    public byte getFlags() {
         return flags;
     }
     
-    public int GetFragmentOffset() {
+    public int getFragmentOffset() {
         return fragment_offset;
     }
     
-    public byte GetTimeToLive() {
+    public byte getTimeToLive() {
         return time_to_live;
     }
     
-    public byte GetProtocol() {
+    public byte getProtocol() {
         return protocol;
     }
     
-    public int GetHeaderChecksum() {
+    public int getHeaderChecksum() {
         return header_checksum;
     }
     
-    public byte[] GetSourceAddress() {
+    public byte[] getSourceAddress() {
         return source_address;
     }
     
-    public byte[] GetDestinationAddress() {
+    public byte[] getDestinationAddress() {
         return destination_address;
     }
     
-    public int GetOptions() {
+    public int getOptions() {
         return options;
     }
     
-    public byte[] GetTransportLayerData() {
+    public byte[] getTransportLayerData() {
         return transport_layer_data;
     }
     
-    public NetworkTimeProtocolData GetNTP() {
+    public NetworkTimeProtocolData getNTP() {
         return ntp;
     }
     
     @Override
-    public void PrintTypeLengthValue() {
-        super.PrintTypeLengthValue();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("version : 0x%x \n", version));
         Logger.d(String.format("header_length : 0x%x \n", header_length));
@@ -148,13 +148,13 @@ public class IPv4Packet extends TypeLengthValue {
         Logger.d(String.format("options : 0x%x \n", options));
         
         if ( null != ntp ) {
-            ntp.Print();
+            ntp.print();
         }
         
         if ( null != mmtp_packet ) {
-            mmtp_packet.Print();
+            mmtp_packet.print();
         }
         
-        BinaryLogger.Print(transport_layer_data);
+        BinaryLogger.print(transport_layer_data);
     }
 }

@@ -10,29 +10,29 @@ public class MH_CompressionTypeDescriptor extends Descriptor {
     public MH_CompressionTypeDescriptor(BitReadWriter brw) {
         super(brw);
         
-        compression_type = brw.ReadOnBuffer(8);
-        original_size = brw.ReadOnBuffer(32);
+        compression_type = brw.readOnBuffer(8);
+        original_size = brw.readOnBuffer(32);
     }
 
-    public void SetCompressionType(int value) {
+    public void setCompressionType(int value) {
         compression_type = value;
     }
     
-    public void SetOriginalSize(int value) {
+    public void setOriginalSize(int value) {
         original_size = value;
     }
     
-    public int GetCompressionType() {
+    public int getCompressionType() {
         return compression_type;
     }
     
-    public int GetOriginalSize() {
+    public int getOriginalSize() {
         return original_size;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t compression_type : 0x%x \n",  compression_type));
         Logger.d(String.format("\t original_size : 0x%x (%d) \n", original_size, original_size));
@@ -45,12 +45,12 @@ public class MH_CompressionTypeDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(compression_type, 8);
-            brw.WriteOnBuffer(original_size, 32);
+            brw.writeOnBuffer(compression_type, 8);
+            brw.writeOnBuffer(original_size, 32);
         }
     }
 

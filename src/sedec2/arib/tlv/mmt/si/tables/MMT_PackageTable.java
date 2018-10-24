@@ -37,78 +37,78 @@ public class MMT_PackageTable extends Table {
         __decode_table_body__();
     }
     
-    public byte GetMPTMode() {
+    public byte getMPTMode() {
         return MPT_mode;
     }
     
-    public byte GetMMTPackageIdLength() {
+    public byte getMMTPackageIdLength() {
         return MMT_package_id_length;
     }
     
-    public byte[] GetMMTPackageIdByte() {
+    public byte[] getMMTPackageIdByte() {
         return MMT_package_id_byte;
     }
     
-    public int GetMPTDescriptorLength() {
+    public int getMPTDescriptorLength() {
         return MPT_descriptor_length;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
-    public byte GetNumberOfAssets() {
+    public byte getNumberOfAssets() {
         return number_of_assets;
     }
     
-    public List<Asset> GetAssets() {
+    public List<Asset> getAssets() {
         return assets;
     }
 
     @Override
     protected void __decode_table_body__() {
-        SkipOnBuffer(6);
-        MPT_mode = (byte) ReadOnBuffer(2);
-        MMT_package_id_length = (byte) ReadOnBuffer(8);
+        skipOnBuffer(6);
+        MPT_mode = (byte) readOnBuffer(2);
+        MMT_package_id_length = (byte) readOnBuffer(8);
         MMT_package_id_byte = new byte[MMT_package_id_length];
         
         for ( int i=0; i<MMT_package_id_length; i++ ) {
-            MMT_package_id_byte[i] = (byte) ReadOnBuffer(8);
+            MMT_package_id_byte[i] = (byte) readOnBuffer(8);
         }
         
-        MPT_descriptor_length = ReadOnBuffer(16);
+        MPT_descriptor_length = readOnBuffer(16);
         for ( int i=MPT_descriptor_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
-        number_of_assets = (byte) ReadOnBuffer(8);
+        number_of_assets = (byte) readOnBuffer(8);
         
         for ( int i=0; i<number_of_assets; i++ ) {
             Asset asset = new Asset();
-            asset.identifier_type = (byte) ReadOnBuffer(8);
-            asset.asset_id_scheme = ReadOnBuffer(32);
-            asset.asset_id_length = (byte) ReadOnBuffer(8);
+            asset.identifier_type = (byte) readOnBuffer(8);
+            asset.asset_id_scheme = readOnBuffer(32);
+            asset.asset_id_length = (byte) readOnBuffer(8);
             asset.asset_id_byte = new byte[asset.asset_id_length];
             
             for ( int j=0; j<asset.asset_id_length; j++ ) {
-                asset.asset_id_byte[j] = (byte) ReadOnBuffer(8);
+                asset.asset_id_byte[j] = (byte) readOnBuffer(8);
             }
-            asset.asset_type = ReadOnBuffer(32);
-            SkipOnBuffer(7);
-            asset.asset_clock_relation_flag = (byte) ReadOnBuffer(8);
-            asset.location_count = (byte) ReadOnBuffer(8);
+            asset.asset_type = readOnBuffer(32);
+            skipOnBuffer(7);
+            asset.asset_clock_relation_flag = (byte) readOnBuffer(8);
+            asset.location_count = (byte) readOnBuffer(8);
             
             for ( int j=0; j<asset.location_count; j++ ) {
                 MMTGeneralLocationInfo info = new MMTGeneralLocationInfo(this);
                 asset.infos.add(info);
             }
             
-            asset.asset_descriptors_length = ReadOnBuffer(16);
+            asset.asset_descriptors_length = readOnBuffer(16);
             for ( int j=asset.asset_descriptors_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 asset.descriptors.add(desc);
             }
             assets.add(asset);
@@ -116,15 +116,15 @@ public class MMT_PackageTable extends Table {
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("MPT_mode : 0x%x \n", MPT_mode));
         Logger.d(String.format("MMT_package_id_length : 0x%x \n", MMT_package_id_length));
         Logger.d(String.format("MMT_package_id_byte : %s \n", new String(MMT_package_id_byte)));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         Logger.d(String.format("number_of_assets : 0x%x \n", number_of_assets));
@@ -140,11 +140,11 @@ public class MMT_PackageTable extends Table {
                     asset.asset_clock_relation_flag));
             Logger.d(String.format("location_count : 0x%x \n", asset.location_count));
             for ( int j=0; j<asset.infos.size(); j++ ) {
-                asset.infos.get(j).PrintInfo();
+                asset.infos.get(j).print();
             }
             
             for ( int j=0; j<asset.descriptors.size(); j++ ) {
-                asset.descriptors.get(j).PrintDescriptor();
+                asset.descriptors.get(j).print();
             }
         }
     }

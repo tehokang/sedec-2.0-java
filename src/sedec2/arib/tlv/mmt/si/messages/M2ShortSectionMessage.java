@@ -9,26 +9,26 @@ public class M2ShortSectionMessage extends Message {
     public M2ShortSectionMessage(byte[] buffer) {
         super(buffer);
         
-        message_id = ReadOnBuffer(16);
-        version = ReadOnBuffer(8);
-        length = ReadOnBuffer(16);
+        message_id = readOnBuffer(16);
+        version = readOnBuffer(8);
+        length = readOnBuffer(16);
         
         __decode_message_body__();
     }
 
-    public Table GetTable() {
+    public Table getTable() {
         return table;
     }
     
     @Override
     protected void __decode_message_body__() {
-        table = (Table) TableFactory.CreateTable(GetCurrentBuffer());
+        table = (Table) TableFactory.createTable(getCurrentBuffer());
     }
 
     @Override
-    public void PrintMessage() {
-        super.PrintMessage();
+    public void print() {
+        super.print();
         
-        table.PrintTable();
+        table.print();
     }
 }

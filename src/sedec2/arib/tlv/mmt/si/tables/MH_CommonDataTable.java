@@ -34,91 +34,91 @@ public class MH_CommonDataTable extends Table {
         __decode_table_body__();
     }
 
-    public int GetDownloadDataId() {
+    public int getDownloadDataId() {
         return download_data_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return original_network_id;
     }
     
-    public byte GetDataType() {
+    public byte getDataType() {
         return data_type;
     }
     
-    public int GetDescriptorsLoopLength() {
+    public int getDescriptorsLoopLength() {
         return descriptors_loop_length;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
-    public DataModuleByte GetDataModuleByte() {
+    public DataModuleByte getDataModuleByte() {
         return data_module_byte;
     }
     
     @Override
     protected void __decode_table_body__() {
-        download_data_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        original_network_id = ReadOnBuffer(16);
-        data_type = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(4);
-        descriptors_loop_length = ReadOnBuffer(12);
+        download_data_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        original_network_id = readOnBuffer(16);
+        data_type = (byte) readOnBuffer(8);
+        skipOnBuffer(4);
+        descriptors_loop_length = readOnBuffer(12);
         
         for ( int i=descriptors_loop_length;i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
         for (int i = (section_length - 10 - descriptors_loop_length - 4); i>0; ) {
             if ( data_type == 0x01 ) {
-                data_module_byte.logo_type = (byte) ReadOnBuffer(8);
-                SkipOnBuffer(7);
-                data_module_byte.logo_id = ReadOnBuffer(9);
-                SkipOnBuffer(4);
-                data_module_byte.logo_version = ReadOnBuffer(12);
-                data_module_byte.data_size = ReadOnBuffer(16);
+                data_module_byte.logo_type = (byte) readOnBuffer(8);
+                skipOnBuffer(7);
+                data_module_byte.logo_id = readOnBuffer(9);
+                skipOnBuffer(4);
+                data_module_byte.logo_version = readOnBuffer(12);
+                data_module_byte.data_size = readOnBuffer(16);
                 data_module_byte.data_byte = new int[data_module_byte.data_size];
                 
                 for ( int j=0; j<data_module_byte.data_size; j++ ) {
-                    data_module_byte.data_byte[j] = ReadOnBuffer(8);
+                    data_module_byte.data_byte[j] = readOnBuffer(8);
                 }
                 i-= (7 + data_module_byte.data_size);
             } else {
-                SkipOnBuffer(8);
+                skipOnBuffer(8);
                 i-=1;
             }
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("download_data_id : 0x%x \n", download_data_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -131,7 +131,7 @@ public class MH_CommonDataTable extends Table {
         
         for ( int i=0; i<descriptors.size(); i++ ) {
             Descriptor desc = descriptors.get(i);
-            desc.PrintDescriptor();
+            desc.print();
         }
         
         if ( data_type == 0x01 ) {

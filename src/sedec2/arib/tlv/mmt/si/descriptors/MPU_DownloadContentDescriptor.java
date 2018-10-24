@@ -39,64 +39,64 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
     public MPU_DownloadContentDescriptor(BitReadWriter brw) {
         super(brw);
         
-        reboot = (byte) brw.ReadOnBuffer(1);
-        add_on = (byte) brw.ReadOnBuffer(1);
-        component_tag = (byte) brw.ReadOnBuffer(1);
-        item_info_flag = (byte) brw.ReadOnBuffer(1);
-        text_info_flag = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(3);
-        component_size = brw.ReadOnBuffer(32);
-        download_id = brw.ReadOnBuffer(32);
-        time_our_value_DAM = brw.ReadOnBuffer(32);
-        leak_rate = brw.ReadOnBuffer(22);
-        brw.SkipOnBuffer(2);
-        component_tag = brw.ReadOnBuffer(16);
+        reboot = (byte) brw.readOnBuffer(1);
+        add_on = (byte) brw.readOnBuffer(1);
+        component_tag = (byte) brw.readOnBuffer(1);
+        item_info_flag = (byte) brw.readOnBuffer(1);
+        text_info_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(3);
+        component_size = brw.readOnBuffer(32);
+        download_id = brw.readOnBuffer(32);
+        time_our_value_DAM = brw.readOnBuffer(32);
+        leak_rate = brw.readOnBuffer(22);
+        brw.skipOnBuffer(2);
+        component_tag = brw.readOnBuffer(16);
         
         if ( compatibility_flag == 1 ) {
-            compatibility_descriptor = (Descriptor) DescriptorFactory.CreateDescriptor(brw);
+            compatibility_descriptor = (Descriptor) DescriptorFactory.createDescriptor(brw);
         }
         
         if ( item_info_flag == 1 ) {
-            num_of_items = brw.ReadOnBuffer(16);
+            num_of_items = brw.readOnBuffer(16);
             
             for ( int i=0; i<num_of_items; i++ ) {
                 ItemInfo item_info = new ItemInfo();
-                item_info.item_id = brw.ReadOnBuffer(32);
-                item_info.item_size = brw.ReadOnBuffer(32);
-                item_info.item_info_length = (byte) brw.ReadOnBuffer(8);
+                item_info.item_id = brw.readOnBuffer(32);
+                item_info.item_size = brw.readOnBuffer(32);
+                item_info.item_info_length = (byte) brw.readOnBuffer(8);
                 
                 item_info.item_info_byte = new byte[item_info.item_info_length];
                 for ( int j=0; j<item_info.item_info_length; j++ ) {
-                    item_info.item_info_byte[j] = (byte) brw.ReadOnBuffer(8);
+                    item_info.item_info_byte[j] = (byte) brw.readOnBuffer(8);
                 }
                 item_infos.add(item_info);
             }
         }
         
-        private_data_length = (byte) brw.ReadOnBuffer(8);
+        private_data_length = (byte) brw.readOnBuffer(8);
         private_data_byte = new byte[private_data_length];
         
         for ( int i=0; i<private_data_length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
         
         if ( text_info_flag == 1) {
-            ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
+            ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
             
-            text_length = (byte) brw.ReadOnBuffer(8);
+            text_length = (byte) brw.readOnBuffer(8);
             text_char = new byte[text_length];
             
             for ( int i=0; i<text_char.length; i++ ) {
-                text_char[i] = (byte) brw.ReadOnBuffer(8);
+                text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t reboot : 0x%x \n", reboot));
         Logger.d(String.format("\t add_on : 0x%x \n", add_on));
@@ -110,7 +110,7 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         Logger.d(String.format("\t component_tag : 0x%x \n", component_tag));
         
         if ( compatibility_flag == 1 ) {
-            compatibility_descriptor.PrintDescriptor();
+            compatibility_descriptor.print();
         }
         
         if ( item_info_flag == 1 ) {
@@ -134,7 +134,7 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         Logger.d(String.format("\t private_data_length : 0x%x \n", private_data_length));
         Logger.d(String.format("\t private_data_byte : \n"));
         
-        BinaryLogger.Print(private_data_byte);
+        BinaryLogger.print(private_data_byte);
         
         if ( text_info_flag == 1) {
             Logger.d(String.format("\t ISO_639_language_code : 0x%x \n", 
@@ -149,7 +149,7 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         descriptor_length = 1 + 4 + 4 + 4 + 3 + 2;
         
         if ( compatibility_flag == 1 ) {
-            descriptor_length += compatibility_descriptor.GetDescriptorLength();
+            descriptor_length += compatibility_descriptor.getDescriptorLength();
         }
         
         if ( item_info_flag == 1 ) {

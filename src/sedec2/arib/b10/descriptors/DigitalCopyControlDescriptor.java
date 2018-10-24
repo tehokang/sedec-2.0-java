@@ -27,28 +27,28 @@ public class DigitalCopyControlDescriptor extends Descriptor {
     public DigitalCopyControlDescriptor(BitReadWriter brw) {
         super(brw);
         
-        digital_recording_control_data = (byte) brw.ReadOnBuffer(2);
-        maximum_bitrate_flag = (byte) brw.ReadOnBuffer(1);
-        component_control_flag = (byte) brw.ReadOnBuffer(1);
-        user_defined = (byte) brw.ReadOnBuffer(4);
+        digital_recording_control_data = (byte) brw.readOnBuffer(2);
+        maximum_bitrate_flag = (byte) brw.readOnBuffer(1);
+        component_control_flag = (byte) brw.readOnBuffer(1);
+        user_defined = (byte) brw.readOnBuffer(4);
         
         if ( maximum_bitrate_flag == 1 ) {
-            maximum_bitrate = (byte) brw.ReadOnBuffer(8);
+            maximum_bitrate = (byte) brw.readOnBuffer(8);
         }
         
         if ( component_control_flag == 1) {
-            component_control_length = (byte) brw.ReadOnBuffer(8);
+            component_control_length = (byte) brw.readOnBuffer(8);
             
             for ( int i=0; i<component_control_length; i++ ) {
                 ComponentControl component_control = new ComponentControl();
-                component_control.component_tag = (byte) brw.ReadOnBuffer(8);
-                component_control.digital_recording_control_data = (byte) brw.ReadOnBuffer(2);
-                component_control.maximum_bitrate_flag = (byte) brw.ReadOnBuffer(1);
-                brw.SkipOnBuffer(1);
-                component_control.user_defined = (byte) brw.ReadOnBuffer(4);
+                component_control.component_tag = (byte) brw.readOnBuffer(8);
+                component_control.digital_recording_control_data = (byte) brw.readOnBuffer(2);
+                component_control.maximum_bitrate_flag = (byte) brw.readOnBuffer(1);
+                brw.skipOnBuffer(1);
+                component_control.user_defined = (byte) brw.readOnBuffer(4);
                 
                 if ( component_control.maximum_bitrate_flag == 1 ) {
-                    component_control.maximum_bitrate = (byte) brw.ReadOnBuffer(8);
+                    component_control.maximum_bitrate = (byte) brw.readOnBuffer(8);
                 }
                 component_controls.add(component_control);
             }
@@ -56,8 +56,8 @@ public class DigitalCopyControlDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t digital_recording_control_data : 0x%x \n", 
                 digital_recording_control_data));

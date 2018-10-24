@@ -27,7 +27,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         public byte[] source_address = new byte[4];
         public byte[] destination_address = new byte[4];
         
-        public void Print() {
+        public void print() {
             Logger.d(String.format("version : 0x%x \n", version));
             Logger.d(String.format("IHL : 0x%x \n", IHL));
             Logger.d(String.format("type_of_service : 0x%x \n", type_of_service));
@@ -56,7 +56,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         public byte[] source_address = new byte[16];
         public byte[] destination_address = new byte[16];
         
-        public void Print() {
+        public void print() {
             Logger.d(String.format("version : 0x%x \n", version));
             Logger.d(String.format("traffic_class : 0x%x \n", traffic_class));
             Logger.d(String.format("flow_label : 0x%x \n", flow_label));
@@ -99,7 +99,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         public int source_port;
         public int destination_port;
         
-        public void Print() {
+        public void print() {
             Logger.d(String.format("source_port : 0x%x \n", source_port));
             Logger.d(String.format("destination_port : 0x%x \n", destination_port));
         }
@@ -112,68 +112,68 @@ public class CompressedIpPacket extends TypeLengthValue {
         public PacketDataByte(int length, BitReadWriter brw) {
             data = new byte[length];
             for ( int i=0; i<data.length; i++ ) {
-                data[i] = (byte) brw.ReadOnBuffer(8);
+                data[i] = (byte) brw.readOnBuffer(8);
             }
             
             mmtp_packet = new MMTP_Packet(data);
         }
         
-        public void Print() {
+        public void print() {
             if ( mmtp_packet != null ) {
-                mmtp_packet.Print();
+                mmtp_packet.print();
             }
             
-            BinaryLogger.Print(data);
+            BinaryLogger.print(data);
         }
     }
     
     public CompressedIpPacket(byte[] buffer) {
         super(buffer);
         
-        CID = ReadOnBuffer(12);
-        SN = (byte) ReadOnBuffer(4);
-        CID_header_type = (byte) ReadOnBuffer(8);
+        CID = readOnBuffer(12);
+        SN = (byte) readOnBuffer(4);
+        CID_header_type = (byte) readOnBuffer(8);
         
         if ( CID_header_type == 0x20 ) {
-            ipv4_header_wo_length.version = (byte) ReadOnBuffer(4);
-            ipv4_header_wo_length.IHL = (byte) ReadOnBuffer(4);
-            ipv4_header_wo_length.type_of_service = (byte) ReadOnBuffer(8);
-            ipv4_header_wo_length.identification = ReadOnBuffer(16);
-            ipv4_header_wo_length.flags = (byte) ReadOnBuffer(3);
-            ipv4_header_wo_length.fragment_offset = ReadOnBuffer(13);
-            ipv4_header_wo_length.time_to_live = (byte) ReadOnBuffer(8);
-            ipv4_header_wo_length.protocol = (byte) ReadOnBuffer(8);
+            ipv4_header_wo_length.version = (byte) readOnBuffer(4);
+            ipv4_header_wo_length.IHL = (byte) readOnBuffer(4);
+            ipv4_header_wo_length.type_of_service = (byte) readOnBuffer(8);
+            ipv4_header_wo_length.identification = readOnBuffer(16);
+            ipv4_header_wo_length.flags = (byte) readOnBuffer(3);
+            ipv4_header_wo_length.fragment_offset = readOnBuffer(13);
+            ipv4_header_wo_length.time_to_live = (byte) readOnBuffer(8);
+            ipv4_header_wo_length.protocol = (byte) readOnBuffer(8);
 
             for ( int i=0; i<4; i++ ) 
-                ipv4_header_wo_length.source_address[i] = (byte) ReadOnBuffer(8);
+                ipv4_header_wo_length.source_address[i] = (byte) readOnBuffer(8);
             
             for ( int i=0; i<4; i++ ) 
-                ipv4_header_wo_length.destination_address[i] = (byte) ReadOnBuffer(8);
+                ipv4_header_wo_length.destination_address[i] = (byte) readOnBuffer(8);
             
-            udp_header_wo_length.source_port = ReadOnBuffer(16);
-            udp_header_wo_length.destination_port = ReadOnBuffer(16);
+            udp_header_wo_length.source_port = readOnBuffer(16);
+            udp_header_wo_length.destination_port = readOnBuffer(16);
             
             packet_data_byte = new PacketDataByte(length-3-20, this);
             
         } else if ( CID_header_type == 0x21 ) {
-            identification = ReadOnBuffer(16);
+            identification = readOnBuffer(16);
             packet_data_byte = new PacketDataByte(length-3-2, this);
             
         } else if ( CID_header_type == 0x60 ) {
-            ipv6_header_wo_length.version = (byte) ReadOnBuffer(4);
-            ipv6_header_wo_length.traffic_class = (byte) ReadOnBuffer(8);
-            ipv6_header_wo_length.flow_label = ReadOnBuffer(20);
-            ipv6_header_wo_length.next_header = (byte) ReadOnBuffer(8);
-            ipv6_header_wo_length.hop_limit = (byte) ReadOnBuffer(8);
+            ipv6_header_wo_length.version = (byte) readOnBuffer(4);
+            ipv6_header_wo_length.traffic_class = (byte) readOnBuffer(8);
+            ipv6_header_wo_length.flow_label = readOnBuffer(20);
+            ipv6_header_wo_length.next_header = (byte) readOnBuffer(8);
+            ipv6_header_wo_length.hop_limit = (byte) readOnBuffer(8);
             
             for ( int i=0; i<16; i++ ) 
-                ipv6_header_wo_length.source_address[i] = (byte) ReadOnBuffer(8);
+                ipv6_header_wo_length.source_address[i] = (byte) readOnBuffer(8);
             
             for ( int i=0; i<16; i++ ) 
-                ipv6_header_wo_length.destination_address[i] = (byte) ReadOnBuffer(8);
+                ipv6_header_wo_length.destination_address[i] = (byte) readOnBuffer(8);
             
-            udp_header_wo_length.source_port = ReadOnBuffer(16);
-            udp_header_wo_length.destination_port = ReadOnBuffer(16);
+            udp_header_wo_length.source_port = readOnBuffer(16);
+            udp_header_wo_length.destination_port = readOnBuffer(16);
             
             packet_data_byte = new PacketDataByte(length-3-6-16-16-4, this);
             
@@ -182,59 +182,59 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
 
-    public int GetCID() {
+    public int getCID() {
         return CID;
     }
     
-    public byte GetSN() {
+    public byte getSN() {
         return SN;
     }
     
-    public byte GetCIDHeaderType() {
+    public byte getCIDHeaderType() {
         return CID_header_type;
     }
     
-    public IPv4HeaderWoLength GetIpv4HeaderWoLength() {
+    public IPv4HeaderWoLength getIpv4HeaderWoLength() {
         return ipv4_header_wo_length;
     }
     
-    public UDPHeaderWoLength GetUdpHeaderWoLength() {
+    public UDPHeaderWoLength getUdpHeaderWoLength() {
         return udp_header_wo_length;
     }
     
-    public IPv6HeaderWoLength GetIpv6HeaderWoLength() {
+    public IPv6HeaderWoLength getIpv6HeaderWoLength() {
         return ipv6_header_wo_length;
     }
     
-    public int GetIdentification() {
+    public int getIdentification() {
         return identification;
     }
     
-    public PacketDataByte GetPacketDataByte() {
+    public PacketDataByte getPacketDataByte() {
         return packet_data_byte;
     }
     
     @Override
-    public void PrintTypeLengthValue() {
-        super.PrintTypeLengthValue();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("CID : 0x%x \n", CID));
         Logger.d(String.format("SN : 0x%x \n", SN));
         Logger.d(String.format("CID_header_type : 0x%x \n", CID_header_type));
         
         if ( CID_header_type == 0x20 ) {
-            ipv4_header_wo_length.Print();
-            udp_header_wo_length.Print();
-            packet_data_byte.Print();
+            ipv4_header_wo_length.print();
+            udp_header_wo_length.print();
+            packet_data_byte.print();
         } else if ( CID_header_type == 0x21 ) {
             Logger.d(String.format("Identification : 0x%x \n", identification));
-            packet_data_byte.Print();
+            packet_data_byte.print();
         } else if ( CID_header_type == 0x60 ) {
-            ipv6_header_wo_length.Print();
-            udp_header_wo_length.Print();
-            packet_data_byte.Print();
+            ipv6_header_wo_length.print();
+            udp_header_wo_length.print();
+            packet_data_byte.print();
         } else if ( CID_header_type == 0x61 ) {
-            packet_data_byte.Print();
+            packet_data_byte.print();
         }
     }
 }

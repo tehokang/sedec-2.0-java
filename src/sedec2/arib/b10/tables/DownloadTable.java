@@ -23,25 +23,25 @@ public class DownloadTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        maker_id = (byte) ReadOnBuffer(8);
-        model_id = (byte) ReadOnBuffer(8);
-        section_number = ReadOnBuffer(16);
-        last_section_number = ReadOnBuffer(16);
+        maker_id = (byte) readOnBuffer(8);
+        model_id = (byte) readOnBuffer(8);
+        section_number = readOnBuffer(16);
+        last_section_number = readOnBuffer(16);
         
         for ( int i=0; i<model_info.length; i++ ) {
-            model_info[i] = (byte) ReadOnBuffer(8);
+            model_info[i] = (byte) readOnBuffer(8);
         }
         
         for ( int i=0; i<code_data_byte.length; i++ ) {
-            code_data_byte[i] = (byte) ReadOnBuffer(8);
+            code_data_byte[i] = (byte) readOnBuffer(8);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("maker_id : 0x%x \n", maker_id));
         Logger.d(String.format("model_id : 0x%x \n", model_id));

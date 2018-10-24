@@ -11,33 +11,33 @@ public class LinkedPuDescriptor extends Descriptor {
         super(brw);
         
         if ( 0 < descriptor_length ) {
-            num_of_linked_PU = brw.ReadOnBuffer(8);
+            num_of_linked_PU = brw.readOnBuffer(8);
             
             for ( int i=0;i<num_of_linked_PU; i++ ) {
-                linked_PU_tag[i] = (byte) brw.ReadOnBuffer(8);
+                linked_PU_tag[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
     
-    public int GetNumOfLinkedPu() {
+    public int getNumOfLinkedPu() {
         return num_of_linked_PU;
     }
     
-    public byte[] GetLinkedPuTag() {
+    public byte[] getLinkedPuTag() {
         return linked_PU_tag;
     }
     
-    public void SetNumOfLinkedPu(int value) {
+    public void setNumOfLinkedPu(int value) {
         num_of_linked_PU = value;
     }
     
-    public void SetLinkedPuTag(byte[] value) {
+    public void setLinkedPuTag(byte[] value) {
         linked_PU_tag = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_linked_PU : 0x%x \n", num_of_linked_PU));
         Logger.d(String.format("\t linked_PU_tag : %s \n", new String(linked_PU_tag)));
@@ -50,14 +50,14 @@ public class LinkedPuDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(num_of_linked_PU, 8);
+            brw.writeOnBuffer(num_of_linked_PU, 8);
             
             for ( int i=0; i<num_of_linked_PU; i++ ) {
-                brw.WriteOnBuffer(linked_PU_tag[i], 8);
+                brw.writeOnBuffer(linked_PU_tag[i], 8);
             }
         }
     }

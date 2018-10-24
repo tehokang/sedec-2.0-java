@@ -7,7 +7,7 @@ public class UnknownDescriptor extends Descriptor {
     public UnknownDescriptor(BitReadWriter brw) {
         super(brw);
         
-        brw.SkipOnBuffer(descriptor_length*8);
+        brw.skipOnBuffer(descriptor_length*8);
     }
 
     @Override
@@ -18,8 +18,8 @@ public class UnknownDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
     }
 
 }

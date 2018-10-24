@@ -10,20 +10,20 @@ public class MH_AutostartPriorityDescriptor extends Descriptor {
     public MH_AutostartPriorityDescriptor(BitReadWriter brw) {
         super(brw);
         
-        autostart_priority = (byte) brw.ReadOnBuffer(8);
+        autostart_priority = (byte) brw.readOnBuffer(8);
     }
 
-    public byte GetAutostartPriority() {
+    public byte getAutostartPriority() {
         return autostart_priority;
     }
     
-    public void SetAutostartPriority(byte value) {
+    public void setAutostartPriority(byte value) {
         autostart_priority = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t autostart_priority : 0x%x \n", autostart_priority));
         Logger.d("\n");
@@ -35,9 +35,9 @@ public class MH_AutostartPriorityDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(autostart_priority, 8);
+        brw.writeOnBuffer(autostart_priority, 8);
     }
 }

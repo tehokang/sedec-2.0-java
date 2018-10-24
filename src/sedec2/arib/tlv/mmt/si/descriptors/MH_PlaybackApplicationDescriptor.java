@@ -24,31 +24,31 @@ public class MH_PlaybackApplicationDescriptor extends Descriptor {
     public MH_PlaybackApplicationDescriptor(BitReadWriter brw) {
         super(brw);
         
-        application_profiles_length = (byte) brw.ReadOnBuffer(8);
+        application_profiles_length = (byte) brw.readOnBuffer(8);
         for ( int i=0; i<application_profiles_length; i++ ) {
             ApplicationProfile app_profile = new ApplicationProfile();
-            app_profile.application_profile = brw.ReadOnBuffer(16);
-            app_profile.version_major = (byte) brw.ReadOnBuffer(8);
-            app_profile.version_minor = (byte) brw.ReadOnBuffer(8);
-            app_profile.version_micro = (byte) brw.ReadOnBuffer(8);
+            app_profile.application_profile = brw.readOnBuffer(16);
+            app_profile.version_major = (byte) brw.readOnBuffer(8);
+            app_profile.version_minor = (byte) brw.readOnBuffer(8);
+            app_profile.version_micro = (byte) brw.readOnBuffer(8);
             application_profiles.add(app_profile);
         }
         
-        service_bound_flag = (byte) brw.ReadOnBuffer(1);
-        visibility = (byte) brw.ReadOnBuffer(2);
-        brw.SkipOnBuffer(5);
-        application_priority = (byte) brw.ReadOnBuffer(8);
+        service_bound_flag = (byte) brw.readOnBuffer(1);
+        visibility = (byte) brw.readOnBuffer(2);
+        brw.skipOnBuffer(5);
+        application_priority = (byte) brw.readOnBuffer(8);
         
         transport_protocol_label = 
                 new byte[descriptor_length-3-application_profiles.size()*5];
         for ( int i=0; i<transport_protocol_label.length; i++ ) {
-            transport_protocol_label[i] = (byte) brw.ReadOnBuffer(8);
+            transport_protocol_label[i] = (byte) brw.readOnBuffer(8);
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t application_profiles_length : 0x%x \n", 
                 application_profiles_length));

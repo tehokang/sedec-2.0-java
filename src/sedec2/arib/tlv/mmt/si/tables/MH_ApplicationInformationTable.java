@@ -27,73 +27,73 @@ public class MH_ApplicationInformationTable extends Table {
         __decode_table_body__();
     }
     
-    public int GetApplicationType() {
+    public int getApplicationType() {
         return application_type;
     }
     
-    public int GetVersionNumber() {
+    public int getVersionNumber() {
         return version_number;
     }
     
-    public int GetCurrentNextIndicator() {
+    public int getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public int GetSectionNumber() {
+    public int getSectionNumber() {
         return section_number;
     }
     
-    public int GetLastSectionNumber() {
+    public int getLastSectionNumber() {
         return last_section_number;
     }
     
-    public int GetCommonDescriptorLength() {
+    public int getCommonDescriptorLength() {
         return common_descriptors_length;
     }
     
-    public List<Descriptor> GetCommonDescriptors() {
+    public List<Descriptor> getCommonDescriptors() {
         return common_descriptors;
     }
     
-    public int GetApplicationLoopLength() {
+    public int getApplicationLoopLength() {
         return application_loop_length;
     }
     
-    public List<Application> GetApplications() {
+    public List<Application> getApplications() {
         return applications;
     }
     
     @Override
     protected void __decode_table_body__() {
-        application_type = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = ReadOnBuffer(5);
-        current_next_indicator = ReadOnBuffer(1);
-        section_number = ReadOnBuffer(8);
-        last_section_number = ReadOnBuffer(8);
-        SkipOnBuffer(4);
+        application_type = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = readOnBuffer(5);
+        current_next_indicator = readOnBuffer(1);
+        section_number = readOnBuffer(8);
+        last_section_number = readOnBuffer(8);
+        skipOnBuffer(4);
         
-        common_descriptors_length = ReadOnBuffer(12);
+        common_descriptors_length = readOnBuffer(12);
         for ( int i=common_descriptors_length;i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             common_descriptors.add(desc);
         }
         
-        SkipOnBuffer(4);
+        skipOnBuffer(4);
         
-        application_loop_length = ReadOnBuffer(12);
+        application_loop_length = readOnBuffer(12);
         for ( int i=application_loop_length;i>0; ) {
             Application app = new Application(this);
-            i-=app.GetApplicationLength();
+            i-=app.getApplicationLength();
             applications.add(app);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("application_type : 0x%x \n", application_type));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -103,14 +103,14 @@ public class MH_ApplicationInformationTable extends Table {
         Logger.d(String.format("common_descriptors_length : 0x%x \n", common_descriptors_length));
 
         for ( int i=0; i<common_descriptors.size(); i++ ) {
-            common_descriptors.get(i).PrintDescriptor();
+            common_descriptors.get(i).print();
         }
         
         Logger.d(String.format("application_loop_length : 0x%x \n", application_loop_length));
         Logger.d("\n");
         for ( int i=0; i<applications.size(); i++ ) {
             Logger.d("====== [" + i + "] Application list ======\n");
-            applications.get(i).PrintApplication();
+            applications.get(i).printApplication();
             Logger.d("--------------------------------------\n");
         }
         

@@ -38,8 +38,8 @@ public class MessageFactory {
     /** DT */
     public final static int DATA_TRANSMISSION_MESSAGE = 0x8003;
     
-    public static Message CreateMessage(byte[] buffer) {
-        int message_id = ((buffer[0] & 0xff) << 8) | buffer[1] & 0xff;
+    public static Message createMessage(byte[] buffer) {
+        int message_id = ((buffer[0] & 0xff) << 8) | (buffer[1] & 0xff);
         
         switch ( message_id ) {
             case PACKAGE_ACCESS_MESSAGE:

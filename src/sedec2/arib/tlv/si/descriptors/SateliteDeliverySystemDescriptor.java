@@ -15,18 +15,18 @@ public class SateliteDeliverySystemDescriptor extends Descriptor {
     public SateliteDeliverySystemDescriptor(BitReadWriter brw) {
         super(brw);
         
-        frequency = brw.ReadOnBuffer(32);
-        orbital_position = brw.ReadOnBuffer(16);
-        west_east_flag = (byte) brw.ReadOnBuffer(1);
-        polarisation = (byte) brw.ReadOnBuffer(2);
-        modulation = (byte) brw.ReadOnBuffer(5);
-        symbol_rate = (byte) brw.ReadOnBuffer(28);
-        FEC_inner = (byte) brw.ReadOnBuffer(4);
+        frequency = brw.readOnBuffer(32);
+        orbital_position = brw.readOnBuffer(16);
+        west_east_flag = (byte) brw.readOnBuffer(1);
+        polarisation = (byte) brw.readOnBuffer(2);
+        modulation = (byte) brw.readOnBuffer(5);
+        symbol_rate = (byte) brw.readOnBuffer(28);
+        FEC_inner = (byte) brw.readOnBuffer(4);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t frequency : 0x%x \n", frequency));
         Logger.d(String.format("\t orbital_position : 0x%x \n", orbital_position));

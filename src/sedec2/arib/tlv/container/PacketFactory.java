@@ -14,7 +14,7 @@ public class PacketFactory {
     public final static int SIGNALLING_PACKET = 0xfe;
     public final static int NULL_PACKET = 0xff;
 
-    public static TypeLengthValue CreatePacket(byte[] buffer) {
+    public static TypeLengthValue createPacket(byte[] buffer) {
         int packet_type = (buffer[1] & 0xff);
         
         switch ( packet_type ) {

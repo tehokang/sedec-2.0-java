@@ -24,31 +24,31 @@ public class ContentCopyControlDescriptor extends Descriptor {
     public ContentCopyControlDescriptor(BitReadWriter brw) {
         super(brw);
         
-        digital_recording_control_data = (byte) brw.ReadOnBuffer(2);
-        maximum_bit_rate_flag = (byte) brw.ReadOnBuffer(1);
-        component_control_flag = (byte) brw.ReadOnBuffer(1);
+        digital_recording_control_data = (byte) brw.readOnBuffer(2);
+        maximum_bit_rate_flag = (byte) brw.readOnBuffer(1);
+        component_control_flag = (byte) brw.readOnBuffer(1);
         
-        brw.SkipOnBuffer(4);
-        brw.SkipOnBuffer(8);
+        brw.skipOnBuffer(4);
+        brw.skipOnBuffer(8);
         
         if ( maximum_bit_rate_flag == 1 ) {
-            maximum_bitrate = (byte) brw.ReadOnBuffer(8);
+            maximum_bitrate = (byte) brw.readOnBuffer(8);
         }
         
         if ( component_control_flag == 1 ) {
-            component_control_length = (byte) brw.ReadOnBuffer(8);
+            component_control_length = (byte) brw.readOnBuffer(8);
             
             for ( int i=component_control_length; i>0; ) {
                 ComponentControl cc = new ComponentControl();
-                cc.component_tag = brw.ReadOnBuffer(16);
-                cc.digital_recording_control_data = (byte) brw.ReadOnBuffer(2);
-                cc.maximum_bitrate_flag = (byte) brw.ReadOnBuffer(1);
-                brw.SkipOnBuffer(5);
-                brw.SkipOnBuffer(8);
+                cc.component_tag = brw.readOnBuffer(16);
+                cc.digital_recording_control_data = (byte) brw.readOnBuffer(2);
+                cc.maximum_bitrate_flag = (byte) brw.readOnBuffer(1);
+                brw.skipOnBuffer(5);
+                brw.skipOnBuffer(8);
                 
                 i-=4;
                 if ( cc.maximum_bitrate_flag == 1) {
-                    cc.maximum_bitrate = (byte) brw.ReadOnBuffer(8);
+                    cc.maximum_bitrate = (byte) brw.readOnBuffer(8);
                     i-=1;
                 }
                 component_controls.add(cc);
@@ -57,8 +57,8 @@ public class ContentCopyControlDescriptor extends Descriptor {
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t digital_recording_control_data : 0x%x \n", 
                 digital_recording_control_data));

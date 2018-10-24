@@ -34,47 +34,47 @@ public class ProgramMapTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        program_number = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(3);
-        PCR_PID = ReadOnBuffer(13);
-        SkipOnBuffer(4);
-        program_info_length = ReadOnBuffer(12);
+        program_number = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(3);
+        PCR_PID = readOnBuffer(13);
+        skipOnBuffer(4);
+        program_info_length = readOnBuffer(12);
 
         for ( int i=program_info_length; i>0; ) {
-            Descriptor desc = DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
 
         for ( int i=(section_length-9-program_info_length-4); i>0; )
         {
             Program program = new Program();
-            program.stream_type = (byte) ReadOnBuffer(8);
-            SkipOnBuffer(3);
-            program.elementary_PID = ReadOnBuffer(13);
-            SkipOnBuffer(4);
-            program.ES_info_length = ReadOnBuffer(12);
+            program.stream_type = (byte) readOnBuffer(8);
+            skipOnBuffer(3);
+            program.elementary_PID = readOnBuffer(13);
+            skipOnBuffer(4);
+            program.ES_info_length = readOnBuffer(12);
 
             for ( int j=program.ES_info_length; j>0; )
             {
-                Descriptor desc = DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 program.descriptors.add(desc);
             }
             i-= (5 + program.ES_info_length);
             programs.add(program);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("program_number : 0x%x \n", program_number));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -85,7 +85,7 @@ public class ProgramMapTable extends Table {
         Logger.d(String.format("program_info_length : 0x%x \n", program_info_length));
 
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
 
         for ( int i=0; i<programs.size(); i++ ) {
@@ -96,7 +96,7 @@ public class ProgramMapTable extends Table {
             Logger.d(String.format("  ES_info_length : 0x%x \n", program.ES_info_length));
 
             for ( int j=0; j<program.descriptors.size(); j++ ) {
-                program.descriptors.get(j).PrintDescriptor();
+                program.descriptors.get(j).print();
             }
         }
 

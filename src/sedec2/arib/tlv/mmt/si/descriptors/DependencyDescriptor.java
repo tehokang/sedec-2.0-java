@@ -19,26 +19,26 @@ public class DependencyDescriptor extends Descriptor {
     public DependencyDescriptor(BitReadWriter brw) {
         super();
         
-        descriptor_tag = brw.ReadOnBuffer(16);
-        descriptor_length = brw.ReadOnBuffer(16);
+        descriptor_tag = brw.readOnBuffer(16);
+        descriptor_length = brw.readOnBuffer(16);
         
-        num_of_dependencies = (byte) brw.ReadOnBuffer(8);
+        num_of_dependencies = (byte) brw.readOnBuffer(8);
         
         for ( int i=0; i<num_of_dependencies; i++ ) {
             Asset asset = new Asset();
-            asset.asset_id_scheme = brw.ReadOnBuffer(32);
-            asset.asset_id_length = (byte) brw.ReadOnBuffer(8);
+            asset.asset_id_scheme = brw.readOnBuffer(32);
+            asset.asset_id_length = (byte) brw.readOnBuffer(8);
             asset.asset_id_byte = new byte[asset.asset_id_length];
             for ( int j=0; j<asset.asset_id_length; j++ ) {
-                asset.asset_id_byte[j] = (byte) brw.ReadOnBuffer(8);
+                asset.asset_id_byte[j] = (byte) brw.readOnBuffer(8);
             }
             assets.add(asset);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t num_of_dependencies : 0x%x \n", num_of_dependencies));
         

@@ -19,16 +19,16 @@ public class MPU_TimestampDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             MPU mpu = new MPU();
-            mpu.mpu_sequence_number = brw.ReadOnBuffer(32);
-            mpu.mpu_presentation_time = brw.ReadOnBuffer(64);
+            mpu.mpu_sequence_number = brw.readOnBuffer(32);
+            mpu.mpu_presentation_time = brw.readOnBuffer(64);
             mpus.add(mpu);
             i-=(4 + 8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<mpus.size(); i++ ) {
             MPU mpu = mpus.get(i);

@@ -11,22 +11,22 @@ public class MH_TypeDescriptor extends Descriptor {
         
         if ( 0 < descriptor_length ) {
             for ( int i=0; i<descriptor_length; i++ ) {
-                text_char[i] = (byte) brw.ReadOnBuffer(8);
+                text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
     }
 
-    public byte[] GetTextChar() {
+    public byte[] getTextChar() {
         return text_char;
     }
     
-    public void SetTextChar(byte[] value) {
+    public void setTextChar(byte[] value) {
         text_char = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t text_char : %s \n", new String(text_char)));
         Logger.d("\n");
@@ -38,12 +38,12 @@ public class MH_TypeDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
             for ( int i=0;i<descriptor_length; i++ ) {
-                brw.WriteOnBuffer(text_char[i], 8);
+                brw.writeOnBuffer(text_char[i], 8);
             }
         }
     }

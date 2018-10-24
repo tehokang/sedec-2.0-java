@@ -14,13 +14,13 @@ public class DiscontinuityInformationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        transition_flag = (byte) ReadOnBuffer(1);
-        SkipOnBuffer(7);
+        transition_flag = (byte) readOnBuffer(1);
+        skipOnBuffer(7);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("transition_flag : 0x%x \n", transition_flag));
     }

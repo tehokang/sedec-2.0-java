@@ -23,32 +23,32 @@ public class MH_HEVCDescriptor extends Descriptor {
     public MH_HEVCDescriptor(BitReadWriter brw) {
         super(brw);
         
-        profile_space = (byte) brw.ReadOnBuffer(2);
-        tier_flag = (byte) brw.ReadOnBuffer(1);
-        profile_idc = (byte) brw.ReadOnBuffer(5);
-        profile_compatibility_indication = brw.ReadOnBuffer(32);
-        progressive_source_flag = (byte) brw.ReadOnBuffer(1);
-        interlaced_source_flag = (byte) brw.ReadOnBuffer(1);
-        non_packed_constraint_flag = (byte) brw.ReadOnBuffer(1);
-        frame_only_constraint_flag = (byte) brw.ReadOnBuffer(1);
-        reserved_zero_44bits = brw.ReadOnBuffer(44);
-        level_idc = (byte) brw.ReadOnBuffer(8);
-        temporal_layer_subset_flag = (byte) brw.ReadOnBuffer(1);
-        HEVC_still_present_flag = (byte) brw.ReadOnBuffer(1);
-        HEVC_24hr_picture_present_flag = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(5);
+        profile_space = (byte) brw.readOnBuffer(2);
+        tier_flag = (byte) brw.readOnBuffer(1);
+        profile_idc = (byte) brw.readOnBuffer(5);
+        profile_compatibility_indication = brw.readOnBuffer(32);
+        progressive_source_flag = (byte) brw.readOnBuffer(1);
+        interlaced_source_flag = (byte) brw.readOnBuffer(1);
+        non_packed_constraint_flag = (byte) brw.readOnBuffer(1);
+        frame_only_constraint_flag = (byte) brw.readOnBuffer(1);
+        reserved_zero_44bits = brw.readOnBuffer(44);
+        level_idc = (byte) brw.readOnBuffer(8);
+        temporal_layer_subset_flag = (byte) brw.readOnBuffer(1);
+        HEVC_still_present_flag = (byte) brw.readOnBuffer(1);
+        HEVC_24hr_picture_present_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(5);
         
         if ( temporal_layer_subset_flag == 1 ) {
-            brw.SkipOnBuffer(5);
-            temporal_id_min = (byte) brw.ReadOnBuffer(3);
-            brw.SkipOnBuffer(5);
-            temporal_id_max = (byte) brw.ReadOnBuffer(3);
+            brw.skipOnBuffer(5);
+            temporal_id_min = (byte) brw.readOnBuffer(3);
+            brw.skipOnBuffer(5);
+            temporal_id_max = (byte) brw.readOnBuffer(3);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t profile_space : 0x%x \n", profile_space));
         Logger.d(String.format("\t tier_flag : 0x%x \n", tier_flag));

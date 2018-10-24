@@ -72,7 +72,6 @@ import sedec2.arib.tlv.mmt.si.descriptors.UnlockedCacheDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.UtcNptReferenceDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.VideoComponentDescriptor;
 import sedec2.base.BitReadWriter;
-import sedec2.util.Logger;
 
 public class DescriptorFactory {
     public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0001;
@@ -152,13 +151,10 @@ public class DescriptorFactory {
     
     public final static int UNKNOWN_DESCRIPTOR = 0xffff;
     
-    public static Descriptor CreateDescriptor(BitReadWriter brw) {
+    public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = 
-                (((brw.GetCurrentBuffer()[0] & 0xff) << 8) |
-                (brw.GetCurrentBuffer()[1] & 0xff));
-
-        Logger.d(String.format("DescriptorFactory (descriptor_tag : 0x%x) \n", 
-                descriptor_tag));
+                (((brw.getCurrentBuffer()[0] & 0xff) << 8) |
+                (brw.getCurrentBuffer()[1] & 0xff));
 
         switch ( descriptor_tag ) {
             case MH_CA_STARTUP_DESCRIPTOR:

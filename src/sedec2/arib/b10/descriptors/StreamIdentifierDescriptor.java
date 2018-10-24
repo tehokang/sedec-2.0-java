@@ -9,12 +9,12 @@ public class StreamIdentifierDescriptor extends Descriptor {
     public StreamIdentifierDescriptor(BitReadWriter brw) {
         super(brw);
         
-        component_tag = (byte) brw.ReadOnBuffer(8);
+        component_tag = (byte) brw.readOnBuffer(8);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t component_tag : 0x%x \n", component_tag));
     }

@@ -34,81 +34,81 @@ public class MH_BroadcasterInformationTable extends Table {
         __decode_table_body__();
     }
 
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return original_network_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public byte GetBroadcastViewPriority() {
+    public byte getBroadcastViewPriority() {
         return broadcast_view_priority;
     }
     
-    public int GetFirstDescriptorsLength() {
+    public int getFirstDescriptorsLength() {
         return first_descriptors_length;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
-    public List<Broadcaster> GetBroadcasters() {
+    public List<Broadcaster> getBroadcasters() {
         return broadcasters;
     }
     
     @Override
     protected void __decode_table_body__() {
-        original_network_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(3);
-        broadcast_view_priority = (byte) ReadOnBuffer(1);
-        first_descriptors_length = ReadOnBuffer(12);
+        original_network_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(3);
+        broadcast_view_priority = (byte) readOnBuffer(1);
+        first_descriptors_length = readOnBuffer(12);
         
         for ( int i=first_descriptors_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
         for ( int i=(section_length - 7 - first_descriptors_length - 4); i>0; ) {
             Broadcaster broadcaster = new Broadcaster();
-            broadcaster.broadcaster_id = (byte) ReadOnBuffer(8);
-            SkipOnBuffer(4);
-            broadcaster.broadcaster_descriptors_length = ReadOnBuffer(12);
+            broadcaster.broadcaster_id = (byte) readOnBuffer(8);
+            skipOnBuffer(4);
+            broadcaster.broadcaster_descriptors_length = readOnBuffer(12);
             i-=3;
             
             for ( int j=broadcaster.broadcaster_descriptors_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
-                i-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
+                i-=desc.getDescriptorLength();
                 broadcaster.descriptors.add(desc);
             }
             broadcasters.add(broadcaster);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -119,7 +119,7 @@ public class MH_BroadcasterInformationTable extends Table {
         Logger.d(String.format("first_descriptors_length : 0x%x \n",  first_descriptors_length));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         for ( int i=0; i<broadcasters.size(); i++ ) {
@@ -131,7 +131,7 @@ public class MH_BroadcasterInformationTable extends Table {
                     i, broadcaster.broadcaster_descriptors_length));
             
             for ( int j=0; j<broadcaster.descriptors.size(); j++ ) {
-                broadcaster.descriptors.get(j).PrintDescriptor();
+                broadcaster.descriptors.get(j).print();
             }
         }
         

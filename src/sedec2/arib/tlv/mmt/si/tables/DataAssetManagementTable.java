@@ -46,69 +46,69 @@ public class DataAssetManagementTable extends Table {
         __decode_table_body__();
     }
 
-    public byte GetNumOfDataComponents() {
+    public byte getNumOfDataComponents() {
         return num_of_data_components;
     }
     
-    public List<DataComponent> GetDataComponents() {
+    public List<DataComponent> getDataComponents() {
         return data_components;
     }
     
     @Override
     protected void __decode_table_body__() {
-        num_of_data_components = (byte) ReadOnBuffer(8);
+        num_of_data_components = (byte) readOnBuffer(8);
         
         for ( int i=0; i<num_of_data_components; i++ ) {
             DataComponent data_component = new DataComponent();
-            data_component.transaction_id = ReadOnBuffer(32);
-            data_component.component_tag = ReadOnBuffer(16);
-            data_component.download_id = ReadOnBuffer(32);
-            data_component.num_of_mpus = (byte) ReadOnBuffer(8);
+            data_component.transaction_id = readOnBuffer(32);
+            data_component.component_tag = readOnBuffer(16);
+            data_component.download_id = readOnBuffer(32);
+            data_component.num_of_mpus = (byte) readOnBuffer(8);
             
             for ( int j=0; j<data_component.num_of_mpus; j++ ) {
                 MPU mpu = new MPU();
-                mpu.mpu_sequence_number = ReadOnBuffer(32);
-                mpu.num_of_items = (byte) ReadOnBuffer(8);
+                mpu.mpu_sequence_number = readOnBuffer(32);
+                mpu.num_of_items = (byte) readOnBuffer(8);
                 
                 for ( int k=0; k<mpu.num_of_items; k++ ) {
                     Item item = new Item();
-                    item.item_id = ReadOnBuffer(32);
-                    item.node_tag = ReadOnBuffer(16);
-                    item.item_size = ReadOnBuffer(32);
-                    item.item_version = (byte) ReadOnBuffer(8);
-                    item.checksum_flag = (byte) ReadOnBuffer(1);
-                    SkipOnBuffer(7);
+                    item.item_id = readOnBuffer(32);
+                    item.node_tag = readOnBuffer(16);
+                    item.item_size = readOnBuffer(32);
+                    item.item_version = (byte) readOnBuffer(8);
+                    item.checksum_flag = (byte) readOnBuffer(1);
+                    skipOnBuffer(7);
                     
                     if ( item.checksum_flag == 1 ) {
-                        item.item_checksum = ReadOnBuffer(32);
+                        item.item_checksum = readOnBuffer(32);
                     }
                     
-                    item.item_info_length = (byte) ReadOnBuffer(8);
+                    item.item_info_length = (byte) readOnBuffer(8);
                     item.item_info_byte = new byte[item.item_info_length];
                     for ( int m=0; m<item.item_info_length; m++ ) {
-                        item.item_info_byte[m] = (byte) ReadOnBuffer(8);
+                        item.item_info_byte[m] = (byte) readOnBuffer(8);
                     }
                     mpu.items.add(item);
                 }
-                mpu.mpu_info_length = (byte) ReadOnBuffer(8);
+                mpu.mpu_info_length = (byte) readOnBuffer(8);
                 mpu.mpu_info_byte = new byte[mpu.mpu_info_length];
                 for ( int k=0; k<mpu.mpu_info_length; k++ ) {
-                    mpu.mpu_info_byte[k] = (byte) ReadOnBuffer(8);
+                    mpu.mpu_info_byte[k] = (byte) readOnBuffer(8);
                 }
                 data_component.mpus.add(mpu);
             }
-            data_component.descriptors_loop_length = ReadOnBuffer(16);
+            data_component.descriptors_loop_length = readOnBuffer(16);
             for ( int j=data_component.descriptors_loop_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 data_component.descriptors.add(desc);
             }
         }
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("num_of_data_components : 0x%x \n", num_of_data_components));
 
@@ -163,7 +163,7 @@ public class DataAssetManagementTable extends Table {
             Logger.d(String.format("[%d] descriptors_loop_length : 0x%x \n", 
                     i, data_component.descriptors_loop_length));
             for ( int j=data_component.descriptors.size(); j>0; ) {
-                data_component.descriptors.get(j).PrintDescriptor();
+                data_component.descriptors.get(j).print();
             }
         }
     }

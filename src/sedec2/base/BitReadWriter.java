@@ -19,11 +19,11 @@ public class BitReadWriter {
         m_out_counter = 8;
     }
     
-    public byte[] GetBuffer() {
+    public byte[] getBuffer() {
         return m_buffer;
     }
     
-    public byte[] GetCurrentBuffer() {
+    public byte[] getCurrentBuffer() {
         try {
             return Arrays.copyOfRange(m_buffer, m_pos, m_buffer.length);
         } catch (Exception e) {
@@ -32,7 +32,7 @@ public class BitReadWriter {
         }
     }
     
-    public int CalculateCRC32(byte[] temp, int real_data_length) {
+    public int calculateCRC32(byte[] temp, int real_data_length) {
         int bit_count = 0;
         int bit_in_byte = 0;
         int data_bit;
@@ -81,7 +81,7 @@ public class BitReadWriter {
         return(crc);
     }
     
-    public void SkipOnBuffer(int len) {
+    public void skipOnBuffer(int len) {
         for ( int i=0; i<len; i++ ) {
             m_out_counter--;
 
@@ -92,7 +92,7 @@ public class BitReadWriter {
         }
     }
     
-    public int ReadOnBuffer(int len) {
+    public int readOnBuffer(int len) {
         int res = 0;
         int mask;
         byte sp = m_buffer[m_pos];
@@ -122,7 +122,7 @@ public class BitReadWriter {
         return res;
     }
     
-    public void WriteOnBuffer(int value, int len) {
+    public void writeOnBuffer(int value, int len) {
         int mask;
         mask = 1 << (len-1);         
 
@@ -144,7 +144,7 @@ public class BitReadWriter {
         }
     }
 
-    public void WriteOnBuffer(long value, int len) {
+    public void writeOnBuffer(long value, int len) {
         int mask;
         mask = 1 << (len-1);         
 
@@ -166,7 +166,7 @@ public class BitReadWriter {
         }
     }
 
-    public void PrintBuffer() {
+    public void printBuffer() {
         int j=1;
         System.out.print("########### Byte Align ########### \n");
         System.out.print(String.format("%03d : ", j));

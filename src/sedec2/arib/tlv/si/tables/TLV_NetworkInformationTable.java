@@ -35,68 +35,68 @@ public class TLV_NetworkInformationTable extends Table {
         __decode_table_body__();
     }
 
-    public int GetNetworkId() {
+    public int getNetworkId() {
         return network_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;                
     }
     
-    public List<Descriptor> GetNetworkDescriptors() {
+    public List<Descriptor> getNetworkDescriptors() {
         return descriptors;
     }
     
-    public int GetTLVStreamLoopLength() {
+    public int getTLVStreamLoopLength() {
         return TLV_stream_loop_length;
     }
     
-    public List<TLVStream> GetTLVStreams() {
+    public List<TLVStream> getTLVStreams() {
         return tlv_streams;
     }
     
     @Override
     protected void __decode_table_body__() {
-        network_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(4);
-        network_descriptors_length = ReadOnBuffer(12);
+        network_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(4);
+        network_descriptors_length = readOnBuffer(12);
         
         for ( int i=network_descriptors_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
-        SkipOnBuffer(4);
-        TLV_stream_loop_length = ReadOnBuffer(12);
+        skipOnBuffer(4);
+        TLV_stream_loop_length = readOnBuffer(12);
         
         for ( int i=TLV_stream_loop_length; i>0; ) {
             TLVStream tlv_stream = new TLVStream();
-            tlv_stream.tlv_stream_id = ReadOnBuffer(16);
-            tlv_stream.original_network_id = ReadOnBuffer(16);
-            SkipOnBuffer(4);
-            tlv_stream.tlv_stream_descriptors_length = ReadOnBuffer(12);
+            tlv_stream.tlv_stream_id = readOnBuffer(16);
+            tlv_stream.original_network_id = readOnBuffer(16);
+            skipOnBuffer(4);
+            tlv_stream.tlv_stream_descriptors_length = readOnBuffer(12);
             
             for ( int j=tlv_stream.tlv_stream_descriptors_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 tlv_stream.descriptors.add(desc);                
             }
             
@@ -104,12 +104,12 @@ public class TLV_NetworkInformationTable extends Table {
             tlv_streams.add(tlv_stream);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("network_id : 0x%x \n", network_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -121,7 +121,7 @@ public class TLV_NetworkInformationTable extends Table {
         
         for ( int i=0; i<descriptors.size(); i++ ) {
             Descriptor desc = descriptors.get(i);
-            desc.PrintDescriptor();
+            desc.print();
         }
         
         Logger.d(String.format("TLV_stream_loop_length : 0x%x \n", TLV_stream_loop_length));
@@ -137,7 +137,7 @@ public class TLV_NetworkInformationTable extends Table {
             
             for (int j=0; j<tlv_stream.descriptors.size(); j++ ) {
                 Descriptor desc = tlv_stream.descriptors.get(j);
-                desc.PrintDescriptor();
+                desc.print();
             }
         }
         

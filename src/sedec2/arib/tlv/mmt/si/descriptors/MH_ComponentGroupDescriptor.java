@@ -30,36 +30,36 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
     public MH_ComponentGroupDescriptor(BitReadWriter brw) {
         super(brw);
         
-        component_group_type = (byte) brw.ReadOnBuffer(3);
-        total_bit_rate_flag = (byte) brw.ReadOnBuffer(1);
-        num_of_group = (byte) brw.ReadOnBuffer(4);
+        component_group_type = (byte) brw.readOnBuffer(3);
+        total_bit_rate_flag = (byte) brw.readOnBuffer(1);
+        num_of_group = (byte) brw.readOnBuffer(4);
         
         for ( int i=0; i<num_of_group; i++ ) {
             Group group = new Group();
-            group.component_group_id = (byte) brw.ReadOnBuffer(4);
-            group.num_of_CA_unit = (byte) brw.ReadOnBuffer(4);
+            group.component_group_id = (byte) brw.readOnBuffer(4);
+            group.num_of_CA_unit = (byte) brw.readOnBuffer(4);
             
             for ( int j=0; j<group.num_of_CA_unit; j++ ) {
                 CAUnit ca_unit = new CAUnit();
-                ca_unit.CA_unit_id = (byte) brw.ReadOnBuffer(4);
-                ca_unit.num_of_component = (byte) brw.ReadOnBuffer(4);
+                ca_unit.CA_unit_id = (byte) brw.readOnBuffer(4);
+                ca_unit.num_of_component = (byte) brw.readOnBuffer(4);
                 ca_unit.component_tag = new byte[ca_unit.num_of_component*2];
                 
                 for ( int k=0; k<ca_unit.component_tag.length; k++ ) {
-                    ca_unit.component_tag[k] = (byte) brw.ReadOnBuffer(16);
+                    ca_unit.component_tag[k] = (byte) brw.readOnBuffer(16);
                 }
                 group.ca_units.add(ca_unit);
             }
             
             if ( total_bit_rate_flag == 1) {
-                group.total_bit_rate = (byte) brw.ReadOnBuffer(8);
+                group.total_bit_rate = (byte) brw.readOnBuffer(8);
             }
             
-            group.text_length = (byte) brw.ReadOnBuffer(8);
+            group.text_length = (byte) brw.readOnBuffer(8);
             group.text_char = new byte[group.text_length];
             
             for ( int j=0; j<group.text_char.length; j++ ) {
-                group.text_char[j] = (byte) brw.ReadOnBuffer(8);
+                group.text_char[j] = (byte) brw.readOnBuffer(8);
             }
             
             groups.add(group);
@@ -67,8 +67,8 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t component_group_type : 0x%x \n", component_group_type));
         Logger.d(String.format("\t total_bit_rate_flag : 0x%x \n", total_bit_rate_flag));

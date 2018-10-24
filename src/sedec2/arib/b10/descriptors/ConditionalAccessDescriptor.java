@@ -11,19 +11,19 @@ public class ConditionalAccessDescriptor extends Descriptor {
     public ConditionalAccessDescriptor(BitReadWriter brw) {
         super(brw);
         
-        CA_system_ID = brw.ReadOnBuffer(16);
-        brw.SkipOnBuffer(3);;
-        CA_PID = brw.ReadOnBuffer(13);
+        CA_system_ID = brw.readOnBuffer(16);
+        brw.skipOnBuffer(3);;
+        CA_PID = brw.readOnBuffer(13);
         
         private_data_byte = new byte[descriptor_length - 4];
         for ( int i=0; i<private_data_byte.length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t CA_system_ID : 0x%x \n",  CA_system_ID));
         Logger.d(String.format("\t CA_PID : 0x%x \n", CA_PID));

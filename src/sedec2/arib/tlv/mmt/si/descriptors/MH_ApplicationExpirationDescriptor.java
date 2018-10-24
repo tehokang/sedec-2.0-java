@@ -9,12 +9,12 @@ public class MH_ApplicationExpirationDescriptor extends Descriptor {
     public MH_ApplicationExpirationDescriptor(BitReadWriter brw) {
         super(brw);
         
-        expiration_date_and_time = brw.ReadOnBuffer(40);
+        expiration_date_and_time = brw.readOnBuffer(40);
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t expiration_date_and_time : 0x%x \n", 
                 expiration_date_and_time));

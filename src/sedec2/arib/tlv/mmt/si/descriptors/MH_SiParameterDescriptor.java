@@ -20,18 +20,18 @@ public class MH_SiParameterDescriptor extends Descriptor {
     public MH_SiParameterDescriptor(BitReadWriter brw) {
         super(brw);
         
-        parameter_version = (byte) brw.ReadOnBuffer(8);
-        update_time = brw.ReadOnBuffer(16);
+        parameter_version = (byte) brw.readOnBuffer(8);
+        update_time = brw.readOnBuffer(16);
         
         for ( int i=descriptor_length-3; i>0; ) {
             SiParameter si_param = new SiParameter();
-            si_param.table_id = (byte) brw.ReadOnBuffer(8);
-            si_param.table_description_length = (byte) brw.ReadOnBuffer(8);
+            si_param.table_id = (byte) brw.readOnBuffer(8);
+            si_param.table_description_length = (byte) brw.readOnBuffer(8);
             
             si_param.table_description_byte = new byte[si_param.table_description_length];
             
             for ( int j=0; j<si_param.table_description_byte.length; j++ ) {
-                si_param.table_description_byte[j] = (byte) brw.ReadOnBuffer(8);
+                si_param.table_description_byte[j] = (byte) brw.readOnBuffer(8);
             }
             
             si_parameters.add(si_param);
@@ -40,8 +40,8 @@ public class MH_SiParameterDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t parameter_version : 0x%x \n", parameter_version));
         Logger.d(String.format("\t parameter_version : 0x%x \n", parameter_version));

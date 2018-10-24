@@ -6,10 +6,12 @@ import java.util.List;
 import sedec2.arib.b10.DescriptorFactory;
 import sedec2.arib.b10.descriptors.Descriptor;
 import sedec2.base.Table;
+import sedec2.util.JSTTime;
 import sedec2.util.Logger;
 
 public class MH_TimeOffsetTable extends Table {
-    protected long JST_time;
+    protected long JST_time_bits;
+    protected JSTTime JST_time;
     
     protected long MJD;
     protected int year;
@@ -28,66 +30,69 @@ public class MH_TimeOffsetTable extends Table {
         __decode_table_body__();
     }
 
-    public long GetJSTTime() {
-        return JST_time;
+    public long getJSTTime() {
+        return JST_time_bits;
     }
     
-    public long GetMJD() {
-        return MJD;
+    public long getMJD() {
+        return JST_time.getMJD();
     }
     
-    public int GetYear() {
-        return year;
+    public int getYear() {
+        return JST_time.getYear();
     }
     
-    public int GetMonth() {
-        return month;
+    public int getMonth() {
+        return JST_time.getMonth();
     }
     
-    public int GetDay() {
-        return day;
+    public int getDay() {
+        return JST_time.getDay();
     }
     
-    public int GetHour() {
-        return hour;
+    public int getHour() {
+        return JST_time.getHour();
     }
     
-    public int GetMinute() {
-        return minute;
+    public int getMinute() {
+        return JST_time.getMinute();
     }
     
-    public int GetSecond() {
-        return second;
+    public int getSecond() {
+        return JST_time.getSecond();
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
     @Override
     protected void __decode_table_body__() {
-        JST_time = ReadOnBuffer(40);
-        SkipOnBuffer(4);
-        descriptors_loop_length = ReadOnBuffer(12);
+        JST_time_bits = readOnBuffer(40);
+        JST_time = new JSTTime(JST_time_bits);
+        
+        skipOnBuffer(4);
+        descriptors_loop_length = readOnBuffer(12);
         
         for ( int i=descriptors_loop_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("JST_time : %d/%d/%d %d:%d:%d \n",
-                year, month, day, hour, minute, second));
+                JST_time.getYear(), JST_time.getMonth(), JST_time.getDay(), 
+                JST_time.getHour(), JST_time.getMinute(), JST_time.getSecond()));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%x%x%x%x \n", 

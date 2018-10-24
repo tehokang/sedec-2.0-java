@@ -36,41 +36,41 @@ public class BroadcasterInformationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        original_network_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        SkipOnBuffer(3);
-        broadcast_view_priority = (byte) ReadOnBuffer(1);
-        first_descriptors_length = ReadOnBuffer(12);
+        original_network_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(3);
+        broadcast_view_priority = (byte) readOnBuffer(1);
+        first_descriptors_length = readOnBuffer(12);
         
         for ( int i=first_descriptors_length; i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
         for ( int i=(section_length - 7 - first_descriptors_length - 4); i>0 ; ) {
             Broadcaster broadcaster = new Broadcaster();
-            broadcaster.broadcaster_id = (byte) ReadOnBuffer(8);
-            SkipOnBuffer(4);
-            broadcaster.broadcaster_descriptors_length = ReadOnBuffer(12);
+            broadcaster.broadcaster_id = (byte) readOnBuffer(8);
+            skipOnBuffer(4);
+            broadcaster.broadcaster_descriptors_length = readOnBuffer(12);
             
             for ( int j=broadcaster.broadcaster_descriptors_length; j>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 broadcaster.descriptors.add(desc);
             }
             broadcasters.add(broadcaster);
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -81,7 +81,7 @@ public class BroadcasterInformationTable extends Table {
         Logger.d(String.format("first_descriptors_length : 0x%x \n",  first_descriptors_length));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
         
         for ( int i=0; i<broadcasters.size(); i++ ) {
@@ -93,7 +93,7 @@ public class BroadcasterInformationTable extends Table {
                     i, broadcaster.broadcaster_descriptors_length));
             
             for ( int j=0; j<broadcaster.descriptors.size(); j++ ) {
-                broadcaster.descriptors.get(j).PrintDescriptor();
+                broadcaster.descriptors.get(j).print();
             }
         }
         

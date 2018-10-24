@@ -48,11 +48,11 @@ public class TlvPacketDecoder {
                     outputStream.write(tlv_payload_buffer);
                     
                     TypeLengthValue tlv = 
-                            sedec2.arib.tlv.container.PacketFactory.CreatePacket(
+                            sedec2.arib.tlv.container.PacketFactory.createPacket(
                                     outputStream.toByteArray());
                     
                     System.out.println(String.format("[%d] TLV", sample_counter));
-                    tlv.PrintTypeLengthValue();
+                    tlv.print();
                     System.out.println("\n");
                     
                     if ( sample_counter > COUNT_OF_SAMPLES ) break;

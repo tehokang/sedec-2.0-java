@@ -12,50 +12,50 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     public RandomizedLatencyDescriptor(BitReadWriter brw) {
         super(brw);
         
-        range = brw.ReadOnBuffer(16);
-        rate = brw.ReadOnBuffer(8);
-        randomization_end_time_flag = (byte) brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(7);
+        range = brw.readOnBuffer(16);
+        rate = brw.readOnBuffer(8);
+        randomization_end_time_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(7);
         if ( 0 != randomization_end_time_flag ) {
-            randomization_end_time = brw.ReadOnBuffer(40);
+            randomization_end_time = brw.readOnBuffer(40);
         }
     }
 
-    public int GetRange() {
+    public int getRange() {
         return range;
     }
     
-    public int GetRate() {
+    public int getRate() {
         return rate;
     }
     
-    public byte GetRandomizationEndTimeFlag() {
+    public byte getRandomizationEndTimeFlag() {
         return randomization_end_time_flag;
     }
     
-    public long GetRandomizationEndTime() {
+    public long getRandomizationEndTime() {
         return randomization_end_time;
     }
     
-    public void SetRange(int value) {
+    public void setRange(int value) {
         range = value;
     }
     
-    public void SetRate(int value) {
+    public void setRate(int value) {
         rate = value;
     }
     
-    public void SetRandomizationEndTimeFlag(byte value) {
+    public void setRandomizationEndTimeFlag(byte value) {
         randomization_end_time_flag = value;
     }
     
-    public void SetRandomizationEndTime(long value) {
+    public void setRandomizationEndTime(long value) {
         randomization_end_time = value;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t range : 0x%x \n", range));
         Logger.d(String.format("\t rate : 0x%x \n", rate));
@@ -71,16 +71,16 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(range, 16);
-        brw.WriteOnBuffer(rate, 8);
-        brw.WriteOnBuffer(randomization_end_time_flag, 1);
-        brw.WriteOnBuffer(0x0f, 7);
+        brw.writeOnBuffer(range, 16);
+        brw.writeOnBuffer(rate, 8);
+        brw.writeOnBuffer(randomization_end_time_flag, 1);
+        brw.writeOnBuffer(0x0f, 7);
         if ( 0 != randomization_end_time_flag )
         {
-            brw.WriteOnBuffer(randomization_end_time, 40);
+            brw.writeOnBuffer(randomization_end_time, 40);
         }
     }
 

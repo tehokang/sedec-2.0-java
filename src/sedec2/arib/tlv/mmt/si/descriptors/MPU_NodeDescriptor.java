@@ -9,16 +9,16 @@ public class MPU_NodeDescriptor extends Descriptor {
     public MPU_NodeDescriptor(BitReadWriter brw) {
         super(brw);
         
-        node_tag = brw.ReadOnBuffer(16);
+        node_tag = brw.readOnBuffer(16);
     }
     
-    public int GetNodeTag() {
+    public int getNodeTag() {
         return node_tag;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t node_tag : 0x%x \n", node_tag));
     }

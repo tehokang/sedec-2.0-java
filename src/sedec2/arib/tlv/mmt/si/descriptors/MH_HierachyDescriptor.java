@@ -16,30 +16,30 @@ public class MH_HierachyDescriptor extends Descriptor {
     public MH_HierachyDescriptor(BitReadWriter brw) {
         super(brw);
         
-        brw.SkipOnBuffer(1);
+        brw.skipOnBuffer(1);
         
-        temporal_scalability_flag = (byte) brw.ReadOnBuffer(1);
-        spatial_scalability_flag = (byte) brw.ReadOnBuffer(1);
-        quality_scalability_flag = (byte) brw.ReadOnBuffer(1);
-        hierachy_type = (byte) brw.ReadOnBuffer(4);
+        temporal_scalability_flag = (byte) brw.readOnBuffer(1);
+        spatial_scalability_flag = (byte) brw.readOnBuffer(1);
+        quality_scalability_flag = (byte) brw.readOnBuffer(1);
+        hierachy_type = (byte) brw.readOnBuffer(4);
         
-        brw.SkipOnBuffer(2);
+        brw.skipOnBuffer(2);
         
-        hierachy_layer_index = (byte) brw.ReadOnBuffer(6);
-        tref_present_flag = (byte) brw.ReadOnBuffer(1);
+        hierachy_layer_index = (byte) brw.readOnBuffer(6);
+        tref_present_flag = (byte) brw.readOnBuffer(1);
         
-        brw.SkipOnBuffer(1);
+        brw.skipOnBuffer(1);
         
-        hierachy_embedded_layer_index = (byte) brw.ReadOnBuffer(6);
+        hierachy_embedded_layer_index = (byte) brw.readOnBuffer(6);
         
-        brw.SkipOnBuffer(2);
+        brw.skipOnBuffer(2);
         
-        hierachy_channel = (byte) brw.ReadOnBuffer(6);
+        hierachy_channel = (byte) brw.readOnBuffer(6);
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t temporal_scalability_flag : 0x%x \n",  
                 temporal_scalability_flag));

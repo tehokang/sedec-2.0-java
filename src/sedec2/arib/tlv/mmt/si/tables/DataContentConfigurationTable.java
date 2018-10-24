@@ -43,59 +43,59 @@ public class DataContentConfigurationTable extends Table {
         __decode_table_body__();
     }
     
-    public byte GetNumOfContents() {
+    public byte getNumOfContents() {
         return num_of_contents;
     }
     
-    public List<Content> GetContents() {
+    public List<Content> getContents() {
         return contents;
     }
 
     @Override
     protected void __decode_table_body__() {
-        num_of_contents = (byte) ReadOnBuffer(8);
+        num_of_contents = (byte) readOnBuffer(8);
         
         for ( int i=0; i<num_of_contents; i++ ) {
             Content content = new Content();
-            content.content_id = ReadOnBuffer(16);
-            content.content_version = (byte) ReadOnBuffer(8);
-            content.content_size = ReadOnBuffer(32);
-            content.PU_info_flag = (byte) ReadOnBuffer(1);
-            content.content_info_flag = (byte) ReadOnBuffer(1);
-            SkipOnBuffer(6);
+            content.content_id = readOnBuffer(16);
+            content.content_version = (byte) readOnBuffer(8);
+            content.content_size = readOnBuffer(32);
+            content.PU_info_flag = (byte) readOnBuffer(1);
+            content.content_info_flag = (byte) readOnBuffer(1);
+            skipOnBuffer(6);
             
             if ( content.PU_info_flag == 1 ) {
-                content.number_of_PUs = (byte) ReadOnBuffer(8);
+                content.number_of_PUs = (byte) readOnBuffer(8);
                 
                 for ( int j=0; j<content.number_of_PUs; j++ ) {
                     PU pu = new PU();
-                    pu.PU_tag = (byte) ReadOnBuffer(8);
-                    pu.PU_size = ReadOnBuffer(32);
-                    pu.number_of_member_nodes = (byte) ReadOnBuffer(8);
+                    pu.PU_tag = (byte) readOnBuffer(8);
+                    pu.PU_size = readOnBuffer(32);
+                    pu.number_of_member_nodes = (byte) readOnBuffer(8);
                     
                     for ( int k=0; k<pu.number_of_member_nodes; k++ ) {
-                        pu.node_tag[k] = ReadOnBuffer(16);
+                        pu.node_tag[k] = readOnBuffer(16);
                     }
-                    pu.PU_descriptor_loop_length = (byte) ReadOnBuffer(8);
+                    pu.PU_descriptor_loop_length = (byte) readOnBuffer(8);
                     for ( int k=pu.PU_descriptor_loop_length; k>0; ) {
-                        Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                        k-=desc.GetDescriptorLength();
+                        Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                        k-=desc.getDescriptorLength();
                         pu.pu_desctiptors.add(desc);
                     }
                     content.pus.add(pu);
                 }
             } else {
-                content.number_of_nodes = ReadOnBuffer(16);
+                content.number_of_nodes = readOnBuffer(16);
                 for ( int j=0; j<content.number_of_nodes; j++ ) {
-                    content.node_tag[j] = ReadOnBuffer(16);
+                    content.node_tag[j] = readOnBuffer(16);
                 }
             }
             
             if ( content.content_info_flag == 1 ) {
-                content.content_descriptor_loop_length = (byte) ReadOnBuffer(8);
+                content.content_descriptor_loop_length = (byte) readOnBuffer(8);
                 for ( int j=content.content_descriptor_loop_length; j>0; ) {
-                    Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                    j-=desc.GetDescriptorLength();
+                    Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                    j-=desc.getDescriptorLength();
                     content.content_descriptors.add(desc);
                 }
             }
@@ -104,8 +104,8 @@ public class DataContentConfigurationTable extends Table {
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("num_of_contents : 0x%x \n", num_of_contents));
         
@@ -139,7 +139,7 @@ public class DataContentConfigurationTable extends Table {
                             j, pu.PU_descriptor_loop_length));
                     
                     for ( int k=pu.pu_desctiptors.size(); k>0; ) {
-                        pu.pu_desctiptors.get(k).PrintDescriptor();
+                        pu.pu_desctiptors.get(k).print();
                     }
                 }
             } else {
@@ -157,7 +157,7 @@ public class DataContentConfigurationTable extends Table {
                         i, content.content_descriptor_loop_length));
                 
                 for ( int j=content.content_descriptors.size(); j>0; ) {
-                    content.content_descriptors.get(j).PrintDescriptor();
+                    content.content_descriptors.get(j).print();
                 }
             }
         }

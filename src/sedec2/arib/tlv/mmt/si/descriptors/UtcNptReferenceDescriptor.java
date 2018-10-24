@@ -11,15 +11,15 @@ public class UtcNptReferenceDescriptor extends Descriptor {
     public UtcNptReferenceDescriptor(BitReadWriter brw) {
         super(brw);
         
-        UTC_Reference = brw.ReadOnBuffer(64);
-        NPT_Reference = brw.ReadOnBuffer(64);
-        scale = (byte) brw.ReadOnBuffer(2);
-        brw.SkipOnBuffer(6);
+        UTC_Reference = brw.readOnBuffer(64);
+        NPT_Reference = brw.readOnBuffer(64);
+        scale = (byte) brw.readOnBuffer(2);
+        brw.skipOnBuffer(6);
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t UTC_Reference : 0x%x \n", UTC_Reference));
         Logger.d(String.format("\t NPT_Reference : 0x%x \n", NPT_Reference));

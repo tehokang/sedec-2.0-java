@@ -10,16 +10,16 @@ public class MH_TargetRegionDescriptor extends Descriptor {
     public MH_TargetRegionDescriptor(BitReadWriter brw) {
         super(brw);
         
-        region_spec_type = (byte) brw.ReadOnBuffer(8);
+        region_spec_type = (byte) brw.readOnBuffer(8);
         
         if ( region_spec_type == 0x01 ) {
-            prefecture_bitmap = brw.ReadOnBuffer(56);
+            prefecture_bitmap = brw.readOnBuffer(56);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t region_spec_type : 0x%x \n", region_spec_type));
         

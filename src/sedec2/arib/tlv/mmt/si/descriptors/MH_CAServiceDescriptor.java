@@ -12,21 +12,21 @@ public class MH_CAServiceDescriptor extends Descriptor {
     public MH_CAServiceDescriptor(BitReadWriter brw) {
         super(brw);
     
-        CA_system_ID = brw.ReadOnBuffer(16);
-        ca_broadcaster_group_id = (byte) brw.ReadOnBuffer(8);
-        message_control = (byte) brw.ReadOnBuffer(8);
+        CA_system_ID = brw.readOnBuffer(16);
+        ca_broadcaster_group_id = (byte) brw.readOnBuffer(8);
+        message_control = (byte) brw.readOnBuffer(8);
         
         service_id = new int[(descriptor_length-4)/2];
         
         for ( int i=descriptor_length-4; i>0; ) {
-            service_id[i] = brw.ReadOnBuffer(16);
+            service_id[i] = brw.readOnBuffer(16);
             i-=2;
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
         Logger.d(String.format("\t ca_broadcaster_group_id : 0x%x \n", ca_broadcaster_group_id));

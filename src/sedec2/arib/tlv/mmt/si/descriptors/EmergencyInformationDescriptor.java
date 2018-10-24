@@ -22,16 +22,16 @@ public class EmergencyInformationDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             EmergencyInfo emergency = new EmergencyInfo();
-            emergency.service_id = brw.ReadOnBuffer(16);
-            emergency.start_end_flag = (byte) brw.ReadOnBuffer(1);
-            emergency.signal_level = (byte) brw.ReadOnBuffer(1);
-            brw.SkipOnBuffer(6);
-            emergency.area_code_length = (byte) brw.ReadOnBuffer(8);
+            emergency.service_id = brw.readOnBuffer(16);
+            emergency.start_end_flag = (byte) brw.readOnBuffer(1);
+            emergency.signal_level = (byte) brw.readOnBuffer(1);
+            brw.skipOnBuffer(6);
+            emergency.area_code_length = (byte) brw.readOnBuffer(8);
             emergency.area_code = new int[emergency.area_code_length];
             
             for ( int j=0; j<emergency.area_code_length; j++ ) {
-                emergency.area_code[j] = brw.ReadOnBuffer(12);
-                brw.SkipOnBuffer(4);
+                emergency.area_code[j] = brw.readOnBuffer(12);
+                brw.skipOnBuffer(4);
             }
             
             emergency_infos.add(emergency);
@@ -40,8 +40,8 @@ public class EmergencyInformationDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<emergency_infos.size(); i++ ) {
             EmergencyInfo emergency = emergency_infos.get(i);

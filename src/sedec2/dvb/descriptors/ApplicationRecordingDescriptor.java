@@ -29,79 +29,79 @@ public class ApplicationRecordingDescriptor extends Descriptor {
     public ApplicationRecordingDescriptor(BitReadWriter brw) {
         super(brw);
         
-        scheduled_recording_flag = brw.ReadOnBuffer(1);
-        trick_mode_aware_flag = brw.ReadOnBuffer(1);
-        time_shift_flag = brw.ReadOnBuffer(1);
-        dynamic_flag = brw.ReadOnBuffer(1);
-        av_synced_flag = brw.ReadOnBuffer(1);
-        initiating_replay_flag = brw.ReadOnBuffer(1);
-        brw.SkipOnBuffer(2);;
-        label_count = (byte) brw.ReadOnBuffer(8);
+        scheduled_recording_flag = brw.readOnBuffer(1);
+        trick_mode_aware_flag = brw.readOnBuffer(1);
+        time_shift_flag = brw.readOnBuffer(1);
+        dynamic_flag = brw.readOnBuffer(1);
+        av_synced_flag = brw.readOnBuffer(1);
+        initiating_replay_flag = brw.readOnBuffer(1);
+        brw.skipOnBuffer(2);;
+        label_count = (byte) brw.readOnBuffer(8);
         
         for ( int i=0; i<label_count; i++ ) {
-            label_length[i] = brw.ReadOnBuffer(8);
+            label_length[i] = brw.readOnBuffer(8);
             for ( int j=0; j<label_length[i]; j++) {
-                label_char[i][j] = (byte) brw.ReadOnBuffer(8);
+                label_char[i][j] = (byte) brw.readOnBuffer(8);
             }
-            storage_properties[i] = (byte) brw.ReadOnBuffer(2);
-            brw.SkipOnBuffer(6);;
+            storage_properties[i] = (byte) brw.readOnBuffer(2);
+            brw.skipOnBuffer(6);;
         }
         
-        component_tag_list_length = (byte) brw.ReadOnBuffer(8);
+        component_tag_list_length = (byte) brw.readOnBuffer(8);
         for ( int i=0; i<component_tag_list_length; i++ ) {
-            component_tag[i] = (byte) brw.ReadOnBuffer(8);
+            component_tag[i] = (byte) brw.readOnBuffer(8);
         }
-        private_length = (byte) brw.ReadOnBuffer(8);
+        private_length = (byte) brw.readOnBuffer(8);
         for ( int i=0; i<private_length; i++) {
-            __private__[i] = (byte)brw.ReadOnBuffer(8);
+            __private__[i] = (byte)brw.readOnBuffer(8);
         }
     }
     
-    public int GetScheduledRecordingFlag() {
+    public int getScheduledRecordingFlag() {
         return scheduled_recording_flag;
     }
     
-    public int GetTrickModeAwareFlag() {
+    public int getTrickModeAwareFlag() {
         return trick_mode_aware_flag;
     }
     
-    public int GetTimeShiftFlag() {
+    public int getTimeShiftFlag() {
         return time_shift_flag;
     }
     
-    public int GetDynamicFlag() {
+    public int getDynamicFlag() {
         return dynamic_flag;
     }
 
-    public int GetAVSyncedFlag() {
+    public int getAVSyncedFlag() {
         return av_synced_flag;
     }
     
-    public int GetInitiatingReplayFlag() {
+    public int getInitiatingReplayFlag() {
         return initiating_replay_flag;
     }
     
-    public void SetScheduledRecordingFlag(int value) {
+    public void setScheduledRecordingFlag(int value) {
         scheduled_recording_flag = value;
     }
     
-    public void SetTrickModeAwareFlag(int value) {
+    public void setTrickModeAwareFlag(int value) {
         trick_mode_aware_flag = value;
     }
     
-    public void SetTimeShiftFlag(int value) {
+    public void setTimeShiftFlag(int value) {
         time_shift_flag = value;
     }
     
-    public void SetDynamicFlag(int value) {
+    public void setDynamicFlag(int value) {
         dynamic_flag = value;
     }
     
-    public void SetAVSyncedFlag(int value) {
+    public void setAVSyncedFlag(int value) {
         av_synced_flag = value;
     }
     
-    public void SetInitiatingReplayFlag(int value) {
+    public void setInitiatingReplayFlag(int value) {
         initiating_replay_flag = value;
     }
     
@@ -117,40 +117,40 @@ public class ApplicationRecordingDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
-        brw.WriteOnBuffer(scheduled_recording_flag, 1);
-        brw.WriteOnBuffer(trick_mode_aware_flag, 1);
-        brw.WriteOnBuffer(time_shift_flag, 1);
-        brw.WriteOnBuffer(dynamic_flag, 1);
-        brw.WriteOnBuffer(av_synced_flag, 1);
-        brw.WriteOnBuffer(initiating_replay_flag, 1);
-        brw.WriteOnBuffer(0x0, 2);
-        brw.WriteOnBuffer(label_count, 8);
+        brw.writeOnBuffer(scheduled_recording_flag, 1);
+        brw.writeOnBuffer(trick_mode_aware_flag, 1);
+        brw.writeOnBuffer(time_shift_flag, 1);
+        brw.writeOnBuffer(dynamic_flag, 1);
+        brw.writeOnBuffer(av_synced_flag, 1);
+        brw.writeOnBuffer(initiating_replay_flag, 1);
+        brw.writeOnBuffer(0x0, 2);
+        brw.writeOnBuffer(label_count, 8);
 
         for(int i=0; i<label_count;i++) {
-            brw.WriteOnBuffer(label_length[i], 8);
+            brw.writeOnBuffer(label_length[i], 8);
             for(int j=0;j<label_length[i];j++) {
-                brw.WriteOnBuffer(label_char[i][j], 8);
+                brw.writeOnBuffer(label_char[i][j], 8);
             }
-            brw.WriteOnBuffer(storage_properties[i], 2);
-            brw.WriteOnBuffer(0x0, 6);
+            brw.writeOnBuffer(storage_properties[i], 2);
+            brw.writeOnBuffer(0x0, 6);
         }
-        brw.WriteOnBuffer(component_tag_list_length, 8);
+        brw.writeOnBuffer(component_tag_list_length, 8);
         for(int i=0; i<component_tag_list_length;i++) {
-            brw.WriteOnBuffer(component_tag[i], 8);
+            brw.writeOnBuffer(component_tag[i], 8);
         }
-        brw.WriteOnBuffer(private_length, 8);
+        brw.writeOnBuffer(private_length, 8);
         for(int i=0;i<private_length;i++) {
-            brw.WriteOnBuffer(__private__[i], 8);
+            brw.writeOnBuffer(__private__[i], 8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
+    public void print() {
        
-        super._PrintDescriptorHeader_();
+        super._print_();
 
         Logger.d(String.format("\t scheduled_recording_flag : 0x%x \n", 
                 scheduled_recording_flag));

@@ -23,56 +23,56 @@ public class EventMessageTable extends Table {
         __decode_table_body__();
     }
     
-    public int GetDataEventId() {
+    public int getDataEventId() {
         return data_event_id;
     }
     
-    public int GetEventMsgGroupId() {
+    public int getEventMsgGroupId() {
         return event_msg_group_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
     @Override
     protected void __decode_table_body__() {
-        data_event_id = (byte) ReadOnBuffer(4);
-        event_msg_group_id = (byte) ReadOnBuffer(12);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
+        data_event_id = (byte) readOnBuffer(4);
+        event_msg_group_id = (byte) readOnBuffer(12);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
         
         for ( int i=(section_length-5-4); i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("data_event_id : 0x%x \n", data_event_id));
         Logger.d(String.format("event_msg_group_id : 0x%x \n", event_msg_group_id));
@@ -82,7 +82,7 @@ public class EventMessageTable extends Table {
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
         
         for ( int i=0; i<descriptors.size(); i++ ) {
-            descriptors.get(i).PrintDescriptor();
+            descriptors.get(i).print();
         }
     }
 }

@@ -22,13 +22,13 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
         
         for ( int i=descriptor_length; i>0; ) {
             LocalTime localtime = new LocalTime();
-            localtime.country_code = brw.ReadOnBuffer(24);
-            localtime.country_region_id = (byte) brw.ReadOnBuffer(6);
-            brw.SkipOnBuffer(1);
-            localtime.local_time_offset_polarity = (byte) brw.ReadOnBuffer(1);
-            localtime.local_time_offset = brw.ReadOnBuffer(16);
-            localtime.time_of_change = brw.ReadOnBuffer(40);
-            localtime.next_time_offset = brw.ReadOnBuffer(16);
+            localtime.country_code = brw.readOnBuffer(24);
+            localtime.country_region_id = (byte) brw.readOnBuffer(6);
+            brw.skipOnBuffer(1);
+            localtime.local_time_offset_polarity = (byte) brw.readOnBuffer(1);
+            localtime.local_time_offset = brw.readOnBuffer(16);
+            localtime.time_of_change = brw.readOnBuffer(40);
+            localtime.next_time_offset = brw.readOnBuffer(16);
             i-=13;
             
             localtimes.add(localtime);
@@ -36,8 +36,8 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         for ( int i=0; i<localtimes.size(); i++ ) {
             LocalTime localtime = localtimes.get(i);

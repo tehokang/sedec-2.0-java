@@ -49,51 +49,51 @@ public class SoftwareDownloadTriggerTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        table_id_ext = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        transport_stream_id = ReadOnBuffer(16);
-        original_network_id = ReadOnBuffer(16);
-        service_id = ReadOnBuffer(16);
-        num_of_contents = (byte) ReadOnBuffer(8);
+        table_id_ext = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        transport_stream_id = readOnBuffer(16);
+        original_network_id = readOnBuffer(16);
+        service_id = readOnBuffer(16);
+        num_of_contents = (byte) readOnBuffer(8);
         
         for ( int i=0; i<num_of_contents; i++ ) {
             Content content = new Content();
-            content.group = (byte) ReadOnBuffer(4);
-            content.target_version = ReadOnBuffer(12);
-            content.new_version = ReadOnBuffer(12);
-            content.download_level = (byte) ReadOnBuffer(2);
-            content.version_indicator = (byte) ReadOnBuffer(2);
-            content.content_description_length = ReadOnBuffer(12);
-            SkipOnBuffer(4);
-            content.schedule_description_length = ReadOnBuffer(12);
-            content.schedule_time_shift_information = (byte) ReadOnBuffer(4);
+            content.group = (byte) readOnBuffer(4);
+            content.target_version = readOnBuffer(12);
+            content.new_version = readOnBuffer(12);
+            content.download_level = (byte) readOnBuffer(2);
+            content.version_indicator = (byte) readOnBuffer(2);
+            content.content_description_length = readOnBuffer(12);
+            skipOnBuffer(4);
+            content.schedule_description_length = readOnBuffer(12);
+            content.schedule_time_shift_information = (byte) readOnBuffer(4);
             
             for ( int j=content.schedule_description_length; j>0; ) {
                 Schedule schedule = new Schedule();
-                schedule.start_time = ReadOnBuffer(40);
-                schedule.duration = ReadOnBuffer(24);
+                schedule.start_time = readOnBuffer(40);
+                schedule.duration = readOnBuffer(24);
                 content.schedules.add(schedule);
                 j-=8;
             }
             
             for ( int k=content.content_description_length; k>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                k-=desc.GetDescriptorLength();
+                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                k-=desc.getDescriptorLength();
                 content.descriptors.add(desc);
             }
             contents.add(content);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("table_id_ext : 0x%x \n", table_id_ext));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -138,7 +138,7 @@ public class SoftwareDownloadTriggerTable extends Table {
             }
             
             for ( int j=0; j<content.descriptors.size(); j++ ) {
-                content.descriptors.get(j).PrintDescriptor();
+                content.descriptors.get(j).print();
             }
         }
         

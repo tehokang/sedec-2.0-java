@@ -20,37 +20,37 @@ public class MH_AudioComponentDescriptor extends Descriptor {
     public MH_AudioComponentDescriptor(BitReadWriter brw) {
         super(brw);
         
-        brw.SkipOnBuffer(4);
-        stream_content = (byte) brw.ReadOnBuffer(4);
-        component_type = (byte) brw.ReadOnBuffer(8);
-        component_tag = (byte) brw.ReadOnBuffer(16);
-        stream_type = (byte) brw.ReadOnBuffer(8);
-        simulcast_group_tag = (byte) brw.ReadOnBuffer(8);
-        ES_multi_lingual_flag = (byte) brw.ReadOnBuffer(1);
-        main_component_tag = (byte) brw.ReadOnBuffer(1);
-        quality_indicator = (byte) brw.ReadOnBuffer(2);
-        sampling_rate = (byte) brw.ReadOnBuffer(3);
-        brw.SkipOnBuffer(1);
+        brw.skipOnBuffer(4);
+        stream_content = (byte) brw.readOnBuffer(4);
+        component_type = (byte) brw.readOnBuffer(8);
+        component_tag = (byte) brw.readOnBuffer(16);
+        stream_type = (byte) brw.readOnBuffer(8);
+        simulcast_group_tag = (byte) brw.readOnBuffer(8);
+        ES_multi_lingual_flag = (byte) brw.readOnBuffer(1);
+        main_component_tag = (byte) brw.readOnBuffer(1);
+        quality_indicator = (byte) brw.readOnBuffer(2);
+        sampling_rate = (byte) brw.readOnBuffer(3);
+        brw.skipOnBuffer(1);
         
-        ISO_639_language_code[0] = (byte) brw.ReadOnBuffer(8);
-        ISO_639_language_code[1] = (byte) brw.ReadOnBuffer(8);
-        ISO_639_language_code[2] = (byte) brw.ReadOnBuffer(8);
+        ISO_639_language_code[0] = (byte) brw.readOnBuffer(8);
+        ISO_639_language_code[1] = (byte) brw.readOnBuffer(8);
+        ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
         
         if ( ES_multi_lingual_flag == 1 ) {
-            ISO_639_language_code_2[0] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code_2[1] = (byte) brw.ReadOnBuffer(8);
-            ISO_639_language_code_2[2] = (byte) brw.ReadOnBuffer(8);
+            ISO_639_language_code_2[0] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code_2[1] = (byte) brw.readOnBuffer(8);
+            ISO_639_language_code_2[2] = (byte) brw.readOnBuffer(8);
         }
         
         text_char = new byte[(descriptor_length - 10 - (ES_multi_lingual_flag==1? 3 : 0))];
         for ( int i = 0; i<text_char.length; i++ ) {
-            text_char[i] = (byte) brw.ReadOnBuffer(8);
+            text_char[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t stream_content : 0x%x \n", stream_content));
         Logger.d(String.format("\t component_type : 0x%x \n", component_type));

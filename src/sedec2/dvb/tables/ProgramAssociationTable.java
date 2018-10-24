@@ -39,27 +39,27 @@ public class ProgramAssociationTable extends Table {
     
     @Override
     protected void __decode_table_body__() {
-        transport_stream_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
+        transport_stream_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
 
         for ( int i=(section_length-9); i>0; ) {
-            int program_number = ReadOnBuffer(16);
-            SkipOnBuffer(3);
-            int pid = ReadOnBuffer(13);
+            int program_number = readOnBuffer(16);
+            skipOnBuffer(3);
+            int pid = readOnBuffer(13);
             Program program = new Program(program_number, pid);
             programs.add(program);
             i-=4;
         }
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("transport_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));

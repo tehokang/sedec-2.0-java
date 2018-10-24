@@ -30,90 +30,90 @@ public class MH_ServiceDescriptionTable extends Table {
         __decode_table_body__();
     }
 
-    public int GetTlvStreamId() {
+    public int getTlvStreamId() {
         return tlv_stream_id;
     }
     
-    public byte GetVersionNumber() {
+    public byte getVersionNumber() {
         return version_number;
     }
     
-    public byte GetCurrentNextIndicator() {
+    public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
     
-    public byte GetSectionNumber() {
+    public byte getSectionNumber() {
         return section_number;
     }
     
-    public byte GetLastSectionNumber() {
+    public byte getLastSectionNumber() {
         return last_section_number;
     }
     
-    public int GetOriginalNetworkId() {
+    public int getOriginalNetworkId() {
         return original_network_id;
     }
     
-    public int GetServiceId() {
+    public int getServiceId() {
         return service_id;
     }
     
-    public byte GetEITUserDefinedFlags() {
+    public byte getEITUserDefinedFlags() {
         return EIT_user_defined_flags;
     }
     
-    public byte GetEITScheduleFlag() {
+    public byte getEITScheduleFlag() {
         return EIT_schedule_flag;
     }
     
-    public byte GetEITPresentFollowingFlag() {
+    public byte getEITPresentFollowingFlag() {
         return EIT_present_following_flag;
     }
     
-    public byte GetRunningStatus() {
+    public byte getRunningStatus() {
         return running_status;
     }
     
-    public byte GetFreeCAMode() {
+    public byte getFreeCAMode() {
         return free_CA_mode;
     }
     
-    public List<Descriptor> GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return descriptors;
     }
     
     @Override
     protected void __decode_table_body__() {
-        tlv_stream_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        original_network_id = ReadOnBuffer(16);
-        SkipOnBuffer(8);
+        tlv_stream_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        original_network_id = readOnBuffer(16);
+        skipOnBuffer(8);
         
-        service_id = ReadOnBuffer(16);
-        SkipOnBuffer(3);
-        EIT_user_defined_flags = (byte) ReadOnBuffer(3);
-        EIT_schedule_flag = (byte) ReadOnBuffer(1);
-        EIT_present_following_flag = (byte) ReadOnBuffer(1);
-        running_status = (byte) ReadOnBuffer(3);
-        free_CA_mode = (byte) ReadOnBuffer(1);
+        service_id = readOnBuffer(16);
+        skipOnBuffer(3);
+        EIT_user_defined_flags = (byte) readOnBuffer(3);
+        EIT_schedule_flag = (byte) readOnBuffer(1);
+        EIT_present_following_flag = (byte) readOnBuffer(1);
+        running_status = (byte) readOnBuffer(3);
+        free_CA_mode = (byte) readOnBuffer(1);
         
-        descriptors_loop_length = ReadOnBuffer(12);
+        descriptors_loop_length = readOnBuffer(12);
         for ( int i=descriptors_loop_length;i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(this);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("tlv_stream_id : 0x%x \n", tlv_stream_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -139,7 +139,7 @@ public class MH_ServiceDescriptionTable extends Table {
         
         for ( int i=0; i<descriptors.size(); i++ ) {
             Descriptor desc = descriptors.get(i);
-            desc.PrintDescriptor();
+            desc.print();
         }
         
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

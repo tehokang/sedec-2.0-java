@@ -39,41 +39,41 @@ public class EventRelationTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        event_relation_id = ReadOnBuffer(16);
-        SkipOnBuffer(2);
-        version_number = (byte) ReadOnBuffer(5);
-        current_next_indicator = (byte) ReadOnBuffer(1);
-        section_number = (byte) ReadOnBuffer(8);
-        last_section_number = (byte) ReadOnBuffer(8);
-        information_provider_id = ReadOnBuffer(16);
-        relation_type = (byte) ReadOnBuffer(4);
-        SkipOnBuffer(4);
+        event_relation_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        information_provider_id = readOnBuffer(16);
+        relation_type = (byte) readOnBuffer(4);
+        skipOnBuffer(4);
         
         for ( int i=(section_length - 8 - 4); i>0; ) {
             EventRelation event_relation = new EventRelation();
-            event_relation.node_id = ReadOnBuffer(16);
-            event_relation.collection_mode = (byte) ReadOnBuffer(4);
-            SkipOnBuffer(4);
-            event_relation.parent_node_id = ReadOnBuffer(16);
-            event_relation.reference_number = (byte) ReadOnBuffer(8);
-            SkipOnBuffer(4);
-            event_relation.descriptors_loop_length = ReadOnBuffer(12);
+            event_relation.node_id = readOnBuffer(16);
+            event_relation.collection_mode = (byte) readOnBuffer(4);
+            skipOnBuffer(4);
+            event_relation.parent_node_id = readOnBuffer(16);
+            event_relation.reference_number = (byte) readOnBuffer(8);
+            skipOnBuffer(4);
+            event_relation.descriptors_loop_length = readOnBuffer(12);
             
             for ( int j=event_relation.descriptors_loop_length; j>0; ) {
                 Descriptor desc = 
-                        (Descriptor) DescriptorFactory.CreateDescriptor(this);
-                j-=desc.GetDescriptorLength();
+                        (Descriptor) DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
                 event_relation.descriptors.add(desc);
             }
             event_relations.add(event_relation);
         }
         
-        checksum_CRC32 = ReadOnBuffer(32);
+        checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
-    public void PrintTable() {
-        super.PrintTable();
+    public void print() {
+        super.print();
         
         Logger.d(String.format("event_relation_id : 0x%x \n", event_relation_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
@@ -100,7 +100,7 @@ public class EventRelationTable extends Table {
                     i, event_relation.descriptors_loop_length));
             
             for ( int j=0; i<event_relation.descriptors.size(); j++ ) {
-                event_relation.descriptors.get(j).PrintDescriptor();
+                event_relation.descriptors.get(j).print();
             }
         }
         

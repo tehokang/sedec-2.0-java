@@ -14,26 +14,26 @@ public class MH_ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
         super(brw);
         
         if ( 0 < descriptor_length ) {
-            permission_bitmap_count = (byte) brw.ReadOnBuffer(8);
+            permission_bitmap_count = (byte) brw.readOnBuffer(8);
             
             for ( int i=0; i<permission_bitmap_count; i++ ) {
-                permission_bitmap[i] = brw.ReadOnBuffer(16);
+                permission_bitmap[i] = brw.readOnBuffer(16);
             }
             
-            managed_URL_count = (byte) brw.ReadOnBuffer(8);
+            managed_URL_count = (byte) brw.readOnBuffer(8);
             for ( int i=0;i<managed_URL_count; i++ ) {
-                managed_URL_length[i] = (byte) brw.ReadOnBuffer(8);
+                managed_URL_length[i] = (byte) brw.readOnBuffer(8);
                 
                 for ( int j=0; i<managed_URL_length[i]; j++ ) {
-                    managed_URL_byte[i][j] = (byte) brw.ReadOnBuffer(8);
+                    managed_URL_byte[i][j] = (byte) brw.readOnBuffer(8);
                 }
             }
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         if ( 0 < descriptor_length ) {
             Logger.d(String.format("\t permission_bitmap_count : 0x%x \n", permission_bitmap_count));
@@ -62,22 +62,22 @@ public class MH_ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
     }
 
     @Override
-    public void WriteDescriptor(BitReadWriter brw) {
-        super.WriteDescriptor(brw);
+    public void writeDescriptor(BitReadWriter brw) {
+        super.writeDescriptor(brw);
         
         if ( 0 < descriptor_length ) {
-            brw.WriteOnBuffer(permission_bitmap_count, 8);
+            brw.writeOnBuffer(permission_bitmap_count, 8);
             
             for ( int i=0; i<permission_bitmap_count; i++ ) {
-                brw.WriteOnBuffer(permission_bitmap[i], 16);
+                brw.writeOnBuffer(permission_bitmap[i], 16);
             }
             
-            brw.WriteOnBuffer(managed_URL_count, 8);
+            brw.writeOnBuffer(managed_URL_count, 8);
             for ( int i=0;i<managed_URL_count; i++ ) {
-                brw.WriteOnBuffer(managed_URL_length[i], 8);
+                brw.writeOnBuffer(managed_URL_length[i], 8);
                 
                 for ( int j=0; i<managed_URL_length[i]; j++ ) {
-                    brw.WriteOnBuffer(managed_URL_byte[i][j], 8);
+                    brw.writeOnBuffer(managed_URL_byte[i][j], 8);
                 }
             }
         }

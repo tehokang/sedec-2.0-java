@@ -17,35 +17,35 @@ public class EventMessageDescriptor extends Descriptor {
     public EventMessageDescriptor(BitReadWriter brw) {
         super();
         
-        descriptor_tag = brw.ReadOnBuffer(16);
-        descriptor_length = brw.ReadOnBuffer(16);
+        descriptor_tag = brw.readOnBuffer(16);
+        descriptor_length = brw.readOnBuffer(16);
         
-        event_msg_group_id = brw.ReadOnBuffer(12);
-        brw.SkipOnBuffer(4);
-        time_mode = (byte) brw.ReadOnBuffer(8);
+        event_msg_group_id = brw.readOnBuffer(12);
+        brw.skipOnBuffer(4);
+        time_mode = (byte) brw.readOnBuffer(8);
         
         if ( time_mode == 0 ) {
-            brw.SkipOnBuffer(64);
+            brw.skipOnBuffer(64);
         } else if ( time_mode == 0x01 || time_mode == 0x05 ) {
-            event_msg_UTC = brw.ReadOnBuffer(64);
+            event_msg_UTC = brw.readOnBuffer(64);
         } else if ( time_mode == 0x02 ) {
-            event_msg_NPT = brw.ReadOnBuffer(64);
+            event_msg_NPT = brw.readOnBuffer(64);
         } else if ( time_mode == 0x03 ) {
-            event_msg_relativeTime = brw.ReadOnBuffer(64);
+            event_msg_relativeTime = brw.readOnBuffer(64);
         }
         
-        event_msg_type = (byte) brw.ReadOnBuffer(8);
-        event_msg_id = brw.ReadOnBuffer(16);
+        event_msg_type = (byte) brw.readOnBuffer(8);
+        event_msg_id = brw.readOnBuffer(16);
         
         private_data_byte = new byte[descriptor_length - 3 - 8 - 1 - 2];
         for ( int i=0; i<private_data_byte.length; i++ ) {
-            private_data_byte[i] = (byte) brw.ReadOnBuffer(8);
+            private_data_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t event_msg_group_id : 0x%x \n", event_msg_group_id));
         Logger.d(String.format("\t time_mode : 0x0%x \n", time_mode));
@@ -56,11 +56,11 @@ public class EventMessageDescriptor extends Descriptor {
         Logger.d(String.format("\t event_msg_id : 0x%x \n", event_msg_id));
         Logger.d(String.format("\t private_data_byte : \n"));
         
-        BinaryLogger.Print(private_data_byte);
+        BinaryLogger.print(private_data_byte);
     }
 
     @Override
-    public int GetDescriptorLength() {
+    public int getDescriptorLength() {
         updateDescriptorLength();
         return descriptor_length + 4;
     }

@@ -18,26 +18,26 @@ public class Application {
     private int m_application_length;
     
     public Application(BitReadWriter brw) {
-        organization_id = brw.ReadOnBuffer(16);
-        application_id = brw.ReadOnBuffer(32);
+        organization_id = brw.readOnBuffer(16);
+        application_id = brw.readOnBuffer(32);
         
-        application_control_code = brw.ReadOnBuffer(8);
-        brw.SkipOnBuffer(4);
-        application_descriptors_loop_length = brw.ReadOnBuffer(12);
+        application_control_code = brw.readOnBuffer(8);
+        brw.skipOnBuffer(4);
+        application_descriptors_loop_length = brw.readOnBuffer(12);
         
         for ( int i=application_descriptors_loop_length; i>0 ;) {
-            Descriptor desc = (Descriptor) DescriptorFactory.CreateDescriptor(brw);
-            i-=desc.GetDescriptorLength();
+            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(brw);
+            i-=desc.getDescriptorLength();
             application_descriptors.add(desc);
         }
     }
     
-    public int GetApplicationLength() {
+    public int getApplicationLength() {
         updateDescriptorLength();
         return m_application_length;
     }
     
-    public void PrintApplication() {
+    public void printApplication() {
         Logger.d(String.format("\t organization_id : 0x%x \n", organization_id));
         Logger.d(String.format("\t application_id : 0x%x \n", application_id));
         Logger.d(String.format("\t application_control_code : 0x%x \n", 
@@ -46,39 +46,39 @@ public class Application {
                 application_descriptors_loop_length));
 
         for ( int i=0; i<application_descriptors.size(); i++ ) {
-            application_descriptors.get(i).PrintDescriptor();
+            application_descriptors.get(i).print();
         }
     }
     
-    public int GetOrganizationId() {
+    public int getOrganizationId() {
         return organization_id;
     }
     
-    public void SetOrganizationId(int org_id) {
+    public void setOrganizationId(int org_id) {
         organization_id = org_id;
     }
     
-    public int GetApplicationId() {
+    public int getApplicationId() {
         return application_id;
     }
     
-    public void SetApplicationId(int app_id) {
+    public void setApplicationId(int app_id) {
         application_id = app_id;
     }
     
-    public int GetApplicationControlCode() {
+    public int getApplicationControlCode() {
         return application_control_code;
     }
     
-    public void SetApplicationControlCode(int control_code) {
+    public void setApplicationControlCode(int control_code) {
         application_control_code = control_code;
     }
     
-    public List<Descriptor>GetDescriptors() {
+    public List<Descriptor> getDescriptors() {
         return application_descriptors;
     }
     
-    public void SetDescriptors(List<Descriptor>descriptors) {
+    public void setDescriptors(List<Descriptor>descriptors) {
         application_descriptors.clear();
         
         for ( int i=0; i<descriptors.size(); i++ ) {
@@ -86,19 +86,19 @@ public class Application {
         }
     }
     
-    public int GetApplicationDescriptorLength() {
+    public int getApplicationDescriptorLength() {
         return application_descriptors_loop_length;
     }
     
-    public void WriteApplication(BitReadWriter brw) {
-        brw.WriteOnBuffer(organization_id, 32);
-        brw.WriteOnBuffer(application_id, 16);
-        brw.WriteOnBuffer(application_control_code, 8);
-        brw.WriteOnBuffer(0x0f, 4);
-        brw.WriteOnBuffer(application_descriptors_loop_length, 12);
+    public void writeApplication(BitReadWriter brw) {
+        brw.writeOnBuffer(organization_id, 32);
+        brw.writeOnBuffer(application_id, 16);
+        brw.writeOnBuffer(application_control_code, 8);
+        brw.writeOnBuffer(0x0f, 4);
+        brw.writeOnBuffer(application_descriptors_loop_length, 12);
 
         for ( int i=0; i<application_descriptors.size(); i++ ) {
-            application_descriptors.get(i).WriteDescriptor(brw);
+            application_descriptors.get(i).writeDescriptor(brw);
         }
     }
     
@@ -106,7 +106,7 @@ public class Application {
         application_descriptors_loop_length = 0;
         for ( int i=0; i<application_descriptors.size(); i++ ) {
             Descriptor desc = application_descriptors.get(i);
-            application_descriptors_loop_length+=desc.GetDescriptorLength();
+            application_descriptors_loop_length+=desc.getDescriptorLength();
         }
         m_application_length = (9 + application_descriptors_loop_length);
     }

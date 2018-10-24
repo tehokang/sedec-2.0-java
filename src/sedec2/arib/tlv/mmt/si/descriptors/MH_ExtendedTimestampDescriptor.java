@@ -28,35 +28,35 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
     public MH_ExtendedTimestampDescriptor(BitReadWriter brw) {
         super(brw);
         
-        brw.SkipOnBuffer(5);
-        pts_offset_type = (byte) brw.ReadOnBuffer(2);
-        timescale_flag = (byte) brw.ReadOnBuffer(1);
+        brw.skipOnBuffer(5);
+        pts_offset_type = (byte) brw.readOnBuffer(2);
+        timescale_flag = (byte) brw.readOnBuffer(1);
         
         if ( timescale_flag == 1 ) {
-            timescale = brw.ReadOnBuffer(32);
+            timescale = brw.readOnBuffer(32);
         }
         
         if ( pts_offset_type == 1 ) {
-            default_pts_offset = brw.ReadOnBuffer(16);
+            default_pts_offset = brw.readOnBuffer(16);
         }
         
         for ( int i=(descriptor_length-1-
                 (timescale_flag==1 ? 4:0)-
                 (pts_offset_type==1 ? 2:0)) ; i>0; ) {
             Timestamp timestamp = new Timestamp();
-            timestamp.mpu_sequence_number = brw.ReadOnBuffer(32);
-            timestamp.mpu_decoding_time_offset = brw.ReadOnBuffer(16);
-            timestamp.num_of_au = (byte) brw.ReadOnBuffer(8);
+            timestamp.mpu_sequence_number = brw.readOnBuffer(32);
+            timestamp.mpu_decoding_time_offset = brw.readOnBuffer(16);
+            timestamp.num_of_au = (byte) brw.readOnBuffer(8);
             
             i-=7;
             
             for ( int j=0; j<timestamp.num_of_au; j++ ) {
                 AccessUnit access_unit = new AccessUnit();
-                access_unit.dts_pts_offset = brw.ReadOnBuffer(16);
+                access_unit.dts_pts_offset = brw.readOnBuffer(16);
                 i-=2;
                 
                 if ( pts_offset_type == 2) {
-                    access_unit.pts_offset = brw.ReadOnBuffer(16);
+                    access_unit.pts_offset = brw.readOnBuffer(16);
                     i-=2;
                 }
                 timestamp.access_units.add(access_unit);
@@ -66,8 +66,8 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t pts_offset_type : 0x%x \n", pts_offset_type));
         Logger.d(String.format("\t timescale_flag : 0x%x \n", timescale_flag));

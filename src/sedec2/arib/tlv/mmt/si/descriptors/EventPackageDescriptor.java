@@ -10,25 +10,25 @@ public class EventPackageDescriptor extends Descriptor {
     public EventPackageDescriptor(BitReadWriter brw) {
         super(brw);
         
-        MMT_package_id_length = (byte) brw.ReadOnBuffer(8);
+        MMT_package_id_length = (byte) brw.readOnBuffer(8);
         MMT_package_id_byte = new byte[MMT_package_id_length];
         
         for ( int i=0; i<MMT_package_id_length; i++ ) {
-            MMT_package_id_byte[i] = (byte) brw.ReadOnBuffer(8);
+            MMT_package_id_byte[i] = (byte) brw.readOnBuffer(8);
         }
     }
     
-    public byte GetMMTPackageIdLength() {
+    public byte getMMTPackageIdLength() {
         return MMT_package_id_length;
     }
     
-    public byte[] GetMMTPackageIdByte() {
+    public byte[] getMMTPackageIdByte() {
         return MMT_package_id_byte;
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t MMT_package_id_length : 0x%x \n", MMT_package_id_length));
         Logger.d(String.format("\t MMT_package_id_byte : %s \n", new String(MMT_package_id_byte)));

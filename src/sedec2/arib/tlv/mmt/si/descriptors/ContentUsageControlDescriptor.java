@@ -14,26 +14,26 @@ public class ContentUsageControlDescriptor extends Descriptor {
     public ContentUsageControlDescriptor(BitReadWriter brw) {
         super(brw);
         
-        remote_view_mode = (byte) brw.ReadOnBuffer(1);
-        copy_restriction_mode = (byte) brw.ReadOnBuffer(1);
-        image_constraint_token = (byte) brw.ReadOnBuffer(1);
+        remote_view_mode = (byte) brw.readOnBuffer(1);
+        copy_restriction_mode = (byte) brw.readOnBuffer(1);
+        image_constraint_token = (byte) brw.readOnBuffer(1);
         
-        brw.SkipOnBuffer(5);
-        brw.SkipOnBuffer(3);
+        brw.skipOnBuffer(5);
+        brw.skipOnBuffer(3);
         
-        retention_mode = (byte) brw.ReadOnBuffer(1);
-        retention_state = (byte) brw.ReadOnBuffer(3);
-        encryption_mode = (byte) brw.ReadOnBuffer(1);
+        retention_mode = (byte) brw.readOnBuffer(1);
+        retention_state = (byte) brw.readOnBuffer(3);
+        encryption_mode = (byte) brw.readOnBuffer(1);
         
         for ( int i=descriptor_length-2; i>0; ) {
-            brw.SkipOnBuffer(8);
+            brw.skipOnBuffer(8);
             i-=1;
         }
     }
     
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t remote_view_mode : 0x%x \n", remote_view_mode));
         Logger.d(String.format("\t copy_restriction_mode : 0x%x \n", copy_restriction_mode));

@@ -12,19 +12,19 @@ public class CAServiceDescriptor extends Descriptor {
     public CAServiceDescriptor(BitReadWriter brw) {
         super(brw);
         
-        CA_system_id = brw.ReadOnBuffer(16);
-        ca_broadcaster_group_id = (byte) brw.ReadOnBuffer(8);
-        message_control = (byte) brw.ReadOnBuffer(8);
+        CA_system_id = brw.readOnBuffer(16);
+        ca_broadcaster_group_id = (byte) brw.readOnBuffer(8);
+        message_control = (byte) brw.readOnBuffer(8);
         
         service_id = new int[(descriptor_length-4)/2];
         for ( int i=0; i<service_id.length; i++ ) {
-            service_id[i] = brw.ReadOnBuffer(16);
+            service_id[i] = brw.readOnBuffer(16);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t CA_system_id : 0x%x \n", CA_system_id));
         Logger.d(String.format("\t ca_broadcaster_group_id : 0x%x \n",  ca_broadcaster_group_id));

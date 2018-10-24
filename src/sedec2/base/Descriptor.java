@@ -12,32 +12,33 @@ public abstract class Descriptor {
          */
     }
     public Descriptor(BitReadWriter brw) {
-        descriptor_tag = brw.ReadOnBuffer(8);
-        descriptor_length = brw.ReadOnBuffer(8);
+        descriptor_tag = brw.readOnBuffer(8);
+        descriptor_length = brw.readOnBuffer(8);
     }
     
-    public int GetDescriptorTag() {
+    public int getDescriptorTag() {
         return descriptor_tag;
     }
     
-    public int GetDescriptorLength() {
+    public int getDescriptorLength() {
         updateDescriptorLength();
         return descriptor_length + 2;
     }
     
-    public void WriteDescriptor(BitReadWriter brw) {
-        brw.WriteOnBuffer(descriptor_tag, 8);
-        brw.WriteOnBuffer(descriptor_length, 8);
+    public void writeDescriptor(BitReadWriter brw) {
+        brw.writeOnBuffer(descriptor_tag, 8);
+        brw.writeOnBuffer(descriptor_length, 8);
     }
     
-    protected void _PrintDescriptorHeader_() {
+    protected void _print_() {
         Logger.d("\n");
         Logger.d(String.format("\t descriptor_tag : 0x%x (%s) \n", 
                 descriptor_tag, getClass().getName()));
-        Logger.d(String.format("\t descriptor_length : 0x%x \n", descriptor_length));
+        Logger.d(String.format("\t descriptor_length : 0x%x (%d) \n", 
+                descriptor_length, descriptor_length));
     }
     
-    public abstract void PrintDescriptor();
+    public abstract void print();
     
     
     /**

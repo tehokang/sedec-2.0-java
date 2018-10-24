@@ -17,7 +17,7 @@ public abstract class Table extends BitReadWriter {
         __decode_table_header__();
     }
     
-    public void EncodeTable() {
+    public void encode() {
         __encode_update_table_length__();
         __encode_prepare_table__();
 
@@ -27,11 +27,11 @@ public abstract class Table extends BitReadWriter {
         __encode_make_crc__();
     }
     
-    public void SaveTable() {
+    public void save() {
         
     }
 
-    public void PrintTable() {
+    public void print() {
         Logger.d(String.format("======= Section Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("table_id : 0x%x \n", table_id));
         Logger.d(String.format("section_syntax_indicator : 0x%x \n", section_syntax_indicator));
@@ -39,7 +39,7 @@ public abstract class Table extends BitReadWriter {
         Logger.d("------------------------------ \n");
     }
 
-    public int GetTableLength() {
+    public int getTableLength() {
         return 3 + section_length;
     }
     
@@ -47,10 +47,10 @@ public abstract class Table extends BitReadWriter {
      * @note internal functions to decode
      */
     protected void __decode_table_header__() {
-        table_id = ReadOnBuffer(8);
-        section_syntax_indicator = ReadOnBuffer(1);
-        SkipOnBuffer(3);
-        section_length = ReadOnBuffer(12);
+        table_id = readOnBuffer(8);
+        section_syntax_indicator = readOnBuffer(1);
+        skipOnBuffer(3);
+        section_length = readOnBuffer(12);
     }
     
     protected abstract void __decode_table_body__();
@@ -71,16 +71,16 @@ public abstract class Table extends BitReadWriter {
     }
     
     protected void __encode_write_table_header__() {
-        WriteOnBuffer( table_id, 8 );
-        WriteOnBuffer( section_syntax_indicator, 1);
-        WriteOnBuffer( 1, 1);
-        WriteOnBuffer( 3, 2);
-        WriteOnBuffer( section_length, 12);
+        writeOnBuffer( table_id, 8 );
+        writeOnBuffer( section_syntax_indicator, 1);
+        writeOnBuffer( 1, 1);
+        writeOnBuffer( 3, 2);
+        writeOnBuffer( section_length, 12);
     }
     protected void __encode_write_table_body__() {};
     protected void __encode_make_crc__() {
         m_crc = Arrays.copyOf(m_buffer, section_length-1);
-        checksum_CRC32 = CalculateCRC32( m_crc, section_length-1 );
-        WriteOnBuffer(checksum_CRC32, 32);
+        checksum_CRC32 = calculateCRC32( m_crc, section_length-1 );
+        writeOnBuffer(checksum_CRC32, 32);
     }
 }

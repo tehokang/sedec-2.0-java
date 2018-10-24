@@ -13,25 +13,25 @@ public class MH_ServiceDescriptor extends Descriptor {
     public MH_ServiceDescriptor(BitReadWriter brw) {
         super(brw);
         
-        service_type = (byte) brw.ReadOnBuffer(8);
-        service_provider_name_length = (byte) brw.ReadOnBuffer(8);
+        service_type = (byte) brw.readOnBuffer(8);
+        service_provider_name_length = (byte) brw.readOnBuffer(8);
         
         service_provider_name = new byte[service_provider_name_length];
         for ( int i=0; i<service_provider_name_length; i++ ) {
-            service_provider_name[i] = (byte) brw.ReadOnBuffer(8);
+            service_provider_name[i] = (byte) brw.readOnBuffer(8);
         }
         
-        service_name_length = (byte) brw.ReadOnBuffer(8);
+        service_name_length = (byte) brw.readOnBuffer(8);
         
         service_name = new byte[service_name_length];
         for ( int i=0; i<service_name_length; i++ ) {
-            service_name[i] = (byte) brw.ReadOnBuffer(8);
+            service_name[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
-    public void PrintDescriptor() {
-        super._PrintDescriptorHeader_();
+    public void print() {
+        super._print_();
         
         Logger.d(String.format("\t service_type : 0x%x \n", service_type));
         Logger.d(String.format("\t service_provider_name_length : 0x%x \n", 
