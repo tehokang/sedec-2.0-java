@@ -39,6 +39,22 @@ public class MMTP_Payload_SignallingMessage {
         }
     }
     
+    public byte getFragmentationIndicator() {
+        return fragmentation_indicator;
+    }
+    
+    public byte getLengthExtensionFlag() {
+        return length_extension_flag;
+    }
+    
+    public byte getAggregationFlag() {
+        return aggregation_flag;
+    }
+    
+    public byte getFragmentCounter() {
+        return fragment_counter;
+    }
+    
     public void print() {
         Logger.d(String.format("------- MMTP Payload ------- (%s)\n", getClass().getName()));
         Logger.d(String.format("fragmentation_indicator : 0x%x \n", fragmentation_indicator));
