@@ -1,12 +1,12 @@
-package sedec2.arib.tlv.mmt.si.messages;
+package sedec2.arib.tlv.mmt.messages;
 
 import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.base.Table;
 
-public class M2ShortSectionMessage extends Message {
-    protected Table table;
-    
-    public M2ShortSectionMessage(byte[] buffer) {
+public class M2SectionMessage extends Message {
+    protected Table table = null;
+
+    public M2SectionMessage(byte[] buffer) {
         super(buffer);
         
         message_id = readOnBuffer(16);
@@ -15,7 +15,7 @@ public class M2ShortSectionMessage extends Message {
         
         __decode_message_body__();
     }
-
+    
     public Table getTable() {
         return table;
     }

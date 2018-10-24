@@ -1,4 +1,4 @@
-package sedec2.arib.tlv.mmt.si.messages;
+package sedec2.arib.tlv.mmt.messages;
 
 import java.util.Arrays;
 

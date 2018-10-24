@@ -1,7 +1,7 @@
 package sedec2.arib.tlv.mmt.mmtp;
 
-import sedec2.arib.tlv.mmt.si.MessageFactory;
-import sedec2.arib.tlv.mmt.si.messages.Message;
+import sedec2.arib.tlv.mmt.MessageFactory;
+import sedec2.arib.tlv.mmt.messages.Message;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 

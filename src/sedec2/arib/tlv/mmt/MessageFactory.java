@@ -1,11 +1,11 @@
-package sedec2.arib.tlv.mmt.si;
+package sedec2.arib.tlv.mmt;
 
-import sedec2.arib.tlv.mmt.si.messages.CAMessage;
-import sedec2.arib.tlv.mmt.si.messages.DataTransmissionMessage;
-import sedec2.arib.tlv.mmt.si.messages.M2SectionMessage;
-import sedec2.arib.tlv.mmt.si.messages.M2ShortSectionMessage;
-import sedec2.arib.tlv.mmt.si.messages.Message;
-import sedec2.arib.tlv.mmt.si.messages.PAMessage;
+import sedec2.arib.tlv.mmt.messages.CAMessage;
+import sedec2.arib.tlv.mmt.messages.DataTransmissionMessage;
+import sedec2.arib.tlv.mmt.messages.M2SectionMessage;
+import sedec2.arib.tlv.mmt.messages.M2ShortSectionMessage;
+import sedec2.arib.tlv.mmt.messages.Message;
+import sedec2.arib.tlv.mmt.messages.PAMessage;
 
 public class MessageFactory {
     /** PA */
