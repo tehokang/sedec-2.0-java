@@ -180,6 +180,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         } else if ( CID_header_type == 0x61 ) {
             packet_data_byte = new PacketDataByte(length-3, this);
         }
+        
     }
 
     public int getCID() {

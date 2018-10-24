@@ -14,6 +14,7 @@ public class TLVExtractor implements Runnable {
     protected Thread m_thread;
     protected boolean m_is_running = true;
     protected List<ITLVExtractorListener> m_listeners = new ArrayList<>();
+    protected List<TypeLengthValue> m_fragmented_tlv = new ArrayList<>();
     private BlockingQueue<byte[]> m_tlv_packets = 
             new ArrayBlockingQueue<byte[]>(100);
             

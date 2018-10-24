@@ -139,6 +139,8 @@ public class MMTP_Payload_MPU {
                                 i, td.priority));
                         Logger.d(String.format("[%d] dependency_counter : 0x%x \n", 
                                 i, td.dependency_counter));
+                        Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
+                                i, td.MFU_data_byte.length, td.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
                         BinaryLogger.print(td.MFU_data_byte);
@@ -159,6 +161,8 @@ public class MMTP_Payload_MPU {
                                 i, td.priority));
                         Logger.d(String.format("[%d] dependency_counter : 0x%x \n", 
                                 i, td.dependency_counter));
+                        Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
+                                i, td.MFU_data_byte.length, td.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
                         BinaryLogger.print(td.MFU_data_byte);
@@ -171,7 +175,8 @@ public class MMTP_Payload_MPU {
                         NonTimedData ntd = mfu.non_timed_data.get(i);
                         Logger.d(String.format("[%d] item_id : 0x%x \n", 
                                 i, ntd.item_id));
-                        
+                        Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
+                                i, ntd.MFU_data_byte.length, ntd.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
                         BinaryLogger.print(ntd.MFU_data_byte);
@@ -184,6 +189,8 @@ public class MMTP_Payload_MPU {
                                 i, ntd.data_unit_length));
                         Logger.d(String.format("[%d] item_id : 0x%x \n", 
                                 i, ntd.item_id));
+                        Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
+                                i, ntd.MFU_data_byte.length, ntd.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n",i ));
                         
                         BinaryLogger.print(ntd.MFU_data_byte);
