@@ -35,7 +35,7 @@ public class TlvPacketDecoder {
                 
                 while ( dataInputStream.available() > 0) {
                     /**
-                     * @note Step.1 Getting a TLV packet
+                     * @note Step.1 Getting a TLV packet from specific file
                      */
                     byte[] tlv_header_buffer = new byte[(int) TLV_HEADER_LENGTH];
                     dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
@@ -45,7 +45,7 @@ public class TlvPacketDecoder {
                     dataInputStream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
 
                     /**
-                     * @note Step.2 Making a TLV packet as byte array
+                     * @note Step.2 Converting a TLV packet to byte array
                      */
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     outputStream.write(tlv_header_buffer);
@@ -58,7 +58,7 @@ public class TlvPacketDecoder {
                     if ( res == false ) {
                         System.out.println("Overflow");
                     }
-                    Thread.sleep(10);
+                    Thread.sleep(1);
                     if ( sample_counter > COUNT_OF_SAMPLES ) break;
                     sample_counter++;
                     outputStream = null;

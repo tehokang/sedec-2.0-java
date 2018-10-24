@@ -67,7 +67,7 @@ public class TLVExtractor implements Runnable {
         {
             try 
             {
-                Thread.sleep(10);
+                Thread.sleep(1);
                 if ( null != m_tlv_packets ) 
                 {
                     Logger.p(String.format("[%d] TLV \n", sample_counter++));
