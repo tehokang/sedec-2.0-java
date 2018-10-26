@@ -162,7 +162,7 @@ public class TLVExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_tables ) {                           
+                        if ( null != m_tables ) {
                             Table table = m_tables.take();
                             
                             if ( table != null ) {

@@ -32,48 +32,14 @@ public class DataTransmissionMessage extends Message {
         return length + 7;
     }
     
-    public byte getNumberOfTables() {
-        return number_of_tables;
-    }
-    
-    public List<TableInfo> getTableInfo() {
-        return table_infos;
-    }
-    
     @Override
     protected void __decode_message_body__() {
-        number_of_tables = (byte) readOnBuffer(8);
-        
-        for ( int i=0; i<number_of_tables; i++ ) {
-            TableInfo table_info = new TableInfo();
-            table_info.table_id = (byte) readOnBuffer(8);
-            table_info.table_version = (byte) readOnBuffer(8);
-            table_info.table_length = readOnBuffer(16);
-            table_infos.add(table_info);
-        }
-        
-        for ( int j=(length-1-(number_of_tables*4)); j>0; ) {
-            Table table = (Table) TableFactory.createTable(getCurrentBuffer());
-            tables.add(table);
-            j-=table.getTableLength();
-        }
+        tables.add( (Table) TableFactory.createTable(getCurrentBuffer()) );
     }
 
     @Override
     public void print() {
         super.print();
-        
-        Logger.d(String.format("number_of_tables : %d \n", number_of_tables));
-        
-        for ( int i=0; i<table_infos.size(); i++ ) {
-            TableInfo table_info = table_infos.get(i);
-            
-            Logger.d(String.format("[%d] table_id : 0x%x \n", i, table_info.table_id));
-            Logger.d(String.format("[%d] table_version : 0x%x \n", 
-                    i, table_info.table_version));
-            Logger.d(String.format("[%d] table_length : 0x%x \n", 
-                    i, table_info.table_length));
-        }
         
         for ( int i=0; i<tables.size(); i++ ) {
             tables.get(i).print();
