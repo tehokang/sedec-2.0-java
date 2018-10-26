@@ -2,7 +2,7 @@ package sedec2.util;
 
 public class JSTTime {
     protected long JST;
-    protected long MJD;
+    protected double MJD;
     protected int year;
     protected int month;
     protected int day;
@@ -14,19 +14,31 @@ public class JSTTime {
         JST = time;
         
         MJD = 0xffff & (time >> 24);
-        year = (int) ((MJD - 15078.2) / 365.25);
-        month = (int) (( MJD - 14956.1 ) - (( year * 365.25 ) / 30.6001));
-        day = (int) (MJD - 14956 - (int) ( year * 365.25 ) - (int) ( month * 30.6001));
-        hour = (int) (0xff & (time >> 16));
-        minute = (int) (0xff & (time >> 8));
-        second = (int) (0xff & time);
+        
+        year = (int) (( MJD - 15078.2) / 365.25 );
+        month = (int) (( MJD - 14956.1 - (int)( year * 365.25 )) / 30.6001);
+        day = (int) ( MJD - 14956 - (int)( year * 365.25 ) - (int)( month * 30.6001) );
+        
+        int k=0;
+        if ( month == 14 || month == 15 ) k = 1;
+        
+        year = year + k + 1900;
+        month = month - 1 - k * 12;
+        
+        String hour_s = Integer.toHexString((int) (0xff & (byte)(time >> 16)));
+        String minute_s = Integer.toHexString((int) (0xff & (byte)(time >> 8)));
+        String second_s = Integer.toHexString((int) (0xff & (byte)time));
+        
+        hour = Integer.parseInt(hour_s);
+        minute = Integer.parseInt(minute_s);
+        second = Integer.parseInt(second_s);
     }
     
     public long getJSTTime() {
         return JST;
     }
     
-    public long getMJD() {
+    public double getMJD() {
         return MJD;
     }
     

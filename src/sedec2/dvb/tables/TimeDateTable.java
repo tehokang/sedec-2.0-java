@@ -18,7 +18,7 @@ public class TimeDateTable extends Table {
         return JST_time.getJSTTime();
     }
     
-    public long getMJD() {
+    public double getMJD() {
         return JST_time.getMJD();
     }
     

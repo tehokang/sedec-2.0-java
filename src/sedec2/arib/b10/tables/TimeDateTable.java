@@ -8,14 +8,6 @@ public class TimeDateTable extends Table {
     protected long JST_time_bits;
     protected JSTTime JST_time;
     
-    protected long MJD;
-    protected int year;
-    protected int month;
-    protected int day;
-    protected int hour;
-    protected int minute;
-    protected int second;
-    
     public TimeDateTable(byte[] buffer) {
         super(buffer);
         
@@ -26,7 +18,7 @@ public class TimeDateTable extends Table {
         return JST_time_bits;
     }
     
-    public long getMJD() {
+    public double getMJD() {
         return JST_time.getMJD();
     }
     

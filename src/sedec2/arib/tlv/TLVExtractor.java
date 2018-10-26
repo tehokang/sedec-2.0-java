@@ -20,6 +20,7 @@ import sedec2.arib.tlv.mmt.MessageFactory;
 import sedec2.arib.tlv.mmt.messages.Message;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
+import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
@@ -94,6 +95,13 @@ public class TLVExtractor {
                                         List<Table> tables = 
                                                 processMmtp_SignallingMessage(mmtp_packet);
                                         for ( int i=0; i<tables.size(); i++ ) {
+                                            Table table = tables.get(i);
+                                            Logger.d(String.format("getTableId : 0x%x \n", table.getTableId()));
+                                            if ( table.getTableId() == TableFactory.MPT ||
+                                                    table.getTableId() == TableFactory.PLT || 
+                                                    table.getTableId() == TableFactory.MH_TOT ) {
+                                                table.print();
+                                            }
                                             m_tables.put(tables.get(i));
                                         }
                                     } 
@@ -102,7 +110,7 @@ public class TLVExtractor {
                                      * @note MPU-MFU
                                      */
                                     if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                                        
+//                                        print(tlv);
                                     }
                                     break;
                                 default:

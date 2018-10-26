@@ -13,14 +13,6 @@ public class MH_TimeOffsetTable extends Table {
     protected long JST_time_bits;
     protected JSTTime JST_time;
     
-    protected long MJD;
-    protected int year;
-    protected int month;
-    protected int day;
-    protected int hour;
-    protected int minute;
-    protected int second;
-    
     protected int descriptors_loop_length;
     protected List<Descriptor> descriptors = new ArrayList<>();
 
@@ -34,7 +26,7 @@ public class MH_TimeOffsetTable extends Table {
         return JST_time_bits;
     }
     
-    public long getMJD() {
+    public double getMJD() {
         return JST_time.getMJD();
     }
     

@@ -27,14 +27,14 @@ public class TlvPacketDecoder {
             
             @Override
             public void onReceivedTable(Table table) {
-                System.out.print(String.format("Received Table (id : 0x%x) \n", 
-                        table.getTableId()));
-                table.print();
+//                System.out.print(String.format("Received Table (id : 0x%x) \n", 
+//                        table.getTableId()));
+//                table.print();
             }
 
             @Override
             public void onNtpUpdated(NetworkTimeProtocolData ntp) {
-                ntp.print();
+//                ntp.print();
             }
         };
         
