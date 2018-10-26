@@ -144,12 +144,6 @@ public class TLVExtractor {
                                 }
                             }
                         }
-                    } catch ( ArrayIndexOutOfBoundsException e ) {
-                        e.printStackTrace();
-                    } catch ( InterruptedException e ) {
-                        /** 
-                         * @note Nothing to do
-                         */
                     } catch ( Exception e ) {
                         /**
                          * @todo You should remove a line below, because TLVExtractor \n
@@ -199,13 +193,20 @@ public class TLVExtractor {
         m_ntp_event_thread.start();
     }
     
+    /**
+     * User should use this function when they don't use TLVExtractor any more.
+     */
     public void destroy() {
         m_is_running = false;
+        
         m_table_event_thread.interrupt();
         m_table_event_thread = null;
         
         m_tlv_extractor_thread.interrupt();
         m_tlv_extractor_thread = null;
+        
+        m_ntp_event_thread.interrupt();
+        m_ntp_event_thread = null;
         
         m_listeners.clear();
         m_listeners = null;
@@ -225,6 +226,11 @@ public class TLVExtractor {
         m_listeners.remove(listener);
     }
     
+    /**
+     * User can put a TLV packet to get the results as Table of MMT-SI, TLV-SI and more.
+     * @param tlv a variable TLV packet
+     * @return Return false if TLVExtractor has situation which can't parse like overflow.
+     */
     public synchronized boolean put(byte[] tlv) {
         try {
             if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
@@ -239,6 +245,12 @@ public class TLVExtractor {
         return true;
     }
     
+    /**
+     * ARIB B60 6.3.2 Configuration of MMTP Payload
+     * @param mmtp MMTP_Packet
+     * @return tables of MMT-SI
+     * @throws IOException
+     */
     protected List<Table> processMmtp_SignallingMessage(MMTP_Packet mmtp) throws IOException {
         MMTP_Payload_SignallingMessage signal_message = mmtp.getSignallingMessage();
         
@@ -255,20 +267,23 @@ public class TLVExtractor {
                     break;
                 case 0x01:
                     /**
-                     * @note This involves header part of divided data.
+                     * @note ARIB B60 Table 6-2
+                     * This involves header part of divided data.
                      */
                     fragmented01_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
                     break;
                 case 0x02:
                     /**
-                     * @note This involves a part of divided data which is \n
+                     * @note ARIB B60 Table 6-2
+                     * This involves a part of divided data which is \n
                      * neither header part nor last part.
                      */
                     fragmented02_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
                     break;
                 case 0x03:
                     /**
-                     * @note This involves last part of divided data.
+                     * @note ARIB B60 Table 6-2
+                     * This involves last part of divided data.
                      */
                     MMTP_Packet mmtp01 = fragmented01_mmtp.get(mmtp.getPacketSequenceNumber()-2);
                     MMTP_Packet mmtp02 = fragmented02_mmtp.get(mmtp.getPacketSequenceNumber()-1);

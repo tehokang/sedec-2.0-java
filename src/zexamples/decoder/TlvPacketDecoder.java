@@ -27,9 +27,9 @@ public class TlvPacketDecoder {
             
             @Override
             public void onReceivedTable(Table table) {
-//                System.out.print(String.format("Received Table (id : 0x%x) \n", 
-//                        table.getTableId()));
-//                table.print();
+                System.out.print(String.format("Received Table (id : 0x%x) \n", 
+                        table.getTableId()));
+                table.print();
             }
 
             @Override
@@ -48,9 +48,9 @@ public class TlvPacketDecoder {
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                final int COUNT_OF_SAMPLES = 100000;    
+                final long COUNT_OF_SAMPLES = 1000000;    
                 final int TLV_HEADER_LENGTH = 4;
-                int sample_counter = 0;
+                long sample_counter = 0;
                 
                 while ( dataInputStream.available() > 0) {
                     /**
@@ -81,8 +81,8 @@ public class TlvPacketDecoder {
                     outputStream = null;
                     Thread.sleep(1);
                     
-//                    if ( sample_counter > COUNT_OF_SAMPLES ) break;
-//                    sample_counter++;
+                    if ( sample_counter > COUNT_OF_SAMPLES ) break;
+                    sample_counter++;
                 }
                 
                 dataInputStream.close();
