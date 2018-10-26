@@ -20,7 +20,7 @@ public class MH_LinkageDescriptor extends Descriptor {
         tlv_stream_id = brw.readOnBuffer(16);
         original_network_id = brw.readOnBuffer(16);
         service_id = brw.readOnBuffer(16);
-        linkage_type = brw.readOnBuffer(16);
+        linkage_type = brw.readOnBuffer(8);
         
         private_data_byte = new byte[descriptor_length - 7];
         for ( int i=0; i<private_data_byte.length; i++ ) {
