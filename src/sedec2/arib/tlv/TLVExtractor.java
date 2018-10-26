@@ -26,6 +26,11 @@ import sedec2.util.Logger;
 public class TLVExtractor {
     protected final String TAG = "TLVExtractor";
     
+    boolean m_enable_ntp_filter = false;
+    boolean m_enable_table_filter = false;
+    boolean m_enable_all_of_table_filter = false;
+    List<Byte> m_table_id_filters = new ArrayList<>();
+    
     protected Thread m_ntp_event_thread;
     protected Thread m_table_event_thread;
     protected Thread m_tlv_extractor_thread;
@@ -38,24 +43,16 @@ public class TLVExtractor {
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     
-    protected Map<Integer, MMTP_Packet> fragmented01_mmtp = new HashMap<Integer, MMTP_Packet>();
-    protected Map<Integer, MMTP_Packet> fragmented02_mmtp = new HashMap<Integer, MMTP_Packet>();
+    protected Map<Integer, MMTP_Packet> m_fragmented01_mmtp = 
+            new HashMap<Integer, MMTP_Packet>();
+    protected Map<Integer, MMTP_Packet> m_fragmented02_mmtp = 
+            new HashMap<Integer, MMTP_Packet>();
     
     /**
      * @note sample_counter and print function is only for testing
      */
-    long tlv_sample_counter = 0;
-    long table_sample_counter = 0;
-    public void print(TypeLengthValue tlv) {
-        Logger.p(String.format("[%d] TLV \n", tlv_sample_counter++));
-        tlv.print();
-    }
-    
-    public void print(Table table) {
-        Logger.p(String.format("[%d] Table (id : 0x%x) \n", 
-                table_sample_counter++, table.getTableId()));
-        table.print();
-    }
+    protected long tlv_sample_counter = 0;
+    protected long table_sample_counter = 0;
     
     public TLVExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
@@ -162,6 +159,11 @@ public class TLVExtractor {
         m_ntps = null;
     }
     
+    /**
+     * Application should add their own listener to recieve tables, ntp, and so on which
+     * SDK can send
+     * @param listener
+     */
     public void addEventListener(ITLVExtractorListener listener) {
         m_listeners.add(listener);
     }
@@ -188,19 +190,35 @@ public class TLVExtractor {
         }
         return true;
     }
-    
+
+    /**
+     * Sending a NTP to application
+     * @param ntp
+     */
     protected synchronized void emitNtp(NetworkTimeProtocolData ntp) {
-        if ( ntp != null ) {
+        if ( ntp != null && m_enable_ntp_filter == true ) {
             for ( int i=0; i<m_listeners.size(); i++ ) {
                 m_listeners.get(i).onUpdatedNtp(ntp);
             }
         }
     }
     
+    /**
+     * Sending a table to application
+     * @param table
+     */
     protected synchronized void emitTable(Table table) {
         if ( table != null ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onReceivedTable(table);
+            if ( m_enable_all_of_table_filter == true ) {
+                for ( int i=0; i<m_listeners.size(); i++ ) {
+                    m_listeners.get(i).onReceivedTable(table);
+                }
+            } else if ( m_enable_table_filter == true ) {
+                for ( int i=0; i<m_listeners.size(); i++ ) {
+                    if ( m_table_id_filters.contains(table.getTableId()) == true ) {
+                        m_listeners.get(i).onReceivedTable(table);
+                    }
+                }
             }
         }
     }
@@ -250,6 +268,8 @@ public class TLVExtractor {
     }
     
     /**
+     * Processing signaling message which is payload_type(0x02) of MMTP.
+     * A table which signaling message has will be sent to application unless the table has fragmented
      * ARIB B60 6.3.2 Configuration of MMTP Payload
      * @param mmtp MMTP_Packet
      * @return tables of MMT-SI
@@ -274,7 +294,7 @@ public class TLVExtractor {
                      * @note ARIB B60 Table 6-2
                      * This involves header part of divided data.
                      */
-                    fragmented01_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
+                    m_fragmented01_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
                     break;
                 case 0x02:
                     /**
@@ -282,25 +302,25 @@ public class TLVExtractor {
                      * This involves a part of divided data which is \n
                      * neither header part nor last part.
                      */
-                    fragmented02_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
+                    m_fragmented02_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
                     break;
                 case 0x03:
                     /**
                      * @note ARIB B60 Table 6-2
                      * This involves last part of divided data.
                      */
-                    MMTP_Packet mmtp01 = fragmented01_mmtp.get(mmtp.getPacketSequenceNumber()-2);
-                    MMTP_Packet mmtp02 = fragmented02_mmtp.get(mmtp.getPacketSequenceNumber()-1);
+                    MMTP_Packet mmtp01 = m_fragmented01_mmtp.get(mmtp.getPacketSequenceNumber()-2);
+                    MMTP_Packet mmtp02 = m_fragmented02_mmtp.get(mmtp.getPacketSequenceNumber()-1);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     
                     if ( mmtp01 != null ) {
                         outputStream.write(mmtp01.getSignallingMessage().getMessageByte());
-                        fragmented01_mmtp.remove(mmtp.getPacketSequenceNumber()-2);
+                        m_fragmented01_mmtp.remove(mmtp.getPacketSequenceNumber()-2);
                     }
                     
                     if ( mmtp02 != null ) {
                         outputStream.write(mmtp02.getSignallingMessage().getMessageByte());
-                        fragmented02_mmtp.remove(mmtp.getPacketSequenceNumber()-1);
+                        m_fragmented02_mmtp.remove(mmtp.getPacketSequenceNumber()-1);
                     }
                     outputStream.write(signal_message.getMessageByte());
                     message = MessageFactory.createMessage(outputStream.toByteArray());
@@ -310,4 +330,63 @@ public class TLVExtractor {
         }
         return new ArrayList<>();
     }
+
+    /**
+     * Only for debugging to print all of a TLV
+     * @param table
+     */
+    protected void print(TypeLengthValue tlv) {
+        Logger.p(String.format("[%d] TLV \n", tlv_sample_counter++));
+        tlv.print();
+    }
+    
+    /**
+     * Only for debugging to print all of table fields
+     * @param table
+     */
+    protected void print(Table table) {
+        Logger.p(String.format("[%d] Table (id : 0x%x) \n", 
+                table_sample_counter++, table.getTableId()));
+        table.print();
+    }
+    
+    /**
+     * Enable all of table of filters which application want to receive 
+     */
+    public void enableAllOfTableFilter() {
+        m_enable_all_of_table_filter = true;
+    }
+    
+    /**
+     * Enable table filters which application only want to receive
+     * @param table_ids
+     */
+    public void enableTableFilter(List<Byte> table_ids) {
+        m_enable_table_filter = true;
+        m_table_id_filters = table_ids;
+    }
+
+    /**
+     * Disable table filters if application doesn't want to receive
+     * @param table_ids
+     */
+    public void disableTableFilter() {
+        m_enable_all_of_table_filter = false;
+        m_enable_table_filter = false;
+    }
+    
+    /**
+     * Enable NTP data if application want to receive
+     */
+    public void enableNtpFilter() {
+        m_enable_ntp_filter = true;
+    }
+    
+    /**
+     * Disable NTP data if application doesn't want to receive 
+     */
+    public void disableNtpFilter() {
+        m_enable_ntp_filter = false;
+    }
+
 }

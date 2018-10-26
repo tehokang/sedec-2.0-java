@@ -5,12 +5,20 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.util.ArrayList;
+import java.util.List;
 
 import sedec2.arib.tlv.ITLVExtractorListener;
 import sedec2.arib.tlv.TLVExtractor;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
 
+/**
+ * TlvPacketDecoder is an example for getting 
+ * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
+ * - NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData \n
+ * - MPU, MFU to be used for media which is included in MMTP Packet \n 
+ */
 public class TlvPacketDecoder {
     public static void main(String []args) {
         if ( args.length < 1 ) {
@@ -26,6 +34,11 @@ public class TlvPacketDecoder {
          * @note Step.1 Creating TLVExtractor
          */
         TLVExtractor tlv_extractor = new TLVExtractor();
+        
+        /**
+         * @note Step.2 Add Event Listener to listen Table, NTP, MFU
+         * and you can set table filters only what you want to receive or not
+         */
         ITLVExtractorListener listener = new ITLVExtractorListener() {
             int counter = 0;
             
@@ -33,28 +46,44 @@ public class TlvPacketDecoder {
             public void onReceivedTable(Table table) {
                 System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
                         counter++, table.getTableId()));
-//                if ( table.getTableId() == TableFactory.MPT ) {
-//                    table.print();
-//                    System.exit(0);
-//                } else if ( table.getTableId() == TableFactory.PLT ) {
-//                    table.print();
-//                    System.exit(0);
-//                } else {
-//                    table.print();
-//                }
+                table.print();
             }
-
+            
             @Override
             public void onUpdatedNtp(NetworkTimeProtocolData ntp) {
-//                ntp.print();
+                ntp.print();
             }
         };
-        
-        /**
-         * @note Step.2 Add Event Listener to listen Table, NTP, MFU
-         */
         tlv_extractor.addEventListener(listener);
         
+        /**
+         * @note Option.1 Enable specific filters which you want to receive
+         */
+        List<Byte> filters = new ArrayList<>();
+        filters.add((byte)sedec2.arib.tlv.si.TableFactory.AMT);
+        filters.add((byte)sedec2.arib.tlv.si.TableFactory.TLV_NIT_ACTUAL);
+        filters.add((byte)sedec2.arib.tlv.si.TableFactory.TLV_NIT_OTHER);
+        tlv_extractor.enableTableFilter(filters);
+        
+        /**
+         * @note Option.2 Enable all of filters which you want to receive
+         */
+        tlv_extractor.enableAllOfTableFilter();
+        
+        /**
+         * @note Option.3 Disable all of filters which you don't want to receive
+         */
+        tlv_extractor.disableTableFilter();
+        
+        /**
+         * @note Option.4 Enable NTP data if user want to receive
+         */
+        tlv_extractor.disableNtpFilter();
+        
+        /**
+         * @note Assume.1 Getting each one TLV packet from specific file.
+         * It assume that platform should give a TLV packet to us as input of TLVExtractor
+         */
         for ( int i=0; i<args.length; i++ ) {
             File inOutFile = new File(args[i]);
             
@@ -63,14 +92,13 @@ public class TlvPacketDecoder {
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                final long COUNT_OF_SAMPLES = 1000;    
+                final long COUNT_OF_SAMPLES = 10000000;    
                 final int TLV_HEADER_LENGTH = 4;
                 long sample_counter = 0;
                 
                 while ( dataInputStream.available() > 0) {
                     /**
-                     * @note Assume.1 Getting a TLV packet from specific file.
-                     * It assume that platform should give a TLV packet to us as input of TLVExtractor
+                     * @note Assume.2 Making a packet of TLV 
                      */
                     byte[] tlv_header_buffer = new byte[(int) TLV_HEADER_LENGTH];
                     dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
