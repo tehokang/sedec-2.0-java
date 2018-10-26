@@ -22,22 +22,37 @@ public class TlvPacketDecoder {
                     "{TLV Raw File} \n");
         }
     
+        /**
+         * @note Step.1 Creating TLVExtractor
+         */
         TLVExtractor tlv_extractor = new TLVExtractor();
         ITLVExtractorListener listener = new ITLVExtractorListener() {
+            int counter = 0;
             
             @Override
             public void onReceivedTable(Table table) {
-//                System.out.print(String.format("Received Table (id : 0x%x) \n", 
-//                        table.getTableId()));
-//                table.print();
+                System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
+                        counter++, table.getTableId()));
+//                if ( table.getTableId() == TableFactory.MPT ) {
+//                    table.print();
+//                    System.exit(0);
+//                } else if ( table.getTableId() == TableFactory.PLT ) {
+//                    table.print();
+//                    System.exit(0);
+//                } else {
+//                    table.print();
+//                }
             }
 
             @Override
-            public void onNtpUpdated(NetworkTimeProtocolData ntp) {
+            public void onUpdatedNtp(NetworkTimeProtocolData ntp) {
 //                ntp.print();
             }
         };
         
+        /**
+         * @note Step.2 Add Event Listener to listen Table, NTP, MFU
+         */
         tlv_extractor.addEventListener(listener);
         
         for ( int i=0; i<args.length; i++ ) {
@@ -48,13 +63,14 @@ public class TlvPacketDecoder {
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                final long COUNT_OF_SAMPLES = 1000000;    
+                final long COUNT_OF_SAMPLES = 1000;    
                 final int TLV_HEADER_LENGTH = 4;
                 long sample_counter = 0;
                 
                 while ( dataInputStream.available() > 0) {
                     /**
-                     * @note Step.1 Getting a TLV packet from specific file
+                     * @note Assume.1 Getting a TLV packet from specific file.
+                     * It assume that platform should give a TLV packet to us as input of TLVExtractor
                      */
                     byte[] tlv_header_buffer = new byte[(int) TLV_HEADER_LENGTH];
                     dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
@@ -63,9 +79,6 @@ public class TlvPacketDecoder {
                             new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
                     dataInputStream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
 
-                    /**
-                     * @note Step.2 Converting a TLV packet to byte array
-                     */
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     outputStream.write(tlv_header_buffer);
                     outputStream.write(tlv_payload_buffer);
@@ -81,8 +94,11 @@ public class TlvPacketDecoder {
                     outputStream = null;
                     Thread.sleep(1);
                     
-                    if ( sample_counter > COUNT_OF_SAMPLES ) break;
-                    sample_counter++;
+                    if ( sample_counter++ > COUNT_OF_SAMPLES ) {
+                        System.out.print(String.format(
+                                "TLV Packet counter is over %d \n", COUNT_OF_SAMPLES));
+                        break;
+                    }
                 }
                 
                 dataInputStream.close();
@@ -92,9 +108,13 @@ public class TlvPacketDecoder {
             }
         }
         
+        /**
+         * @note Step.4 Destroy of TLVExtractor to not handle and released by garbage collector
+         */
         tlv_extractor.removeEventListener(listener);
         tlv_extractor.destroy();
         tlv_extractor = null;
+        
         System.out.println("ByeBye");
     }
 }

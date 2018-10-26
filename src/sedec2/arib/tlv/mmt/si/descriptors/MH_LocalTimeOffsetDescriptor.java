@@ -59,6 +59,7 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
+        descriptor_length = 0;
         descriptor_length += (localtimes.size() * 13);
     }
 }

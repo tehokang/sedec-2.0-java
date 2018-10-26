@@ -1,5 +1,8 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
@@ -8,8 +11,15 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
     protected int logo_id;
     protected int logo_version;
     protected int download_data_id;
+    protected List<Logo> logos = new ArrayList<>();
     protected byte[] logo_char;
     protected byte[] reserved_future_use;
+
+    class Logo {
+        public byte logo_type;
+        public byte start_section_number;
+        public byte num_of_sections;
+    }
     
     public MH_LogoTransmissionDescriptor(BitReadWriter brw) {
         super(brw);
@@ -23,6 +33,15 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 brw.skipOnBuffer(4);;
                 logo_version = brw.readOnBuffer(12);
                 download_data_id = brw.readOnBuffer(16);
+                
+                for ( int i=descriptor_length-1-6; i>0; ) {
+                    Logo logo = new Logo();
+                    logo.logo_type = (byte) brw.readOnBuffer(8);
+                    logo.start_section_number = (byte) brw.readOnBuffer(8);
+                    logo.num_of_sections = (byte) brw.readOnBuffer(8);
+                    logos.add(logo);
+                    i-=3;
+                }
                 break;
             case 0x02:
                 brw.skipOnBuffer(7);
@@ -67,6 +86,10 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
         return logo_char;
     }
     
+    public List<Logo> getLogos() {
+        return logos;
+    }
+    
     @Override
     public void print() {
         super._print_();
@@ -78,6 +101,15 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 Logger.d(String.format("\t logo_id : 0x%x \n", logo_id));
                 Logger.d(String.format("\t logo_version : 0x%x \n", logo_version));
                 Logger.d(String.format("\t download_data_id : 0x%x \n", download_data_id));
+                for ( int i=0; i<logos.size(); i++ ) {
+                    Logo logo = logos.get(i);
+                    Logger.d(String.format("\t [%d] logo_type : 0x%x \n", 
+                            i, logo.logo_type));
+                    Logger.d(String.format("\t [%d] start_section_number : 0x%x \n",
+                            i, logo.start_section_number));
+                    Logger.d(String.format("\t [%d] num_of_sections : 0x%x \n", 
+                            i, logo.num_of_sections));
+                }
                 break;
             case 0x02:
                 Logger.d(String.format("\t logo_id : 0x%x \n", logo_id));
@@ -94,7 +126,7 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
     protected void updateDescriptorLength() {
         switch ( logo_transmission_type ) {
             case 0x01:
-                descriptor_length = 1 + 6;
+                descriptor_length = 1 + 6 + (logos.size()*3);
                 break;
             case 0x02:
                 descriptor_length = 1 + 2;

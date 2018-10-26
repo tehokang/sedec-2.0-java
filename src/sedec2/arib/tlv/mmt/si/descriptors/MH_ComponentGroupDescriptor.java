@@ -24,7 +24,7 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
     class CAUnit {
         public byte CA_unit_id;
         public byte num_of_component;
-        public byte[] component_tag;
+        public int[] component_tag;
     }
     
     public MH_ComponentGroupDescriptor(BitReadWriter brw) {
@@ -43,10 +43,10 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
                 CAUnit ca_unit = new CAUnit();
                 ca_unit.CA_unit_id = (byte) brw.readOnBuffer(4);
                 ca_unit.num_of_component = (byte) brw.readOnBuffer(4);
-                ca_unit.component_tag = new byte[ca_unit.num_of_component*2];
+                ca_unit.component_tag = new int[ca_unit.num_of_component];
                 
                 for ( int k=0; k<ca_unit.component_tag.length; k++ ) {
-                    ca_unit.component_tag[k] = (byte) brw.readOnBuffer(16);
+                    ca_unit.component_tag[k] = brw.readOnBuffer(16);
                 }
                 group.ca_units.add(ca_unit);
             }

@@ -39,7 +39,6 @@ public class MH_ServiceListDescriptor extends Descriptor {
                     i, services.get(i).service_id));
             Logger.d(String.format("\t [%d] service_type : 0x%x \n",
                     i, services.get(i).service_type));
-            
         }
     }
 

@@ -22,8 +22,7 @@ public class MH_ParentalRatingDescriptor extends Descriptor {
             rating.country_code = brw.readOnBuffer(24);
             rating.rating = (byte) brw.readOnBuffer(8);
             ratings.add(rating);
-            
-            i-=3;
+            i-=4;
         }
     }
 

@@ -3,8 +3,7 @@ package sedec2.arib.tlv.mmt.si.tables;
 import sedec2.util.Logger;
 
 public abstract class Table extends sedec2.base.Table {   
-    protected int table_id;
-    protected int version;
+    protected byte version;
     protected int length;
     
     public Table(byte[] buffer) {
@@ -36,8 +35,8 @@ public abstract class Table extends sedec2.base.Table {
 
     @Override
     protected void __decode_table_header__() {
-        table_id = readOnBuffer(8);
-        version = readOnBuffer(8);
+        table_id = (byte) readOnBuffer(8);
+        version = (byte) readOnBuffer(8);
         length = readOnBuffer(16);
     }
     

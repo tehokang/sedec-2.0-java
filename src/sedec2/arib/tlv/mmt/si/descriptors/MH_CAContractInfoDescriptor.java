@@ -34,7 +34,7 @@ public class MH_CAContractInfoDescriptor extends Descriptor {
         fee_name_length = (byte) brw.readOnBuffer(8);
         fee_name = new byte[fee_name_length];
         
-        for ( int i=0; i<fee_name_length; i++ ) {
+        for ( int i=0; i<fee_name.length; i++ ) {
             fee_name[i] = (byte) brw.readOnBuffer(8);
         }
     }

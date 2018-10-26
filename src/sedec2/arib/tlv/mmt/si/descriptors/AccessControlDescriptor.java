@@ -14,17 +14,11 @@ public class AccessControlDescriptor extends Descriptor {
         super(brw);
         
         CA_system_ID = brw.readOnBuffer(16);
-        
-        for ( int i=descriptor_length; i>0; ) {
-            
-            MMT_general_location_info = new MMTGeneralLocationInfo(brw);
-            i-=MMT_general_location_info.getLength();
-            
-            private_data = new byte[i];
-            for ( int j=0; j<private_data.length; j++) {
-                private_data[j] = (byte) brw.readOnBuffer(8);
-                i-=1;
-            }
+        MMT_general_location_info = new MMTGeneralLocationInfo(brw);
+        private_data = 
+                new byte[descriptor_length - 2 - MMT_general_location_info.getLength()];
+        for ( int j=0; j<private_data.length; j++) {
+            private_data[j] = (byte) brw.readOnBuffer(8);
         }
     }
 
@@ -33,9 +27,7 @@ public class AccessControlDescriptor extends Descriptor {
         super._print_();
         
         Logger.d(String.format("\t CA_system_ID : 0x%x \n", CA_system_ID));
-        
         MMT_general_location_info.print();
-        
         Logger.d("\t private_data : \n");
         BinaryLogger.print(private_data);
     }

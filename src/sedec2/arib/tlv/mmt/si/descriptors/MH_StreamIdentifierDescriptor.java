@@ -23,5 +23,4 @@ public class MH_StreamIdentifierDescriptor extends Descriptor {
     protected void updateDescriptorLength() {
         descriptor_length = 2;
     }
-
 }

@@ -51,6 +51,8 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
         session_protocol_number = (byte) brw.readOnBuffer(8);
         session_id = brw.readOnBuffer(32);
         retry = (byte) brw.readOnBuffer(8);
+        connect_timer = brw.readOnBuffer(24);
+        address_type = (byte) brw.readOnBuffer(8);
         
         if ( address_type == 0x00 ) {
             for ( int j=0; j<4; j++ ) 
@@ -68,7 +70,7 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
             URL_length = (byte) brw.readOnBuffer(8);
             URL_byte = new byte[URL_length];
             
-            for ( int i=0; i<URL_length; i++ ) {
+            for ( int i=0; i<URL_byte.length; i++ ) {
                 URL_byte[i] = (byte) brw.readOnBuffer(8);
             }
         }
@@ -92,7 +94,7 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
             text_length = (byte) brw.readOnBuffer(8);
             text_char = new byte[text_length];
             
-            for ( int i=0; i<text_length; i++ ) {
+            for ( int i=0; i<text_char.length; i++ ) {
                 text_char[i] = (byte) brw.readOnBuffer(8);
             }
         }
@@ -110,6 +112,8 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
         Logger.d(String.format("\t session_protocol_number : 0x%x \n", session_protocol_number)); 
         Logger.d(String.format("\t session_id : 0x%x \n", session_id));
         Logger.d(String.format("\t retry : 0x%x \n", retry));
+        Logger.d(String.format("\t connect_timer : 0x%x \n", connect_timer));
+        Logger.d(String.format("\t address_type : 0x%x \n", address_type));    
         
         if ( address_type == 0x00 ) {
             Logger.d(String.format("\t ipv4.address : %d.%d.%d.%d \n", 
@@ -155,7 +159,7 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 16;
+        descriptor_length = 15;
         
         if ( address_type == 0x00 ) {
             descriptor_length += 6;

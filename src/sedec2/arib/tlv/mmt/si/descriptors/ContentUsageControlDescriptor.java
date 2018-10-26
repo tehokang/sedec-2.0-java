@@ -10,6 +10,7 @@ public class ContentUsageControlDescriptor extends Descriptor {
     protected byte retention_mode;
     protected byte retention_state;
     protected byte encryption_mode;
+    protected int reserved_future_use_length;
     
     public ContentUsageControlDescriptor(BitReadWriter brw) {
         super(brw);
@@ -25,6 +26,7 @@ public class ContentUsageControlDescriptor extends Descriptor {
         retention_state = (byte) brw.readOnBuffer(3);
         encryption_mode = (byte) brw.readOnBuffer(1);
         
+        reserved_future_use_length = descriptor_length-2;
         for ( int i=descriptor_length-2; i>0; ) {
             brw.skipOnBuffer(8);
             i-=1;
@@ -46,6 +48,6 @@ public class ContentUsageControlDescriptor extends Descriptor {
 
     @Override
     protected void updateDescriptorLength() {
-        descriptor_length = 2;
+        descriptor_length = 2 + reserved_future_use_length;
     }
 }

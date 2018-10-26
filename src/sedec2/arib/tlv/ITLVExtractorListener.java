@@ -5,5 +5,5 @@ import sedec2.base.Table;
 
 public interface ITLVExtractorListener {
     public void onReceivedTable(Table table);
-    public void onNtpUpdated(NetworkTimeProtocolData ntp);
+    public void onUpdatedNtp(NetworkTimeProtocolData ntp);
 }

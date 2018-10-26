@@ -54,6 +54,12 @@ public class DependencyDescriptor extends Descriptor {
     }
 
     @Override
+    public int getDescriptorLength() {
+        updateDescriptorLength();
+        return descriptor_length + 4;
+    }
+    
+    @Override
     protected void updateDescriptorLength() {
         descriptor_length = 1;
         for ( int i=0; i<assets.size(); i++ ) {

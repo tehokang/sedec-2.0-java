@@ -20,15 +20,14 @@ import sedec2.arib.tlv.mmt.MessageFactory;
 import sedec2.arib.tlv.mmt.messages.Message;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
-import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public class TLVExtractor {
     protected final String TAG = "TLVExtractor";
     
-    protected Thread m_table_event_thread;
     protected Thread m_ntp_event_thread;
+    protected Thread m_table_event_thread;
     protected Thread m_tlv_extractor_thread;
     protected boolean m_is_running = true;
     
@@ -38,22 +37,23 @@ public class TLVExtractor {
             new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    protected Map<Integer, MMTP_Packet> fragmented01_mmtp = 
-            new HashMap<Integer, MMTP_Packet>();
-    protected Map<Integer, MMTP_Packet> fragmented02_mmtp = 
-            new HashMap<Integer, MMTP_Packet>();
+    
+    protected Map<Integer, MMTP_Packet> fragmented01_mmtp = new HashMap<Integer, MMTP_Packet>();
+    protected Map<Integer, MMTP_Packet> fragmented02_mmtp = new HashMap<Integer, MMTP_Packet>();
     
     /**
      * @note sample_counter and print function is only for testing
      */
-    long sample_counter = 0;
+    long tlv_sample_counter = 0;
+    long table_sample_counter = 0;
     public void print(TypeLengthValue tlv) {
-        Logger.p(String.format("[%d] TLV \n", sample_counter++));
+        Logger.p(String.format("[%d] TLV \n", tlv_sample_counter++));
         tlv.print();
     }
     
     public void print(Table table) {
-        Logger.p(String.format("[%d] TLV (%d) \n", sample_counter++, table.getTableId()));
+        Logger.p(String.format("[%d] Table (id : 0x%x) \n", 
+                table_sample_counter++, table.getTableId()));
         table.print();
     }
     
@@ -69,59 +69,13 @@ public class TLVExtractor {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
                                     sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            
-                            switch ( tlv.getPacketType() & 0xff ) {
-                                case PacketFactory.SIGNALLING_PACKET:
-                                    m_tables.put( ((SignallingPacket)tlv).getTable() );
-                                    break;
-                                case PacketFactory.IPV4_PACKET:
-                                    NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
-                                    if ( ipv4_ntp != null ) m_ntps.put(ipv4_ntp);
-                                    break;
-                                case PacketFactory.IPV6_PACKET:
-                                    NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
-                                    if ( ipv6_ntp != null ) m_ntps.put(ipv6_ntp);
-                                    break;
-                                case PacketFactory.COMPRESSED_IP_PACKET:
-                                    CompressedIpPacket cip = (CompressedIpPacket) tlv;
-                                    MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
-                                    
-                                    if ( mmtp_packet == null ) continue;
-                                    
-                                    /**
-                                     * @note Signaling Message
-                                     */
-                                    if ( 0x02 == mmtp_packet.getPayloadType() ) {
-                                        List<Table> tables = 
-                                                processMmtp_SignallingMessage(mmtp_packet);
-                                        for ( int i=0; i<tables.size(); i++ ) {
-                                            Table table = tables.get(i);
-                                            Logger.d(String.format("getTableId : 0x%x \n", table.getTableId()));
-                                            if ( table.getTableId() == TableFactory.MPT ||
-                                                    table.getTableId() == TableFactory.PLT || 
-                                                    table.getTableId() == TableFactory.MH_TOT ) {
-                                                table.print();
-                                            }
-                                            m_tables.put(tables.get(i));
-                                        }
-                                    } 
-                                    
-                                    /**
-                                     * @note MPU-MFU
-                                     */
-                                    if ( 0x00 == mmtp_packet.getPayloadType() ) {
-//                                        print(tlv);
-                                    }
-                                    break;
-                                default:
-                                    break;
-                            }
+                            processTLV(tlv); 
                         }
                         
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
-                        /** 
+                        /**
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
@@ -130,7 +84,6 @@ public class TLVExtractor {
                          * has to keep alive even though TLVExtractor get any wrong packets.
                          */
                         e.printStackTrace();
-                        m_is_running = false;
                     }
                 }        
             }
@@ -143,21 +96,13 @@ public class TLVExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_ntps ) {                           
-                            NetworkTimeProtocolData ntp = m_ntps.take();
-                            
-                            if ( ntp != null ) {
-                                for ( int i=0; i<m_listeners.size(); i++ ) {
-                                    m_listeners.get(i).onNtpUpdated(ntp);
-                                }
-                            }
-                        }
-                    } catch ( Exception e ) {
+                        if ( null != m_ntps ) emitNtp(m_ntps.take());
+                    } catch ( InterruptedException e ) {
                         /**
-                         * @todo You should remove a line below, because TLVExtractor \n
-                         * has to keep alive even though TLVExtractor get any wrong packets.
+                         * @note Nothing to do
                          */
-                        m_is_running = false;
+                    } catch ( Exception e ) {
+                        e.printStackTrace();
                     }
                 }
             }
@@ -170,15 +115,7 @@ public class TLVExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_tables ) {
-                            Table table = m_tables.take();
-                            
-                            if ( table != null ) {
-                                for ( int i=0; i<m_listeners.size(); i++ ) {
-                                    m_listeners.get(i).onReceivedTable(table);
-                                }
-                            }
-                        }
+                        if ( null != m_tables ) emitTable(m_tables.take());
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
@@ -186,11 +123,7 @@ public class TLVExtractor {
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
-                        /**
-                         * @todo You should remove a line below, because TLVExtractor \n
-                         * has to keep alive even though TLVExtractor get any wrong packets.
-                         */
-                        m_is_running = false;
+                        e.printStackTrace();
                     }
                 }
             }
@@ -218,12 +151,15 @@ public class TLVExtractor {
         
         m_listeners.clear();
         m_listeners = null;
-        
+                
         m_tlv_packets.clear();
         m_tlv_packets = null;
         
         m_tables.clear();
         m_tables = null;
+
+        m_ntps.clear();
+        m_ntps = null;
     }
     
     public void addEventListener(ITLVExtractorListener listener) {
@@ -239,7 +175,7 @@ public class TLVExtractor {
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public synchronized boolean put(byte[] tlv) {
+    public boolean put(byte[] tlv) {
         try {
             if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
                 m_tlv_packets.put(tlv);
@@ -253,13 +189,73 @@ public class TLVExtractor {
         return true;
     }
     
+    protected synchronized void emitNtp(NetworkTimeProtocolData ntp) {
+        if ( ntp != null ) {
+            for ( int i=0; i<m_listeners.size(); i++ ) {
+                m_listeners.get(i).onUpdatedNtp(ntp);
+            }
+        }
+    }
+    
+    protected synchronized void emitTable(Table table) {
+        if ( table != null ) {
+            for ( int i=0; i<m_listeners.size(); i++ ) {
+                m_listeners.get(i).onReceivedTable(table);
+            }
+        }
+    }
+    
+    protected synchronized void processTLV(TypeLengthValue tlv) 
+            throws InterruptedException, IOException {
+        switch ( tlv.getPacketType() & 0xff ) {
+            case PacketFactory.SIGNALLING_PACKET:
+                m_tables.put( ((SignallingPacket)tlv).getTable() );
+                break;
+            case PacketFactory.IPV4_PACKET:
+                NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
+                if ( ipv4_ntp != null ) m_ntps.put(ipv4_ntp);
+                break;
+            case PacketFactory.IPV6_PACKET:
+                NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
+                if ( ipv6_ntp != null ) m_ntps.put(ipv6_ntp);
+                break;
+            case PacketFactory.COMPRESSED_IP_PACKET:
+                CompressedIpPacket cip = (CompressedIpPacket) tlv;
+                MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
+                
+                if ( mmtp_packet == null ) break;
+                
+                /**
+                 * @note Signaling Message
+                 */
+                if ( 0x02 == mmtp_packet.getPayloadType() ) {
+                    List<Table> tables = 
+                            processMmtpSignallingMessage(mmtp_packet);
+                    
+                    for ( int i=0; i<tables.size(); i++ ) {
+                        m_tables.put(tables.get(i));
+                    }
+                } 
+                
+                /**
+                 * @note MPU-MFU
+                 */
+                if ( 0x00 == mmtp_packet.getPayloadType() ) {
+                    
+                }
+                break;
+            default:
+                break;
+        }
+    }
+    
     /**
      * ARIB B60 6.3.2 Configuration of MMTP Payload
      * @param mmtp MMTP_Packet
      * @return tables of MMT-SI
      * @throws IOException
      */
-    protected List<Table> processMmtp_SignallingMessage(MMTP_Packet mmtp) throws IOException {
+    protected List<Table> processMmtpSignallingMessage(MMTP_Packet mmtp) throws IOException {
         MMTP_Payload_SignallingMessage signal_message = mmtp.getSignallingMessage();
         
         if ( signal_message != null ) {
