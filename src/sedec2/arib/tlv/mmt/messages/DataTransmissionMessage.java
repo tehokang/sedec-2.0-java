@@ -1,21 +1,9 @@
 package sedec2.arib.tlv.mmt.messages;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import sedec2.arib.tlv.mmt.si.TableFactory;
 import sedec2.arib.tlv.mmt.si.tables.Table;
-import sedec2.util.Logger;
 
 public class DataTransmissionMessage extends Message {
-    protected byte number_of_tables;
-    protected List<TableInfo> table_infos = new ArrayList<>();
-    
-    class TableInfo {
-        public byte table_id;
-        public byte table_version;
-        public int table_length;
-    }
     
     public DataTransmissionMessage(byte[] buffer) {
         super(buffer);
