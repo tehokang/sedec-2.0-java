@@ -10,7 +10,6 @@ import sedec2.util.Logger;
 public class DataTransmissionMessage extends Message {
     protected byte number_of_tables;
     protected List<TableInfo> table_infos = new ArrayList<>();
-    protected List<Table> tables = new ArrayList<>();
     
     class TableInfo {
         public byte table_id;
@@ -28,16 +27,17 @@ public class DataTransmissionMessage extends Message {
         __decode_message_body__();
     }
 
+    @Override
+    public int getMessageLength() {
+        return length + 7;
+    }
+    
     public byte getNumberOfTables() {
         return number_of_tables;
     }
     
     public List<TableInfo> getTableInfo() {
         return table_infos;
-    }
-    
-    public List<Table> getTables() {
-        return tables;
     }
     
     @Override

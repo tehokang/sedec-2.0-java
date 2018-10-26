@@ -86,6 +86,14 @@ public class IPv6Packet extends TypeLengthValue {
         return transport_layer_data;
     }
     
+    public NetworkTimeProtocolData getNtp() {
+        return ntp;
+    }
+    
+    public MMTP_Packet getMmtp() {
+        return mmtp_packet;
+    }
+    
     @Override
     public void print() {
         super.print();

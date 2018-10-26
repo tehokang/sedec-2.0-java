@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MH_SiParameterDescriptor extends Descriptor {
@@ -44,17 +45,18 @@ public class MH_SiParameterDescriptor extends Descriptor {
         super._print_();
         
         Logger.d(String.format("\t parameter_version : 0x%x \n", parameter_version));
-        Logger.d(String.format("\t parameter_version : 0x%x \n", parameter_version));
+        Logger.d(String.format("\t update_time : 0x%x \n", update_time));
         
         for ( int i=0; i<si_parameters.size(); i++ ) {
             SiParameter si_param = si_parameters.get(i);
             
             Logger.d(String.format("\t [%d] table_id : 0x%x \n", 
                     i, si_param.table_id));
-            Logger.d(String.format("\t [%d] parameter_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] table_description_length : 0x%x \n", 
                     i, si_param.table_description_length));
-            Logger.d(String.format("\t [%d] parameter_version : %s \n", 
-                    i, new String(si_param.table_description_byte)));
+            Logger.d(String.format("\t [%d] table_description_byte : \n", i));
+            
+            BinaryLogger.print(si_param.table_description_byte);
         }
     }
 

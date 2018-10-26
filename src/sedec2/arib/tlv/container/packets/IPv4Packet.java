@@ -121,8 +121,12 @@ public class IPv4Packet extends TypeLengthValue {
         return transport_layer_data;
     }
     
-    public NetworkTimeProtocolData getNTP() {
+    public NetworkTimeProtocolData getNtp() {
         return ntp;
+    }
+    
+    public MMTP_Packet getMmtp() {
+        return mmtp_packet;
     }
     
     @Override

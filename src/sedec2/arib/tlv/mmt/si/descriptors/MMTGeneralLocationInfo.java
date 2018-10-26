@@ -68,30 +68,25 @@ public class MMTGeneralLocationInfo {
                 break;
             case 0x02:
                 for ( int j=0; j<16; j++ ) 
-                    type2.ipv6_src_addr[j] = 
-                            (byte) brw.readOnBuffer(8);
+                    type2.ipv6_src_addr[j] = (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<16; j++ ) 
-                    type2.ipv6_dst_addr[j] = 
-                            (byte) brw.readOnBuffer(8);
+                    type2.ipv6_dst_addr[j] = (byte) brw.readOnBuffer(8);
                 type2.dst_port = brw.readOnBuffer(16);
                 type2.packet_id = brw.readOnBuffer(16);
-                length=40;
+                length=36;
                 break;
             case 0x03:
                 type3.network_id = brw.readOnBuffer(16);
-                type3.MPEG_2_transport_stream_id = 
-                        brw.readOnBuffer(16);
+                type3.MPEG_2_transport_stream_id = brw.readOnBuffer(16);
                 brw.skipOnBuffer(3);
                 type3.MPEG_2_PID = brw.readOnBuffer(13);
                 length=6;
                 break;
             case 0x04:
                 for ( int j=0; j<16; j++ ) 
-                    type4.ipv6_src_addr[j] = 
-                            (byte) brw.readOnBuffer(8);
+                    type4.ipv6_src_addr[j] = (byte) brw.readOnBuffer(8);
                 for ( int j=0; j<16; j++ ) 
-                    type4.ipv6_dst_addr[j] = 
-                            (byte) brw.readOnBuffer(8);
+                    type4.ipv6_dst_addr[j] = (byte) brw.readOnBuffer(8);
                 type4.dst_port = brw.readOnBuffer(16);
                 brw.skipOnBuffer(3);
                 type4.MPEG_2_PID = brw.readOnBuffer(13);
@@ -99,8 +94,7 @@ public class MMTGeneralLocationInfo {
                 break;
             case 0x05:
                 type5.URL_length = (byte) brw.readOnBuffer(8);
-                type5.URL_byte = 
-                        new byte[type5.URL_length];
+                type5.URL_byte = new byte[type5.URL_length];
                 for ( int j=0; j<type5.URL_length; j++ ) {
                     type5.URL_byte[j] = (byte) brw.readOnBuffer(8);
                 }
@@ -110,6 +104,7 @@ public class MMTGeneralLocationInfo {
     }
     
     public void print() {
+        Logger.d(String.format("--- MMT_general_location_info --- (%s)\n", getClass().getName()));
         Logger.d(String.format("\t location_type : 0x%x \n", location_type));
         
         switch ( location_type ) {

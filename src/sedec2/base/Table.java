@@ -17,6 +17,18 @@ public abstract class Table extends BitReadWriter {
         __decode_table_header__();
     }
     
+    public int getTableId() {
+        return table_id;
+    }
+    
+    public int getSectionSyntaxIndicator() {
+        return section_syntax_indicator;
+    }
+    
+    public int getSectionLength() {
+        return section_length;
+    }
+    
     public void encode() {
         __encode_update_table_length__();
         __encode_prepare_table__();

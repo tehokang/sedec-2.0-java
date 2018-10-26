@@ -19,15 +19,8 @@ public class MH_CommonDataTable extends Table {
     protected byte data_type;
     protected int descriptors_loop_length;
     protected List<Descriptor> descriptors = new ArrayList<>();
-    protected DataModuleByte data_module_byte;
+    protected byte[] data_module_byte;
     
-    class DataModuleByte {
-        public byte logo_type;
-        public int logo_id;
-        public int logo_version;
-        public int data_size;
-        public int[] data_byte;
-    }
     public MH_CommonDataTable(byte[] buffer) {
         super(buffer);
         
@@ -70,7 +63,7 @@ public class MH_CommonDataTable extends Table {
         return descriptors;
     }
     
-    public DataModuleByte getDataModuleByte() {
+    public byte[] getDataModuleByte() {
         return data_module_byte;
     }
     
@@ -93,24 +86,10 @@ public class MH_CommonDataTable extends Table {
             descriptors.add(desc);
         }
         
-        for (int i = (section_length - 10 - descriptors_loop_length - 4); i>0; ) {
-            if ( data_type == 0x01 ) {
-                data_module_byte.logo_type = (byte) readOnBuffer(8);
-                skipOnBuffer(7);
-                data_module_byte.logo_id = readOnBuffer(9);
-                skipOnBuffer(4);
-                data_module_byte.logo_version = readOnBuffer(12);
-                data_module_byte.data_size = readOnBuffer(16);
-                data_module_byte.data_byte = new int[data_module_byte.data_size];
-                
-                for ( int j=0; j<data_module_byte.data_size; j++ ) {
-                    data_module_byte.data_byte[j] = readOnBuffer(8);
-                }
-                i-= (7 + data_module_byte.data_size);
-            } else {
-                skipOnBuffer(8);
-                i-=1;
-            }
+        data_module_byte = new byte[section_length - 10 - descriptors_loop_length - 4];
+        
+        for (int i=0; i<data_module_byte.length; i++ ) {
+            data_module_byte[i] = (byte) readOnBuffer(8);
         }
         
         checksum_CRC32 = readOnBuffer(32);
@@ -134,28 +113,10 @@ public class MH_CommonDataTable extends Table {
             desc.print();
         }
         
-        if ( data_type == 0x01 ) {
-            Logger.d(String.format("data_module_byte.logo_type : 0x%x \n", 
-                    data_module_byte.logo_type));
-            Logger.d(String.format("data_module_byte.logo_id : 0x%x \n", 
-                    data_module_byte.logo_id));
-            Logger.d(String.format("data_module_byte.logo_version : 0x%x \n", 
-                    data_module_byte.logo_version));
-            Logger.d(String.format("data_module_byte.data_size : 0x%x \n", 
-                    data_module_byte.data_size));
-            
-            Logger.d(String.format("data_module_byte.data_byte : "));
-            for ( int i=0; i<data_module_byte.data_size; i++ ) {
-                Logger.d(String.format("0x%x", data_module_byte.data_byte[i]));
-            }
-            Logger.d(String.format("\n"));
-        }
-        
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,
                 (checksum_CRC32 >> 16) & 0xff,
                 (checksum_CRC32 >> 8) & 0xff,
                 checksum_CRC32 & 0xff));
     }
-    
 }

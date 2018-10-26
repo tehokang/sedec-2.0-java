@@ -6,7 +6,10 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 
+import sedec2.arib.tlv.ITLVExtractorListener;
 import sedec2.arib.tlv.TLVExtractor;
+import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
+import sedec2.base.Table;
 
 public class TlvPacketDecoder {
     public static void main(String []args) {
@@ -20,6 +23,22 @@ public class TlvPacketDecoder {
         }
     
         TLVExtractor tlv_extractor = new TLVExtractor();
+        ITLVExtractorListener listener = new ITLVExtractorListener() {
+            
+            @Override
+            public void onReceivedTable(Table table) {
+//                System.out.print(String.format("Received Table (id : 0x%x) \n", 
+//                        table.getTableId()));
+//                table.print();
+            }
+
+            @Override
+            public void onNtpUpdated(NetworkTimeProtocolData ntp) {
+                ntp.print();
+            }
+        };
+        
+        tlv_extractor.addEventListener(listener);
         
         for ( int i=0; i<args.length; i++ ) {
             File inOutFile = new File(args[i]);
@@ -52,25 +71,30 @@ public class TlvPacketDecoder {
                     outputStream.write(tlv_payload_buffer);
                     
                     /**
-                     * @note Step.3 Putting a TLV packet into TLVExtractor
+                     * @note Step.3 Putting a TLV packet into TLVExtractor \n
+                     * and you can wait for both the results of TLV as table of MPEG2 and MFU
                      */
-                    boolean res = tlv_extractor.put(outputStream.toByteArray());
-                    if ( res == false ) {
-                        System.out.println("Overflow");
+                    if ( false == tlv_extractor.put(outputStream.toByteArray()) ) {
+                        System.out.println("Oops, they have problem to decode TLV ");
+                        break;
                     }
-                    Thread.sleep(1);
-                    if ( sample_counter > COUNT_OF_SAMPLES ) break;
-                    sample_counter++;
                     outputStream = null;
+                    Thread.sleep(1);
+                    
+//                    if ( sample_counter > COUNT_OF_SAMPLES ) break;
+//                    sample_counter++;
                 }
                 
                 dataInputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 break;
-            } finally {
-                System.out.println("ByeBye");
-            } 
+            }
         }
+        
+        tlv_extractor.removeEventListener(listener);
+        tlv_extractor.destroy();
+        tlv_extractor = null;
+        System.out.println("ByeBye");
     }
 }

@@ -33,7 +33,7 @@ import sedec2.arib.tlv.mmt.si.descriptors.MH_DownloadProtectionDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_EventGroupDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_ExpireDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_ExtendedEventDescriptor;
-import sedec2.arib.tlv.mmt.si.descriptors.MH_ExtendedTimestampDescriptor;
+import sedec2.arib.tlv.mmt.si.descriptors.MPU_ExtendedTimestampDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_ExternalApplicationControlDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_HEVCDescriptor;
 import sedec2.arib.tlv.mmt.si.descriptors.MH_HierachyDescriptor;
@@ -278,7 +278,7 @@ public class DescriptorFactory {
             case MH_SERVICE_DESCRIPTOR:
                 return new MH_ServiceDescriptor(brw);
             case MH_EXTENDED_TIMESTAMP_DESCRIPTOR:
-                return new MH_ExtendedTimestampDescriptor(brw);
+                return new MPU_ExtendedTimestampDescriptor(brw);
             case MPU_DOWNLOAD_CONTENT_DESCRIPTOR:
                 return new MPU_DownloadContentDescriptor(brw);
             case EVENT_MESSAGE_DESCRIPTOR:

@@ -1,10 +1,8 @@
 package sedec2.arib.tlv.mmt.messages;
 
 import sedec2.arib.tlv.mmt.si.TableFactory;
-import sedec2.base.Table;
 
 public class M2ShortSectionMessage extends Message {
-    protected Table table;
     
     public M2ShortSectionMessage(byte[] buffer) {
         super(buffer);
@@ -16,21 +14,22 @@ public class M2ShortSectionMessage extends Message {
         __decode_message_body__();
     }
 
-    public Table getTable() {
-        return table;
-    }
-    
     @Override
     protected void __decode_message_body__() {
-        table = (Table) TableFactory.createTable(getCurrentBuffer());
+        tables.add( TableFactory.createTable(getCurrentBuffer()) );
     }
 
+    @Override
+    public int getMessageLength() {
+        return length + 5;
+    }
+    
     @Override
     public void print() {
         super.print();
         
-        if ( table != null ) {
-            table.print();
+        for ( int i=0; i<tables.size(); i++ ) {
+            tables.get(i).print();
         }
     }
 }

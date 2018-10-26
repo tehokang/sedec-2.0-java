@@ -6,7 +6,7 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-public class MH_ExtendedTimestampDescriptor extends Descriptor {
+public class MPU_ExtendedTimestampDescriptor extends Descriptor {
     protected byte pts_offset_type;
     protected byte timescale_flag;
     protected int timescale;
@@ -15,6 +15,7 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
     
     class Timestamp {
         public int mpu_sequence_number;
+        public byte mpu_presentation_time_leap_indicator;
         public int mpu_decoding_time_offset;
         public byte num_of_au;
         public List<AccessUnit> access_units = new ArrayList<>();
@@ -25,7 +26,7 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
         public int pts_offset;
     }
     
-    public MH_ExtendedTimestampDescriptor(BitReadWriter brw) {
+    public MPU_ExtendedTimestampDescriptor(BitReadWriter brw) {
         super(brw);
         
         brw.skipOnBuffer(5);
@@ -45,10 +46,12 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
                 (pts_offset_type==1 ? 2:0)) ; i>0; ) {
             Timestamp timestamp = new Timestamp();
             timestamp.mpu_sequence_number = brw.readOnBuffer(32);
+            timestamp.mpu_presentation_time_leap_indicator = (byte) brw.readOnBuffer(2);
+            brw.skipOnBuffer(6);;
             timestamp.mpu_decoding_time_offset = brw.readOnBuffer(16);
             timestamp.num_of_au = (byte) brw.readOnBuffer(8);
             
-            i-=7;
+            i-=8;
             
             for ( int j=0; j<timestamp.num_of_au; j++ ) {
                 AccessUnit access_unit = new AccessUnit();
@@ -115,7 +118,7 @@ public class MH_ExtendedTimestampDescriptor extends Descriptor {
         
         for ( int i=0; i<timestamps.size(); i++ ) {
             Timestamp timestamp = timestamps.get(i);
-            descriptor_length += 7;
+            descriptor_length += 8;
             for ( int j=0; j<timestamp.access_units.size(); j++ ) {
                 descriptor_length += 2;
                 if ( pts_offset_type == 2) {

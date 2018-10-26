@@ -34,7 +34,7 @@ public class MPU_TimestampDescriptor extends Descriptor {
             MPU mpu = mpus.get(i);
             Logger.d(String.format("\t [%d] mpu_sequence_number : 0x%x \n", 
                     i, mpu.mpu_sequence_number));
-            Logger.d(String.format("\t [%d] mpu_sequence_number : 0x%x \n", 
+            Logger.d(String.format("\t [%d] mpu_presentation_time : 0x%x \n", 
                     i, mpu.mpu_presentation_time));
         }
     }

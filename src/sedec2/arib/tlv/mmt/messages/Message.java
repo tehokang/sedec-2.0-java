@@ -1,7 +1,10 @@
 package sedec2.arib.tlv.mmt.messages;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
+import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public abstract class Message extends sedec2.base.BitReadWriter {   
@@ -9,13 +12,13 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     protected int version;
     protected int length;
     
+    protected List<Table> tables = new ArrayList<>();
+    
     public Message(byte[] buffer) {
         super(buffer);
     }
     
-    public int getMessageLength() {
-        return length + 7;
-    }
+    public abstract int getMessageLength();
     
     public int getMessageId() {
         return message_id;
@@ -27,6 +30,10 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     
     public int getLength() {
         return length;
+    }
+    
+    public List<Table> getTables() {
+        return tables;
     }
     
     public void encode() {

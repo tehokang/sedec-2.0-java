@@ -1,7 +1,7 @@
 package sedec2.arib.tlv.mmt.mmtp;
 
-import sedec2.arib.tlv.mmt.MessageFactory;
-import sedec2.arib.tlv.mmt.messages.Message;
+import java.util.Arrays;
+
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
@@ -11,7 +11,6 @@ public class MMTP_Payload_SignallingMessage {
     protected byte aggregation_flag;
     protected byte fragment_counter;
     
-    protected Message message = null;
     protected int message_length;
     protected byte[] message_byte;
     
@@ -23,7 +22,10 @@ public class MMTP_Payload_SignallingMessage {
         fragment_counter = (byte) brw.readOnBuffer(8);
         
         if ( aggregation_flag == 0x00 ) {
-            message = MessageFactory.createMessage(brw.getCurrentBuffer());
+            message_byte = new byte[brw.getCurrentBuffer().length];
+            for ( int i=0; i<message_byte.length; i++ ) {
+                message_byte[i] = (byte) brw.readOnBuffer(8);
+            }
         } else {
             if ( length_extension_flag == 0x01 ) {
                 message_length = brw.readOnBuffer(32);
@@ -35,8 +37,11 @@ public class MMTP_Payload_SignallingMessage {
             for ( int i=0; i<message_byte.length; i++ ) {
                 message_byte[i] = (byte) brw.readOnBuffer(8);
             }
-            message = MessageFactory.createMessage(message_byte);
         }
+    }
+    
+    public byte[] getMessageByte() {
+        return Arrays.copyOfRange(message_byte, 0, message_byte.length);
     }
     
     public byte getFragmentationIndicator() {
@@ -61,9 +66,5 @@ public class MMTP_Payload_SignallingMessage {
         Logger.d(String.format("length_extension_flag : 0x%x \n", length_extension_flag));
         Logger.d(String.format("aggregation_flag : 0x%x \n", aggregation_flag));
         Logger.d(String.format("fragment_counter : 0x%x \n", fragment_counter));
-        
-        if ( null != message ) {
-            message.print();
-        }
     }
 }

@@ -21,6 +21,10 @@ public class SignallingPacket extends TypeLengthValue {
         }
     }
 
+    public Table getTable() {
+        return table;
+    }
+    
     @Override
     public void print() {
         super.print();

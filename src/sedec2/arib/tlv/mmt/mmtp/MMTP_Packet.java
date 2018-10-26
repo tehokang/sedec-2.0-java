@@ -136,24 +136,9 @@ public class MMTP_Packet extends BitReadWriter {
         
         if ( payload_type == 0x00 ) {
             mmtp_payload_mpu = new MMTP_Payload_MPU(this);
+            
         } else if ( payload_type == 0x02 ) {
-            switch ( packet_id ) {
-                case 0x0000:
-                case 0x0001:
-                case 0x8000:
-                case 0x8001:
-                case 0x8002:
-                case 0x8003:
-                case 0x8004:
-                case 0x8005:
-                case 0x8006:
-                case 0x8007:
-                    mmtp_payload_signalling_message = new MMTP_Payload_SignallingMessage(this);        
-                    break;
-                default:
-                    Logger.d(String.format("Unknown packet_id (0x%x)\n", packet_id));
-                    break;
-            }
+            mmtp_payload_signalling_message = new MMTP_Payload_SignallingMessage(this);        
         }
     }
     
@@ -193,24 +178,9 @@ public class MMTP_Packet extends BitReadWriter {
         
         if ( payload_type == 0x00 && mmtp_payload_mpu != null ) {
             mmtp_payload_mpu.print();
+            
         } else if (payload_type == 0x02 && mmtp_payload_signalling_message != null ) {
-            switch ( packet_id ) {
-                case 0x0000:
-                case 0x0001:
-                case 0x8000:
-                case 0x8001:
-                case 0x8002:
-                case 0x8003:
-                case 0x8004:
-                case 0x8005:
-                case 0x8006:
-                case 0x8007:
-                    mmtp_payload_signalling_message.print();
-                    break;
-                default:
-                    Logger.d(String.format("Unknown packet_id (0x%x)\n", packet_id));
-                    break;
-            }
+            mmtp_payload_signalling_message.print();
         }
     }
 }

@@ -24,81 +24,142 @@ import sedec2.base.Table;
 public class TableFactory {
     /** MMT-PT */
     public final static int MMT_PACKAGE_TABLE = 0x20;
+    public final static int MPT = MMT_PACKAGE_TABLE;
     
     /** PLT */
     public final static int PACKAGE_LIST_TABLE = 0x80;
+    public final static int PLT = PACKAGE_LIST_TABLE;
     
     /** LCT */
     public final static int LAYOUT_CONFIGURATION_TABLE = 0x81;
+    public final static int LCT = LAYOUT_CONFIGURATION_TABLE;
 
     /** ECM */
     public final static int ENTITLEMENT_CONTROL_MESSAGE_1 = 0x82;
+    public final static int ECM_1 = ENTITLEMENT_CONTROL_MESSAGE_1;
+    
     public final static int ENTITLEMENT_CONTROL_MESSAGE_2 = 0x83;
+    public final static int ECM_2 = ENTITLEMENT_CONTROL_MESSAGE_2;
     
     /** EMM */
     public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_1 = 0x84;
+    public final static int EMM_1 = ENTITLEMENT_MANAGEMENT_MESSAGE_1;
+    
     public final static int ENTITLEMENT_MANAGEMENT_MESSAGE_2 = 0x85;
+    public final static int EMM_2 = ENTITLEMENT_MANAGEMENT_MESSAGE_2;
 
     /** CAT */
     public final static int CONDITIONAL_ACCESS_TABLE = 0x86;
+    public final static int CAT = CONDITIONAL_ACCESS_TABLE;
 
     /** DCM */
     public final static int DOWNLOAD_CONTROL_MESSAGE_1 = 0x87;
+    public final static int DCM_1 = DOWNLOAD_CONTROL_MESSAGE_1;
+    
     public final static int DOWNLOAD_CONTROL_MESSAGE_2 = 0x88;
+    public final static int DCM_2 = DOWNLOAD_CONTROL_MESSAGE_2;
     
     /** DMM */
     public final static int DOWNLOAD_MANAGEMENT_MESSAGE_1 = 0x89;
+    public final static int DMM_1 = DOWNLOAD_MANAGEMENT_MESSAGE_1;
+    
     public final static int DOWNLOAD_MANAGEMENT_MESSAGE_2 = 0x8a;
+    public final static int DMM_2 = DOWNLOAD_MANAGEMENT_MESSAGE_2;
 
     /** MH-EIT 0x8b, 0x8c~0x9b */
     public final static int ACTUAL_MH_EVENT_INFORMATION_TABLE = 0x8b;
+    public final static int MH_EIT_ACTUAL = ACTUAL_MH_EVENT_INFORMATION_TABLE;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_1 = 0x8c;
+    public final static int MH_EIT_AUTO_1 = AUTO_MH_EVENT_INFORMATION_TABLE_1;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_2 = 0x8d;
+    public final static int MH_EIT_AUTO_2 = AUTO_MH_EVENT_INFORMATION_TABLE_2;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_3 = 0x8e;
+    public final static int MH_EIT_AUTO_3 = AUTO_MH_EVENT_INFORMATION_TABLE_3;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_4 = 0x8f;
+    public final static int MH_EIT_AUTO_4 = AUTO_MH_EVENT_INFORMATION_TABLE_4;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_5 = 0x90;
+    public final static int MH_EIT_AUTO_5 = AUTO_MH_EVENT_INFORMATION_TABLE_5;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_6 = 0x91;
+    public final static int MH_EIT_AUTO_6 = AUTO_MH_EVENT_INFORMATION_TABLE_6;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_7 = 0x92;
+    public final static int MH_EIT_AUTO_7 = AUTO_MH_EVENT_INFORMATION_TABLE_7;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_8 = 0x93;
+    public final static int MH_EIT_AUTO_8 = AUTO_MH_EVENT_INFORMATION_TABLE_8;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_9 = 0x94;
+    public final static int MH_EIT_AUTO_9 = AUTO_MH_EVENT_INFORMATION_TABLE_9;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_10 = 0x95;
+    public final static int MH_EIT_AUTO_10 = AUTO_MH_EVENT_INFORMATION_TABLE_10;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_11 = 0x96;
+    public final static int MH_EIT_AUTO_11 = AUTO_MH_EVENT_INFORMATION_TABLE_11;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_12 = 0x97;
+    public final static int MH_EIT_AUTO_12 = AUTO_MH_EVENT_INFORMATION_TABLE_12;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_13 = 0x98;
+    public final static int MH_EIT_AUTO_13 = AUTO_MH_EVENT_INFORMATION_TABLE_13;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_14 = 0x99;
+    public final static int MH_EIT_AUTO_14 = AUTO_MH_EVENT_INFORMATION_TABLE_14;
+            
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_15 = 0x9a;
+    public final static int MH_EIT_AUTO_15 = AUTO_MH_EVENT_INFORMATION_TABLE_15;
+    
     public final static int AUTO_MH_EVENT_INFORMATION_TABLE_16 = 0x9b;
+    public final static int MH_EIT_AUTO_16 = AUTO_MH_EVENT_INFORMATION_TABLE_16;
     
     /** MH-AIT */
     public final static int MH_APPLICATION_INFORMATION_TABLE = 0x9c;
+    public final static int MH_AIT = MH_APPLICATION_INFORMATION_TABLE;
     
     /** MH-BIT */
     public final static int MH_BROADCASTER_INFORMATION_TABLE = 0x9d;
+    public final static int MH_BIT = MH_BROADCASTER_INFORMATION_TABLE;
     
     /** MH-SDTT */
     public final static int MH_SOFTWARE_DOWNLOAD_TRIGGER_TABLE = 0x9e;
+    public final static int MH_SDTT = MH_SOFTWARE_DOWNLOAD_TRIGGER_TABLE;
 
     /** MH-SDT */
     public final static int ACTUAL_MH_SERVICE_DESCRIPTION_TABLE = 0x9f;
+    public final static int MH_SDT_ACTUAL = ACTUAL_MH_SERVICE_DESCRIPTION_TABLE;
+    
     public final static int OTHER_MH_SERVICE_DESCRIPTION_TABLE = 0xa0;
+    public final static int MH_SDT_OTHER = OTHER_MH_SERVICE_DESCRIPTION_TABLE;
 
     /** MH-TOT */
     public final static int MH_TIME_OFFSET_TABLE = 0xa1;
+    public final static int MH_TOT = MH_TIME_OFFSET_TABLE;
 
     /** MH-CDT */
     public final static int MH_COMMON_DATA_TABLE = 0xa2;
+    public final static int MH_CDT = MH_COMMON_DATA_TABLE;
         
     /** DDMT */
     public final static int DATA_DIRECTORY_MANAGEMENT_TABLE = 0xa3;
+    public final static int DDMT = DATA_DIRECTORY_MANAGEMENT_TABLE;
     
     /** DAMT */
     public final static int DATA_ASSET_MANAGEMENT_TABLE = 0xa4;
+    public final static int DSMT = DATA_ASSET_MANAGEMENT_TABLE;
     
     /** DCCT */
     public final static int DATA_CONTENT_CONFIGURATION_TABLE = 0xa5;
+    public final static int DCCT = DATA_CONTENT_CONFIGURATION_TABLE;
     
     /** EMT */
     public final static int EVENT_MESSAGE_TABLE = 0xa6;
+    public final static int EMT = EVENT_MESSAGE_TABLE;
     
     public final static int UNKNOWN_TABLE = 0xff;
 

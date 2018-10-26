@@ -13,9 +13,9 @@ public class CompressedIpPacket extends TypeLengthValue {
     protected UDPHeaderWoLength udp_header_wo_length = new UDPHeaderWoLength();
     protected IPv6HeaderWoLength ipv6_header_wo_length = new IPv6HeaderWoLength();
     protected int identification;
-    protected PacketDataByte packet_data_byte = null;
+    protected PacketData packet_data_byte = null;
     
-    class IPv4HeaderWoLength {
+    public class IPv4HeaderWoLength {
         public byte version;
         public byte IHL;
         public byte type_of_service;
@@ -47,7 +47,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
     
-    class IPv6HeaderWoLength {
+    public class IPv6HeaderWoLength {
         public byte version;
         public byte traffic_class;
         public int flow_label;
@@ -95,7 +95,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
     
-    class UDPHeaderWoLength {
+    public class UDPHeaderWoLength {
         public int source_port;
         public int destination_port;
         
@@ -105,11 +105,11 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
     
-    class PacketDataByte {
+    public class PacketData {
         public byte[] data;
         public MMTP_Packet mmtp_packet = null;
         
-        public PacketDataByte(int length, BitReadWriter brw) {
+        public PacketData(int length, BitReadWriter brw) {
             data = new byte[length];
             for ( int i=0; i<data.length; i++ ) {
                 data[i] = (byte) brw.readOnBuffer(8);
@@ -153,11 +153,11 @@ public class CompressedIpPacket extends TypeLengthValue {
             udp_header_wo_length.source_port = readOnBuffer(16);
             udp_header_wo_length.destination_port = readOnBuffer(16);
             
-            packet_data_byte = new PacketDataByte(length-3-20, this);
+            packet_data_byte = new PacketData(length-3-20, this);
             
         } else if ( CID_header_type == 0x21 ) {
             identification = readOnBuffer(16);
-            packet_data_byte = new PacketDataByte(length-3-2, this);
+            packet_data_byte = new PacketData(length-3-2, this);
             
         } else if ( CID_header_type == 0x60 ) {
             ipv6_header_wo_length.version = (byte) readOnBuffer(4);
@@ -175,12 +175,11 @@ public class CompressedIpPacket extends TypeLengthValue {
             udp_header_wo_length.source_port = readOnBuffer(16);
             udp_header_wo_length.destination_port = readOnBuffer(16);
             
-            packet_data_byte = new PacketDataByte(length-3-6-16-16-4, this);
+            packet_data_byte = new PacketData(length-3-6-16-16-4, this);
             
         } else if ( CID_header_type == 0x61 ) {
-            packet_data_byte = new PacketDataByte(length-3, this);
+            packet_data_byte = new PacketData(length-3, this);
         }
-        
     }
 
     public int getCID() {
@@ -211,7 +210,7 @@ public class CompressedIpPacket extends TypeLengthValue {
         return identification;
     }
     
-    public PacketDataByte getPacketDataByte() {
+    public PacketData getPacketData() {
         return packet_data_byte;
     }
     

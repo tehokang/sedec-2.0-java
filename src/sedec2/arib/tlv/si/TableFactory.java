@@ -8,10 +8,14 @@ import sedec2.base.UnknownTable;
 public class TableFactory {
     /** TLV-NIT */
     public final static int ACTUAL_TLV_NETWORK_INFORMATION_TABLE = 0x40;
+    public final static int TLV_NIT_ACTUAL = ACTUAL_TLV_NETWORK_INFORMATION_TABLE;
+    
     public final static int OTHER_TLV_NETWORK_INFORMATION_TABLE = 0x41;
+    public final static int TLV_NIT_OTHER = OTHER_TLV_NETWORK_INFORMATION_TABLE;
       
     /** AMT */
     public final static int ADDRESS_MAP_TABLE = 0xfe;
+    public final static int AMT = ADDRESS_MAP_TABLE;
     
     public final static int UNKNOWN_TABLE = 0xff;
 
