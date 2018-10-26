@@ -17,6 +17,8 @@ public class MH_HEVCDescriptor extends Descriptor {
     protected byte temporal_layer_subset_flag;
     protected byte HEVC_still_present_flag;
     protected byte HEVC_24hr_picture_present_flag;
+    protected byte sub_pic_hrd_params_not_present_flag;
+    protected byte HDR_WCG_idc;
     protected byte temporal_id_min;
     protected byte temporal_id_max;
     
@@ -36,13 +38,15 @@ public class MH_HEVCDescriptor extends Descriptor {
         temporal_layer_subset_flag = (byte) brw.readOnBuffer(1);
         HEVC_still_present_flag = (byte) brw.readOnBuffer(1);
         HEVC_24hr_picture_present_flag = (byte) brw.readOnBuffer(1);
-        brw.skipOnBuffer(5);
+        sub_pic_hrd_params_not_present_flag = (byte) brw.readOnBuffer(1);
+        brw.skipOnBuffer(2);
+        HDR_WCG_idc = (byte) brw.readOnBuffer(2);
         
         if ( temporal_layer_subset_flag == 1 ) {
-            brw.skipOnBuffer(5);
             temporal_id_min = (byte) brw.readOnBuffer(3);
             brw.skipOnBuffer(5);
             temporal_id_max = (byte) brw.readOnBuffer(3);
+            brw.skipOnBuffer(5);
         }
     }
 
