@@ -259,7 +259,7 @@ public class TLVExtractor {
                  * @note MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                    
+                    Logger.d("MPU-MFU \n");
                 }
                 break;
             default:

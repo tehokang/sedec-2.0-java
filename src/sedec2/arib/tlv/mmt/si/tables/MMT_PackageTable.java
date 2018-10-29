@@ -23,7 +23,7 @@ public class MMT_PackageTable extends Table {
         public int asset_id_scheme;
         public byte asset_id_length;
         public byte[] asset_id_byte;
-        public int asset_type;
+        public byte[] asset_type = new byte[4];
         public byte asset_clock_relation_flag;
         public byte location_count;
         
@@ -97,7 +97,11 @@ public class MMT_PackageTable extends Table {
                 asset.asset_id_byte[j] = (byte) readOnBuffer(8);
             }
             
-            asset.asset_type = readOnBuffer(32);
+            asset.asset_type[0] = (byte) readOnBuffer(8);
+            asset.asset_type[1] = (byte) readOnBuffer(8);
+            asset.asset_type[2] = (byte) readOnBuffer(8);
+            asset.asset_type[3] = (byte) readOnBuffer(8);
+            
             skipOnBuffer(7);
             asset.asset_clock_relation_flag = (byte) readOnBuffer(1);
             asset.location_count = (byte) readOnBuffer(8);
@@ -131,10 +135,10 @@ public class MMT_PackageTable extends Table {
             descriptors.get(i).print();
         }
         
-        Logger.d(String.format("number_of_assets : 0x%x \n", number_of_assets));
+        Logger.d(String.format("number_of_assets : 0x%x \n\n", number_of_assets));
         for ( int i=0; i<assets.size(); i++ ) {
             Asset asset = assets.get(i);
-            
+            Logger.d(String.format("[%d] ----- Asset Information ----- \n", i));
             Logger.d(String.format("[%d] identifier_type : 0x%x \n", i, asset.identifier_type));
             Logger.d(String.format("[%d] asset_id_scheme : 0x%x \n", i, asset.asset_id_scheme));
             Logger.d(String.format("[%d] asset_id_length : 0x%x \n", i, asset.asset_id_length));
@@ -142,7 +146,7 @@ public class MMT_PackageTable extends Table {
             
             BinaryLogger.print(asset.asset_id_byte);
             
-            Logger.d(String.format("[%d] asset_type : 0x%x \n",  i, asset.asset_type));
+            Logger.d(String.format("[%d] asset_type : %s \n",  i, new String(asset.asset_type)));
             Logger.d(String.format("[%d] asset_clock_relation_flag : 0x%x \n", 
                     i, asset.asset_clock_relation_flag));
             Logger.d(String.format("[%d] location_count : 0x%x \n", i, asset.location_count));
@@ -153,6 +157,7 @@ public class MMT_PackageTable extends Table {
             for ( int j=0; j<asset.descriptors.size(); j++ ) {
                 asset.descriptors.get(j).print();
             }
+            Logger.d("\n");
         }
     }
 

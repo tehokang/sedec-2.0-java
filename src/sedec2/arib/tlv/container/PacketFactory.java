@@ -8,14 +8,14 @@ import sedec2.arib.tlv.container.packets.SignallingPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
 public class PacketFactory {
-    public final static int IPV4_PACKET = 0x01;
-    public final static int IPV6_PACKET = 0x02;
-    public final static int COMPRESSED_IP_PACKET = 0x03;
-    public final static int SIGNALLING_PACKET = 0xfe;
-    public final static int NULL_PACKET = 0xff;
+    public final static byte IPV4_PACKET = (byte) 0x01;
+    public final static byte IPV6_PACKET = (byte) 0x02;
+    public final static byte COMPRESSED_IP_PACKET = (byte) 0x03;
+    public final static byte SIGNALLING_PACKET = (byte) 0xfe;
+    public final static byte NULL_PACKET = (byte) 0xff;
 
     public static TypeLengthValue createPacket(byte[] buffer) {
-        int packet_type = (buffer[1] & 0xff);
+        byte packet_type = (byte)(buffer[1] & 0xff);
         
         switch ( packet_type ) {
             case IPV4_PACKET:

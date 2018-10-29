@@ -73,7 +73,7 @@ public class TlvPacketDecoder {
         /**
          * @note Option.3 Disable all of filters which you don't want to receive
          */
-        tlv_extractor.disableTableFilter();
+//        tlv_extractor.disableTableFilter();
         
         /**
          * @note Option.4 Enable NTP data if user want to receive

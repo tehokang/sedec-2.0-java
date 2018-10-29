@@ -1,7 +1,7 @@
 package sedec2.util;
 
 public class BinaryLogger {
-    public static boolean PRINT = false;
+    public static boolean PRINT = true;
     public static boolean DEBUG = true;
     
     public static void print(byte[] buffer) {

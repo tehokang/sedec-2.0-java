@@ -17,27 +17,27 @@ import sedec2.dvb.tables.ProgramAssociationTable;
 import sedec2.dvb.tables.ProgramMapTable;
 
 public class TableFactory {
-    public final static int PROGRAM_ASSOCIATION_TABLE = 0x00;
-    public final static int CONDITIONAL_ACCESS_TABLE = 0x01;
-    public final static int PROGRAM_MAP_TABLE = 0x02;
-    public final static int APPLICATION_INFORMATION_TABLE = 0x74;
-    public final static int ACTUAL_NETWORK_INFORMATION_TABLE = 0x40;
-    public final static int OTHER_NETWORK_INFORMATION_TABLE = 0x41;
-    public final static int ACTUAL_SERVICE_DESCRIPTON_TABLE = 0x42;
-    public final static int OTHER_SERVICE_DESCRIPTION_TABLE = 0x46;
-    public final static int BOUQUET_ASSOCIATION_TABLE = 0x4a;
-    public final static int ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4e;
-    public final static int OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE = 0x4f;
-    public final static int TIME_DATE_TABLE = 0x70;
-    public final static int RUNNING_STATUS_TABLE = 0x71;
-    public final static int STUFFING_TABLE = 0x72;
-    public final static int TIME_OFFSET_TABLE = 0x73;
-    public final static int DISCONTINUITY_INFORMATION_TABLE = 0x7e;
-    public final static int SELECTION_INFORMATION_TABLE = 0x7f;
-    public final static int UNKNOWN_TABLE = 0xff;
+    public final static byte PROGRAM_ASSOCIATION_TABLE = (byte) 0x00;
+    public final static byte CONDITIONAL_ACCESS_TABLE = (byte) 0x01;
+    public final static byte PROGRAM_MAP_TABLE = (byte) 0x02;
+    public final static byte APPLICATION_INFORMATION_TABLE = (byte) 0x74;
+    public final static byte ACTUAL_NETWORK_INFORMATION_TABLE = (byte) 0x40;
+    public final static byte OTHER_NETWORK_INFORMATION_TABLE = (byte) 0x41;
+    public final static byte ACTUAL_SERVICE_DESCRIPTON_TABLE = (byte) 0x42;
+    public final static byte OTHER_SERVICE_DESCRIPTION_TABLE = (byte) 0x46;
+    public final static byte BOUQUET_ASSOCIATION_TABLE = (byte) 0x4a;
+    public final static byte ACTUAL_TS_PRESENT_EVENT_INFORMATION_TABLE = (byte) 0x4e;
+    public final static byte OTHER_TS_PRESENT_EVENT_INFORMATION_TABLE = (byte) 0x4f;
+    public final static byte TIME_DATE_TABLE = (byte) 0x70;
+    public final static byte RUNNING_STATUS_TABLE = (byte) 0x71;
+    public final static byte STUFFING_TABLE = (byte) 0x72;
+    public final static byte TIME_OFFSET_TABLE = (byte) 0x73;
+    public final static byte DISCONTINUITY_INFORMATION_TABLE = (byte) 0x7e;
+    public final static byte SELECTION_INFORMATION_TABLE = (byte) 0x7f;
+    public final static byte UNKNOWN_TABLE = (byte) 0xff;
     
     public static Table createTable(byte[] buffer) {
-        int table_id = (buffer[0] & 0xff);
+        byte table_id = (byte)(buffer[0] & 0xff);
         
         Table section = null;
 

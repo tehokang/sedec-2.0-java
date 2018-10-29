@@ -7,20 +7,20 @@ import sedec2.base.UnknownTable;
 
 public class TableFactory {
     /** TLV-NIT */
-    public final static int ACTUAL_TLV_NETWORK_INFORMATION_TABLE = 0x40;
-    public final static int TLV_NIT_ACTUAL = ACTUAL_TLV_NETWORK_INFORMATION_TABLE;
+    public final static byte ACTUAL_TLV_NETWORK_INFORMATION_TABLE = (byte) 0x40;
+    public final static byte TLV_NIT_ACTUAL = ACTUAL_TLV_NETWORK_INFORMATION_TABLE;
     
-    public final static int OTHER_TLV_NETWORK_INFORMATION_TABLE = 0x41;
-    public final static int TLV_NIT_OTHER = OTHER_TLV_NETWORK_INFORMATION_TABLE;
+    public final static byte OTHER_TLV_NETWORK_INFORMATION_TABLE = (byte) 0x41;
+    public final static byte TLV_NIT_OTHER = OTHER_TLV_NETWORK_INFORMATION_TABLE;
       
     /** AMT */
-    public final static int ADDRESS_MAP_TABLE = 0xfe;
-    public final static int AMT = ADDRESS_MAP_TABLE;
+    public final static byte ADDRESS_MAP_TABLE = (byte) 0xfe;
+    public final static byte AMT = ADDRESS_MAP_TABLE;
     
-    public final static int UNKNOWN_TABLE = 0xff;
+    public final static byte UNKNOWN_TABLE = (byte) 0xff;
 
     public static Table createTable(byte[] buffer) {
-        int table_id = (buffer[0] & 0xff);
+        byte table_id = (byte)(buffer[0] & 0xff);
         
         switch(table_id) {
             case ACTUAL_TLV_NETWORK_INFORMATION_TABLE:
