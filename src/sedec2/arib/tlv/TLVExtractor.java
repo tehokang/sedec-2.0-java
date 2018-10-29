@@ -266,7 +266,7 @@ public class TLVExtractor {
                  * @note MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
-//                    processMmtpMpu(mmtp_packet);
+                    processMmtpMpu(mmtp_packet);
                 }
                 break;
             default:
@@ -275,12 +275,15 @@ public class TLVExtractor {
     }
     
     protected void processMmtpMpu(MMTP_Packet mmtp) {
-        Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, msn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
-                mmtp.getPacketId(), 
-                mmtp.getPacketSequenceNumber(),
-                mmtp.getMPU().getMPUSequenceNumber(),
-                mmtp.getMPU().getFragmentCounter(),
-                mmtp.getMPU().getFragmentationIndicator()));
+//        Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, msn : 0x%08x, f_t : 0x%02x, f_c : 0x%02x, f_i : 0x%02x \n", 
+//                mmtp.getPacketId(), 
+//                mmtp.getPacketSequenceNumber(),
+//                mmtp.getMPU().getMPUSequenceNumber(),
+//                mmtp.getMPU().getFragmentType(),
+//                mmtp.getMPU().getFragmentCounter(),
+//                mmtp.getMPU().getFragmentationIndicator()));
+//        Logger.d(String.format("\t timed_flag : 0x%x, aggregation_flag : 0x%x \n", 
+//                mmtp.getMPU().getTimedFlag(), mmtp.getMPU().getAggregationFlag()));
     }
     
     /**

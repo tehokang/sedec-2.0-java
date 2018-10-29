@@ -41,11 +41,24 @@ public class TlvPacketDecoder {
          */
         ITLVExtractorListener listener = new ITLVExtractorListener() {
             int counter = 0;
+            Table mpt = null;
+            Table plt = null;
             
             @Override
             public void onReceivedTable(Table table) {
                 System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
                         counter++, table.getTableId()));
+                if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
+                    mpt = table;
+                } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
+                    plt = table;
+                }
+                
+                if ( mpt != null && plt != null ) {
+                    plt.print();
+                    mpt.print();
+                    System.exit(0);
+                }
 //                table.print();
             }
             
@@ -64,6 +77,7 @@ public class TlvPacketDecoder {
         filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_ACTUAL);
         filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_OTHER);
         filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
+        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
         tlv_extractor.enableTableFilter(filters);
         
         /**
