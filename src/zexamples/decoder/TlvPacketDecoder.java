@@ -43,20 +43,24 @@ public class TlvPacketDecoder {
             int counter = 0;
             Table mpt = null;
             Table plt = null;
+            Table amt = null;
             
             @Override
             public void onReceivedTable(Table table) {
-                System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
-                        counter++, table.getTableId()));
+//                System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
+//                        counter++, table.getTableId()));
                 if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
                     mpt = table;
                 } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
                     plt = table;
+                } else if (table.getTableId() == sedec2.arib.tlv.si.TableFactory.AMT ) {
+                    amt = table;
                 }
                 
-                if ( mpt != null && plt != null ) {
+                if ( mpt != null && plt != null && amt != null ) {
                     plt.print();
                     mpt.print();
+                    amt.print();
                     System.exit(0);
                 }
 //                table.print();

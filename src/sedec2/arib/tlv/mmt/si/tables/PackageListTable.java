@@ -142,7 +142,7 @@ public class PackageListTable extends Table {
             Logger.d(String.format("[%d] MMT_package_id_length : 0x%x \n", 
                     i, pkg.MMT_package_id_length));
             Logger.d(String.format("[%d] MMT_package_id_byte :\n", i));
-            BinaryLogger.print(pkg.MMT_package_id_byte);
+            BinaryLogger.debug(pkg.MMT_package_id_byte);
             pkg.MMT_general_location_info.print();
         }
         
