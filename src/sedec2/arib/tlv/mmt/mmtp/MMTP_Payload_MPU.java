@@ -16,7 +16,7 @@ public class MMTP_Payload_MPU {
     protected byte fragment_counter;
     protected int MPU_sequence_number;
     protected MFU mfu = null;
-    
+        
     class MFU {
         public List<TimedData> timed_data = new ArrayList<>();
         public List<NonTimedData> non_timed_data = new ArrayList<>();
@@ -111,6 +111,38 @@ public class MMTP_Payload_MPU {
                 }
             }
         }
+    }
+    
+    public int getPayloadLength() {
+        return payload_length;
+    }
+    
+    public byte getFragmentType() {
+        return fragment_type;
+    }
+    
+    public byte getTimedFlag() {
+        return timed_flag;
+    }
+    
+    public byte getFragmentationIndicator() {
+        return fragmentation_indicator;
+    }
+    
+    public byte getAggregationFlag() {
+        return aggregation_flag;
+    }
+    
+    public byte getFragmentCounter() {
+        return fragment_counter;
+    }
+    
+    public int getMPUSequenceNumber() {
+        return MPU_sequence_number;
+    }
+    
+    public MFU getMFU() {
+        return mfu;
     }
     
     public void print() {

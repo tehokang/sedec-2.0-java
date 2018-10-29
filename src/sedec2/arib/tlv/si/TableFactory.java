@@ -22,7 +22,7 @@ public class TableFactory {
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
         
-        switch(table_id) {
+        switch ( table_id ) {
             case ACTUAL_TLV_NETWORK_INFORMATION_TABLE:
             case OTHER_TLV_NETWORK_INFORMATION_TABLE:
                 return new TLV_NetworkInformationTable(buffer);

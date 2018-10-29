@@ -23,7 +23,7 @@ import sedec2.base.Table;
 
 public class TableFactory {
     /** MMT-PT */
-    public final static byte MMT_PACKAGE_TABLE = 0x20;
+    public final static byte MMT_PACKAGE_TABLE = (byte) 0x20;
     public final static byte MPT = MMT_PACKAGE_TABLE;
     
     /** PLT */
@@ -166,7 +166,7 @@ public class TableFactory {
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
         
-        switch(table_id) {
+        switch ( table_id ) {
             case DATA_CONTENT_CONFIGURATION_TABLE:
                 return new DataContentConfigurationTable(buffer);
             case DATA_ASSET_MANAGEMENT_TABLE:

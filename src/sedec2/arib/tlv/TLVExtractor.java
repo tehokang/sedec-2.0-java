@@ -3,9 +3,8 @@ package sedec2.arib.tlv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
-import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -43,11 +42,9 @@ public class TLVExtractor {
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     
-    protected Map<Integer, MMTP_Packet> m_fragmented01_mmtp = 
-            new HashMap<Integer, MMTP_Packet>();
-    protected Map<Integer, MMTP_Packet> m_fragmented02_mmtp = 
-            new HashMap<Integer, MMTP_Packet>();
-    
+    protected List<MMTP_Packet> m_fragmented01_mmtp_for_signal_message = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_for_signal_message = new ArrayList<>();
+            
     /**
      * @note sample_counter and print function is only for testing
      */
@@ -146,6 +143,12 @@ public class TLVExtractor {
         m_ntp_event_thread.interrupt();
         m_ntp_event_thread = null;
         
+        m_fragmented01_mmtp_for_signal_message.clear();
+        m_fragmented01_mmtp_for_signal_message = null;
+                
+        m_fragmented02_mmtp_for_signal_message.clear();
+        m_fragmented02_mmtp_for_signal_message = null;
+        
         m_listeners.clear();
         m_listeners = null;
                 
@@ -209,25 +212,29 @@ public class TLVExtractor {
      */
     protected synchronized void emitTable(Table table) {
         if ( table != null ) {
-            if ( m_enable_all_of_table_filter == true ) {
-                for ( int i=0; i<m_listeners.size(); i++ ) {
-                    m_listeners.get(i).onReceivedTable(table);
-                }
-            } else if ( m_enable_table_filter == true ) {
-                for ( int i=0; i<m_listeners.size(); i++ ) {
-                    if ( m_table_id_filters.contains(table.getTableId()) == true ) {
-                        m_listeners.get(i).onReceivedTable(table);
-                    }
-                }
+            for ( int i=0; i<m_listeners.size(); i++ ) {
+                m_listeners.get(i).onReceivedTable(table);
+            }
+        }
+    }
+    
+    protected void putTableToEmitAsEvent(Table table) throws InterruptedException {
+        if ( table == null ) return;
+        
+        if ( m_enable_all_of_table_filter == true ) {
+            m_tables.put( table );
+        } else if ( m_enable_table_filter == true ) {
+            if ( m_table_id_filters.contains(table.getTableId()) == true ) {
+                m_tables.put(table);
             }
         }
     }
     
     protected synchronized void processTLV(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
-        switch ( tlv.getPacketType() & 0xff ) {
+        switch ( tlv.getPacketType() ) {
             case PacketFactory.SIGNALLING_PACKET:
-                m_tables.put( ((SignallingPacket)tlv).getTable() );
+                putTableToEmitAsEvent( ((SignallingPacket)tlv).getTable() );
                 break;
             case PacketFactory.IPV4_PACKET:
                 NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
@@ -251,7 +258,7 @@ public class TLVExtractor {
                             processMmtpSignallingMessage(mmtp_packet);
                     
                     for ( int i=0; i<tables.size(); i++ ) {
-                        m_tables.put(tables.get(i));
+                        putTableToEmitAsEvent(tables.get(i));
                     }
                 } 
                 
@@ -259,7 +266,7 @@ public class TLVExtractor {
                  * @note MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                    Logger.d("MPU-MFU \n");
+//                    processMmtpMpu(mmtp_packet);
                 }
                 break;
             default:
@@ -267,10 +274,19 @@ public class TLVExtractor {
         }
     }
     
+    protected void processMmtpMpu(MMTP_Packet mmtp) {
+        Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, msn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
+                mmtp.getPacketId(), 
+                mmtp.getPacketSequenceNumber(),
+                mmtp.getMPU().getMPUSequenceNumber(),
+                mmtp.getMPU().getFragmentCounter(),
+                mmtp.getMPU().getFragmentationIndicator()));
+    }
+    
     /**
      * Processing signaling message which is payload_type(0x02) of MMTP.
      * A table which signaling message has will be sent to application unless the table has fragmented
-     * ARIB B60 6.3.2 Configuration of MMTP Payload
+     * ARIB B60 6.3.2 Configuration of MMTP payload
      * @param mmtp MMTP_Packet
      * @return tables of MMT-SI
      * @throws IOException
@@ -290,39 +306,78 @@ public class TLVExtractor {
                     if ( message != null ) return message.getTables();
                     break;
                 case 0x01:
+//                    Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
+//                            mmtp.getPacketId(), 
+//                            mmtp.getPacketSequenceNumber(),
+//                            signal_message.getFragmentCounter(),
+//                            signal_message.getFragmentationIndicator()));
                     /**
                      * @note ARIB B60 Table 6-2
                      * This involves header part of divided data.
                      */
-                    m_fragmented01_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
+                    m_fragmented01_mmtp_for_signal_message.add(mmtp);
                     break;
                 case 0x02:
+//                    Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
+//                            mmtp.getPacketId(), 
+//                            mmtp.getPacketSequenceNumber(),
+//                            signal_message.getFragmentCounter(),
+//                            signal_message.getFragmentationIndicator()));
                     /**
                      * @note ARIB B60 Table 6-2
                      * This involves a part of divided data which is \n
                      * neither header part nor last part.
                      */
-                    m_fragmented02_mmtp.put(mmtp.getPacketSequenceNumber(), mmtp);
+                    m_fragmented02_mmtp_for_signal_message.add(mmtp);
                     break;
                 case 0x03:
                     /**
-                     * @note ARIB B60 Table 6-2
-                     * This involves last part of divided data.
+                     * @note ARIB B60 Table 6-2, This involves last part of divided data.
+                     * In other words, it's a timing to make whole section table since 0x03 is last packet
+                     * after gathering fragmented data of tables.
                      */
-                    MMTP_Packet mmtp01 = m_fragmented01_mmtp.get(mmtp.getPacketSequenceNumber()-2);
-                    MMTP_Packet mmtp02 = m_fragmented02_mmtp.get(mmtp.getPacketSequenceNumber()-1);
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     
-                    if ( mmtp01 != null ) {
-                        outputStream.write(mmtp01.getSignallingMessage().getMessageByte());
-                        m_fragmented01_mmtp.remove(mmtp.getPacketSequenceNumber()-2);
+                    /**
+                     * Case.1 0x01 of fragmentation_indicator will be only one thing.  
+                     */
+                    for ( Iterator<MMTP_Packet> it = 
+                            m_fragmented01_mmtp_for_signal_message.iterator() ; 
+                            it.hasNext() ; ) {
+                        MMTP_Packet mmtp01 = it.next();
+                        MMTP_Payload_SignallingMessage sm = mmtp01.getSignallingMessage();
+                        if( mmtp01.getPacketId() == mmtp.getPacketId() && 
+                                sm != null &&
+                                sm.getFragmentationIndicator() == 0x01 ) {
+                            outputStream.write(sm.getMessageByte());
+                            it.remove();
+                        }
+                    }
+              
+                    /**
+                     * Case.2 0x02 of fragmentation_indicator will be multiple things  
+                     */
+                    for(Iterator<MMTP_Packet> it = 
+                            m_fragmented02_mmtp_for_signal_message.iterator() ; 
+                            it.hasNext() ; ) {
+                        MMTP_Packet mmtp02 = it.next();
+                        MMTP_Payload_SignallingMessage sm = mmtp02.getSignallingMessage();
+                        if( mmtp02.getPacketId() == mmtp.getPacketId() &&
+                                sm != null && 
+                                sm.getFragmentationIndicator() == 0x02 ) {
+                            outputStream.write(sm.getMessageByte());
+                            it.remove();
+                        }
                     }
                     
-                    if ( mmtp02 != null ) {
-                        outputStream.write(mmtp02.getSignallingMessage().getMessageByte());
-                        m_fragmented02_mmtp.remove(mmtp.getPacketSequenceNumber()-1);
-                    }
+                    /**
+                     * Case.2 0x03 of fragmentation_indicator will be only one thing as last
+                     */
                     outputStream.write(signal_message.getMessageByte());
+                    
+                    /**
+                     * As a result, outputStream has whole data of tables
+                     */
                     message = MessageFactory.createMessage(outputStream.toByteArray());
                     if (message != null ) return message.getTables();
                     break;

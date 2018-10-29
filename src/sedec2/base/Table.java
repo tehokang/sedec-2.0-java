@@ -1,5 +1,6 @@
 package sedec2.base;
 
+import java.io.FileOutputStream;
 import java.util.Arrays;
 
 import sedec2.util.Logger;
@@ -39,8 +40,14 @@ public abstract class Table extends BitReadWriter {
         __encode_make_crc__();
     }
     
-    public void save() {
-        
+    public void save(String filepath) {
+        try {
+            FileOutputStream fos = new FileOutputStream(filepath);
+            fos.write(m_buffer);
+            fos.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     public void print() {

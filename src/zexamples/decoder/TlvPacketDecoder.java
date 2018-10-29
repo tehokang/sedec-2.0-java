@@ -46,7 +46,7 @@ public class TlvPacketDecoder {
             public void onReceivedTable(Table table) {
                 System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
                         counter++, table.getTableId()));
-                table.print();
+//                table.print();
             }
             
             @Override
@@ -60,15 +60,16 @@ public class TlvPacketDecoder {
          * @note Option.1 Enable specific filters which you want to receive
          */
         List<Byte> filters = new ArrayList<>();
-        filters.add((byte)sedec2.arib.tlv.si.TableFactory.AMT);
-        filters.add((byte)sedec2.arib.tlv.si.TableFactory.TLV_NIT_ACTUAL);
-        filters.add((byte)sedec2.arib.tlv.si.TableFactory.TLV_NIT_OTHER);
+        filters.add(sedec2.arib.tlv.si.TableFactory.AMT);
+        filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_ACTUAL);
+        filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_OTHER);
+        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_extractor.enableTableFilter(filters);
         
         /**
          * @note Option.2 Enable all of filters which you want to receive
          */
-        tlv_extractor.enableAllOfTableFilter();
+//        tlv_extractor.enableAllOfTableFilter();
         
         /**
          * @note Option.3 Disable all of filters which you don't want to receive
@@ -78,7 +79,7 @@ public class TlvPacketDecoder {
         /**
          * @note Option.4 Enable NTP data if user want to receive
          */
-        tlv_extractor.disableNtpFilter();
+//        tlv_extractor.disableNtpFilter();
         
         /**
          * @note Assume.1 Getting each one TLV packet from specific file.
