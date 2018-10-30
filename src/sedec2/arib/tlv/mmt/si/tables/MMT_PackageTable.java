@@ -18,7 +18,7 @@ public class MMT_PackageTable extends Table {
     protected byte number_of_assets;
     protected List<Asset> assets = new ArrayList<>();
     
-    class Asset {
+    public class Asset {
         public byte identifier_type;
         public int asset_id_scheme;
         public byte asset_id_length;
@@ -144,7 +144,7 @@ public class MMT_PackageTable extends Table {
             Logger.d(String.format("[%d] asset_id_length : 0x%x \n", i, asset.asset_id_length));
             Logger.d(String.format("[%d] asset_id_byte : \n", i));
             
-            BinaryLogger.print(asset.asset_id_byte);
+            BinaryLogger.debug(asset.asset_id_byte);
             
             Logger.d(String.format("[%d] asset_type : %s \n",  i, new String(asset.asset_type)));
             Logger.d(String.format("[%d] asset_clock_relation_flag : 0x%x \n", 

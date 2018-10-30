@@ -1,4 +1,4 @@
-package zexamples.decoder;
+package zexamples.decoder.arib;
 
 import java.io.BufferedInputStream;
 import java.io.ByteArrayOutputStream;
@@ -6,11 +6,100 @@ import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
-import sedec2.arib.tlv.TLVExtractor;
-import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
+import sedec2.arib.tlv.TlvMediaExtractor;
+import sedec2.arib.tlv.TlvMediaExtractor.IMediaExtractorListener;
+import sedec2.arib.tlv.TlvTableExtractor;
+import sedec2.arib.tlv.TlvTableExtractor.ITableExtractorListener;
+import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
+import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
+import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
+
+class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener {
+    protected MMT_PackageTable mpt = null;
+    protected PackageListTable plt = null;
+    protected TlvTableExtractor tlv_table_extractor = new TlvTableExtractor();
+    protected TlvMediaExtractor tlv_media_extractor = new TlvMediaExtractor();
+    
+    public TlvCoordinator() {
+        List<Byte> filters = new ArrayList<>();
+        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
+        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
+        tlv_table_extractor.enableTableFilter(filters);
+        
+        /* @note Option Enable all of filters which you want to receive */
+//        tlv_extractor.enableAllOfTableFilter();
+        
+        /* @note Option Disable all of filters which you don't want to receive */
+//        tlv_extractor.disableTableFilter();
+        
+        /* @note Option Enable NTP data if user want to receive */
+//        tlv_extractor.disableNtpFilter();
+
+        tlv_table_extractor.addEventListener(this);
+        tlv_media_extractor.addEventListener(this);
+    }
+    
+    public void destroy() {
+        tlv_media_extractor.removeEventListener(this);
+        tlv_table_extractor.removeEventListener(this);
+        
+        tlv_media_extractor = null;
+        tlv_table_extractor = null;
+    }
+    
+    public boolean putTlvForTable(byte[] tlv_raw) {
+        return tlv_table_extractor.put(tlv_raw);
+    }
+    
+    public boolean putTlvForMedia(byte[] tlv_raw) {
+        return tlv_media_extractor.put(tlv_raw);
+    }
+    
+    @Override
+    public void onReceivedTable(Table table) {
+        if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
+            if ( mpt == null ) {
+                mpt = (MMT_PackageTable) table;
+                List<Asset> assets = mpt.getAssets();
+                for ( int i=0; i<assets.size(); i++) {
+                    Asset asset = assets.get(i);
+                    String asset_type = new String(asset.asset_type);                            
+                    int pid = ((asset.asset_id_byte[0] & 0xff) << 8 | asset.asset_id_byte[1]);
+                    switch ( asset_type ) {
+                        case "hev1" :
+                            tlv_media_extractor.setVideoPidFilter(Arrays.asList(pid));
+                            break;
+                        case "mp4a":
+                            tlv_media_extractor.setAudioPidFilter(Arrays.asList(pid));
+                            break;
+                    }
+                }
+            }
+        } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
+            if ( plt == null  ) {
+                plt = (PackageListTable) table;                        
+            } else if ( plt != null && plt.getVersion() != 
+                    ((PackageListTable)table).getVersion() ) {
+                plt = (PackageListTable) table;
+                mpt = null;
+            }
+        }                
+    }
+
+    @Override
+    public void onReceivedVideo(int packet_id, byte[] buffer) {
+        
+    }
+
+    @Override
+    public void onReceivedAudio(int packet_id, byte[] buffer) {
+        
+    }
+}
 
 /**
  * TlvPacketDecoder is an example for getting 
@@ -19,6 +108,9 @@ import sedec2.base.Table;
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
  */
 public class TlvPacketDecoder {
+
+
+    
     public static void main(String []args) {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
@@ -28,76 +120,8 @@ public class TlvPacketDecoder {
                     "zexamples.decoder.TlvPacketDecoder " + 
                     "{TLV Raw File} \n");
         }
-    
-        /**
-         * @note Step.1 Creating TLVExtractor
-         */
-        TLVExtractor tlv_extractor = new TLVExtractor();
         
-        /**
-         * @note Step.2 Add Event Listener to listen Table, NTP, MFU
-         * and you can set table filters only what you want to receive or not
-         */
-        TLVExtractor.ITLVExtractorListener listener = 
-                new TLVExtractor.ITLVExtractorListener() {
-            int counter = 0;
-            Table mpt = null;
-            Table plt = null;
-            Table amt = null;
-            
-            @Override
-            public void onReceivedTable(Table table) {
-//                System.out.print(String.format("[%d] User Received Table (id : 0x%x) \n", 
-//                        counter++, table.getTableId()));
-                if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
-                    mpt = table;
-                } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
-                    plt = table;
-                } else if (table.getTableId() == sedec2.arib.tlv.si.TableFactory.AMT ) {
-                    amt = table;
-                }
-                
-                if ( mpt != null && plt != null && amt != null ) {
-                    plt.print();
-                    mpt.print();
-                    amt.print();
-                    System.exit(0);
-                }
-//                table.print();
-            }
-            
-            @Override
-            public void onUpdatedNtp(NetworkTimeProtocolData ntp) {
-                ntp.print();
-            }
-        };
-        tlv_extractor.addEventListener(listener);
-        
-        /**
-         * @note Option.1 Enable specific filters which you want to receive
-         */
-        List<Byte> filters = new ArrayList<>();
-        filters.add(sedec2.arib.tlv.si.TableFactory.AMT);
-        filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_ACTUAL);
-        filters.add(sedec2.arib.tlv.si.TableFactory.TLV_NIT_OTHER);
-        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
-        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
-        tlv_extractor.enableTableFilter(filters);
-        
-        /**
-         * @note Option.2 Enable all of filters which you want to receive
-         */
-//        tlv_extractor.enableAllOfTableFilter();
-        
-        /**
-         * @note Option.3 Disable all of filters which you don't want to receive
-         */
-//        tlv_extractor.disableTableFilter();
-        
-        /**
-         * @note Option.4 Enable NTP data if user want to receive
-         */
-//        tlv_extractor.disableNtpFilter();
+        TlvCoordinator tlv_coordinator = new TlvCoordinator();
         
         /**
          * @note Assume.1 Getting each one TLV packet from specific file.
@@ -134,7 +158,10 @@ public class TlvPacketDecoder {
                      * @note Step.3 Putting a TLV packet into TLVExtractor \n
                      * and you can wait for both the results of TLV as table of MPEG2 and MFU
                      */
-                    if ( false == tlv_extractor.put(outputStream.toByteArray()) ) {
+                    if ( false == 
+                            tlv_coordinator.putTlvForTable(outputStream.toByteArray()) ||
+                         false == 
+                            tlv_coordinator.putTlvForMedia(outputStream.toByteArray())  ) {
                         System.out.println("Oops, they have problem to decode TLV ");
                         break;
                     }
@@ -156,11 +183,10 @@ public class TlvPacketDecoder {
         }
         
         /**
-         * @note Step.4 Destroy of TLVExtractor to not handle and released by garbage collector
+         * @note Destroy of TLVExtractor to not handle and released by garbage collector
          */
-        tlv_extractor.removeEventListener(listener);
-        tlv_extractor.destroy();
-        tlv_extractor = null;
+        tlv_coordinator.destroy();
+        tlv_coordinator = null;
         
         System.out.println("ByeBye");
     }

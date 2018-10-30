@@ -10,6 +10,10 @@ public abstract class Table extends sedec2.base.Table {
         super(buffer);
     }
     
+    public byte getVersion() {
+        return version;
+    }
+    
     public void encode() {
         __encode_update_table_length__();
         __encode_prepare_table__();

@@ -10,9 +10,6 @@ import java.util.concurrent.BlockingQueue;
 
 import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.packets.CompressedIpPacket;
-import sedec2.arib.tlv.container.packets.IPv4Packet;
-import sedec2.arib.tlv.container.packets.IPv6Packet;
-import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.SignallingPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.MessageFactory;
@@ -20,30 +17,29 @@ import sedec2.arib.tlv.mmt.messages.Message;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.base.Table;
-import sedec2.util.Logger;
 
-public class TLVExtractor {
-    protected final String TAG = "TLVExtractor";
+public class TlvTableExtractor {
+    public interface ITableExtractorListener {
+        public void onReceivedTable(Table table);    
+    }
     
-    boolean m_enable_ntp_filter = false;
+    protected final String TAG = "TlvTableExtractor";
+    
     boolean m_enable_table_filter = false;
     boolean m_enable_all_of_table_filter = false;
     List<Byte> m_table_id_filters = new ArrayList<>();
     
-    protected Thread m_ntp_event_thread;
     protected Thread m_table_event_thread;
     protected Thread m_tlv_extractor_thread;
     protected boolean m_is_running = true;
     
-    protected List<ITLVExtractorListener> m_listeners = new ArrayList<>();
+    protected List<ITableExtractorListener> m_listeners = new ArrayList<>();
 
-    protected BlockingQueue<NetworkTimeProtocolData> m_ntps = 
-            new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     
-    protected List<MMTP_Packet> m_fragmented01_mmtp_for_signal_message = new ArrayList<>();
-    protected List<MMTP_Packet> m_fragmented02_mmtp_for_signal_message = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented01_mmtp_with_signal_message = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_with_signal_message = new ArrayList<>();
             
     /**
      * @note sample_counter and print function is only for testing
@@ -51,7 +47,7 @@ public class TLVExtractor {
     protected long tlv_sample_counter = 0;
     protected long table_sample_counter = 0;
     
-    public TLVExtractor() {
+    public TlvTableExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -83,25 +79,6 @@ public class TLVExtractor {
             }
         });
         
-        m_ntp_event_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                
-                while ( m_is_running ) {
-                    try {
-                        Thread.sleep(1);
-                        if ( null != m_ntps ) emitNtp(m_ntps.take());
-                    } catch ( InterruptedException e ) {
-                        /**
-                         * @note Nothing to do
-                         */
-                    } catch ( Exception e ) {
-                        e.printStackTrace();
-                    }
-                }
-            }
-        });
-        
         m_table_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -125,7 +102,6 @@ public class TLVExtractor {
         
         m_tlv_extractor_thread.start();
         m_table_event_thread.start();
-        m_ntp_event_thread.start();
     }
     
     /**
@@ -140,14 +116,11 @@ public class TLVExtractor {
         m_tlv_extractor_thread.interrupt();
         m_tlv_extractor_thread = null;
         
-        m_ntp_event_thread.interrupt();
-        m_ntp_event_thread = null;
-        
-        m_fragmented01_mmtp_for_signal_message.clear();
-        m_fragmented01_mmtp_for_signal_message = null;
+        m_fragmented01_mmtp_with_signal_message.clear();
+        m_fragmented01_mmtp_with_signal_message = null;
                 
-        m_fragmented02_mmtp_for_signal_message.clear();
-        m_fragmented02_mmtp_for_signal_message = null;
+        m_fragmented02_mmtp_with_signal_message.clear();
+        m_fragmented02_mmtp_with_signal_message = null;
         
         m_listeners.clear();
         m_listeners = null;
@@ -158,8 +131,6 @@ public class TLVExtractor {
         m_tables.clear();
         m_tables = null;
 
-        m_ntps.clear();
-        m_ntps = null;
     }
     
     /**
@@ -167,11 +138,11 @@ public class TLVExtractor {
      * SDK can send
      * @param listener
      */
-    public void addEventListener(ITLVExtractorListener listener) {
+    public void addEventListener(ITableExtractorListener listener) {
         m_listeners.add(listener);
     }
     
-    public void removeEventListener(ITLVExtractorListener listener) {
+    public void removeEventListener(ITableExtractorListener listener) {
         m_listeners.remove(listener);
     }
     
@@ -194,18 +165,6 @@ public class TLVExtractor {
         return true;
     }
 
-    /**
-     * Sending a NTP to application
-     * @param ntp
-     */
-    protected synchronized void emitNtp(NetworkTimeProtocolData ntp) {
-        if ( ntp != null && m_enable_ntp_filter == true ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onUpdatedNtp(ntp);
-            }
-        }
-    }
-    
     /**
      * Sending a table to application
      * @param table
@@ -233,16 +192,11 @@ public class TLVExtractor {
     protected synchronized void processTLV(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
+            case PacketFactory.IPV4_PACKET:
+            case PacketFactory.IPV6_PACKET:
+                break;
             case PacketFactory.SIGNALLING_PACKET:
                 putTableToEmitAsEvent( ((SignallingPacket)tlv).getTable() );
-                break;
-            case PacketFactory.IPV4_PACKET:
-                NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
-                if ( ipv4_ntp != null ) m_ntps.put(ipv4_ntp);
-                break;
-            case PacketFactory.IPV6_PACKET:
-                NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
-                if ( ipv6_ntp != null ) m_ntps.put(ipv6_ntp);
                 break;
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
@@ -261,29 +215,8 @@ public class TLVExtractor {
                         putTableToEmitAsEvent(tables.get(i));
                     }
                 } 
-                
-                /**
-                 * @note MPU-MFU
-                 */
-                if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                    processMmtpMpu(mmtp_packet);
-                }
-                break;
-            default:
                 break;
         }
-    }
-    
-    protected void processMmtpMpu(MMTP_Packet mmtp) {
-//        Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, msn : 0x%08x, f_t : 0x%02x, f_c : 0x%02x, f_i : 0x%02x \n", 
-//                mmtp.getPacketId(), 
-//                mmtp.getPacketSequenceNumber(),
-//                mmtp.getMPU().getMPUSequenceNumber(),
-//                mmtp.getMPU().getFragmentType(),
-//                mmtp.getMPU().getFragmentCounter(),
-//                mmtp.getMPU().getFragmentationIndicator()));
-//        Logger.d(String.format("\t timed_flag : 0x%x, aggregation_flag : 0x%x \n", 
-//                mmtp.getMPU().getTimedFlag(), mmtp.getMPU().getAggregationFlag()));
     }
     
     /**
@@ -309,29 +242,19 @@ public class TLVExtractor {
                     if ( message != null ) return message.getTables();
                     break;
                 case 0x01:
-//                    Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
-//                            mmtp.getPacketId(), 
-//                            mmtp.getPacketSequenceNumber(),
-//                            signal_message.getFragmentCounter(),
-//                            signal_message.getFragmentationIndicator()));
                     /**
                      * @note ARIB B60 Table 6-2
                      * This involves header part of divided data.
                      */
-                    m_fragmented01_mmtp_for_signal_message.add(mmtp);
+                    m_fragmented01_mmtp_with_signal_message.add(mmtp);
                     break;
                 case 0x02:
-//                    Logger.d(String.format("pid : 0x%04x, psn : 0x%08x, f_c : 0x%02x, f_i : 0x%02x \n", 
-//                            mmtp.getPacketId(), 
-//                            mmtp.getPacketSequenceNumber(),
-//                            signal_message.getFragmentCounter(),
-//                            signal_message.getFragmentationIndicator()));
                     /**
                      * @note ARIB B60 Table 6-2
                      * This involves a part of divided data which is \n
                      * neither header part nor last part.
                      */
-                    m_fragmented02_mmtp_for_signal_message.add(mmtp);
+                    m_fragmented02_mmtp_with_signal_message.add(mmtp);
                     break;
                 case 0x03:
                     /**
@@ -345,7 +268,7 @@ public class TLVExtractor {
                      * Case.1 0x01 of fragmentation_indicator will be only one thing.  
                      */
                     for ( Iterator<MMTP_Packet> it = 
-                            m_fragmented01_mmtp_for_signal_message.iterator() ; 
+                            m_fragmented01_mmtp_with_signal_message.iterator() ; 
                             it.hasNext() ; ) {
                         MMTP_Packet mmtp01 = it.next();
                         MMTP_Payload_SignallingMessage sm = mmtp01.getSignallingMessage();
@@ -361,7 +284,7 @@ public class TLVExtractor {
                      * Case.2 0x02 of fragmentation_indicator will be multiple things  
                      */
                     for(Iterator<MMTP_Packet> it = 
-                            m_fragmented02_mmtp_for_signal_message.iterator() ; 
+                            m_fragmented02_mmtp_with_signal_message.iterator() ; 
                             it.hasNext() ; ) {
                         MMTP_Packet mmtp02 = it.next();
                         MMTP_Payload_SignallingMessage sm = mmtp02.getSignallingMessage();
@@ -382,32 +305,13 @@ public class TLVExtractor {
                      * As a result, outputStream has whole data of tables
                      */
                     message = MessageFactory.createMessage(outputStream.toByteArray());
-                    if (message != null ) return message.getTables();
+                    if ( message != null ) return message.getTables();
                     break;
             }
         }
         return new ArrayList<>();
     }
 
-    /**
-     * Only for debugging to print all of a TLV
-     * @param table
-     */
-    protected void print(TypeLengthValue tlv) {
-        Logger.p(String.format("[%d] TLV \n", tlv_sample_counter++));
-        tlv.print();
-    }
-    
-    /**
-     * Only for debugging to print all of table fields
-     * @param table
-     */
-    protected void print(Table table) {
-        Logger.p(String.format("[%d] Table (id : 0x%x) \n", 
-                table_sample_counter++, table.getTableId()));
-        table.print();
-    }
-    
     /**
      * Enable all of table of filters which application want to receive 
      */
@@ -433,18 +337,4 @@ public class TLVExtractor {
         m_enable_table_filter = false;
     }
     
-    /**
-     * Enable NTP data if application want to receive
-     */
-    public void enableNtpFilter() {
-        m_enable_ntp_filter = true;
-    }
-    
-    /**
-     * Disable NTP data if application doesn't want to receive 
-     */
-    public void disableNtpFilter() {
-        m_enable_ntp_filter = false;
-    }
-
 }

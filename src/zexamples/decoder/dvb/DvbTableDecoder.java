@@ -1,4 +1,4 @@
-package zexamples.decoder;
+package zexamples.decoder.dvb;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;
