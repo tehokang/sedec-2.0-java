@@ -3,6 +3,7 @@ package sedec2.arib.tlv.mmt.si.descriptors;
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.arib.tlv.mmt.si.info.MMTGeneralLocationInfo;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 

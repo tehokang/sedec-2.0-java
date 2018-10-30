@@ -5,7 +5,7 @@ import java.util.List;
 
 import sedec2.arib.tlv.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
-import sedec2.arib.tlv.mmt.si.descriptors.MMTGeneralLocationInfo;
+import sedec2.arib.tlv.mmt.si.info.MMTGeneralLocationInfo;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 

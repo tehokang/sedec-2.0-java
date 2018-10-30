@@ -1,5 +1,6 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
+import sedec2.arib.tlv.mmt.si.info.MMTGeneralLocationInfo;
 import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;

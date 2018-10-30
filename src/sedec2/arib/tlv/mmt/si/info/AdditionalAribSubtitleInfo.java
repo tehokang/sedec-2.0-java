@@ -1,4 +1,4 @@
-package sedec2.arib.tlv.mmt.si.descriptors;
+package sedec2.arib.tlv.mmt.si.info;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;

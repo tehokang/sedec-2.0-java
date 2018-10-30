@@ -1,5 +1,6 @@
 package sedec2.arib.tlv.mmt.si.descriptors;
 
+import sedec2.arib.tlv.mmt.si.info.AdditionalAribSubtitleInfo;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
