@@ -8,7 +8,6 @@ import java.io.FileInputStream;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.tlv.ITLVExtractorListener;
 import sedec2.arib.tlv.TLVExtractor;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
@@ -39,7 +38,8 @@ public class TlvPacketDecoder {
          * @note Step.2 Add Event Listener to listen Table, NTP, MFU
          * and you can set table filters only what you want to receive or not
          */
-        ITLVExtractorListener listener = new ITLVExtractorListener() {
+        TLVExtractor.ITLVExtractorListener listener = 
+                new TLVExtractor.ITLVExtractorListener() {
             int counter = 0;
             Table mpt = null;
             Table plt = null;
