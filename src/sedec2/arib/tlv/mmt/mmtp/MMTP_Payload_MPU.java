@@ -15,25 +15,15 @@ public class MMTP_Payload_MPU {
     protected byte aggregation_flag;
     protected byte fragment_counter;
     protected int MPU_sequence_number;
-    protected MFU mfu = null;
+    protected List<MFU> mfus = new ArrayList<>();
         
-    class MFU {
-        public List<TimedData> timed_data = new ArrayList<>();
-        public List<NonTimedData> non_timed_data = new ArrayList<>();
-    }
-    
-    class TimedData {
+    public class MFU {
         public int data_unit_length;
         public int movie_fragment_sequence_number;
         public int sample_number;
         public int offset;
         public byte priority;
         public byte dependency_counter;
-        public byte[] MFU_data_byte;
-    }
-    
-    class NonTimedData {
-        public int data_unit_length;
         public int item_id;
         public byte[] MFU_data_byte;
     }
@@ -48,65 +38,64 @@ public class MMTP_Payload_MPU {
         MPU_sequence_number = brw.readOnBuffer(32);
         
         if ( fragment_type == 0x02 ) {
-            mfu = new MFU();
             
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
-                    TimedData td = new TimedData();
-                    td.movie_fragment_sequence_number = brw.readOnBuffer(32);
-                    td.sample_number = brw.readOnBuffer(32);
-                    td.offset = brw.readOnBuffer(32);
-                    td.priority = (byte) brw.readOnBuffer(8);
-                    td.dependency_counter = (byte) brw.readOnBuffer(8);
-                    td.MFU_data_byte = new byte[payload_length - 20];
+                    MFU mfu = new MFU();
+                    mfu.movie_fragment_sequence_number = brw.readOnBuffer(32);
+                    mfu.sample_number = brw.readOnBuffer(32);
+                    mfu.offset = brw.readOnBuffer(32);
+                    mfu.priority = (byte) brw.readOnBuffer(8);
+                    mfu.dependency_counter = (byte) brw.readOnBuffer(8);
+                    mfu.MFU_data_byte = new byte[payload_length - 20];
                     
-                    for ( int i=0; i<td.MFU_data_byte.length; i++ ) {
-                        td.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
+                    for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
+                        mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                     }
-                    mfu.timed_data.add(td);
+                    mfus.add(mfu);
                     
                 } else {
                     for ( int k=payload_length-6; k>0; ) {
-                        TimedData td = new TimedData();
-                        td.data_unit_length = brw.readOnBuffer(16);
-                        td.movie_fragment_sequence_number = brw.readOnBuffer(32);
-                        td.sample_number = brw.readOnBuffer(32);
-                        td.offset = brw.readOnBuffer(32);
-                        td.priority = (byte) brw.readOnBuffer(8);
-                        td.dependency_counter = (byte) brw.readOnBuffer(8);
-                        td.MFU_data_byte = new byte[td.data_unit_length-14];
+                        MFU mfu = new MFU();
+                        mfu.data_unit_length = brw.readOnBuffer(16);
+                        mfu.movie_fragment_sequence_number = brw.readOnBuffer(32);
+                        mfu.sample_number = brw.readOnBuffer(32);
+                        mfu.offset = brw.readOnBuffer(32);
+                        mfu.priority = (byte) brw.readOnBuffer(8);
+                        mfu.dependency_counter = (byte) brw.readOnBuffer(8);
+                        mfu.MFU_data_byte = new byte[mfu.data_unit_length-14];
                         
-                        for ( int i=0; i<td.MFU_data_byte.length; i++ ) {
-                            td.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
+                        for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
+                            mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                         }
-                        k-= (2 + td.data_unit_length);
-                        mfu.timed_data.add(td);
+                        k-= (2 + mfu.data_unit_length);
+                        mfus.add(mfu);
                     }
                 }
                 
             } else {
                 if ( aggregation_flag == 0x00 ) {
-                    NonTimedData ntd = new NonTimedData();
-                    ntd.item_id = brw.readOnBuffer(32);
-                    ntd.MFU_data_byte = new byte[payload_length - 10];
+                    MFU mfu = new MFU();
+                    mfu.item_id = brw.readOnBuffer(32);
+                    mfu.MFU_data_byte = new byte[payload_length - 10];
                     
-                    for ( int i=0; i<ntd.MFU_data_byte.length; i++ ) {
-                        ntd.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
+                    for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
+                        mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                     }
-                    mfu.non_timed_data.add(ntd);
+                    mfus.add(mfu);
                     
                 } else {
                     for ( int k=payload_length-6; k>0; ) {
-                        NonTimedData ntd = new NonTimedData();
-                        ntd.data_unit_length = brw.readOnBuffer(16);
-                        ntd.item_id = brw.readOnBuffer(32);
-                        ntd.MFU_data_byte = new byte[payload_length-4];
+                        MFU mfu = new MFU();
+                        mfu.data_unit_length = brw.readOnBuffer(16);
+                        mfu.item_id = brw.readOnBuffer(32);
+                        mfu.MFU_data_byte = new byte[payload_length-4];
                         
-                        for ( int i=0; i<ntd.MFU_data_byte.length; i++ ) {
-                            ntd.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
+                        for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
+                            mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                         }
-                        mfu.non_timed_data.add(ntd);
-                        k-= (2 + ntd.data_unit_length);
+                        mfus.add(mfu);
+                        k-= (2 + mfu.data_unit_length);
                     }
                 }
             }
@@ -141,8 +130,8 @@ public class MMTP_Payload_MPU {
         return MPU_sequence_number;
     }
     
-    public MFU getMFU() {
-        return mfu;
+    public List<MFU> getMFUList() {
+        return mfus;
     }
     
     public void print() {
@@ -159,73 +148,73 @@ public class MMTP_Payload_MPU {
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
                     
-                    for ( int i=0; i<mfu.timed_data.size();i ++) {
-                        TimedData td = mfu.timed_data.get(i);
+                    for ( int i=0; i<mfus.size();i ++) {
+                        MFU mfu = mfus.get(i);
                         Logger.d(String.format("[%d] movie_fragment_sequence_number : 0x%x \n", 
-                                i, td.movie_fragment_sequence_number));
+                                i, mfu.movie_fragment_sequence_number));
                         Logger.d(String.format("[%d] sample_number : 0x%x \n", 
-                                i, td.sample_number));
+                                i, mfu.sample_number));
                         Logger.d(String.format("[%d] offset : 0x%x \n", 
-                                i, td.offset));
+                                i, mfu.offset));
                         Logger.d(String.format("[%d] priority : 0x%x \n", 
-                                i, td.priority));
+                                i, mfu.priority));
                         Logger.d(String.format("[%d] dependency_counter : 0x%x \n", 
-                                i, td.dependency_counter));
+                                i, mfu.dependency_counter));
                         Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
-                                i, td.MFU_data_byte.length, td.MFU_data_byte.length));
+                                i, mfu.MFU_data_byte.length, mfu.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.print(td.MFU_data_byte);
+                        BinaryLogger.print(mfu.MFU_data_byte);
                     }
                     
                 } else {
-                    for ( int i=0; i<mfu.timed_data.size();i ++) {
-                        TimedData td = mfu.timed_data.get(i);
+                    for ( int i=0; i<mfus.size();i ++) {
+                        MFU mfu = mfus.get(i);
                         Logger.d(String.format("[%d] data_unit_length : 0x%x \n", 
-                               i, td.data_unit_length));
+                               i, mfu.data_unit_length));
                         Logger.d(String.format("[%d] movie_fragment_sequence_number : 0x%x \n", 
-                                i, td.movie_fragment_sequence_number));
+                                i, mfu.movie_fragment_sequence_number));
                         Logger.d(String.format("[%d] sample_number : 0x%x \n", 
-                                i, td.sample_number));
+                                i, mfu.sample_number));
                         Logger.d(String.format("[%d] offset : 0x%x \n", 
-                                i, td.offset));
+                                i, mfu.offset));
                         Logger.d(String.format("[%d] priority : 0x%x \n", 
-                                i, td.priority));
+                                i, mfu.priority));
                         Logger.d(String.format("[%d] dependency_counter : 0x%x \n", 
-                                i, td.dependency_counter));
+                                i, mfu.dependency_counter));
                         Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
-                                i, td.MFU_data_byte.length, td.MFU_data_byte.length));
+                                i, mfu.MFU_data_byte.length, mfu.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.print(td.MFU_data_byte);
+                        BinaryLogger.print(mfu.MFU_data_byte);
                     }
                 }
                 
             } else {
                 if ( aggregation_flag == 0x00 ) {
-                    for ( int i=0; i<mfu.non_timed_data.size(); i++ ) {
-                        NonTimedData ntd = mfu.non_timed_data.get(i);
+                    for ( int i=0; i<mfus.size();i ++) {
+                        MFU mfu = mfus.get(i);
                         Logger.d(String.format("[%d] item_id : 0x%x \n", 
-                                i, ntd.item_id));
+                                i, mfu.item_id));
                         Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
-                                i, ntd.MFU_data_byte.length, ntd.MFU_data_byte.length));
+                                i, mfu.MFU_data_byte.length, mfu.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n", i));
                         
-                        BinaryLogger.print(ntd.MFU_data_byte);
+                        BinaryLogger.print(mfu.MFU_data_byte);
                     }
                     
                 } else {
-                    for ( int i=0; i<mfu.non_timed_data.size(); i++ ) {
-                        NonTimedData ntd = mfu.non_timed_data.get(i);
+                    for ( int i=0; i<mfus.size();i ++) {
+                        MFU mfu = mfus.get(i);
                         Logger.d(String.format("[%d] data_unit_length : 0x%x \n", 
-                                i, ntd.data_unit_length));
+                                i, mfu.data_unit_length));
                         Logger.d(String.format("[%d] item_id : 0x%x \n", 
-                                i, ntd.item_id));
+                                i, mfu.item_id));
                         Logger.d(String.format("[%d] MFU_data_byte length : 0x%x (%d) \n", 
-                                i, ntd.MFU_data_byte.length, ntd.MFU_data_byte.length));
+                                i, mfu.MFU_data_byte.length, mfu.MFU_data_byte.length));
                         Logger.d(String.format("[%d] MFU_data_byte : \n",i ));
                         
-                        BinaryLogger.print(ntd.MFU_data_byte);
+                        BinaryLogger.print(mfu.MFU_data_byte);
                     }
                 }
             }

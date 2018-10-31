@@ -1,16 +1,20 @@
 package zexamples.decoder.arib;
 
 import java.io.BufferedInputStream;
+import java.io.BufferedOutputStream;
 import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import sedec2.arib.tlv.TlvMediaExtractor;
-import sedec2.arib.tlv.TlvMediaExtractor.IMediaExtractorListener;
+import sedec2.arib.tlv.TlvMpuExtractor;
+import sedec2.arib.tlv.TlvMpuExtractor.IMediaExtractorListener;
 import sedec2.arib.tlv.TlvTableExtractor;
 import sedec2.arib.tlv.TlvTableExtractor.ITableExtractorListener;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -22,9 +26,27 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
     protected TlvTableExtractor tlv_table_extractor = new TlvTableExtractor();
-    protected TlvMediaExtractor tlv_media_extractor = new TlvMediaExtractor();
+    protected TlvMpuExtractor tlv_mpu_extractor = new TlvMpuExtractor();
     
-    public TlvCoordinator() {
+    FileOutputStream video_fs = null;
+    BufferedOutputStream video_bs = null;
+    
+    FileOutputStream audio_fs = null;
+    BufferedOutputStream audio_bs = null;
+
+    FileOutputStream data_fs = null;
+    BufferedOutputStream data_bs = null;
+
+    public TlvCoordinator() throws FileNotFoundException {
+        video_fs = new FileOutputStream(new File("video.mfu.hevc"));
+        video_bs = new BufferedOutputStream(video_fs);
+        
+        audio_fs = new FileOutputStream(new File("audio.mfu.mp4a"));
+        audio_bs = new BufferedOutputStream(audio_fs);
+
+        data_fs = new FileOutputStream(new File("data.mfu"));
+        data_bs = new BufferedOutputStream(data_fs);
+
         List<Byte> filters = new ArrayList<>();
         filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         filters.add(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
@@ -40,14 +62,14 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
 //        tlv_extractor.disableNtpFilter();
 
         tlv_table_extractor.addEventListener(this);
-        tlv_media_extractor.addEventListener(this);
+        tlv_mpu_extractor.addEventListener(this);
     }
     
     public void destroy() {
-        tlv_media_extractor.removeEventListener(this);
+        tlv_mpu_extractor.removeEventListener(this);
         tlv_table_extractor.removeEventListener(this);
         
-        tlv_media_extractor = null;
+        tlv_mpu_extractor = null;
         tlv_table_extractor = null;
     }
     
@@ -56,7 +78,7 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
     }
     
     public boolean putTlvForMedia(byte[] tlv_raw) {
-        return tlv_media_extractor.put(tlv_raw);
+        return tlv_mpu_extractor.put(tlv_raw);
     }
     
     @Override
@@ -70,11 +92,22 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
                     String asset_type = new String(asset.asset_type);                            
                     int pid = ((asset.asset_id_byte[0] & 0xff) << 8 | asset.asset_id_byte[1]);
                     switch ( asset_type ) {
-                        case "hev1" :
-                            tlv_media_extractor.setVideoPidFilter(Arrays.asList(pid));
+                        case "hev1":
+                        case "hvc1":
+                            tlv_mpu_extractor.setVideoPidFilter(Arrays.asList(pid));
                             break;
                         case "mp4a":
-                            tlv_media_extractor.setAudioPidFilter(Arrays.asList(pid));
+                            tlv_mpu_extractor.setAudioPidFilter(Arrays.asList(pid));
+                            break;
+                        case "stpp":
+                            tlv_mpu_extractor.setTimedTextPidFilter(Arrays.asList(pid));
+                            break;
+                        case "aapp":
+                            tlv_mpu_extractor.setApplicationPidFilter(Arrays.asList(pid));
+                            break;
+                        case "asgd":
+                            break;
+                        case "aagd":
                             break;
                     }
                 }
@@ -87,17 +120,40 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
                 plt = (PackageListTable) table;
                 mpt = null;
             }
+            
+            if ( plt != null && mpt != null ) {
+//                plt.print();
+//                mpt.print();
+//                System.exit(1);
+            }
         }                
     }
 
     @Override
     public void onReceivedVideo(int packet_id, byte[] buffer) {
-        
+        try {
+            video_bs.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
     public void onReceivedAudio(int packet_id, byte[] buffer) {
-        
+        try {
+            audio_bs.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
+    }
+
+    @Override
+    public void onReceivedTimedText(int packet_id, byte[] buffer) {
+        try {
+            data_bs.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        } 
     }
 }
 
@@ -111,7 +167,7 @@ public class TlvPacketDecoder {
 
 
     
-    public static void main(String []args) {
+    public static void main(String []args) throws FileNotFoundException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
                     "I need TLV packet to be parsed as 1st parameter");

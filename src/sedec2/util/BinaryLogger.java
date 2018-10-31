@@ -33,4 +33,20 @@ public class BinaryLogger {
             Logger.p("\n------------------------------------\n");
         }
     }
+    
+    public static void debug(byte[] buffer, int length) {
+        if ( DEBUG == true ) {
+            Logger.p(String.format("-------- %s:debug -------- \n", 
+                    BinaryLogger.class.getSimpleName()));
+
+            int j=1;
+            Logger.p(String.format("%03d : ", j));
+            for(int k=0; k<buffer.length; k++) {
+                if ( k >= length ) break;
+                Logger.p(String.format("%02x ", buffer[k]));
+                if(k%10 == 9) Logger.p(String.format("\n%03d : ", (++j)));
+            }
+            Logger.p("\n------------------------------------\n");
+        }
+    }
 }
