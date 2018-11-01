@@ -122,9 +122,9 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
             }
             
             if ( plt != null && mpt != null ) {
-                plt.print();
-                mpt.print();
-                System.exit(1);
+//                plt.print();
+//                mpt.print();
+//                System.exit(1);
             }
         }                
     }

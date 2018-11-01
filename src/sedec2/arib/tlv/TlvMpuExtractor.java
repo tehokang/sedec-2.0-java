@@ -295,7 +295,6 @@ public class TlvMpuExtractor {
             case 0x00:
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-//                    BinaryLogger.debug(mfus.get(i).MFU_data_byte);
                     /**
                      * @note Replacement length of NAL with NAL prefix 
                      */
@@ -321,6 +320,9 @@ public class TlvMpuExtractor {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
                         	if(i == 0) {
+                                /**
+                                 * @note Replacement length of NAL with NAL prefix 
+                                 */
                         		System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);
                         	}
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
@@ -348,9 +350,6 @@ public class TlvMpuExtractor {
                 for ( int i=0; i<mfus.size(); i++ ) {
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
-                
-//                outputStreamNal.write(nal_prefix);
-//                outputStreamNal.write(ByteBuffer.allocate(4).putInt(outputStreamRawMfu.toByteArray().length).array());
                 outputStreamNal.write(outputStreamRawMfu.toByteArray());
                 put(new QueueData(packet_id, outputStreamNal.toByteArray()));
                 break;
