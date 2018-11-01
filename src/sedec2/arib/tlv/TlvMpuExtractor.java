@@ -320,6 +320,9 @@ public class TlvMpuExtractor {
                             mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
+                        	if(i == 0) {
+                        		System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);
+                        	}
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
@@ -346,7 +349,7 @@ public class TlvMpuExtractor {
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
                 
-                outputStreamNal.write(nal_prefix);
+//                outputStreamNal.write(nal_prefix);
 //                outputStreamNal.write(ByteBuffer.allocate(4).putInt(outputStreamRawMfu.toByteArray().length).array());
                 outputStreamNal.write(outputStreamRawMfu.toByteArray());
                 put(new QueueData(packet_id, outputStreamNal.toByteArray()));
