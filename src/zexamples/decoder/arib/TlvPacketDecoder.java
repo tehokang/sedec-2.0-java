@@ -13,8 +13,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import sedec2.arib.tlv.TlvMpuExtractor;
-import sedec2.arib.tlv.TlvMpuExtractor.IMediaExtractorListener;
+import sedec2.arib.tlv.TlvMfuExtractor.IMediaExtractorListener;
+import sedec2.arib.tlv.TlvMfuExtractor;
 import sedec2.arib.tlv.TlvTableExtractor;
 import sedec2.arib.tlv.TlvTableExtractor.ITableExtractorListener;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -26,7 +26,7 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
     protected TlvTableExtractor tlv_table_extractor = new TlvTableExtractor();
-    protected TlvMpuExtractor tlv_mpu_extractor = new TlvMpuExtractor();
+    protected TlvMfuExtractor tlv_mpu_extractor = new TlvMfuExtractor();
     
     FileOutputStream video_fs = null;
     BufferedOutputStream video_bs = null;

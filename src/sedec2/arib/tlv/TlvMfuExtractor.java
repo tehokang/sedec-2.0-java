@@ -154,7 +154,7 @@ public class TlvMfuExtractor {
         
         m_tlv_extractor_thread.start();
         m_mfu_video_event_thread.start();
-//        m_mfu_audio_event_thread.start();
+        m_mfu_audio_event_thread.start();
 //        m_mfu_timed_text_event_thread.start();
     }
     
@@ -366,6 +366,7 @@ public class TlvMfuExtractor {
                     /**
                      * @note Gathering MFU
                      */
+                    outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
                 put(new QueueData(packet_id, outputStreamRawMfu.toByteArray()));
                 break;
