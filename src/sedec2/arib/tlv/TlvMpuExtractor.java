@@ -2,7 +2,6 @@ package sedec2.arib.tlv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -15,7 +14,6 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
-import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class TlvMpuExtractor {
@@ -297,12 +295,15 @@ public class TlvMpuExtractor {
             case 0x00:
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
+//                    BinaryLogger.debug(mfus.get(i).MFU_data_byte);
+                    /**
+                     * @note Replacement length of NAL with NAL prefix 
+                     */
                     System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);                    
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
-//                    outputStreamNal.write(ByteBuffer.allocate(4).putInt(outputStreamRawMfu.toByteArray().length).array());
-                    outputStreamNal.write(outputStreamRawMfu.toByteArray());
-                    put(new QueueData(packet_id, outputStreamNal.toByteArray()));
                 }
+                outputStreamNal.write(outputStreamRawMfu.toByteArray());
+                put(new QueueData(packet_id, outputStreamNal.toByteArray()));
                 break;
             case 0x01:
                 m_fragmented01_mmtp_video_mfu.add(mmtp);

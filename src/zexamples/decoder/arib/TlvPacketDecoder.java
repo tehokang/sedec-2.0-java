@@ -122,9 +122,9 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
             }
             
             if ( plt != null && mpt != null ) {
-//                plt.print();
-//                mpt.print();
-//                System.exit(1);
+                plt.print();
+                mpt.print();
+                System.exit(1);
             }
         }                
     }
@@ -164,9 +164,6 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
  */
 public class TlvPacketDecoder {
-
-
-    
     public static void main(String []args) throws FileNotFoundException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
