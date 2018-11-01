@@ -16,7 +16,7 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.util.Logger;
 
-public class TlvMpuExtractor {
+public class TlvMfuExtractor {
     public interface IMediaExtractorListener {
         public void onReceivedVideo(int packet_id, byte[] buffer);
         public void onReceivedAudio(int packet_id, byte[] buffer);
@@ -57,7 +57,7 @@ public class TlvMpuExtractor {
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_video_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_video_mpu = new ArrayList<>();
 
-    public TlvMpuExtractor() {
+    public TlvMfuExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
