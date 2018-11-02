@@ -58,6 +58,9 @@ public class TlvMfuExtractor {
     
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_video_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_video_mpu = new ArrayList<>();
+    
+    protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_audio_mpu = new ArrayList<>();
+    protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_audio_mpu = new ArrayList<>();
 
     public TlvMfuExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
@@ -360,8 +363,10 @@ public class TlvMfuExtractor {
      * @note Video Filtering
      */
     protected void processMfuAudio(int packet_id, MMTP_Payload_MPU mpu) throws InterruptedException, IOException {
+    	int dataUnitLen = 0;
         List<MFU> mfus = null;
         ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
+        ByteArrayOutputStream outputStreamAudio = new ByteArrayOutputStream();
         BitReadWriter syncword = new BitReadWriter(new byte[3]);
         syncword.writeOnBuffer((int)0x2b7, 11);
         
@@ -377,21 +382,23 @@ public class TlvMfuExtractor {
                     /**
                      * @note Gathering MFU
                      */
-                    syncword.writeOnBuffer(mfus.get(i).MFU_data_byte.length, 13);
-                    BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);
-                    outputStreamRawMfu.write(syncword.getBuffer());
-                    outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
-                }
-                put(new QueueData(packet_id, outputStreamRawMfu.toByteArray()));
+                	dataUnitLen += mfus.get(i).MFU_data_byte.length;
+                    outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);                   
+                }                
+                syncword.writeOnBuffer(dataUnitLen, 13);
+                BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);                
+                outputStreamAudio.write(syncword.getBuffer());
+                outputStreamAudio.write(outputStreamRawMfu.toByteArray());
+                put(new QueueData(packet_id, outputStreamAudio.toByteArray()));
                 break;
             case 0x01:
-                m_fragmented01_mmtp_video_mpu.add(mpu);
+            	m_fragmented01_mmtp_audio_mpu.add(mpu);
                 break;
             case 0x02:
-                m_fragmented02_mmtp_video_mpu.add(mpu);
+            	m_fragmented02_mmtp_audio_mpu.add(mpu);
                 break;
             case 0x03:
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_video_mpu.iterator() ; 
+                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_audio_mpu.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu01 = it.next();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
@@ -400,10 +407,7 @@ public class TlvMfuExtractor {
                             /**
                              * @note Gathering MFU
                              */
-                            if ( i == 0 ) {
-                                syncword.writeOnBuffer(mfus.get(i).MFU_data_byte.length, 13);
-                                outputStreamRawMfu.write(syncword.getBuffer());
-                            }
+                           	dataUnitLen += mfus.get(i).MFU_data_byte.length;
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
@@ -411,12 +415,13 @@ public class TlvMfuExtractor {
                     }
                 }
                 
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_video_mpu.iterator() ; 
+                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_audio_mpu.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu02 = it.next();
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
+                        	dataUnitLen += mfus.get(i).MFU_data_byte.length;
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
@@ -425,9 +430,14 @@ public class TlvMfuExtractor {
                 
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
+                	dataUnitLen += mfus.get(i).MFU_data_byte.length;
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
-                put(new QueueData(packet_id, outputStreamRawMfu.toByteArray()));
+                syncword.writeOnBuffer(dataUnitLen, 13);
+                BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);
+                outputStreamAudio.write(syncword.getBuffer());
+                outputStreamAudio.write(outputStreamRawMfu.toByteArray());
+                put(new QueueData(packet_id, outputStreamAudio.toByteArray()));
                 break;
         }
     }
