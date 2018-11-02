@@ -74,11 +74,11 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
     }
     
     public boolean putTlvForTable(byte[] tlv_raw) {
-        return tlv_table_extractor.put(tlv_raw);
+        return tlv_table_extractor.putIn(tlv_raw);
     }
     
     public boolean putTlvForMedia(byte[] tlv_raw) {
-        return tlv_mpu_extractor.put(tlv_raw);
+        return tlv_mpu_extractor.putIn(tlv_raw);
     }
     
     @Override

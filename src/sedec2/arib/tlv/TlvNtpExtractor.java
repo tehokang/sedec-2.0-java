@@ -16,25 +16,18 @@ public class TlvNtpExtractor {
     public interface ITlvNtpExtractorListener {
         public void onUpdatedNtp(NetworkTimeProtocolData ntp);
     }
-    
+
     protected final String TAG = "TlvNtpExtractor";
     
     boolean m_enable_ntp_filter = false;
-    
+    protected boolean m_is_running = true;
     protected Thread m_ntp_event_thread;
     protected Thread m_tlv_extractor_thread;
-    protected boolean m_is_running = true;
     
     protected List<ITlvNtpExtractorListener> m_listeners = new ArrayList<>();
-
     protected BlockingQueue<NetworkTimeProtocolData> m_ntps = 
             new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    
-    /**
-     * @note sample_counter and print function is only for testing
-     */
-    protected long tlv_sample_counter = 0;
     
     public TlvNtpExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
@@ -48,7 +41,7 @@ public class TlvNtpExtractor {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
                                     sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            processTLV(tlv); 
+                            process(tlv); 
                         }
                         
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -131,7 +124,7 @@ public class TlvNtpExtractor {
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public boolean put(byte[] tlv) {
+    public boolean putIn(byte[] tlv) {
         try {
             if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
                 m_tlv_packets.put(tlv);
@@ -146,6 +139,15 @@ public class TlvNtpExtractor {
     }
 
     /**
+     * Extractor can send NTP via this function as asynchronous event
+     * @param ntp
+     * @throws InterruptedException
+     */
+    protected void putOut(NetworkTimeProtocolData ntp) throws InterruptedException {
+        m_ntps.put(ntp);
+    }
+    
+    /**
      * Sending a NTP to application
      * @param ntp
      */
@@ -157,16 +159,16 @@ public class TlvNtpExtractor {
         }
     }
     
-    protected synchronized void processTLV(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.IPV4_PACKET:
                 NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
-                if ( ipv4_ntp != null ) m_ntps.put(ipv4_ntp);
+                if ( ipv4_ntp != null ) putOut(ipv4_ntp);
                 break;
             case PacketFactory.IPV6_PACKET:
                 NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
-                if ( ipv6_ntp != null ) m_ntps.put(ipv6_ntp);
+                if ( ipv6_ntp != null ) putOut(ipv6_ntp);
                 break;
             case PacketFactory.SIGNALLING_PACKET:
             case PacketFactory.COMPRESSED_IP_PACKET:

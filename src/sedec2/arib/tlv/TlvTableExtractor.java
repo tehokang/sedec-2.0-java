@@ -34,19 +34,11 @@ public class TlvTableExtractor {
     protected boolean m_is_running = true;
     
     protected List<ITableExtractorListener> m_listeners = new ArrayList<>();
-
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    
     protected List<MMTP_Packet> m_fragmented01_mmtp_with_signal_message = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp_with_signal_message = new ArrayList<>();
             
-    /**
-     * @note sample_counter and print function is only for testing
-     */
-    protected long tlv_sample_counter = 0;
-    protected long table_sample_counter = 0;
-    
     public TlvTableExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
@@ -59,7 +51,7 @@ public class TlvTableExtractor {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
                                     sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            processTLV(tlv); 
+                            process(tlv); 
                         }
                         
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -151,7 +143,7 @@ public class TlvTableExtractor {
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public boolean put(byte[] tlv) {
+    public boolean putIn(byte[] tlv) {
         try {
             if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
                 m_tlv_packets.put(tlv);
@@ -165,6 +157,18 @@ public class TlvTableExtractor {
         return true;
     }
 
+    protected void putOut(Table table) throws InterruptedException {
+        if ( table == null ) return;
+        
+        if ( m_enable_all_of_table_filter == true ) {
+            m_tables.put( table );
+        } else if ( m_enable_table_filter == true ) {
+            if ( m_table_id_filters.contains(table.getTableId()) == true ) {
+                m_tables.put(table);
+            }
+        }
+    }
+    
     /**
      * Sending a table to application
      * @param table
@@ -177,26 +181,14 @@ public class TlvTableExtractor {
         }
     }
     
-    protected void putTableToEmitAsEvent(Table table) throws InterruptedException {
-        if ( table == null ) return;
-        
-        if ( m_enable_all_of_table_filter == true ) {
-            m_tables.put( table );
-        } else if ( m_enable_table_filter == true ) {
-            if ( m_table_id_filters.contains(table.getTableId()) == true ) {
-                m_tables.put(table);
-            }
-        }
-    }
-    
-    protected synchronized void processTLV(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.IPV4_PACKET:
             case PacketFactory.IPV6_PACKET:
                 break;
             case PacketFactory.SIGNALLING_PACKET:
-                putTableToEmitAsEvent( ((SignallingPacket)tlv).getTable() );
+                putOut( ((SignallingPacket)tlv).getTable() );
                 break;
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
@@ -212,7 +204,7 @@ public class TlvTableExtractor {
                             processMmtpSignallingMessage(mmtp_packet);
                     
                     for ( int i=0; i<tables.size(); i++ ) {
-                        putTableToEmitAsEvent(tables.get(i));
+                        putOut(tables.get(i));
                     }
                 } 
                 break;

@@ -15,8 +15,6 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.base.BitReadWriter;
-import sedec2.util.BinaryLogger;
-import sedec2.util.Logger;
 
 public class TlvMfuExtractor {
     public interface IMediaExtractorListener {
@@ -34,34 +32,31 @@ public class TlvMfuExtractor {
             this.data = data;
         }
     }
-    
-    protected final String TAG = "TlvMpuExtractor";
-    
+
+    protected final String TAG = "TlvMfuExtractor";
+
+    List<Integer> m_app_pid_filters = new ArrayList<>();
     List<Integer> m_video_pid_filters = new ArrayList<>();
     List<Integer> m_audio_pid_filters = new ArrayList<>();
     List<Integer> m_timed_text_pid_filters = new ArrayList<>();
-    List<Integer> m_app_pid_filters = new ArrayList<>();
     
+    protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_video_event_thread;
     protected Thread m_mfu_audio_event_thread;
     protected Thread m_mfu_timed_text_event_thread;
-    
-    protected boolean m_is_running = true;
-    
+        
     protected List<IMediaExtractorListener> m_listeners = new ArrayList<>();
-
-    protected BlockingQueue<QueueData> m_mfu_videos = new ArrayBlockingQueue<QueueData>(100);
-    protected BlockingQueue<QueueData> m_mfu_audios = new ArrayBlockingQueue<QueueData>(100);
-    protected BlockingQueue<QueueData> m_mfu_timed_texts = new ArrayBlockingQueue<QueueData>(100);
-    protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_video_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_video_mpu = new ArrayList<>();
-    
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_audio_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_audio_mpu = new ArrayList<>();
 
+    protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
+    protected BlockingQueue<QueueData> m_mfu_videos = new ArrayBlockingQueue<QueueData>(100);
+    protected BlockingQueue<QueueData> m_mfu_audios = new ArrayBlockingQueue<QueueData>(100);
+    protected BlockingQueue<QueueData> m_mfu_timed_texts = new ArrayBlockingQueue<QueueData>(100);
+    
     public TlvMfuExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
@@ -74,7 +69,7 @@ public class TlvMfuExtractor {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
                                     sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            processTLV(tlv); 
+                            process(tlv); 
                         }
                         
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -160,7 +155,7 @@ public class TlvMfuExtractor {
         m_tlv_extractor_thread.start();
         m_mfu_video_event_thread.start();
         m_mfu_audio_event_thread.start();
-//        m_mfu_timed_text_event_thread.start();
+        m_mfu_timed_text_event_thread.start();
     }
     
     /**
@@ -198,7 +193,7 @@ public class TlvMfuExtractor {
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public boolean put(byte[] tlv) {
+    public boolean putIn(byte[] tlv) {
         try {
             if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
                 m_tlv_packets.put(tlv);
@@ -212,6 +207,22 @@ public class TlvMfuExtractor {
         return true;
     }
 
+    protected void putOut(QueueData data) throws InterruptedException {
+        if ( data == null ) return;
+        
+        if ( m_video_pid_filters.contains(data.packet_id) == true ) {
+            m_mfu_videos.put(data);
+        }
+        
+        if ( m_audio_pid_filters.contains(data.packet_id) == true ) {
+            m_mfu_audios.put(data);
+        }
+        
+        if ( m_timed_text_pid_filters.contains(data.packet_id) == true ) {
+            m_mfu_timed_texts.put(data);
+        }
+    }
+    
     protected synchronized void emitVideoMfu(QueueData data) {
         if ( data != null ) {
             for ( int i=0; i<m_listeners.size(); i++ ) {
@@ -236,7 +247,7 @@ public class TlvMfuExtractor {
         }
     }
     
-    protected synchronized void processTLV(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.SIGNALLING_PACKET:
@@ -261,22 +272,6 @@ public class TlvMfuExtractor {
         }
     }
 
-    protected void put(QueueData data) throws InterruptedException {
-        if ( data == null ) return;
-        
-        if ( m_video_pid_filters.contains(data.packet_id) == true ) {
-            m_mfu_videos.put(data);
-        }
-        
-        if ( m_audio_pid_filters.contains(data.packet_id) == true ) {
-            m_mfu_audios.put(data);
-        }
-        
-        if ( m_timed_text_pid_filters.contains(data.packet_id) == true ) {
-            m_mfu_timed_texts.put(data);
-        }
-    }
-    
     /**
      * processMfuVideo assumes that video should be hevc specified in ARIB B60
      * @throws InterruptedException 
@@ -286,13 +281,15 @@ public class TlvMfuExtractor {
     protected void processMfuVideo(int packet_id, MMTP_Payload_MPU mpu) throws InterruptedException, IOException {
         List<MFU> mfus = null;
         byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
-        ByteArrayOutputStream outputStreamNal = new ByteArrayOutputStream();
-        ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
+        ByteArrayOutputStream outputStreamVideo = new ByteArrayOutputStream();
 
-        Logger.d(String.format("[V] pid : 0x%04x, " + 
-                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        /**
+         * @note Please enable following if you'd like to see video sequence flow
+         */
+//        Logger.d(String.format("[V] pid : 0x%04x, " + 
+//                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+//                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+//                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
@@ -302,10 +299,9 @@ public class TlvMfuExtractor {
                      * @note Replacement length of NAL with NAL prefix 
                      */
                     System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);                    
-                    outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
+                    outputStreamVideo.write(mfus.get(i).MFU_data_byte);
                 }
-                outputStreamNal.write(outputStreamRawMfu.toByteArray());
-                put(new QueueData(packet_id, outputStreamNal.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamVideo.toByteArray()));
                 break;
             case 0x01:
                 m_fragmented01_mmtp_video_mpu.add(mpu);
@@ -326,7 +322,7 @@ public class TlvMfuExtractor {
                                  */
                         		System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);
                         	}
-                            outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
+                            outputStreamVideo.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
                         break;
@@ -339,7 +335,7 @@ public class TlvMfuExtractor {
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
+                            outputStreamVideo.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
                     }
@@ -347,11 +343,9 @@ public class TlvMfuExtractor {
                 
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
+                    outputStreamVideo.write(mfus.get(i).MFU_data_byte);
                 }
-                
-                outputStreamNal.write(outputStreamRawMfu.toByteArray());
-                put(new QueueData(packet_id, outputStreamNal.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamVideo.toByteArray()));
                 break;
         }
     }
@@ -367,29 +361,32 @@ public class TlvMfuExtractor {
         List<MFU> mfus = null;
         ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
         ByteArrayOutputStream outputStreamAudio = new ByteArrayOutputStream();
+        /**
+         * @note Please refer to 8.2 Transmission of Audio Signal in ARIB B60
+         * synchronization byte and length information should be added
+         */
         BitReadWriter syncword = new BitReadWriter(new byte[3]);
         syncword.writeOnBuffer((int)0x2b7, 11);
         
-        Logger.d(String.format("[A] pid : 0x%04x, " + 
-                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        /**
+         * @note Please enable following if you'd like to see video sequence flow
+         */
+//        Logger.d(String.format("[A] pid : 0x%04x, " + 
+//                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+//                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+//                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-                    /**
-                     * @note Gathering MFU
-                     */
                 	dataUnitLen += mfus.get(i).MFU_data_byte.length;
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);                   
                 }                
                 syncword.writeOnBuffer(dataUnitLen, 13);
-                BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);                
                 outputStreamAudio.write(syncword.getBuffer());
                 outputStreamAudio.write(outputStreamRawMfu.toByteArray());
-                put(new QueueData(packet_id, outputStreamAudio.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamAudio.toByteArray()));
                 break;
             case 0x01:
             	m_fragmented01_mmtp_audio_mpu.add(mpu);
@@ -404,9 +401,6 @@ public class TlvMfuExtractor {
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
-                            /**
-                             * @note Gathering MFU
-                             */
                            	dataUnitLen += mfus.get(i).MFU_data_byte.length;
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                         }
@@ -434,17 +428,16 @@ public class TlvMfuExtractor {
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
                 syncword.writeOnBuffer(dataUnitLen, 13);
-                BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);
                 outputStreamAudio.write(syncword.getBuffer());
                 outputStreamAudio.write(outputStreamRawMfu.toByteArray());
-                put(new QueueData(packet_id, outputStreamAudio.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamAudio.toByteArray()));
                 break;
         }
     }
     
     protected void processMfuData(int packet_id, MMTP_Payload_MPU mpu) {
         /**
-         * Data Filtering
+         * @todo Data Filtering like closed caption and application
          */
     }
     
