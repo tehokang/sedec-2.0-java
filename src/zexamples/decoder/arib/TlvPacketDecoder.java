@@ -41,7 +41,7 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
         video_fs = new FileOutputStream(new File("video.mfu.hevc"));
         video_bs = new BufferedOutputStream(video_fs);
         
-        audio_fs = new FileOutputStream(new File("audio.mfu.mp4a"));
+        audio_fs = new FileOutputStream(new File("audio.mfu.aac"));
         audio_bs = new BufferedOutputStream(audio_fs);
 
         data_fs = new FileOutputStream(new File("data.mfu"));

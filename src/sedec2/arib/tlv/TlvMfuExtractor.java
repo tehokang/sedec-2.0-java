@@ -14,6 +14,8 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
+import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class TlvMfuExtractor {
@@ -273,6 +275,7 @@ public class TlvMfuExtractor {
     }
     
     /**
+     * processMfuVideo assumes that video should be hevc specified in ARIB B60
      * @throws InterruptedException 
      * @throws IOException 
      * @note Video Filtering
@@ -350,10 +353,18 @@ public class TlvMfuExtractor {
         }
     }
     
+    /**
+     * processMfuAudio assumes that audio should be mpeg4-audio(aac or als) specified in ARIB B60
+     * @throws InterruptedException 
+     * @throws IOException 
+     * @note Video Filtering
+     */
     protected void processMfuAudio(int packet_id, MMTP_Payload_MPU mpu) throws InterruptedException, IOException {
         List<MFU> mfus = null;
         ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
-
+        BitReadWriter syncword = new BitReadWriter(new byte[3]);
+        syncword.writeOnBuffer((int)0x2b7, 11);
+        
         Logger.d(String.format("[A] pid : 0x%04x, " + 
                 "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
                 packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
@@ -366,6 +377,9 @@ public class TlvMfuExtractor {
                     /**
                      * @note Gathering MFU
                      */
+                    syncword.writeOnBuffer(mfus.get(i).MFU_data_byte.length, 13);
+                    BinaryLogger.debug(syncword.getBuffer(), syncword.getBuffer().length);
+                    outputStreamRawMfu.write(syncword.getBuffer());
                     outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                 }
                 put(new QueueData(packet_id, outputStreamRawMfu.toByteArray()));
@@ -386,6 +400,10 @@ public class TlvMfuExtractor {
                             /**
                              * @note Gathering MFU
                              */
+                            if ( i == 0 ) {
+                                syncword.writeOnBuffer(mfus.get(i).MFU_data_byte.length, 13);
+                                outputStreamRawMfu.write(syncword.getBuffer());
+                            }
                             outputStreamRawMfu.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
