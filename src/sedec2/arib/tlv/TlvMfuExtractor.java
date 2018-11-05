@@ -15,12 +15,13 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.base.BitReadWriter;
+import sedec2.util.Logger;
 
 public class TlvMfuExtractor {
     public interface IMediaExtractorListener {
         public void onReceivedVideo(int packet_id, byte[] buffer);
         public void onReceivedAudio(int packet_id, byte[] buffer);
-        public void onReceivedTimedText(int packet_id, byte[] buffer);
+        public void onReceivedTtml(int packet_id, byte[] buffer);
     }
 
     class QueueData {
@@ -38,24 +39,26 @@ public class TlvMfuExtractor {
     List<Integer> m_app_pid_filters = new ArrayList<>();
     List<Integer> m_video_pid_filters = new ArrayList<>();
     List<Integer> m_audio_pid_filters = new ArrayList<>();
-    List<Integer> m_timed_text_pid_filters = new ArrayList<>();
+    List<Integer> m_ttml_pid_filters = new ArrayList<>();
     
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_video_event_thread;
     protected Thread m_mfu_audio_event_thread;
-    protected Thread m_mfu_timed_text_event_thread;
+    protected Thread m_mfu_ttml_event_thread;
         
     protected List<IMediaExtractorListener> m_listeners = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_video_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_video_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_audio_mpu = new ArrayList<>();
     protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_audio_mpu = new ArrayList<>();
+    protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_ttml_mpu = new ArrayList<>();
+    protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_ttml_mpu = new ArrayList<>();
 
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     protected BlockingQueue<QueueData> m_mfu_videos = new ArrayBlockingQueue<QueueData>(100);
     protected BlockingQueue<QueueData> m_mfu_audios = new ArrayBlockingQueue<QueueData>(100);
-    protected BlockingQueue<QueueData> m_mfu_timed_texts = new ArrayBlockingQueue<QueueData>(100);
+    protected BlockingQueue<QueueData> m_mfu_ttmls = new ArrayBlockingQueue<QueueData>(100);
     
     public TlvMfuExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
@@ -131,14 +134,14 @@ public class TlvMfuExtractor {
             }
         });
         
-        m_mfu_timed_text_event_thread = new Thread(new Runnable() {
+        m_mfu_ttml_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_mfu_timed_texts ) emitTimedTextMfu(m_mfu_timed_texts.take());
+                        if ( null != m_mfu_ttmls ) emitTtmlMfu(m_mfu_ttmls.take());
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
@@ -155,7 +158,7 @@ public class TlvMfuExtractor {
         m_tlv_extractor_thread.start();
         m_mfu_video_event_thread.start();
         m_mfu_audio_event_thread.start();
-        m_mfu_timed_text_event_thread.start();
+        m_mfu_ttml_event_thread.start();
     }
     
     /**
@@ -218,8 +221,8 @@ public class TlvMfuExtractor {
             m_mfu_audios.put(data);
         }
         
-        if ( m_timed_text_pid_filters.contains(data.packet_id) == true ) {
-            m_mfu_timed_texts.put(data);
+        if ( m_ttml_pid_filters.contains(data.packet_id) == true ) {
+            m_mfu_ttmls.put(data);
         }
     }
     
@@ -239,10 +242,10 @@ public class TlvMfuExtractor {
         }
     }
     
-    protected synchronized void emitTimedTextMfu(QueueData data) {
+    protected synchronized void emitTtmlMfu(QueueData data) {
         if ( data != null ) {
             for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onReceivedTimedText(data.packet_id, data.data);
+                m_listeners.get(i).onReceivedTtml(data.packet_id, data.data);
             }
         }
     }
@@ -278,7 +281,8 @@ public class TlvMfuExtractor {
      * @throws IOException 
      * @note Video Filtering
      */
-    protected void processMfuVideo(int packet_id, MMTP_Payload_MPU mpu) throws InterruptedException, IOException {
+    protected void processMfuVideo(int packet_id, MMTP_Payload_MPU mpu) 
+            throws InterruptedException, IOException {
         List<MFU> mfus = null;
         byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
         ByteArrayOutputStream outputStreamVideo = new ByteArrayOutputStream();
@@ -356,7 +360,8 @@ public class TlvMfuExtractor {
      * @throws IOException 
      * @note Video Filtering
      */
-    protected void processMfuAudio(int packet_id, MMTP_Payload_MPU mpu) throws InterruptedException, IOException {
+    protected void processMfuAudio(int packet_id, MMTP_Payload_MPU mpu) 
+            throws InterruptedException, IOException {
     	int dataUnitLen = 0;
         List<MFU> mfus = null;
         ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
@@ -435,10 +440,66 @@ public class TlvMfuExtractor {
         }
     }
     
-    protected void processMfuData(int packet_id, MMTP_Payload_MPU mpu) {
+    protected void processMfuTtml(int packet_id, MMTP_Payload_MPU mpu) 
+            throws IOException, InterruptedException {
+        List<MFU> mfus = null;
+        ByteArrayOutputStream outputStreamTtml = new ByteArrayOutputStream();
+        
         /**
-         * @todo Data Filtering like closed caption and application
+         * @note Please enable following if you'd like to see ttml sequence flow
          */
+        Logger.d(String.format("[T] pid : 0x%04x, " + 
+                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        
+        switch ( mpu.getFragmentationIndicator() ) {
+            case 0x00:
+                mfus = mpu.getMFUList();
+                for ( int i=0; i<mfus.size(); i++ ) {
+                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);                   
+                }
+                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
+                break;
+            case 0x01:
+                m_fragmented01_mmtp_ttml_mpu.add(mpu);
+                break;
+            case 0x02:
+                m_fragmented01_mmtp_ttml_mpu.add(mpu);
+                break;
+            case 0x03:
+                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_ttml_mpu.iterator() ; 
+                        it.hasNext() ; ) {
+                    MMTP_Payload_MPU mpu01 = it.next();
+                    if( mpu01.getFragmentationIndicator() == 0x01 ) {
+                        mfus = mpu01.getMFUList();
+                        for ( int i=0; i<mfus.size(); i++ ) {
+                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                        }
+                        it.remove();
+                        break;
+                    }
+                }
+                
+                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_ttml_mpu.iterator() ; 
+                        it.hasNext() ; ) {
+                    MMTP_Payload_MPU mpu02 = it.next();
+                    if( mpu02.getFragmentationIndicator() == 0x02 ) {
+                        mfus = mpu02.getMFUList();
+                        for ( int i=0; i<mfus.size(); i++ ) {
+                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                        }
+                        it.remove();
+                    }
+                } 
+                
+                mfus = mpu.getMFUList();
+                for ( int i=0; i<mfus.size(); i++ ) {
+                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                }
+                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
+                break;
+        }
     }
     
     protected void processMmtpMpu(MMTP_Packet mmtp) throws InterruptedException, IOException {
@@ -453,8 +514,27 @@ public class TlvMfuExtractor {
             processMfuAudio(packet_id, mpu);
         }
         
-        if ( m_timed_text_pid_filters.contains(packet_id) ) {
-            processMfuData(packet_id, mpu);
+        if ( m_ttml_pid_filters.contains(packet_id) ) {
+            processMfuTtml(packet_id, mpu);
+        }
+    }
+    
+    public void addVideoPidFilter(int video_pid) {
+        for ( int i=0; i<m_video_pid_filters.size(); i++ ) {
+            if ( m_video_pid_filters.get(i) == video_pid ) {
+                return;
+            }
+        }
+        m_video_pid_filters.add(video_pid);
+    }
+    
+    public void removeVideoPidFilter(int video_pid) {
+        for ( Iterator<Integer> it = m_video_pid_filters.iterator() ; 
+                it.hasNext() ; ) {
+            Integer vpid = it.next();
+            if ( vpid == video_pid ) {
+                it.remove();
+            }
         }
     }
     
@@ -462,12 +542,50 @@ public class TlvMfuExtractor {
         m_video_pid_filters = video_pids;
     }
     
+    public void addAudioPidFilter(int audio_pid) {
+        for ( int i=0; i<m_audio_pid_filters.size(); i++ ) {
+            if ( m_audio_pid_filters.get(i) == audio_pid ) {
+                return;
+            }
+        }
+        m_audio_pid_filters.add(audio_pid);
+    }
+    
+    public void removeAudioPidFilter(int audio_pid) {
+        for ( Iterator<Integer> it = m_audio_pid_filters.iterator() ; 
+                it.hasNext() ; ) {
+            Integer apid = it.next();
+            if ( apid == audio_pid ) {
+                it.remove();
+            }
+        }
+    }
+    
     public void setAudioPidFilter(List<Integer> audio_pids) {
         m_audio_pid_filters = audio_pids;
     }
     
-    public void setTimedTextPidFilter(List<Integer> data_pids) {
-        m_timed_text_pid_filters = data_pids;
+    public void addTtmlPidFilter(int ttml_pid) {
+        for ( int i=0; i<m_ttml_pid_filters.size(); i++ ) {
+            if ( m_ttml_pid_filters.get(i) == ttml_pid ) {
+                return;
+            }
+        }
+        m_ttml_pid_filters.add(ttml_pid);
+    }
+    
+    public void removeTtmlPidFilter(int ttml_pid) {
+        for ( Iterator<Integer> it = m_ttml_pid_filters.iterator() ; 
+                it.hasNext() ; ) {
+            Integer tpid = it.next();
+            if ( tpid == ttml_pid ) {
+                it.remove();
+            }
+        }
+    }
+    
+    public void setTtmlPidFilter(List<Integer> data_pids) {
+        m_ttml_pid_filters = data_pids;
     }
     
     public void setApplicationPidFilter(List<Integer> app_pids) {

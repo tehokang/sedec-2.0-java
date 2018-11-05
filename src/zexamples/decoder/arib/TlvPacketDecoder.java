@@ -17,6 +17,7 @@ import sedec2.arib.tlv.TlvMfuExtractor.IMediaExtractorListener;
 import sedec2.arib.tlv.TlvMfuExtractor;
 import sedec2.arib.tlv.TlvTableExtractor;
 import sedec2.arib.tlv.TlvTableExtractor.ITableExtractorListener;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
@@ -44,7 +45,7 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
         audio_fs = new FileOutputStream(new File("audio.mfu.aac"));
         audio_bs = new BufferedOutputStream(audio_fs);
 
-        data_fs = new FileOutputStream(new File("data.mfu"));
+        data_fs = new FileOutputStream(new File("closedcaption.mfu.txt"));
         data_bs = new BufferedOutputStream(data_fs);
 
         List<Byte> filters = new ArrayList<>();
@@ -100,14 +101,26 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
                             tlv_mpu_extractor.setAudioPidFilter(Arrays.asList(pid));
                             break;
                         case "stpp":
-                            tlv_mpu_extractor.setTimedTextPidFilter(Arrays.asList(pid));
+                            /**
+                             * @note TTML (Timed Text, Closed-caption and superimposition)
+                             */
+                            tlv_mpu_extractor.addTtmlPidFilter(pid);
                             break;
                         case "aapp":
+                            /**
+                             * @note Application
+                             */
                             tlv_mpu_extractor.setApplicationPidFilter(Arrays.asList(pid));
                             break;
                         case "asgd":
+                            /**
+                             * @note Synchronous type general purpose data
+                             */
                             break;
                         case "aagd":
+                            /**
+                             * @note Asynchronous type general purpose data
+                             */
                             break;
                     }
                 }
@@ -148,9 +161,10 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
     }
 
     @Override
-    public void onReceivedTimedText(int packet_id, byte[] buffer) {
+    public void onReceivedTtml(int packet_id, byte[] buffer) {
         try {
-            data_bs.write(buffer);
+            MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
+            data_bs.write(ttml.getBuffer());
         } catch (IOException e) {
             e.printStackTrace();
         } 

@@ -68,7 +68,7 @@ public class MFU_ClosedCaption extends BitReadWriter {
                 (subsamples.size()*(length_extension_flag==1?5:3));
         
         data_byte = new byte[remaining_length];    
-        for ( int i=0; i<data_byte.length; ) {
+        for ( int i=0; i<data_byte.length; i++ ) {
             data_byte[i] = (byte) readOnBuffer(8);
         }
     }
@@ -92,6 +92,11 @@ public class MFU_ClosedCaption extends BitReadWriter {
                     ss.subsample_i_data_size));
         }
         
-        BinaryLogger.print(data_byte);
+        if ( data_type == 0x0000 ) {
+            Logger.d(String.format("\t data_byte : \n"));
+            Logger.d(String.format("\t %s \n", new String(data_byte)));
+        } else {
+            BinaryLogger.print(data_byte);
+        }
     }
 }
