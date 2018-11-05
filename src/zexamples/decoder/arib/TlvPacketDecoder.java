@@ -183,7 +183,8 @@ public class TlvPacketDecoder {
                 
                 while ( dataInputStream.available() > 0) {
                     /**
-                     * @note Assume.2 Making a packet of TLV 
+                     * @note Assume.2 Making a packet of TLV which has a sync byte as beginning
+                     * In other words, user should put a perfect TLV packet with sync byte into. 
                      */
                     byte[] tlv_header_buffer = new byte[(int) TLV_HEADER_LENGTH];
                     dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
