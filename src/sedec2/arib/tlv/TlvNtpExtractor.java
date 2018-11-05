@@ -13,7 +13,7 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
 public class TlvNtpExtractor {
-    public interface ITlvNtpExtractorListener {
+    public interface INtpExtractorListener {
         public void onUpdatedNtp(NetworkTimeProtocolData ntp);
     }
 
@@ -24,7 +24,7 @@ public class TlvNtpExtractor {
     protected Thread m_ntp_event_thread;
     protected Thread m_tlv_extractor_thread;
     
-    protected List<ITlvNtpExtractorListener> m_listeners = new ArrayList<>();
+    protected List<INtpExtractorListener> m_listeners = new ArrayList<>();
     protected BlockingQueue<NetworkTimeProtocolData> m_ntps = 
             new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
@@ -111,11 +111,11 @@ public class TlvNtpExtractor {
      * SDK can send
      * @param listener
      */
-    public void addEventListener(ITlvNtpExtractorListener listener) {
+    public void addEventListener(INtpExtractorListener listener) {
         m_listeners.add(listener);
     }
     
-    public void removeEventListener(ITlvNtpExtractorListener listener) {
+    public void removeEventListener(INtpExtractorListener listener) {
         m_listeners.remove(listener);
     }
     

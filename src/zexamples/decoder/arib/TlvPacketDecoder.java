@@ -15,19 +15,24 @@ import java.util.List;
 
 import sedec2.arib.tlv.TlvMfuExtractor.IMediaExtractorListener;
 import sedec2.arib.tlv.TlvMfuExtractor;
+import sedec2.arib.tlv.TlvNtpExtractor;
+import sedec2.arib.tlv.TlvNtpExtractor.INtpExtractorListener;
 import sedec2.arib.tlv.TlvTableExtractor;
 import sedec2.arib.tlv.TlvTableExtractor.ITableExtractorListener;
+import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
 
-class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener {
+class TlvCoordinator implements 
+        ITableExtractorListener, IMediaExtractorListener, INtpExtractorListener {
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
     protected TlvTableExtractor tlv_table_extractor = new TlvTableExtractor();
     protected TlvMfuExtractor tlv_mpu_extractor = new TlvMfuExtractor();
+    protected TlvNtpExtractor tlv_ntp_extractor = new TlvNtpExtractor();
     
     FileOutputStream video_fs = null;
     BufferedOutputStream video_bs = null;
@@ -64,11 +69,16 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
 
         tlv_table_extractor.addEventListener(this);
         tlv_mpu_extractor.addEventListener(this);
+        tlv_ntp_extractor.addEventListener(this);
     }
     
     public void destroy() {
         tlv_mpu_extractor.removeEventListener(this);
         tlv_table_extractor.removeEventListener(this);
+        
+        tlv_mpu_extractor.destroy();
+        tlv_table_extractor.destroy();
+        tlv_ntp_extractor.destroy();
         
         tlv_mpu_extractor = null;
         tlv_table_extractor = null;
@@ -168,6 +178,11 @@ class TlvCoordinator implements ITableExtractorListener, IMediaExtractorListener
         } catch (IOException e) {
             e.printStackTrace();
         } 
+    }
+
+    @Override
+    public void onUpdatedNtp(NetworkTimeProtocolData ntp) {
+        ntp.print();
     }
 }
 

@@ -48,12 +48,12 @@ public class TlvMfuExtractor {
     protected Thread m_mfu_ttml_event_thread;
         
     protected List<IMediaExtractorListener> m_listeners = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_video_mpu = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_video_mpu = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_audio_mpu = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_audio_mpu = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented01_mmtp_ttml_mpu = new ArrayList<>();
-    protected List<MMTP_Payload_MPU> m_fragmented02_mmtp_ttml_mpu = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented01_mmtp_video = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_video = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented01_mmtp_audio = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_audio = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented01_mmtp_ttml = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_ttml = new ArrayList<>();
 
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     protected BlockingQueue<QueueData> m_mfu_videos = new ArrayBlockingQueue<QueueData>(100);
@@ -281,19 +281,21 @@ public class TlvMfuExtractor {
      * @throws IOException 
      * @note Video Filtering
      */
-    protected void processMfuVideo(int packet_id, MMTP_Payload_MPU mpu) 
+    protected void processMfuVideo(MMTP_Packet mmtp) 
             throws InterruptedException, IOException {
         List<MFU> mfus = null;
+        int packet_id = mmtp.getPacketId();
+        MMTP_Payload_MPU mpu = mmtp.getMPU();
         byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
         ByteArrayOutputStream outputStreamVideo = new ByteArrayOutputStream();
 
         /**
          * @note Please enable following if you'd like to see video sequence flow
          */
-//        Logger.d(String.format("[V] pid : 0x%04x, " + 
-//                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-//                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-//                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        Logger.d(String.format("[V] pid : 0x%04x, " + 
+                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
@@ -308,15 +310,15 @@ public class TlvMfuExtractor {
                 putOut(new QueueData(packet_id, outputStreamVideo.toByteArray()));
                 break;
             case 0x01:
-                m_fragmented01_mmtp_video_mpu.add(mpu);
+                m_fragmented01_mmtp_video.add(mmtp);
                 break;
             case 0x02:
-                m_fragmented02_mmtp_video_mpu.add(mpu);
+                m_fragmented02_mmtp_video.add(mmtp);
                 break;
             case 0x03:
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_video_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_video.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu01 = it.next();
+                    MMTP_Payload_MPU mpu01 = it.next().getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -333,9 +335,9 @@ public class TlvMfuExtractor {
                     }
                 }
                 
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_video_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_video.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu02 = it.next();
+                    MMTP_Payload_MPU mpu02 = it.next().getMPU();
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -360,10 +362,12 @@ public class TlvMfuExtractor {
      * @throws IOException 
      * @note Video Filtering
      */
-    protected void processMfuAudio(int packet_id, MMTP_Payload_MPU mpu) 
+    protected void processMfuAudio(MMTP_Packet mmtp) 
             throws InterruptedException, IOException {
     	int dataUnitLen = 0;
         List<MFU> mfus = null;
+        int packet_id = mmtp.getPacketId();
+        MMTP_Payload_MPU mpu = mmtp.getMPU();
         ByteArrayOutputStream outputStreamRawMfu = new ByteArrayOutputStream();
         ByteArrayOutputStream outputStreamAudio = new ByteArrayOutputStream();
         /**
@@ -376,10 +380,10 @@ public class TlvMfuExtractor {
         /**
          * @note Please enable following if you'd like to see video sequence flow
          */
-//        Logger.d(String.format("[A] pid : 0x%04x, " + 
-//                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-//                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-//                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        Logger.d(String.format("[A] pid : 0x%04x, " + 
+                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
@@ -394,15 +398,15 @@ public class TlvMfuExtractor {
                 putOut(new QueueData(packet_id, outputStreamAudio.toByteArray()));
                 break;
             case 0x01:
-            	m_fragmented01_mmtp_audio_mpu.add(mpu);
+            	m_fragmented01_mmtp_audio.add(mmtp);
                 break;
             case 0x02:
-            	m_fragmented02_mmtp_audio_mpu.add(mpu);
+            	m_fragmented02_mmtp_audio.add(mmtp);
                 break;
             case 0x03:
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_audio_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_audio.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu01 = it.next();
+                    MMTP_Payload_MPU mpu01 = it.next().getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -414,9 +418,9 @@ public class TlvMfuExtractor {
                     }
                 }
                 
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_audio_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_audio.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu02 = it.next();
+                    MMTP_Payload_MPU mpu02 = it.next().getMPU();
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -440,9 +444,11 @@ public class TlvMfuExtractor {
         }
     }
     
-    protected void processMfuTtml(int packet_id, MMTP_Payload_MPU mpu) 
+    protected void processMfuTtml(MMTP_Packet mmtp) 
             throws IOException, InterruptedException {
         List<MFU> mfus = null;
+        int packet_id = mmtp.getPacketId();
+        MMTP_Payload_MPU mpu = mmtp.getMPU();
         ByteArrayOutputStream outputStreamTtml = new ByteArrayOutputStream();
         
         /**
@@ -462,15 +468,15 @@ public class TlvMfuExtractor {
                 putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 break;
             case 0x01:
-                m_fragmented01_mmtp_ttml_mpu.add(mpu);
+                m_fragmented01_mmtp_ttml.add(mmtp);
                 break;
             case 0x02:
-                m_fragmented01_mmtp_ttml_mpu.add(mpu);
+                m_fragmented01_mmtp_ttml.add(mmtp);
                 break;
             case 0x03:
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented01_mmtp_ttml_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_ttml.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu01 = it.next();
+                    MMTP_Payload_MPU mpu01 = it.next().getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -481,9 +487,9 @@ public class TlvMfuExtractor {
                     }
                 }
                 
-                for ( Iterator<MMTP_Payload_MPU> it = m_fragmented02_mmtp_ttml_mpu.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_ttml.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu02 = it.next();
+                    MMTP_Payload_MPU mpu02 = it.next().getMPU();
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -504,18 +510,17 @@ public class TlvMfuExtractor {
     
     protected void processMmtpMpu(MMTP_Packet mmtp) throws InterruptedException, IOException {
         int packet_id = mmtp.getPacketId();
-        MMTP_Payload_MPU mpu = mmtp.getMPU();
         
         if ( m_video_pid_filters.contains(packet_id) ) {
-            processMfuVideo(packet_id, mpu);
+            processMfuVideo(mmtp);
         } 
         
         if ( m_audio_pid_filters.contains(packet_id) ) {
-            processMfuAudio(packet_id, mpu);
+            processMfuAudio(mmtp);
         }
         
         if ( m_ttml_pid_filters.contains(packet_id) ) {
-            processMfuTtml(packet_id, mpu);
+            processMfuTtml(mmtp);
         }
     }
     
