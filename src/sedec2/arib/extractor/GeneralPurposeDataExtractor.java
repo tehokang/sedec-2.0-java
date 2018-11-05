@@ -16,11 +16,11 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.util.Logger;
 
-public class VideoExtractor extends BaseExtractor {
-    public interface IVideoExtractorListener extends BaseExtractor.Listener {
-        public void onReceivedVideo(int packet_id, byte[] buffer);
+public class GeneralPurposeDataExtractor extends BaseExtractor {
+    public interface IGeneralPurposeDataExtractorListener extends BaseExtractor.Listener {
+        public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
-
+ 
     class QueueData {
         public int packet_id;
         public byte[] data;
@@ -31,18 +31,18 @@ public class VideoExtractor extends BaseExtractor {
         }
     }
 
-    protected final String TAG = "VideoExtractor";
+    protected final String TAG = "GeneralPurposeDataExtractor";
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
-    protected Thread m_mfu_video_event_thread;
+    protected Thread m_mfu_generalpurpose_data_event_thread;
         
-    protected List<MMTP_Packet> m_fragmented01_mmtp_video = new ArrayList<>();
-    protected List<MMTP_Packet> m_fragmented02_mmtp_video = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented01_mmtp_general_data = new ArrayList<>();
+    protected List<MMTP_Packet> m_fragmented02_mmtp_general_data = new ArrayList<>();
 
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    protected BlockingQueue<QueueData> m_mfu_videos = new ArrayBlockingQueue<QueueData>(100);
+    protected BlockingQueue<QueueData> m_mfu_general_data = new ArrayBlockingQueue<QueueData>(100);
     
-    public VideoExtractor() {
+    public GeneralPurposeDataExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,19 +74,19 @@ public class VideoExtractor extends BaseExtractor {
             }
         });
         
-        m_mfu_video_event_thread = new Thread(new Runnable() {
+        m_mfu_generalpurpose_data_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 QueueData data = null;
-                
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_mfu_videos && (data = m_mfu_videos.take()) != null ) {
+                        if ( null != m_mfu_general_data && 
+                                (data = m_mfu_general_data.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                ((IVideoExtractorListener)m_listeners.get(i)).
-                                        onReceivedVideo(data.packet_id, data.data);
+                                ((IGeneralPurposeDataExtractorListener)m_listeners.get(i)).
+                                        onReceivedGeneralPurposeData(data.packet_id, data.data);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -103,7 +103,7 @@ public class VideoExtractor extends BaseExtractor {
         });
         
         m_tlv_extractor_thread.start();
-        m_mfu_video_event_thread.start();
+        m_mfu_generalpurpose_data_event_thread.start();
     }
     
     /**
@@ -115,14 +115,15 @@ public class VideoExtractor extends BaseExtractor {
         m_tlv_extractor_thread.interrupt();
         m_tlv_extractor_thread = null;
         
-        m_mfu_video_event_thread.interrupt();
-        m_mfu_video_event_thread = null;
+        m_mfu_generalpurpose_data_event_thread.interrupt();
+        m_mfu_generalpurpose_data_event_thread = null;
         
         m_listeners.clear();
         m_listeners = null;
                 
         m_tlv_packets.clear();
         m_tlv_packets = null;
+        
     }
     
     /**
@@ -130,7 +131,6 @@ public class VideoExtractor extends BaseExtractor {
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    @Override
     public void putIn(byte[] tlv) throws InterruptedException {
         if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
             m_tlv_packets.put(tlv);
@@ -141,7 +141,7 @@ public class VideoExtractor extends BaseExtractor {
     protected void putOut(Object obj) throws InterruptedException {
         if ( obj == null ) return;
         
-        m_mfu_videos.put((QueueData)obj);
+        m_mfu_general_data.put((QueueData)obj);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -162,8 +162,8 @@ public class VideoExtractor extends BaseExtractor {
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        processMfuVideo(mmtp_packet);
-                    } 
+                        processMfuGeneralData(mmtp_packet);
+                    }
                 }
                 break;
             default:
@@ -171,25 +171,18 @@ public class VideoExtractor extends BaseExtractor {
         }
     }
 
-    /**
-     * processMfuVideo assumes that video should be hevc specified in ARIB B60
-     * @throws InterruptedException 
-     * @throws IOException 
-     * @note Video Filtering
-     */
-    protected void processMfuVideo(MMTP_Packet mmtp) 
-            throws InterruptedException, IOException {
+    protected void processMfuGeneralData(MMTP_Packet mmtp) 
+            throws IOException, InterruptedException {
         List<MFU> mfus = null;
         int packet_id = mmtp.getPacketId();
         MMTP_Payload_MPU mpu = mmtp.getMPU();
-        byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
-        ByteArrayOutputStream outputStreamVideo = new ByteArrayOutputStream();
-
+        ByteArrayOutputStream outputStreamTtml = new ByteArrayOutputStream();
+        
         /**
-         * @note Please enable following if you'd like to see video sequence flow
+         * @note Please enable following if you'd like to see ttml sequence flow
          */
         if ( enable_logging == true ) {
-            Logger.d(String.format("[V] pid : 0x%04x, " + 
+            Logger.d(String.format("[GD] pid : 0x%04x, " + 
                     "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
                     packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
                     mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
@@ -199,47 +192,37 @@ public class VideoExtractor extends BaseExtractor {
             case 0x00:
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-                    /**
-                     * @note Replacement length of NAL with NAL prefix 
-                     */
-                    System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);                    
-                    outputStreamVideo.write(mfus.get(i).MFU_data_byte);
+                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);                   
                 }
-                putOut(new QueueData(packet_id, outputStreamVideo.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 break;
             case 0x01:
-                m_fragmented01_mmtp_video.add(mmtp);
+                m_fragmented01_mmtp_general_data.add(mmtp);
                 break;
             case 0x02:
-                m_fragmented02_mmtp_video.add(mmtp);
+                m_fragmented01_mmtp_general_data.add(mmtp);
                 break;
             case 0x03:
-                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_video.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_general_data.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu01 = it.next().getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
-                            if(i == 0) {
-                                /**
-                                 * @note Replacement length of NAL with NAL prefix 
-                                 */
-                                System.arraycopy(nal_prefix, 0, mfus.get(i).MFU_data_byte, 0, nal_prefix.length);
-                            }
-                            outputStreamVideo.write(mfus.get(i).MFU_data_byte);
+                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
                         break;
                     }
                 }
                 
-                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_video.iterator() ; 
+                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_general_data.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu02 = it.next().getMPU();
                     if( mpu02.getFragmentationIndicator() == 0x02 ) {
                         mfus = mpu02.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamVideo.write(mfus.get(i).MFU_data_byte);
+                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
                     }
@@ -247,10 +230,11 @@ public class VideoExtractor extends BaseExtractor {
                 
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamVideo.write(mfus.get(i).MFU_data_byte);
+                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);
                 }
-                putOut(new QueueData(packet_id, outputStreamVideo.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 break;
         }
     }
+
 }

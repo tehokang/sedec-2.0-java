@@ -65,10 +65,10 @@ public class NtpExtractor extends BaseExtractor {
                     try {
                         Thread.sleep(1);
                         if ( null != m_ntps && 
-                                (ntp = m_ntps.take()) != null && 
-                                m_enable_filter == true ) {
+                                (ntp = m_ntps.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                ((INtpExtractorListener)m_listeners.get(i)).onReceivedNtp(ntp);
+                                ((INtpExtractorListener)m_listeners.get(i)).
+                                        onReceivedNtp(ntp);
                             }
                         }
                     } catch ( InterruptedException e ) {
@@ -136,10 +136,12 @@ public class NtpExtractor extends BaseExtractor {
             case PacketFactory.IPV4_PACKET:
                 NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
                 if ( ipv4_ntp != null ) putOut(ipv4_ntp);
+                if ( enable_logging == true ) ipv4_ntp.print();
                 break;
             case PacketFactory.IPV6_PACKET:
                 NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
                 if ( ipv6_ntp != null ) putOut(ipv6_ntp);
+                if ( enable_logging == true ) ipv6_ntp.print();
                 break;
             case PacketFactory.SIGNALLING_PACKET:
             case PacketFactory.COMPRESSED_IP_PACKET:

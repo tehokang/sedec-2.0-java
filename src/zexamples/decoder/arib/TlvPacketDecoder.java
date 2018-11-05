@@ -24,19 +24,22 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     protected PackageListTable plt = null;
     protected BufferedOutputStream video_bs = null;
     protected BufferedOutputStream audio_bs = null;
-    protected BufferedOutputStream ttml_bs = null;
     protected TlvDemultiplexer tlv_demuxer = null;
     
     public TlvCoordinator() throws FileNotFoundException {
         video_bs = new BufferedOutputStream(new FileOutputStream(new File("video.mfu.hevc")));
         audio_bs = new BufferedOutputStream(new FileOutputStream(new File("audio.mfu.aac")));
-        ttml_bs = new BufferedOutputStream(new FileOutputStream(new File("closedcaption.mfu.txt")));
 
         tlv_demuxer = new TlvDemultiplexer();
+        tlv_demuxer.addEventListener(this);
+        
         tlv_demuxer.enableSiFilter();
+        tlv_demuxer.enableTtmlFilter();
         tlv_demuxer.enableAudioFilter();
         tlv_demuxer.enableVideoFilter();
-        tlv_demuxer.addEventListener(this);
+        tlv_demuxer.enableApplicationFilter();
+        tlv_demuxer.enableGeneralDataFilter();
+        
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
     }
@@ -56,7 +59,6 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -65,14 +67,20 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
                     switch ( asset_type ) {
                         case "hev1":
                         case "hvc1":
+                            /**
+                             * @note Video
+                             */
                             tlv_demuxer.addVideoPidFilter(pid);
                             break;
                         case "mp4a":
+                            /**
+                             * @note Audio
+                             */
                             tlv_demuxer.addAudioPidFilter(pid);
                             break;
                         case "stpp":
                             /**
-                             * @note TTML (Timed Text, Closed-caption and superimposition)
+                             * @note TTML
                              */
                             tlv_demuxer.addTtmlPidFilter(pid);
                             break;
@@ -80,16 +88,19 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
                             /**
                              * @note Application
                              */
+                            tlv_demuxer.addApplicationPidFilter(pid);
                             break;
                         case "asgd":
                             /**
                              * @note Synchronous type general purpose data
                              */
+                            tlv_demuxer.addGeneralPurposeDataPidFilter(pid);
                             break;
                         case "aagd":
                             /**
                              * @note Asynchronous type general purpose data
                              */
+                            tlv_demuxer.addGeneralPurposeDataPidFilter(pid);
                             break;
                     }
                 }
@@ -100,7 +111,6 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
             } else if ( plt != null && plt.getVersion() != 
                     ((PackageListTable)table).getVersion() ) {
                 plt = (PackageListTable) table;
-                plt.print();
                 mpt = null;
             }
             
@@ -132,17 +142,27 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
-        try {
-            MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
-            ttml_bs.write(ttml.getDataByte());
-        } catch (IOException e) {
-            e.printStackTrace();
-        } 
+        MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
+        System.out.println(String.format("TTML : %s \n",  new String(ttml.getDataByte()))); 
     }
 
     @Override
     public void onReceivedNtp(NetworkTimeProtocolData ntp) {
         ntp.print();
+    }
+
+    @Override
+    public void onReceivedApplication(int packet_id, byte[] buffer) {
+        /**
+         * @todo download a resource of application
+         */
+    }
+
+    @Override
+    public void onReceivedGeneralData(int packet_id, byte[] buffer) {
+        /**
+         * @todo General-Purpose Data
+         */
     }
 }
 

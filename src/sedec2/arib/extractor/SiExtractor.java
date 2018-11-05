@@ -74,8 +74,10 @@ public class SiExtractor extends BaseExtractor {
                     try {
                         Thread.sleep(1);
                         if ( null != m_tables && (table = m_tables.take()) != null ) {
+                            if ( enable_logging == true ) table.print();
                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                ((ITableExtractorListener)m_listeners.get(i)).onReceivedTable(table);
+                                ((ITableExtractorListener)m_listeners.get(i)).
+                                        onReceivedTable(table);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -140,13 +142,7 @@ public class SiExtractor extends BaseExtractor {
     protected void putOut(Object table) throws InterruptedException {
         if ( table == null ) return;
         
-        if ( m_enable_filter == true ) {
-            m_tables.put( (Table) table );
-        } else {
-            if ( m_byte_id_filter.contains(((Table)table).getTableId()) == true ) {
-                m_tables.put( (Table) table);
-            }
-        }
+        m_tables.put( (Table) table );
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -172,7 +168,10 @@ public class SiExtractor extends BaseExtractor {
                             processMmtpSignallingMessage(mmtp_packet);
                     
                     for ( int i=0; i<tables.size(); i++ ) {
-                        putOut(tables.get(i));
+                        Table table = tables.get(i);
+                        if ( m_byte_id_filter.contains(table.getTableId()) == true ) {
+                            putOut(tables.get(i));
+                        }
                     }
                 } 
                 break;

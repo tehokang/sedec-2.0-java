@@ -4,7 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public abstract class BaseExtractor {
-    protected boolean m_enable_filter = false;
+    protected boolean enable_logging = false;
     protected List<Listener> m_listeners = new ArrayList<>();
     protected List<Integer> m_int_id_filter = new ArrayList<>();
     protected List<Byte> m_byte_id_filter = new ArrayList<>();
@@ -59,11 +59,11 @@ public abstract class BaseExtractor {
         }
     }
     
-    public void enableFilter() {
-        m_enable_filter = true;
+    public void enableLogging() {
+        enable_logging = true;
     }
     
-    public void disableFilter() {
-        m_enable_filter = false;
+    public void disableLogging() {
+        enable_logging = false;
     }
 }

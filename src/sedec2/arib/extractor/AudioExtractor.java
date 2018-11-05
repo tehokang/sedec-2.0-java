@@ -37,7 +37,6 @@ public class AudioExtractor extends BaseExtractor {
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_audio_event_thread;
         
-    protected List<IAudioExtractorListener> m_listeners = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented01_mmtp_audio = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp_audio = new ArrayList<>();
 
@@ -87,7 +86,8 @@ public class AudioExtractor extends BaseExtractor {
                         Thread.sleep(1);
                         if ( null != m_mfu_audios && ( data = m_mfu_audios.take()) != null) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                m_listeners.get(i).onReceivedAudio(data.packet_id, data.data);
+                                ((IAudioExtractorListener)m_listeners.get(i)).
+                                        onReceivedAudio(data.packet_id, data.data);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -143,17 +143,7 @@ public class AudioExtractor extends BaseExtractor {
     protected void putOut(Object obj) throws InterruptedException {
         if ( obj == null ) return;
         
-        if ( m_int_id_filter.contains(((QueueData)obj).packet_id) == true ) {
-            m_mfu_audios.put((QueueData)obj);
-        }
-    }
-    
-    protected synchronized void emitAudioMfu(QueueData data) {
-        if ( data != null ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onReceivedAudio(data.packet_id, data.data);
-            }
-        }
+        m_mfu_audios.put((QueueData)obj);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -207,10 +197,12 @@ public class AudioExtractor extends BaseExtractor {
         /**
          * @note Please enable following if you'd like to see video sequence flow
          */
-        Logger.d(String.format("[A] pid : 0x%04x, " + 
-                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        if ( enable_logging == true ) {
+            Logger.d(String.format("[A] pid : 0x%04x, " + 
+                    "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                    packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                    mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        }
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:

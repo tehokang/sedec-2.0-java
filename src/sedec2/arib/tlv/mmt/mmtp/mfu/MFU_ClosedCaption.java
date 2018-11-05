@@ -128,7 +128,7 @@ public class MFU_ClosedCaption extends BitReadWriter {
         }
         
         if ( data_type == 0x0000 ) {
-            Logger.d(String.format("\t data_byte : \n"));
+            Logger.d(String.format("data_byte : \n"));
             Logger.d(String.format("\t %s \n", new String(data_byte)));
         } else {
             BinaryLogger.print(data_byte);

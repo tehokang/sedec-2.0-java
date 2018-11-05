@@ -36,7 +36,6 @@ public class TtmlExtractor extends BaseExtractor {
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_ttml_event_thread;
         
-    protected List<ITtmlExtractorListener> m_listeners = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented01_mmtp_ttml = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp_ttml = new ArrayList<>();
 
@@ -79,10 +78,17 @@ public class TtmlExtractor extends BaseExtractor {
 
             @Override
             public void run() {
+                QueueData data = null;
+                
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_mfu_ttmls ) emitTtmlMfu(m_mfu_ttmls.take());
+                        if ( null != m_mfu_ttmls &&  (data = m_mfu_ttmls.take()) != null ) {
+                            for ( int i=0; i<m_listeners.size(); i++ ) {
+                                ((ITtmlExtractorListener)m_listeners.get(i)).
+                                        onReceivedTtml(data.packet_id, data.data);
+                            }
+                        }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
@@ -135,17 +141,7 @@ public class TtmlExtractor extends BaseExtractor {
     protected void putOut(Object obj) throws InterruptedException {
         if ( obj == null ) return;
         
-        if ( m_int_id_filter.contains(((QueueData)obj).packet_id) == true ) {
-            m_mfu_ttmls.put((QueueData)obj);
-        }
-    }
-    
-    protected synchronized void emitTtmlMfu(QueueData data) {
-        if ( data != null ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onReceivedTtml(data.packet_id, data.data);
-            }
-        }
+        m_mfu_ttmls.put((QueueData)obj);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -185,10 +181,12 @@ public class TtmlExtractor extends BaseExtractor {
         /**
          * @note Please enable following if you'd like to see ttml sequence flow
          */
-        Logger.d(String.format("[T] pid : 0x%04x, " + 
-                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        if ( enable_logging == true ) {
+            Logger.d(String.format("[T] pid : 0x%04x, " + 
+                    "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                    packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                    mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        }
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
