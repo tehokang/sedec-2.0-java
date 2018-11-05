@@ -1,4 +1,4 @@
-package sedec2.arib.tlv;
+package sedec2.arib;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
