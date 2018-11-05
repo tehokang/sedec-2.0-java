@@ -1,4 +1,4 @@
-package sedec2.arib;
+package sedec2.arib.extractor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -18,28 +18,22 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.base.Table;
 
-public class TlvTableExtractor {
-    public interface ITableExtractorListener {
+public class SiExtractor extends Extractor {
+    public interface ITableExtractorListener extends Extractor.Listener {
         public void onReceivedTable(Table table);    
     }
     
     protected final String TAG = "TlvTableExtractor";
-    
-    boolean m_enable_table_filter = false;
-    boolean m_enable_all_of_table_filter = false;
-    List<Byte> m_table_id_filters = new ArrayList<>();
-    
+    protected boolean m_is_running = true;
     protected Thread m_table_event_thread;
     protected Thread m_tlv_extractor_thread;
-    protected boolean m_is_running = true;
     
-    protected List<ITableExtractorListener> m_listeners = new ArrayList<>();
     protected BlockingQueue<Table> m_tables = new ArrayBlockingQueue<Table>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     protected List<MMTP_Packet> m_fragmented01_mmtp_with_signal_message = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp_with_signal_message = new ArrayList<>();
             
-    public TlvTableExtractor() {
+    public SiExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -74,11 +68,16 @@ public class TlvTableExtractor {
         m_table_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                Table table = null;
                 
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_tables ) emitTable(m_tables.take());
+                        if ( null != m_tables && (table = m_tables.take()) != null ) {
+                            for ( int i=0; i<m_listeners.size(); i++ ) {
+                                ((ITableExtractorListener)m_listeners.get(i)).onReceivedTable(table);
+                            }
+                        }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
@@ -126,57 +125,26 @@ public class TlvTableExtractor {
     }
     
     /**
-     * Application should add their own listener to recieve tables, ntp, and so on which
-     * SDK can send
-     * @param listener
-     */
-    public void addEventListener(ITableExtractorListener listener) {
-        m_listeners.add(listener);
-    }
-    
-    public void removeEventListener(ITableExtractorListener listener) {
-        m_listeners.remove(listener);
-    }
-    
-    /**
      * User can put a TLV packet to get the results as Table of MMT-SI, TLV-SI and more.
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public boolean putIn(byte[] tlv) {
-        try {
-            if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
-                m_tlv_packets.put(tlv);
-            } else {
-                return false;
-            }
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            return false;
+    @Override
+    public void putIn(byte[] tlv) throws InterruptedException {
+        if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
+            m_tlv_packets.put(tlv);
         }
-        return true;
     }
 
-    protected void putOut(Table table) throws InterruptedException {
+    @Override
+    protected void putOut(Object table) throws InterruptedException {
         if ( table == null ) return;
         
-        if ( m_enable_all_of_table_filter == true ) {
-            m_tables.put( table );
-        } else if ( m_enable_table_filter == true ) {
-            if ( m_table_id_filters.contains(table.getTableId()) == true ) {
-                m_tables.put(table);
-            }
-        }
-    }
-    
-    /**
-     * Sending a table to application
-     * @param table
-     */
-    protected synchronized void emitTable(Table table) {
-        if ( table != null ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onReceivedTable(table);
+        if ( m_enable_filter == true ) {
+            m_tables.put( (Table) table );
+        } else {
+            if ( m_byte_id_filter.contains(((Table)table).getTableId()) == true ) {
+                m_tables.put( (Table) table);
             }
         }
     }
@@ -303,30 +271,4 @@ public class TlvTableExtractor {
         }
         return new ArrayList<>();
     }
-
-    /**
-     * Enable all of table of filters which application want to receive 
-     */
-    public void enableAllOfTableFilter() {
-        m_enable_all_of_table_filter = true;
-    }
-    
-    /**
-     * Enable table filters which application only want to receive
-     * @param table_ids
-     */
-    public void enableTableFilter(List<Byte> table_ids) {
-        m_enable_table_filter = true;
-        m_table_id_filters = table_ids;
-    }
-
-    /**
-     * Disable table filters if application doesn't want to receive
-     * @param table_ids
-     */
-    public void disableTableFilter() {
-        m_enable_all_of_table_filter = false;
-        m_enable_table_filter = false;
-    }
-    
 }

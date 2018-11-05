@@ -9,16 +9,9 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
-import sedec2.arib.TlvMfuExtractor;
-import sedec2.arib.TlvMfuExtractor.IMediaExtractorListener;
-import sedec2.arib.TlvNtpExtractor;
-import sedec2.arib.TlvNtpExtractor.INtpExtractorListener;
-import sedec2.arib.TlvTableExtractor;
-import sedec2.arib.TlvTableExtractor.ITableExtractorListener;
+import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -26,70 +19,36 @@ import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
 
-class TlvCoordinator implements 
-        ITableExtractorListener, IMediaExtractorListener, INtpExtractorListener {
+class TlvCoordinator implements TlvDemultiplexer.Listener {
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
-    protected TlvTableExtractor tlv_table_extractor = new TlvTableExtractor();
-    protected TlvMfuExtractor tlv_mpu_extractor = new TlvMfuExtractor();
-    protected TlvNtpExtractor tlv_ntp_extractor = new TlvNtpExtractor();
+    protected BufferedOutputStream video_bs = null;
+    protected BufferedOutputStream audio_bs = null;
+    protected BufferedOutputStream ttml_bs = null;
+    protected TlvDemultiplexer tlv_demuxer = null;
     
-    FileOutputStream video_fs = null;
-    BufferedOutputStream video_bs = null;
-    
-    FileOutputStream audio_fs = null;
-    BufferedOutputStream audio_bs = null;
-
-    FileOutputStream data_fs = null;
-    BufferedOutputStream data_bs = null;
-
     public TlvCoordinator() throws FileNotFoundException {
-        video_fs = new FileOutputStream(new File("video.mfu.hevc"));
-        video_bs = new BufferedOutputStream(video_fs);
-        
-        audio_fs = new FileOutputStream(new File("audio.mfu.aac"));
-        audio_bs = new BufferedOutputStream(audio_fs);
+        video_bs = new BufferedOutputStream(new FileOutputStream(new File("video.mfu.hevc")));
+        audio_bs = new BufferedOutputStream(new FileOutputStream(new File("audio.mfu.aac")));
+        ttml_bs = new BufferedOutputStream(new FileOutputStream(new File("closedcaption.mfu.txt")));
 
-        data_fs = new FileOutputStream(new File("closedcaption.mfu.txt"));
-        data_bs = new BufferedOutputStream(data_fs);
-
-        List<Byte> filters = new ArrayList<>();
-        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
-        filters.add(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
-        tlv_table_extractor.enableTableFilter(filters);
-        
-        /* @note Option Enable all of filters which you want to receive */
-//        tlv_extractor.enableAllOfTableFilter();
-        
-        /* @note Option Disable all of filters which you don't want to receive */
-//        tlv_extractor.disableTableFilter();
-        
-        /* @note Option Enable NTP data if user want to receive */
-//        tlv_extractor.disableNtpFilter();
-
-        tlv_table_extractor.addEventListener(this);
-        tlv_mpu_extractor.addEventListener(this);
-        tlv_ntp_extractor.addEventListener(this);
+        tlv_demuxer = new TlvDemultiplexer();
+        tlv_demuxer.enableSiFilter();
+        tlv_demuxer.enableAudioFilter();
+        tlv_demuxer.enableVideoFilter();
+        tlv_demuxer.addEventListener(this);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
     }
     
     public void destroy() {
-        tlv_mpu_extractor.removeEventListener(this);
-        tlv_table_extractor.removeEventListener(this);
-        
-        tlv_mpu_extractor.destroy();
-        tlv_table_extractor.destroy();
-        tlv_ntp_extractor.destroy();
-        
-        tlv_mpu_extractor = null;
-        tlv_table_extractor = null;
+        tlv_demuxer.removeEventListener(this);
+        tlv_demuxer.destroy();
+        tlv_demuxer = null;
     }
     
-    public boolean putTlvForTable(byte[] tlv_raw) {
-        return tlv_table_extractor.putIn(tlv_raw);
-    }
-    
-    public boolean putTlvForMedia(byte[] tlv_raw) {
-        return tlv_mpu_extractor.putIn(tlv_raw);
+    public boolean put(byte[] tlv_raw) {
+        return tlv_demuxer.put(tlv_raw);
     }
     
     @Override
@@ -97,6 +56,7 @@ class TlvCoordinator implements
         if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -105,22 +65,21 @@ class TlvCoordinator implements
                     switch ( asset_type ) {
                         case "hev1":
                         case "hvc1":
-                            tlv_mpu_extractor.setVideoPidFilter(Arrays.asList(pid));
+                            tlv_demuxer.addVideoPidFilter(pid);
                             break;
                         case "mp4a":
-                            tlv_mpu_extractor.setAudioPidFilter(Arrays.asList(pid));
+                            tlv_demuxer.addAudioPidFilter(pid);
                             break;
                         case "stpp":
                             /**
                              * @note TTML (Timed Text, Closed-caption and superimposition)
                              */
-                            tlv_mpu_extractor.addTtmlPidFilter(pid);
+                            tlv_demuxer.addTtmlPidFilter(pid);
                             break;
                         case "aapp":
                             /**
                              * @note Application
                              */
-                            tlv_mpu_extractor.setApplicationPidFilter(Arrays.asList(pid));
                             break;
                         case "asgd":
                             /**
@@ -141,6 +100,7 @@ class TlvCoordinator implements
             } else if ( plt != null && plt.getVersion() != 
                     ((PackageListTable)table).getVersion() ) {
                 plt = (PackageListTable) table;
+                plt.print();
                 mpt = null;
             }
             
@@ -174,14 +134,14 @@ class TlvCoordinator implements
     public void onReceivedTtml(int packet_id, byte[] buffer) {
         try {
             MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
-            data_bs.write(ttml.getBuffer());
+            ttml_bs.write(ttml.getDataByte());
         } catch (IOException e) {
             e.printStackTrace();
         } 
     }
 
     @Override
-    public void onUpdatedNtp(NetworkTimeProtocolData ntp) {
+    public void onReceivedNtp(NetworkTimeProtocolData ntp) {
         ntp.print();
     }
 }
@@ -236,14 +196,12 @@ public class TlvPacketDecoder {
                     outputStream.write(tlv_header_buffer);
                     outputStream.write(tlv_payload_buffer);
                     
+                    byte[] tlv_raw = outputStream.toByteArray();
                     /**
                      * @note Step.3 Putting a TLV packet into TLVExtractor \n
                      * and you can wait for both the results of TLV as table of MPEG2 and MFU
                      */
-                    if ( false == 
-                            tlv_coordinator.putTlvForTable(outputStream.toByteArray()) ||
-                         false == 
-                            tlv_coordinator.putTlvForMedia(outputStream.toByteArray())  ) {
+                    if ( false == tlv_coordinator.put(tlv_raw) ) {
                         System.out.println("Oops, they have problem to decode TLV ");
                         break;
                     }
@@ -271,5 +229,6 @@ public class TlvPacketDecoder {
         tlv_coordinator = null;
         
         System.out.println("ByeBye");
+        System.exit(0);
     }
 }

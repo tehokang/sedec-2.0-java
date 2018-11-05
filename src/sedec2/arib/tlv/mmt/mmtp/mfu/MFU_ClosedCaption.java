@@ -23,8 +23,7 @@ public class MFU_ClosedCaption extends BitReadWriter {
         public byte subsample_i_data_type;
         public int subsample_i_data_size;
     }
-    
-    
+       
     public MFU_ClosedCaption(byte[] buffer) {
         super(buffer);
         
@@ -71,6 +70,42 @@ public class MFU_ClosedCaption extends BitReadWriter {
         for ( int i=0; i<data_byte.length; i++ ) {
             data_byte[i] = (byte) readOnBuffer(8);
         }
+    }
+    
+    public byte getSubtitleTag() {
+        return subtitle_tag;
+    }
+    
+    public byte getSubtitleSequenceNumber() {
+        return subtitle_sequence_number;
+    }
+    
+    public byte getSubsampleNumber() {
+        return subsample_number;
+    }
+    
+    public byte getLastSubsampleNumber() {
+        return last_subsample_number;
+    }
+    
+    public byte getDataType() {
+        return data_type;
+    }
+    
+    public byte getLengthExtensionFlag() {
+        return length_extension_flag;
+    }
+    
+    public byte getSubsampleInfoListFlag() {
+        return subsample_info_list_flag;
+    }
+    
+    public List<SubSample> getSubsamples() {
+        return subsamples;
+    }
+    
+    public byte[] getDataByte() {
+        return data_byte;
     }
     
     public void print() {

@@ -1,8 +1,6 @@
-package sedec2.arib;
+package sedec2.arib.extractor;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -12,24 +10,22 @@ import sedec2.arib.tlv.container.packets.IPv6Packet;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
-public class TlvNtpExtractor {
-    public interface INtpExtractorListener {
-        public void onUpdatedNtp(NetworkTimeProtocolData ntp);
+public class NtpExtractor extends Extractor {
+    public interface INtpExtractorListener extends Extractor.Listener {
+        public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
 
     protected final String TAG = "TlvNtpExtractor";
     
-    boolean m_enable_ntp_filter = false;
     protected boolean m_is_running = true;
     protected Thread m_ntp_event_thread;
     protected Thread m_tlv_extractor_thread;
     
-    protected List<INtpExtractorListener> m_listeners = new ArrayList<>();
     protected BlockingQueue<NetworkTimeProtocolData> m_ntps = 
             new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
     protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
     
-    public TlvNtpExtractor() {
+    public NtpExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -64,11 +60,18 @@ public class TlvNtpExtractor {
         m_ntp_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                NetworkTimeProtocolData ntp = null;
                 
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_ntps ) emitNtp(m_ntps.take());
+                        if ( null != m_ntps && 
+                                (ntp = m_ntps.take()) != null && 
+                                m_enable_filter == true ) {
+                            for ( int i=0; i<m_listeners.size(); i++ ) {
+                                ((INtpExtractorListener)m_listeners.get(i)).onReceivedNtp(ntp);
+                            }
+                        }
                     } catch ( InterruptedException e ) {
                         /**
                          * @note Nothing to do
@@ -107,35 +110,14 @@ public class TlvNtpExtractor {
     }
     
     /**
-     * Application should add their own listener to recieve tables, ntp, and so on which
-     * SDK can send
-     * @param listener
-     */
-    public void addEventListener(INtpExtractorListener listener) {
-        m_listeners.add(listener);
-    }
-    
-    public void removeEventListener(INtpExtractorListener listener) {
-        m_listeners.remove(listener);
-    }
-    
-    /**
      * User can put a TLV packet to get the results as Table of MMT-SI, TLV-SI and more.
      * @param tlv a variable TLV packet
      * @return Return false if TLVExtractor has situation which can't parse like overflow.
      */
-    public boolean putIn(byte[] tlv) {
-        try {
-            if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
-                m_tlv_packets.put(tlv);
-            } else {
-                return false;
-            }
-        } catch ( Exception e ) {
-            e.printStackTrace();
-            return false;
+    public void putIn(byte[] tlv) throws InterruptedException {
+        if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
+            m_tlv_packets.put(tlv);
         }
-        return true;
     }
 
     /**
@@ -143,20 +125,10 @@ public class TlvNtpExtractor {
      * @param ntp
      * @throws InterruptedException
      */
-    protected void putOut(NetworkTimeProtocolData ntp) throws InterruptedException {
-        m_ntps.put(ntp);
-    }
-    
-    /**
-     * Sending a NTP to application
-     * @param ntp
-     */
-    protected synchronized void emitNtp(NetworkTimeProtocolData ntp) {
-        if ( ntp != null && m_enable_ntp_filter == true ) {
-            for ( int i=0; i<m_listeners.size(); i++ ) {
-                m_listeners.get(i).onUpdatedNtp(ntp);
-            }
-        }
+
+    @Override
+    protected void putOut(Object object) throws InterruptedException {
+        m_ntps.put((NetworkTimeProtocolData)object);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -177,17 +149,4 @@ public class TlvNtpExtractor {
         }
     }
     
-    /**
-     * Enable NTP data if application want to receive
-     */
-    public void enableNtpFilter() {
-        m_enable_ntp_filter = true;
-    }
-    
-    /**
-     * Disable NTP data if application doesn't want to receive 
-     */
-    public void disableNtpFilter() {
-        m_enable_ntp_filter = false;
-    }
 }
