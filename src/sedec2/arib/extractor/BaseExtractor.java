@@ -3,7 +3,7 @@ package sedec2.arib.extractor;
 import java.util.ArrayList;
 import java.util.List;
 
-public abstract class Extractor {
+public abstract class BaseExtractor {
     protected boolean m_enable_filter = false;
     protected List<Listener> m_listeners = new ArrayList<>();
     protected List<Integer> m_int_id_filter = new ArrayList<>();
@@ -13,19 +13,19 @@ public abstract class Extractor {
         
     }
     
-    public Extractor() {
+    public BaseExtractor() {
         
     }
     
     public abstract void destroy();
     
-    public void addEventListener(Extractor.Listener listener) {
+    public void addEventListener(BaseExtractor.Listener listener) {
         if ( m_listeners.contains(listener) == false ) {
             m_listeners.add(listener);
         }
     }
     
-    public void removeEventListener(Extractor.Listener listener) {
+    public void removeEventListener(BaseExtractor.Listener listener) {
         if ( m_listeners.contains(listener) == true ) {
             m_listeners.remove(listener);
         }

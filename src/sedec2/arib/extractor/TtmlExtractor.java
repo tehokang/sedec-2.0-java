@@ -16,8 +16,8 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.util.Logger;
 
-public class TtmlExtractor extends Extractor {
-    public interface ITtmlExtractorListener extends Extractor.Listener {
+public class TtmlExtractor extends BaseExtractor {
+    public interface ITtmlExtractorListener extends BaseExtractor.Listener {
         public void onReceivedTtml(int packet_id, byte[] buffer);
     }
 
@@ -31,7 +31,7 @@ public class TtmlExtractor extends Extractor {
         }
     }
 
-    protected final String TAG = "TlvMfuExtractor";
+    protected final String TAG = "TtmlExtractor";
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_ttml_event_thread;

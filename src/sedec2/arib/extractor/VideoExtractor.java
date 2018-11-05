@@ -16,8 +16,8 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.util.Logger;
 
-public class VideoExtractor extends Extractor {
-    public interface IVideoExtractorListener extends Extractor.Listener {
+public class VideoExtractor extends BaseExtractor {
+    public interface IVideoExtractorListener extends BaseExtractor.Listener {
         public void onReceivedVideo(int packet_id, byte[] buffer);
     }
 
@@ -31,7 +31,7 @@ public class VideoExtractor extends Extractor {
         }
     }
 
-    protected final String TAG = "TlvMfuExtractor";
+    protected final String TAG = "VideoExtractor";
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_video_event_thread;

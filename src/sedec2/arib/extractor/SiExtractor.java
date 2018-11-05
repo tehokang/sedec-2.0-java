@@ -18,12 +18,12 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.base.Table;
 
-public class SiExtractor extends Extractor {
-    public interface ITableExtractorListener extends Extractor.Listener {
+public class SiExtractor extends BaseExtractor {
+    public interface ITableExtractorListener extends BaseExtractor.Listener {
         public void onReceivedTable(Table table);    
     }
     
-    protected final String TAG = "TlvTableExtractor";
+    protected final String TAG = "SiExtractor";
     protected boolean m_is_running = true;
     protected Thread m_table_event_thread;
     protected Thread m_tlv_extractor_thread;

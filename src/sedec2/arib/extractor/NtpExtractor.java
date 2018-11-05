@@ -10,13 +10,12 @@ import sedec2.arib.tlv.container.packets.IPv6Packet;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
-public class NtpExtractor extends Extractor {
-    public interface INtpExtractorListener extends Extractor.Listener {
+public class NtpExtractor extends BaseExtractor {
+    public interface INtpExtractorListener extends BaseExtractor.Listener {
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
 
-    protected final String TAG = "TlvNtpExtractor";
-    
+    protected final String TAG = "NtpExtractor";
     protected boolean m_is_running = true;
     protected Thread m_ntp_event_thread;
     protected Thread m_tlv_extractor_thread;

@@ -17,8 +17,8 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-public class AudioExtractor extends Extractor {
-    public interface IAudioExtractorListener extends Extractor.Listener {
+public class AudioExtractor extends BaseExtractor {
+    public interface IAudioExtractorListener extends BaseExtractor.Listener {
         public void onReceivedAudio(int packet_id, byte[] buffer);
     }
 
@@ -32,7 +32,7 @@ public class AudioExtractor extends Extractor {
         }
     }
 
-    protected final String TAG = "TlvAudioExtractor";
+    protected final String TAG = "AudioExtractor";
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_audio_event_thread;

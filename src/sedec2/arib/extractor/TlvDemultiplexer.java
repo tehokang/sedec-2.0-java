@@ -24,11 +24,11 @@ public class TlvDemultiplexer implements
     protected boolean m_enable_video_filter = false;
     protected boolean m_enable_audio_filter = false;
     
-    protected Extractor m_si_extractor = null;
-    protected Extractor m_ntp_extractor = null;
-    protected Extractor m_ttml_extractor = null;
-    protected Extractor m_video_extractor = null;
-    protected Extractor m_audio_extractor = null;
+    protected BaseExtractor m_si_extractor = null;
+    protected BaseExtractor m_ntp_extractor = null;
+    protected BaseExtractor m_ttml_extractor = null;
+    protected BaseExtractor m_video_extractor = null;
+    protected BaseExtractor m_audio_extractor = null;
     protected List<Listener> m_listeners = new ArrayList<>();
     
     public TlvDemultiplexer() {
