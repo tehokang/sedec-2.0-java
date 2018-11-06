@@ -1,7 +1,7 @@
 package sedec2.arib.tlv.mmt.messages;
 
 import sedec2.arib.tlv.mmt.si.TableFactory;
-import sedec2.arib.tlv.mmt.si.tables.Table;
+import sedec2.base.Table;
 
 public class DataTransmissionMessage extends Message {
     

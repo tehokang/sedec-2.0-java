@@ -17,6 +17,7 @@ import sedec2.arib.tlv.mmt.messages.Message;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.base.Table;
+import sedec2.util.Logger;
 
 public class SiExtractor extends BaseExtractor {
     public interface ITableExtractorListener extends BaseExtractor.Listener {
@@ -141,8 +142,11 @@ public class SiExtractor extends BaseExtractor {
     @Override
     protected void putOut(Object table) throws InterruptedException {
         if ( table == null ) return;
-        
-        m_tables.put( (Table) table );
+
+        if ( enable_logging == true ) ((Table)table).print();
+        if ( m_byte_id_filter.contains(((Table)table).getTableId()) == true ) {
+            m_tables.put((Table)table);
+        }
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -164,15 +168,7 @@ public class SiExtractor extends BaseExtractor {
                  * @note Signaling Message
                  */
                 if ( 0x02 == mmtp_packet.getPayloadType() ) {
-                    List<Table> tables = 
-                            processMmtpSignallingMessage(mmtp_packet);
-                    
-                    for ( int i=0; i<tables.size(); i++ ) {
-                        Table table = tables.get(i);
-                        if ( m_byte_id_filter.contains(table.getTableId()) == true ) {
-                            putOut(tables.get(i));
-                        }
-                    }
+                    processMmtpSignallingMessage(mmtp_packet);
                 } 
                 break;
         }
@@ -185,9 +181,19 @@ public class SiExtractor extends BaseExtractor {
      * @param mmtp MMTP_Packet
      * @return tables of MMT-SI
      * @throws IOException
+     * @throws InterruptedException 
      */
-    protected List<Table> processMmtpSignallingMessage(MMTP_Packet mmtp) throws IOException {
+    protected void processMmtpSignallingMessage(MMTP_Packet mmtp) 
+            throws IOException, InterruptedException {
+        int packet_id = mmtp.getPacketId();
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         MMTP_Payload_SignallingMessage signal_message = mmtp.getSignallingMessage();
+        
+        if ( enable_logging == true ) {
+            Logger.d(String.format("[S] pid : 0x%04x, f_i : 0x%x, a_f : 0x%x \n", 
+                    packet_id, signal_message.getFragmentationIndicator(),
+                    signal_message.getAggregationFlag()));
+        }
         
         if ( signal_message != null ) {
             Message message = null;
@@ -198,7 +204,12 @@ public class SiExtractor extends BaseExtractor {
                     byte[] buffer = signal_message.getMessageByte();
                     message = MessageFactory.createMessage(buffer);
                   
-                    if ( message != null ) return message.getTables();
+                    if ( message != null ) {
+                        List<Table> tables = message.getTables();
+                        for ( int i=0; i<tables.size(); i++ ) {
+                            putOut(tables.get(i));
+                        }
+                    }
                     break;
                 case 0x01:
                     /**
@@ -216,14 +227,11 @@ public class SiExtractor extends BaseExtractor {
                     m_fragmented02_mmtp_with_signal_message.add(mmtp);
                     break;
                 case 0x03:
+                    boolean found_01_fragmentation_indicator = false;
                     /**
                      * @note ARIB B60 Table 6-2, This involves last part of divided data.
                      * In other words, it's a timing to make whole section table since 0x03 is last packet
                      * after gathering fragmented data of tables.
-                     */
-                    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-                    
-                    /**
                      * Case.1 0x01 of fragmentation_indicator will be only one thing.  
                      */
                     for ( Iterator<MMTP_Packet> it = 
@@ -236,38 +244,46 @@ public class SiExtractor extends BaseExtractor {
                                 sm.getFragmentationIndicator() == 0x01 ) {
                             outputStream.write(sm.getMessageByte());
                             it.remove();
+                            found_01_fragmentation_indicator = true;
+                            break;
                         }
                     }
               
                     /**
                      * Case.2 0x02 of fragmentation_indicator will be multiple things  
                      */
-                    for(Iterator<MMTP_Packet> it = 
-                            m_fragmented02_mmtp_with_signal_message.iterator() ; 
-                            it.hasNext() ; ) {
-                        MMTP_Packet mmtp02 = it.next();
-                        MMTP_Payload_SignallingMessage sm = mmtp02.getSignallingMessage();
-                        if( mmtp02.getPacketId() == mmtp.getPacketId() &&
-                                sm != null && 
-                                sm.getFragmentationIndicator() == 0x02 ) {
-                            outputStream.write(sm.getMessageByte());
-                            it.remove();
+                    if ( found_01_fragmentation_indicator == true ) {
+                        for(Iterator<MMTP_Packet> it = 
+                                m_fragmented02_mmtp_with_signal_message.iterator() ; 
+                                it.hasNext() ; ) {
+                            MMTP_Packet mmtp02 = it.next();
+                            MMTP_Payload_SignallingMessage sm = mmtp02.getSignallingMessage();
+                            if( mmtp02.getPacketId() == mmtp.getPacketId() &&
+                                    sm != null && 
+                                    sm.getFragmentationIndicator() == 0x02 ) {
+                                outputStream.write(sm.getMessageByte());
+                                it.remove();
+                            }
+                        }
+                    
+                        /**
+                         * Case.2 0x03 of fragmentation_indicator will be only one thing as last
+                         */
+                        outputStream.write(signal_message.getMessageByte());
+                        
+                        /**
+                         * As a result, outputStream has whole data of tables
+                         */
+                        message = MessageFactory.createMessage(outputStream.toByteArray());
+                        if ( message != null ) {
+                            List<Table> tables = message.getTables();
+                            for ( int i=0; i<tables.size(); i++ ) {
+                                putOut(tables.get(i));
+                            }
                         }
                     }
-                    
-                    /**
-                     * Case.2 0x03 of fragmentation_indicator will be only one thing as last
-                     */
-                    outputStream.write(signal_message.getMessageByte());
-                    
-                    /**
-                     * As a result, outputStream has whole data of tables
-                     */
-                    message = MessageFactory.createMessage(outputStream.toByteArray());
-                    if ( message != null ) return message.getTables();
                     break;
             }
         }
-        return new ArrayList<>();
     }
 }

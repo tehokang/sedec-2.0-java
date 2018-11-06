@@ -4,6 +4,8 @@ public class UnknownTable extends Table {
 
     public UnknownTable(byte[] buffer) {
         super(buffer);
+        
+        __decode_table_body__();
     }
 
     @Override

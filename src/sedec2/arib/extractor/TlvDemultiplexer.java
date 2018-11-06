@@ -121,6 +121,18 @@ public class TlvDemultiplexer implements
         m_si_extractor.addPidFilter(table_id);
     }
     
+    public void addSiAllFilter() {
+        for ( int i=0; i<256; i++ ) {
+            m_si_extractor.addPidFilter((byte)(i & 0xff));
+        }
+    }
+    
+    public void removeSiAllFilter() {
+        for ( int i=0; i<256; i++ ) {
+            m_si_extractor.removePidFilter((byte)(i & 0xff));
+        }
+    }
+    
     public void removeSiFilter(byte table_id) {
         m_si_extractor.removePidFilter(table_id);
     }
@@ -189,7 +201,7 @@ public class TlvDemultiplexer implements
         m_ntp_extractor.disableLogging();
     }
     
-    public void enableAppLogging() {
+    public void enableApplicationLogging() {
         m_application_extractor.enableLogging();
     }
     

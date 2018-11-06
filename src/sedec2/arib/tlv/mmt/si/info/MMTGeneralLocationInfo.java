@@ -101,6 +101,7 @@ public class MMTGeneralLocationInfo {
                 length=(8+type5.URL_length);
                 break;
         }
+        length += 1; /* location_type 1 byte */
     }
     
     public void print() {

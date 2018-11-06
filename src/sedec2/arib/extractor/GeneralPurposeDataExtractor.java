@@ -203,6 +203,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                 m_fragmented01_mmtp_general_data.add(mmtp);
                 break;
             case 0x03:
+                boolean found_01_fragmentation_indicator = false;
                 for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_general_data.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu01 = it.next().getMPU();
@@ -212,27 +213,30 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                             outputStreamTtml.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
+                        found_01_fragmentation_indicator = true;
                         break;
                     }
                 }
                 
-                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_general_data.iterator() ; 
-                        it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu02 = it.next().getMPU();
-                    if( mpu02.getFragmentationIndicator() == 0x02 ) {
-                        mfus = mpu02.getMFUList();
-                        for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                if ( found_01_fragmentation_indicator == true ) {
+                    for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_general_data.iterator() ; 
+                            it.hasNext() ; ) {
+                        MMTP_Payload_MPU mpu02 = it.next().getMPU();
+                        if( mpu02.getFragmentationIndicator() == 0x02 ) {
+                            mfus = mpu02.getMFUList();
+                            for ( int i=0; i<mfus.size(); i++ ) {
+                                outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                            }
+                            it.remove();
                         }
-                        it.remove();
-                    }
-                } 
+                    } 
                 
-                mfus = mpu.getMFUList();
-                for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                    mfus = mpu.getMFUList();
+                    for ( int i=0; i<mfus.size(); i++ ) {
+                        outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                    }
+                    putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 }
-                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 break;
         }
     }

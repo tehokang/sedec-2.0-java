@@ -38,7 +38,6 @@ public class MMTP_Payload_MPU {
         MPU_sequence_number = brw.readOnBuffer(32);
         
         if ( fragment_type == 0x02 ) {
-            
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
                     MFU mfu = new MFU();
@@ -78,7 +77,6 @@ public class MMTP_Payload_MPU {
                     MFU mfu = new MFU();
                     mfu.item_id = brw.readOnBuffer(32);
                     mfu.MFU_data_byte = new byte[payload_length - 10];
-                    
                     for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
                         mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                     }
@@ -94,8 +92,8 @@ public class MMTP_Payload_MPU {
                         for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
                             mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
                         }
-                        mfus.add(mfu);
                         k-= (2 + mfu.data_unit_length);
+                        mfus.add(mfu);
                     }
                 }
             }
@@ -136,7 +134,8 @@ public class MMTP_Payload_MPU {
     
     public void print() {
         Logger.d(String.format("------- MMTP Payload ------- (%s)\n", getClass().getName()));
-        Logger.d(String.format("payload_length : 0x%x \n", payload_length));
+        Logger.d(String.format("payload_length : 0x%x (%d) \n", 
+                payload_length, payload_length));
         Logger.d(String.format("fragment_type : 0x%x \n", fragment_type));
         Logger.d(String.format("timed_flag : 0x%x \n", timed_flag));
         Logger.d(String.format("fragmentation_indicator : 0x%x \n", fragmentation_indicator));

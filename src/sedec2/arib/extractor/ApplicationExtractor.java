@@ -14,6 +14,8 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
+import sedec2.util.Logger;
 
 public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
@@ -174,23 +176,25 @@ public class ApplicationExtractor extends BaseExtractor {
         List<MFU> mfus = null;
         int packet_id = mmtp.getPacketId();
         MMTP_Payload_MPU mpu = mmtp.getMPU();
-        ByteArrayOutputStream outputStreamTtml = new ByteArrayOutputStream();
+        ByteArrayOutputStream outputStreamApplication = new ByteArrayOutputStream();
         
         /**
          * @note Please enable following if you'd like to see ttml sequence flow
          */
-//        Logger.d(String.format("[APP] pid : 0x%04x, " + 
-//                "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-//                packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-//                mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        if ( enable_logging == true ) {
+            Logger.d(String.format("[APP] pid : 0x%04x, " + 
+                    "msn : 0x%08x, f_i : 0x%x, timed_flag : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
+                    packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
+                    mpu.getTimedFlag(), mpu.getAggregationFlag(), mpu.getMFUList().size()));
+        }
         
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:
                 mfus = mpu.getMFUList();
                 for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);                   
+                    outputStreamApplication.write(mfus.get(i).MFU_data_byte);                   
                 }
-                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
+                putOut(new QueueData(packet_id, outputStreamApplication.toByteArray()));
                 break;
             case 0x01:
                 m_fragmented01_mmtp_application.add(mmtp);
@@ -199,36 +203,40 @@ public class ApplicationExtractor extends BaseExtractor {
                 m_fragmented01_mmtp_application.add(mmtp);
                 break;
             case 0x03:
+                boolean found_01_fragmentation_indicator = false;
                 for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_application.iterator() ; 
                         it.hasNext() ; ) {
                     MMTP_Payload_MPU mpu01 = it.next().getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                            outputStreamApplication.write(mfus.get(i).MFU_data_byte);
                         }
                         it.remove();
+                        found_01_fragmentation_indicator = true;
                         break;
                     }
                 }
                 
-                for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_application.iterator() ; 
-                        it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu02 = it.next().getMPU();
-                    if( mpu02.getFragmentationIndicator() == 0x02 ) {
-                        mfus = mpu02.getMFUList();
-                        for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                if ( found_01_fragmentation_indicator == true ) {
+                    for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_application.iterator() ; 
+                            it.hasNext() ; ) {
+                        MMTP_Payload_MPU mpu02 = it.next().getMPU();
+                        if( mpu02.getFragmentationIndicator() == 0x02 ) {
+                            mfus = mpu02.getMFUList();
+                            for ( int i=0; i<mfus.size(); i++ ) {
+                                outputStreamApplication.write(mfus.get(i).MFU_data_byte);
+                            }
+                            it.remove();
                         }
-                        it.remove();
+                    } 
+                    
+                    mfus = mpu.getMFUList();
+                    for ( int i=0; i<mfus.size(); i++ ) {
+                        outputStreamApplication.write(mfus.get(i).MFU_data_byte);
                     }
-                } 
-                
-                mfus = mpu.getMFUList();
-                for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamTtml.write(mfus.get(i).MFU_data_byte);
+                    putOut(new QueueData(packet_id, outputStreamApplication.toByteArray()));
                 }
-                putOut(new QueueData(packet_id, outputStreamTtml.toByteArray()));
                 break;
         }
     }

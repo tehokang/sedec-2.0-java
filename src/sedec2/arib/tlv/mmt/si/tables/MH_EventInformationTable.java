@@ -97,15 +97,16 @@ public class MH_EventInformationTable extends Table {
             event.running_status = (byte) readOnBuffer(3);
             event.free_CA_mode = (byte) readOnBuffer(1);
             event.descriptors_loop_length = readOnBuffer(12);
-
-            for ( int j=event.descriptors_loop_length; j>0; ) {
+            /**
+             * @todo event.descriptors_loop_length has wrong length of descriptors
+             * in field stream, for instance CAS-A-0000-03b-bsc.tlv
+             */
+            for ( int j=event.descriptors_loop_length-4; j>0; ) {
                 Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
                 j-=desc.getDescriptorLength();
                 event.descriptors.add(desc);
             }
-            
             i-= (12 + event.descriptors_loop_length);
-            
             events.add(event);
         }
         checksum_CRC32 = readOnBuffer(32);

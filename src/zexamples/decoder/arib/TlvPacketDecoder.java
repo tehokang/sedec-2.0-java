@@ -14,6 +14,8 @@ import java.util.List;
 import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
@@ -40,6 +42,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableApplicationFilter();
         tlv_demuxer.enableGeneralDataFilter();
         
+//        tlv_demuxer.enableSiLogging();
+        tlv_demuxer.enableTtmlLogging();
+//        tlv_demuxer.enableAudioLogging();
+//        tlv_demuxer.enableVideoLogging();
+//        tlv_demuxer.enableApplicationLogging();
+//        tlv_demuxer.enableGeneralDataLogging();
+        
+//        tlv_demuxer.addSiAllFilter();
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
     }
@@ -59,6 +69,7 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -107,18 +118,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
             }
         } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
             if ( plt == null  ) {
-                plt = (PackageListTable) table;                        
+                plt = (PackageListTable) table;  
+                plt.print();
             } else if ( plt != null && plt.getVersion() != 
                     ((PackageListTable)table).getVersion() ) {
                 plt = (PackageListTable) table;
                 mpt = null;
             }
             
-            if ( plt != null && mpt != null ) {
-//                plt.print();
-//                mpt.print();
-//                System.exit(1);
-            }
         }                
     }
 
@@ -143,7 +150,7 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
-        System.out.println(String.format("TTML : %s \n",  new String(ttml.getDataByte()))); 
+        ttml.print();
     }
 
     @Override
@@ -153,16 +160,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedApplication(int packet_id, byte[] buffer) {
-        /**
-         * @todo download a resource of application
-         */
+//        MFU_IndexItem data = new MFU_IndexItem(buffer);
+//        data.print();
     }
 
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
-        /**
-         * @todo General-Purpose Data
-         */
+        MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
+        data.print();
     }
 }
 
