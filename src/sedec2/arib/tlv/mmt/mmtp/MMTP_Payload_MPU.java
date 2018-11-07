@@ -87,7 +87,7 @@ public class MMTP_Payload_MPU {
                         MFU mfu = new MFU();
                         mfu.data_unit_length = brw.readOnBuffer(16);
                         mfu.item_id = brw.readOnBuffer(32);
-                        mfu.MFU_data_byte = new byte[payload_length-4];
+                        mfu.MFU_data_byte = new byte[mfu.data_unit_length-4];
                         
                         for ( int i=0; i<mfu.MFU_data_byte.length; i++ ) {
                             mfu.MFU_data_byte[i] = (byte) brw.readOnBuffer(8);
