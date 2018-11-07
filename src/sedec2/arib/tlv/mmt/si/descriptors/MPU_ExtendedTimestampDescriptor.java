@@ -94,10 +94,10 @@ public class MPU_ExtendedTimestampDescriptor extends Descriptor {
             
             for ( int j=0; j<timestamp.access_units.size(); j++ ) {
                 AccessUnit access_unit = timestamp.access_units.get(j);
-                Logger.d(String.format("\t\t\t [%d] dts_pts_offset : 0x%x \n", 
+                Logger.d(String.format("\t\t\t [%d] dts_pts_offset : 0x%04x \n", 
                         j, access_unit.dts_pts_offset));
                 if ( pts_offset_type == 2) {
-                    Logger.d(String.format("\t\t\t [%d] pts_offset : 0x%x \n", 
+                    Logger.d(String.format("\t\t\t [%d] pts_offset : 0x%04x \n", 
                             j, access_unit.pts_offset));
                 }
             }
