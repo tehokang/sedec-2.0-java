@@ -151,11 +151,11 @@ public class TableFactory {
     
     /** DAMT */
     public final static byte DATA_ASSET_MANAGEMENT_TABLE = (byte) 0xa4;
-    public final static byte DSMT = DATA_ASSET_MANAGEMENT_TABLE;
+    public final static byte DAMT = DATA_ASSET_MANAGEMENT_TABLE;
     
     /** DCCT */
-    public final static byte DATA_CONTENT_CONFIGURATION_TABLE = (byte) 0xa5;
-    public final static byte DCCT = DATA_CONTENT_CONFIGURATION_TABLE;
+    public final static byte DATA_CONTENT_MANAGEMENT_TABLE = (byte) 0xa5;
+    public final static byte DCMT = DATA_CONTENT_MANAGEMENT_TABLE;
     
     /** EMT */
     public final static byte EVENT_MESSAGE_TABLE = (byte) 0xa6;
@@ -167,7 +167,7 @@ public class TableFactory {
         byte table_id = (byte)(buffer[0] & 0xff);
         
         switch ( table_id ) {
-            case DATA_CONTENT_CONFIGURATION_TABLE:
+            case DATA_CONTENT_MANAGEMENT_TABLE:
                 return new DataContentConfigurationTable(buffer);
             case DATA_ASSET_MANAGEMENT_TABLE:
                 return new DataAssetManagementTable(buffer);
