@@ -1,4 +1,4 @@
-package zexamples.decoder.arib;
+package zexamples.arib;
 
 import java.io.BufferedInputStream;
 import java.io.DataInputStream;

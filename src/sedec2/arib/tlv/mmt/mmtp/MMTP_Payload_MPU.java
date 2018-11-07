@@ -39,6 +39,9 @@ public class MMTP_Payload_MPU {
         
         if ( fragment_type == 0x02 ) {
             if ( timed_flag == 0x01 ) {
+                /**
+                 * @note timed media data
+                 */
                 if ( aggregation_flag == 0x00 ) {
                     MFU mfu = new MFU();
                     mfu.movie_fragment_sequence_number = brw.readOnBuffer(32);
@@ -73,6 +76,9 @@ public class MMTP_Payload_MPU {
                 }
                 
             } else {
+                /**
+                 * @note non-timed media data like application
+                 */
                 if ( aggregation_flag == 0x00 ) {
                     MFU mfu = new MFU();
                     mfu.item_id = brw.readOnBuffer(32);
@@ -144,6 +150,7 @@ public class MMTP_Payload_MPU {
         Logger.d(String.format("MPU_sequence_number : 0x%x \n", MPU_sequence_number));
         
         if ( fragment_type == 0x02 ) {
+            Logger.d("-- MFU List --\n");
             if ( timed_flag == 0x01 ) {
                 if ( aggregation_flag == 0x00 ) {
                     

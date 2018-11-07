@@ -33,7 +33,7 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         public int item_id;
         public int item_size;
         public byte item_info_length;
-        public byte[] item_info_byte;
+        public List<Descriptor> item_info_byte = new ArrayList<>();
     }
     
     public MPU_DownloadContentDescriptor(BitReadWriter brw) {
@@ -65,9 +65,10 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
                 item_info.item_size = brw.readOnBuffer(32);
                 item_info.item_info_length = (byte) brw.readOnBuffer(8);
                 
-                item_info.item_info_byte = new byte[item_info.item_info_length];
-                for ( int j=0; j<item_info.item_info_length; j++ ) {
-                    item_info.item_info_byte[j] = (byte) brw.readOnBuffer(8);
+                for ( int j=item_info.item_info_length; j>0; ) {
+                    Descriptor desc = DescriptorFactory.createDescriptor(brw);
+                    j-=desc.getDescriptorLength();
+                    item_info.item_info_byte.add(desc);
                 }
                 item_infos.add(item_info);
             }
@@ -126,8 +127,10 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
                 Logger.d(String.format("\t\t [%d] item_info_length : 0x%x \n", 
                         i, item_info.item_info_length));
 
-                Logger.d(String.format("\t\t [%d] item_info_length : %s \n", 
-                        i, new String(item_info.item_info_byte)));
+                Logger.d(String.format("\t\t [%d] item_info_byte : \n", i));
+                for ( int j=0; j<item_info.item_info_byte.size(); j++ ) {
+                    item_info.item_info_byte.get(j).print();
+                }
             }
         }
         

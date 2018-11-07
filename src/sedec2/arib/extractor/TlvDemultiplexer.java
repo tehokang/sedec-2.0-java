@@ -17,7 +17,7 @@ public class TlvDemultiplexer implements
         public void onReceivedTtml(int packet_id, byte[] buffer);
         public void onReceivedVideo(int packet_id, byte[] buffer);
         public void onReceivedAudio(int packet_id, byte[] buffer);
-        public void onReceivedApplication(int packet_id, byte[] buffer);
+        public void onReceivedApplication(int packet_id, int mpu_sequence_number, byte[] buffer);
         public void onReceivedGeneralData(int packet_id, byte[] buffer);
     }
     
@@ -344,9 +344,9 @@ public class TlvDemultiplexer implements
     }
 
     @Override
-    public void onReceivedApplication(int packet_id, byte[] buffer) {
+    public void onReceivedApplication(int packet_id, int mpu_sequence_number, byte[] buffer) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedApplication(packet_id, buffer);
+            m_listeners.get(i).onReceivedApplication(packet_id, mpu_sequence_number, buffer);
         }
     }
 

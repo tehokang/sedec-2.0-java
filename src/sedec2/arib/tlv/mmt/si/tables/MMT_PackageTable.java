@@ -30,6 +30,10 @@ public class MMT_PackageTable extends Table {
         public List<MMTGeneralLocationInfo> infos = new ArrayList<>();
         public int asset_descriptors_length;
         public List<Descriptor> descriptors = new ArrayList<>();
+        
+        public int getAssetId() {
+           return ((asset_id_byte[0] & 0xff) << 8 | asset_id_byte[1]);
+        }
     }
     
     public MMT_PackageTable(byte[] buffer) {

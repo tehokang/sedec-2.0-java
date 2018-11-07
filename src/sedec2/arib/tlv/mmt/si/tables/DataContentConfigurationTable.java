@@ -27,7 +27,7 @@ public class DataContentConfigurationTable extends sedec2.base.Table {
     protected byte content_descriptor_loop_length;
     protected List<Descriptor> content_descriptors = new ArrayList<>();
     
-    class PU {
+    public class PU {
         public byte PU_tag;
         public int PU_size;
         public byte number_of_member_nodes;
@@ -97,6 +97,66 @@ public class DataContentConfigurationTable extends sedec2.base.Table {
         checksum_CRC32 = readOnBuffer(32);
     }
 
+    public byte getDataTransmissionSessionId() {
+        return data_transmission_session_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getContentId() {
+        return content_id;
+    }
+    
+    public byte getContentVersion() {
+        return content_version;
+    }
+    
+    public int getContentSize() {
+        return content_size;
+    }
+    
+    public byte getPUInfoFlag() {
+        return PU_info_flag;
+    }
+    
+    public byte getContentInfoFlag() {
+        return content_info_flag;
+    }
+    
+    public byte getNumberOfPUs() {
+        return number_of_PUs;
+    }
+    
+    public List<PU> getPUs() {
+        return pus;
+    }
+    
+    public int getNumberOfNodes() {
+        return number_of_nodes;
+    }
+    
+    public int[] getNodeTag() {
+        return node_tag;
+    }
+    
+    public List<Descriptor> getContentDescriptor() {
+        return content_descriptors;
+    }
+    
     @Override
     public void print() {
         super.print();

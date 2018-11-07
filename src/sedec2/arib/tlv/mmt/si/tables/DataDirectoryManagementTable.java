@@ -18,7 +18,7 @@ public class DataDirectoryManagementTable extends Table {
     protected byte num_of_directory_nodes;
     protected List<DirectoryNode> directory_nodes = new ArrayList<>();
     
-    class DirectoryNode {
+    public class DirectoryNode {
         public int node_tag;
         public byte directory_node_version;
         public byte directory_node_path_length;
@@ -27,7 +27,7 @@ public class DataDirectoryManagementTable extends Table {
         public List<FileNode> files = new ArrayList<>();
     }
     
-    class FileNode {
+    public class FileNode {
         public int node_tag;
         public byte file_name_length;
         public byte[] file_name_byte;
@@ -39,14 +39,6 @@ public class DataDirectoryManagementTable extends Table {
         __decode_table_body__();
     }
 
-    public byte getNumOfDirectoryNodes() {
-        return num_of_directory_nodes;
-    }
-    
-    public List<DirectoryNode> getDirectoryNodes() {
-        return directory_nodes;
-    }
-    
     @Override
     protected void __decode_table_body__() {
         data_transmission_session_id = (byte) readOnBuffer(8);
@@ -93,6 +85,42 @@ public class DataDirectoryManagementTable extends Table {
         }
         
         checksum_CRC32 = readOnBuffer(32);
+    }
+    
+    public byte getDataTransmissionSessionId() {
+        return data_transmission_session_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public byte getBaseDirectoryPathLength() {
+        return base_directory_path_length;
+    }
+    
+    public byte[] getBaseDirectoryPath() {
+        return base_directory_path_byte;
+    }
+    
+    public byte getNumOfDirectoryNodes() {
+        return num_of_directory_nodes;
+    }
+    
+    public List<DirectoryNode> getDirectoryNodes() {
+        return directory_nodes;
     }
 
     @Override

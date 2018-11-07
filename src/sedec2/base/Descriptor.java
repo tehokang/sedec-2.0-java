@@ -31,7 +31,6 @@ public abstract class Descriptor {
     }
     
     protected void _print_() {
-        Logger.d("\n");
         Logger.d(String.format("\t descriptor_tag : 0x%x (%s) \n", 
                 descriptor_tag, getClass().getName()));
         Logger.d(String.format("\t descriptor_length : 0x%x (%d) \n", 

@@ -1,4 +1,4 @@
-package zexamples.decoder.arib;
+package zexamples.arib;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -15,7 +15,9 @@ import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
-import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
+import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable;
+import sedec2.arib.tlv.mmt.si.tables.DataContentConfigurationTable;
+import sedec2.arib.tlv.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
@@ -24,6 +26,10 @@ import sedec2.base.Table;
 class TlvCoordinator implements TlvDemultiplexer.Listener {
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
+    protected DataDirectoryManagementTable ddmt = null;
+    protected DataAssetManagementTable damt = null;
+    protected DataContentConfigurationTable dcct = null;
+    
     protected BufferedOutputStream video_bs = null;
     protected BufferedOutputStream audio_bs = null;
     protected TlvDemultiplexer tlv_demuxer = null;
@@ -43,15 +49,19 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableGeneralDataFilter();
         
 //        tlv_demuxer.enableSiLogging();
-        tlv_demuxer.enableTtmlLogging();
+//        tlv_demuxer.enableTtmlLogging();
 //        tlv_demuxer.enableAudioLogging();
 //        tlv_demuxer.enableVideoLogging();
-//        tlv_demuxer.enableApplicationLogging();
+        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
         
 //        tlv_demuxer.addSiAllFilter();
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DDMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DCMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DAMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MH_AIT);
     }
     
     public void destroy() {
@@ -66,20 +76,41 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     
     @Override
     public void onReceivedTable(Table table) {
-        if ( table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.MPT ) {
+        switch ( table.getTableId() ) {
+        case sedec2.arib.tlv.mmt.si.TableFactory.MH_AIT:
+//            table.print();
+            break;
+        case sedec2.arib.tlv.mmt.si.TableFactory.DDMT: 
+            ddmt = (DataDirectoryManagementTable) table;
+//            ddmt.print();
+            break;
+        case sedec2.arib.tlv.mmt.si.TableFactory.DAMT:
+            damt = (DataAssetManagementTable) table;
+//            damt.print();
+            break;
+        case sedec2.arib.tlv.mmt.si.TableFactory.DCMT:
+            dcct = (DataContentConfigurationTable) table;
+//            dcct.print();
+            break;
+        case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
                     String asset_type = new String(asset.asset_type);                            
-                    int pid = ((asset.asset_id_byte[0] & 0xff) << 8 | asset.asset_id_byte[1]);
+                    int pid = asset.getAssetId();
                     switch ( asset_type ) {
                         case "hev1":
+                            /**
+                             * @note Video including VPS, SPS and PPS in MFU
+                             */
+                            tlv_demuxer.addVideoPidFilter(pid);
+                            break;
                         case "hvc1":
                             /**
-                             * @note Video
+                             * @note Video without VPS, SPS and PPS in MFU
                              */
                             tlv_demuxer.addVideoPidFilter(pid);
                             break;
@@ -116,16 +147,17 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
                     }
                 }
             }
-        } else if (table.getTableId() == sedec2.arib.tlv.mmt.si.TableFactory.PLT ) {
+            break;
+        case sedec2.arib.tlv.mmt.si.TableFactory.PLT:
             if ( plt == null  ) {
                 plt = (PackageListTable) table;  
-                plt.print();
+//                plt.print();
             } else if ( plt != null && plt.getVersion() != 
                     ((PackageListTable)table).getVersion() ) {
                 plt = (PackageListTable) table;
                 mpt = null;
             }
-            
+            break;
         }                
     }
 
@@ -159,9 +191,9 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedApplication(int packet_id, byte[] buffer) {
-//        MFU_IndexItem data = new MFU_IndexItem(buffer);
-//        data.print();
+    public void onReceivedApplication(int packet_id, int mpu_sequence_number, byte[] buffer) {
+//        BinaryLogger.debug(buffer, 20);
+        
     }
 
     @Override
