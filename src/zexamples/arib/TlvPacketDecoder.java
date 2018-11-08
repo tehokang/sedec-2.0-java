@@ -225,17 +225,13 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedIndexItem(int packet_id, byte[] buffer) {
         MFU_IndexItem index_item = new MFU_IndexItem(buffer);
-//        index_item.print();
+        index_item.print();
         List<MFU_IndexItem.Item> items = index_item.getItems();
         for ( int i=0; i<items.size(); i++ ) {
             MFU_IndexItem.Item item = items.get(i);
             if ( application_items.containsKey(item.item_id) == false ) {
                 application_items.put(item.item_id, item);
             }
-        }
-        
-        for ( int i=0; i<application_items.size(); i++ ) {
-            List<MFU_In>application_items.values();
         }
     }
 }
