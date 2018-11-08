@@ -10,7 +10,7 @@ public class MFU_IndexItem extends BitReadWriter {
     protected int num_of_items;
     protected List<Item> items = new ArrayList<>();
     
-    class Item {
+    public class Item {
         public int item_id;
         public int item_size;
         public byte item_version;
@@ -63,6 +63,14 @@ public class MFU_IndexItem extends BitReadWriter {
             }
             items.add(item);
         }
+    }
+    
+    public int getNumOfItems() {
+        return num_of_items;
+    }
+    
+    public List<Item> getItems() {
+        return items;
     }
     
     public void print() {

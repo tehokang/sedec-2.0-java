@@ -20,32 +20,34 @@ public class MMTP_Packet extends BitReadWriter {
     protected int packet_counter;
     protected int extension_type;
     protected int extension_length;
-    protected List<HeaderExtensionByte00> header_extension_byte00s = new ArrayList<>();
-    protected HeaderExtensionByte02 header_extension_byte02;
-    protected HeaderExtensionByte03 header_extension_byte03;
+    protected List<HeaderExtensionByte> header_extension_byte = new ArrayList<>();
     protected MMTP_Payload_MPU mmtp_payload_mpu = null;
     protected MMTP_Payload_SignallingMessage mmtp_payload_signalling_message = null;
     
-    class HeaderExtensionByte00 {
+    public class HeaderExtensionByte {
         public byte hdr_ext_end_flag;
         public int hdr_ext_type;
         public int hdr_ext_length;
-        public byte[] hdr_ext_byte;
-    }
-    
-    class HeaderExtensionByte02 {
-        public byte hdr_ext_end_flag;
-        public int hdr_ext_type;
-        public int hdr_ext_length;
+        
+        /**
+         * @note hdr_ext_type == 0x0001
+         */
+        public byte scramble_control;
+        /**
+         * @note hdr_ext_type == 0x0002
+         * Please refer to Table 10-2 of ARIB B60
+         */
         public int download_id;
-    }
-    
-    class HeaderExtensionByte03 {
-        public byte hdr_ext_end_flag;
-        public int hdr_ext_type;
-        public int hdr_ext_length;
+        /**
+         * @note hdr_ext_type == 0x0003
+         * Please refer to Table 10-3 of ARIB B60
+         */
         public int item_fragment_number;
         public int last_item_fragment_number;
+    }
+    
+    public List<HeaderExtensionByte> getHeaderExtensionByte() {
+        return header_extension_byte;
     }
     
     public MMTP_Payload_MPU getMPU() {
@@ -129,33 +131,23 @@ public class MMTP_Packet extends BitReadWriter {
             
             if ( extension_type == 0x0000 ) {
                 for ( int i=extension_length; i>0; ) {
-                    HeaderExtensionByte00 header_extension_byte00 = new HeaderExtensionByte00();
-                    header_extension_byte00.hdr_ext_end_flag = (byte) readOnBuffer(1);
-                    header_extension_byte00.hdr_ext_type = readOnBuffer(15);
-                    header_extension_byte00.hdr_ext_length = readOnBuffer(16);
-                    header_extension_byte00.hdr_ext_byte = 
-                            new byte[header_extension_byte00.hdr_ext_length];
+                    HeaderExtensionByte heb00 = new HeaderExtensionByte();
+                    heb00.hdr_ext_end_flag = (byte) readOnBuffer(1);
+                    heb00.hdr_ext_type = readOnBuffer(15);
+                    heb00.hdr_ext_length = readOnBuffer(16);
                     
-                    for ( int j=0; j<header_extension_byte00.hdr_ext_byte.length; j++ ) {
-                        header_extension_byte00.hdr_ext_byte[j] = (byte) readOnBuffer(8);
+                    if ( heb00.hdr_ext_type == 0x0001 ) {
+                        heb00.scramble_control = (byte) readOnBuffer(8);
+                    } else if ( heb00.hdr_ext_type == 0x0002 ) {
+                        heb00.download_id = readOnBuffer(32);
+                    } else if ( heb00.hdr_ext_type == 0x0003 ) {
+                        heb00.item_fragment_number = readOnBuffer(32);
+                        heb00.last_item_fragment_number = readOnBuffer(32);
                     }
-                    i-= (4 + header_extension_byte00.hdr_ext_length);
-                    header_extension_byte00s.add(header_extension_byte00);
+                    i-= (4 + heb00.hdr_ext_length);
+                    header_extension_byte.add(heb00);
                 }
-            } else if ( extension_type == 0x0002 ) {
-                header_extension_byte02 = new HeaderExtensionByte02();
-                header_extension_byte02.hdr_ext_end_flag = (byte) readOnBuffer(1);
-                header_extension_byte02.hdr_ext_type = readOnBuffer(15);
-                header_extension_byte02.hdr_ext_length = readOnBuffer(16);
-                header_extension_byte02.download_id = readOnBuffer(32);
-            } else if ( extension_type == 0x0003 ) {
-                header_extension_byte03 = new HeaderExtensionByte03();
-                header_extension_byte03.hdr_ext_end_flag = (byte) readOnBuffer(1);
-                header_extension_byte03.hdr_ext_type = readOnBuffer(15);
-                header_extension_byte03.hdr_ext_length = readOnBuffer(16);
-                header_extension_byte03.item_fragment_number = readOnBuffer(32);
-                header_extension_byte03.last_item_fragment_number = readOnBuffer(32);
-            }
+            } 
         }
         
         if ( payload_type == 0x00 ) {
@@ -187,37 +179,28 @@ public class MMTP_Packet extends BitReadWriter {
             Logger.d(String.format("extension_length : 0x%x \n", extension_length));
             
             if ( extension_type == 0x0000 ) {
-                for ( int i=0; i<header_extension_byte00s.size(); i++ ) {
-                    HeaderExtensionByte00 header_extension_byte00 = header_extension_byte00s.get(i);
-                    Logger.d(String.format("hdr_ext_end_flag : 0x%x \n", 
-                            header_extension_byte00.hdr_ext_end_flag));
-                    Logger.d(String.format("hdr_ext_type : 0x%x \n", 
-                            header_extension_byte00.hdr_ext_type));
-                    Logger.d(String.format("hdr_ext_length : 0x%x \n", 
-                            header_extension_byte00.hdr_ext_length));
-                    Logger.d(String.format("hdr_ext_byte : \n"));
-                    BinaryLogger.print(header_extension_byte00.hdr_ext_byte);
+                for ( int i=0; i<header_extension_byte.size(); i++ ) {
+                    HeaderExtensionByte heb = header_extension_byte.get(i);
+                    Logger.d(String.format("[%d] hdr_ext_end_flag : 0x%x \n", 
+                            i, heb.hdr_ext_end_flag));
+                    Logger.d(String.format("[%d] hdr_ext_type : 0x%x \n", 
+                            i, heb.hdr_ext_type));
+                    Logger.d(String.format("[%d] hdr_ext_length : 0x%x \n", 
+                            i, heb.hdr_ext_length));
+                    
+                    if ( heb.hdr_ext_type == 0x0001 ) {
+                        Logger.d(String.format("[%d] scramble_control : 0x%x \n", 
+                                i, heb.scramble_control));
+                    } else if ( heb.hdr_ext_type == 0x0002 ) {
+                        Logger.d(String.format("[%d] download_id : 0x%x \n", 
+                                i, heb.download_id));
+                    } else if ( heb.hdr_ext_type == 0x0003 ) {
+                        Logger.d(String.format("[%d] item_fragment_number : 0x%x \n", 
+                                i, heb.item_fragment_number));
+                        Logger.d(String.format("[%d] last_item_fragment_number : 0x%x \n", 
+                                i, heb.last_item_fragment_number));
+                    }
                 }
-            } else if ( extension_type == 0x0002 ) {
-                Logger.d(String.format("hdr_ext_end_flag : 0x%x \n", 
-                        header_extension_byte02.hdr_ext_end_flag ));
-                Logger.d(String.format("hdr_ext_type : 0x%x \n", 
-                        header_extension_byte02.hdr_ext_type));
-                Logger.d(String.format("hdr_ext_length : 0x%x \n", 
-                        header_extension_byte02.hdr_ext_length));
-                Logger.d(String.format("download_id : 0x%x \n", 
-                        header_extension_byte02.download_id));
-            } else if ( extension_type == 0x0003 ) {
-                Logger.d(String.format("hdr_ext_end_flag : 0x%x \n", 
-                        header_extension_byte03.hdr_ext_end_flag));
-                Logger.d(String.format("hdr_ext_type : 0x%x \n", 
-                        header_extension_byte03.hdr_ext_type));
-                Logger.d(String.format("hdr_ext_length : 0x%x \n", 
-                        header_extension_byte03.hdr_ext_length));
-                Logger.d(String.format("item_fragment_number : 0x%x \n", 
-                        header_extension_byte03.item_fragment_number ));
-                Logger.d(String.format("last_item_fragment_number : 0x%x \n", 
-                        header_extension_byte03.last_item_fragment_number ));
             }
         }
         

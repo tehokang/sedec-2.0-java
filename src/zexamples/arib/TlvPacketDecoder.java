@@ -9,13 +9,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable;
+import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable.Item;
 import sedec2.arib.tlv.mmt.si.tables.DataContentConfigurationTable;
 import sedec2.arib.tlv.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -26,18 +30,16 @@ import sedec2.base.Table;
 class TlvCoordinator implements TlvDemultiplexer.Listener {
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
-    protected DataDirectoryManagementTable ddmt = null;
+    protected TlvDemultiplexer tlv_demuxer = null;
+    protected BufferedOutputStream video_bs = null;
     protected DataAssetManagementTable damt = null;
     protected DataContentConfigurationTable dcct = null;
+    protected DataDirectoryManagementTable ddmt = null;
     
-    protected BufferedOutputStream video_bs = null;
-    protected BufferedOutputStream audio_bs = null;
-    protected TlvDemultiplexer tlv_demuxer = null;
+    protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
+    protected Map<Integer, MFU_IndexItem.Item> application_items = new HashMap<>();
     
     public TlvCoordinator() throws FileNotFoundException {
-        video_bs = new BufferedOutputStream(new FileOutputStream(new File("video.mfu.hevc")));
-        audio_bs = new BufferedOutputStream(new FileOutputStream(new File("audio.mfu.aac")));
-
         tlv_demuxer = new TlvDemultiplexer();
         tlv_demuxer.addEventListener(this);
         
@@ -49,10 +51,10 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableGeneralDataFilter();
         
 //        tlv_demuxer.enableSiLogging();
-//        tlv_demuxer.enableTtmlLogging();
+        tlv_demuxer.enableTtmlLogging();
 //        tlv_demuxer.enableAudioLogging();
 //        tlv_demuxer.enableVideoLogging();
-        tlv_demuxer.enableApplicationLogging();
+//        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
         
 //        tlv_demuxer.addSiAllFilter();
@@ -64,10 +66,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MH_AIT);
     }
     
-    public void destroy() {
+    public void destroy() throws IOException {
         tlv_demuxer.removeEventListener(this);
         tlv_demuxer.destroy();
         tlv_demuxer = null;
+        
+        video_bs.close();
+        audio_bs_map.clear();
+        audio_bs_map = null;
     }
     
     public boolean put(byte[] tlv_raw) {
@@ -82,11 +88,11 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DDMT: 
             ddmt = (DataDirectoryManagementTable) table;
-//            ddmt.print();
+            ddmt.print();
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DAMT:
             damt = (DataAssetManagementTable) table;
-//            damt.print();
+            damt.print();
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DCMT:
             dcct = (DataContentConfigurationTable) table;
@@ -95,7 +101,7 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-//                mpt.print();
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -164,6 +170,10 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedVideo(int packet_id, byte[] buffer) {
         try {
+            if ( video_bs == null ) {
+                video_bs = new BufferedOutputStream(new FileOutputStream(
+                        new File(String.format("video.mfu.0x%04x.hevc", packet_id))));
+            }
             video_bs.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -173,6 +183,12 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedAudio(int packet_id, byte[] buffer) {
         try {
+            if ( audio_bs_map.containsKey(packet_id) == false ) {
+                audio_bs_map.put(packet_id, new BufferedOutputStream(new FileOutputStream(
+                        new File(String.format("audio.mfu.0x%04x.aac",packet_id)))));
+            }
+            
+            BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
             audio_bs.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
@@ -191,15 +207,36 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedApplication(int packet_id, int mpu_sequence_number, byte[] buffer) {
-//        BinaryLogger.debug(buffer, 20);
-        
+    public void onReceivedApplication(int packet_id, int item_id, 
+            int mpu_sequence_number, byte[] buffer) {
+        /**
+         * @todo File Processing
+         */
+        System.out.println(String.format("packet_id : 0x%x, item_id : 0x%x, " +
+                "mpu_sequence_number : 0x%x", packet_id, item_id, mpu_sequence_number));
     }
 
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
         MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
         data.print();
+    }
+
+    @Override
+    public void onReceivedIndexItem(int packet_id, byte[] buffer) {
+        MFU_IndexItem index_item = new MFU_IndexItem(buffer);
+//        index_item.print();
+        List<MFU_IndexItem.Item> items = index_item.getItems();
+        for ( int i=0; i<items.size(); i++ ) {
+            MFU_IndexItem.Item item = items.get(i);
+            if ( application_items.containsKey(item.item_id) == false ) {
+                application_items.put(item.item_id, item);
+            }
+        }
+        
+        for ( int i=0; i<application_items.size(); i++ ) {
+            List<MFU_In>application_items.values();
+        }
     }
 }
 
@@ -210,7 +247,7 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
  */
 public class TlvPacketDecoder {
-    public static void main(String []args) throws FileNotFoundException {
+    public static void main(String []args) throws IOException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
                     "I need TLV packet to be parsed as 1st parameter");
