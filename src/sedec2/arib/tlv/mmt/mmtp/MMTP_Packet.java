@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
-import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class MMTP_Packet extends BitReadWriter {

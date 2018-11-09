@@ -2,20 +2,14 @@ package sedec2.arib.extractor;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
-import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet.HeaderExtensionByte;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
-import sedec2.util.Logger;
 
 public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
@@ -25,10 +19,8 @@ public class ApplicationExtractor extends BaseExtractor {
         public void onReceivedIndexItem(int packet_id, byte[] buffer);
     }
  
-    class QueueData {
-        public byte[] data;
+    class QueueData extends BaseExtractor.QueueData {
         public int item_id;
-        public int packet_id;
         public int mpu_sequence_number;
         public boolean is_index_item = false;
         
@@ -39,20 +31,11 @@ public class ApplicationExtractor extends BaseExtractor {
             this.item_id = item_id;
             this.is_index_item = is_index_item;
             this.mpu_sequence_number = mpu_sequence_number;
-            
         }
     }
 
     protected final String TAG = "ApplicationExtractor";
-    protected boolean m_is_running = true;
-    protected Thread m_tlv_extractor_thread;
     protected Thread m_mfu_application_event_thread;
-        
-    protected List<MMTP_Packet> m_fragmented01_mmtp_application = new ArrayList<>();
-    protected List<MMTP_Packet> m_fragmented02_mmtp_application = new ArrayList<>();
-
-    protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
-    protected BlockingQueue<QueueData> m_mfu_apps = new ArrayBlockingQueue<QueueData>(100);
     
     public ApplicationExtractor() {
         m_tlv_extractor_thread = new Thread(new Runnable() {
@@ -94,7 +77,8 @@ public class ApplicationExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_mfu_apps && (data = m_mfu_apps.take()) != null ) {
+                        if ( null != m_event_queue && 
+                                (data = (QueueData) m_event_queue.take()) != null ) {
                             
                             if ( data.is_index_item == false ) {
                                 for ( int i=0; i<m_listeners.size(); i++ ) {
@@ -133,46 +117,15 @@ public class ApplicationExtractor extends BaseExtractor {
      * User should use this function when they don't use TLVExtractor any more.
      */
     public void destroy() {
-        m_is_running = false;
-        
-        m_tlv_extractor_thread.interrupt();
-        m_tlv_extractor_thread = null;
+        super.destroy();
         
         m_mfu_application_event_thread.interrupt();
         m_mfu_application_event_thread = null;
-        
-        m_listeners.clear();
-        m_listeners = null;
-                
-        m_tlv_packets.clear();
-        m_tlv_packets = null;
-    }
-    
-    /**
-     * User can put a TLV packet to get the results as Table of MMT-SI, TLV-SI and more.
-     * @param tlv a variable TLV packet
-     * @return Return false if TLVExtractor has situation which can't parse like overflow.
-     */
-    public void putIn(byte[] tlv) throws InterruptedException {
-        if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
-            m_tlv_packets.put(tlv);
-        }
-    }
-
-    @Override
-    protected void putOut(Object obj) throws InterruptedException {
-        if ( obj == null ) return;
-        
-        m_mfu_apps.put((QueueData)obj);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
-            case PacketFactory.SIGNALLING_PACKET:
-            case PacketFactory.IPV4_PACKET:
-            case PacketFactory.IPV6_PACKET:
-                break;
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
                 MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
@@ -184,7 +137,36 @@ public class ApplicationExtractor extends BaseExtractor {
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        processMfuApplication(mmtp_packet);
+                        /**
+                         * @note Please enable following if you'd like to see ttml sequence flow
+                         */
+                        showMMTPInfo("APP", mmtp_packet);
+
+                        boolean is_index_item = false;
+                        List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
+                        
+                        if ( samples.size() == 0 ) break;
+                        
+                        List<HeaderExtensionByte> header_ext = 
+                                mmtp_packet.getHeaderExtensionByte();
+                        for ( int j=0; j<header_ext.size(); j++ ) {
+                            HeaderExtensionByte he = header_ext.get(j);
+                            if ( he.item_fragment_number == 0x0000 &&
+                                    he.last_item_fragment_number == 0x0000 ) {
+                                is_index_item = true;
+                            }
+                        }
+                        
+                        List<MFU> mfus = mmtp_packet.getMPU().getMFUList();
+                        for ( int i=0; i<mfus.size(); i++ ) {
+                            int item_id = mfus.get(i).item_id;
+                            putOut(new QueueData(
+                                    mmtp_packet.getPacketId(), 
+                                    item_id, 
+                                    mmtp_packet.getMPU().getMPUSequenceNumber(), 
+                                    item_id == 0x0 && is_index_item ? true : false, 
+                                    samples.get(i).toByteArray() ));
+                        }
                     }
                 }
                 break;
@@ -192,94 +174,4 @@ public class ApplicationExtractor extends BaseExtractor {
                 break;
         }
     }
-
-    protected void processMfuApplication(MMTP_Packet mmtp) 
-            throws IOException, InterruptedException {
-        int item_id = -1;
-        List<MFU> mfus = null;
-        boolean is_index_item = false;
-        int packet_id = mmtp.getPacketId();
-        MMTP_Payload_MPU mpu = mmtp.getMPU();
-        ByteArrayOutputStream outputStreamApplication = new ByteArrayOutputStream();
-        
-        /**
-         * @note Please enable following if you'd like to see ttml sequence flow
-         */
-        if ( enable_logging == true ) {
-            Logger.d(String.format("[APP] pid : 0x%04x, " + 
-                    "msn : 0x%08x, f_i : 0x%x, a_f : 0x%x, mfu.size : %d \n", 
-                    packet_id, mpu.getMPUSequenceNumber(), mpu.getFragmentationIndicator(),
-                    mpu.getAggregationFlag(), mpu.getMFUList().size()));
-        }
-        
-        switch ( mpu.getFragmentationIndicator() ) {
-            case 0x00:
-                mfus = mpu.getMFUList();
-                item_id = mfus.get(0).item_id;
-                for ( int i=0; i<mfus.size(); i++ ) {
-                    outputStreamApplication.write(mfus.get(i).MFU_data_byte);                   
-                }
-                
-                List<HeaderExtensionByte> header_ext = mmtp.getHeaderExtensionByte();
-                for ( int i=0; i<header_ext.size(); i++ ) {
-                    HeaderExtensionByte he = header_ext.get(i);
-                    if ( item_id == 0x0000 && 
-                            he.item_fragment_number == 0x0000 &&
-                            he.last_item_fragment_number == 0x0000 ) {
-                        is_index_item = true;
-                    }
-                }
-                putOut(new QueueData(packet_id, item_id, 
-                        mpu.getMPUSequenceNumber(), is_index_item, 
-                        outputStreamApplication.toByteArray() ));
-                        
-                break;
-            case 0x01:
-                m_fragmented01_mmtp_application.add(mmtp);
-                break;
-            case 0x02:
-                m_fragmented01_mmtp_application.add(mmtp);
-                break;
-            case 0x03:
-                boolean found_01_fragmentation_indicator = false;
-                for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp_application.iterator() ; 
-                        it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu01 = it.next().getMPU();
-                    if( mpu01.getFragmentationIndicator() == 0x01 ) {
-                        mfus = mpu01.getMFUList();
-                        item_id = mfus.get(0).item_id;
-                        for ( int i=0; i<mfus.size(); i++ ) {
-                            outputStreamApplication.write(mfus.get(i).MFU_data_byte);
-                        }
-                        it.remove();
-                        found_01_fragmentation_indicator = true;
-                        break;
-                    }
-                }
-                
-                if ( found_01_fragmentation_indicator == true ) {
-                    for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp_application.iterator() ; 
-                            it.hasNext() ; ) {
-                        MMTP_Payload_MPU mpu02 = it.next().getMPU();
-                        if( mpu02.getFragmentationIndicator() == 0x02 ) {
-                            mfus = mpu02.getMFUList();
-                            for ( int i=0; i<mfus.size(); i++ ) {
-                                outputStreamApplication.write(mfus.get(i).MFU_data_byte);
-                            }
-                            it.remove();
-                        }
-                    } 
-                    
-                    mfus = mpu.getMFUList();
-                    for ( int i=0; i<mfus.size(); i++ ) {
-                        outputStreamApplication.write(mfus.get(i).MFU_data_byte);
-                    }
-                    putOut(new QueueData(packet_id, item_id, 
-                            mpu.getMPUSequenceNumber(), is_index_item, 
-                            outputStreamApplication.toByteArray() ));
-                }
-                break;
-        }
-    }
-
 }

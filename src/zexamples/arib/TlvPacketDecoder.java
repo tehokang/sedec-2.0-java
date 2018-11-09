@@ -19,7 +19,6 @@ import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable;
-import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable.Item;
 import sedec2.arib.tlv.mmt.si.tables.DataContentConfigurationTable;
 import sedec2.arib.tlv.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -50,14 +49,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableApplicationFilter();
         tlv_demuxer.enableGeneralDataFilter();
         
-//        tlv_demuxer.enableSiLogging();
+        tlv_demuxer.enableSiLogging();
         tlv_demuxer.enableTtmlLogging();
 //        tlv_demuxer.enableAudioLogging();
 //        tlv_demuxer.enableVideoLogging();
 //        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
         
-//        tlv_demuxer.addSiAllFilter();
+        tlv_demuxer.addSiAllFilter();
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DDMT);
@@ -219,13 +218,13 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
         MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
-        data.print();
+//        data.print();
     }
 
     @Override
     public void onReceivedIndexItem(int packet_id, byte[] buffer) {
         MFU_IndexItem index_item = new MFU_IndexItem(buffer);
-        index_item.print();
+//        index_item.print();
         List<MFU_IndexItem.Item> items = index_item.getItems();
         for ( int i=0; i<items.size(); i++ ) {
             MFU_IndexItem.Item item = items.get(i);

@@ -1,8 +1,6 @@
 package sedec2.arib.extractor;
 
 import java.io.IOException;
-import java.util.concurrent.ArrayBlockingQueue;
-import java.util.concurrent.BlockingQueue;
 
 import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.packets.IPv4Packet;
@@ -16,56 +14,31 @@ public class NtpExtractor extends BaseExtractor {
     }
 
     protected final String TAG = "NtpExtractor";
-    protected boolean m_is_running = true;
     protected Thread m_ntp_event_thread;
-    protected Thread m_tlv_extractor_thread;
     
-    protected BlockingQueue<NetworkTimeProtocolData> m_ntps = 
-            new ArrayBlockingQueue<NetworkTimeProtocolData>(100);
-    protected BlockingQueue<byte[]> m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
+    public class QueueData extends BaseExtractor.QueueData {
+        public NetworkTimeProtocolData ntp;
+        
+        public QueueData(NetworkTimeProtocolData ntp) {
+            this.ntp = ntp;
+        }
+    }
     
     public NtpExtractor() {
-        m_tlv_extractor_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                
-                while ( m_is_running ) {
-                    try {
-                        Thread.sleep(1);
-                        if ( null != m_tlv_packets ) {
-                            byte[] tlv_raw = (byte[])m_tlv_packets.take();
-                            TypeLengthValue tlv = 
-                                    sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            process(tlv); 
-                        }
-                        
-                    } catch ( ArrayIndexOutOfBoundsException e ) {
-                        e.printStackTrace();
-                    } catch ( InterruptedException e ) {
-                        /**
-                         * @note Nothing to do
-                         */
-                    } catch ( Exception e ) {
-                        /**
-                         * @todo You should remove a line below, because TLVExtractor \n
-                         * has to keep alive even though TLVExtractor get any wrong packets.
-                         */
-                        e.printStackTrace();
-                    }
-                }        
-            }
-        });
+        super();
         
         m_ntp_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                NetworkTimeProtocolData ntp = null;
+                QueueData data = null;
                 
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_ntps && 
-                                (ntp = m_ntps.take()) != null ) {
+                        if ( null != m_event_queue && 
+                                (data = (QueueData) m_event_queue.take()) != null ) {
+                            
+                            NetworkTimeProtocolData ntp = data.ntp;
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((INtpExtractorListener)m_listeners.get(i)).
                                         onReceivedNtp(ntp);
@@ -81,8 +54,6 @@ public class NtpExtractor extends BaseExtractor {
                 }
             }
         });
-        
-        m_tlv_extractor_thread.start();
         m_ntp_event_thread.start();
     }
     
@@ -90,44 +61,10 @@ public class NtpExtractor extends BaseExtractor {
      * User should use this function when they don't use TLVExtractor any more.
      */
     public void destroy() {
-        m_is_running = false;
-        
-        m_tlv_extractor_thread.interrupt();
-        m_tlv_extractor_thread = null;
+        super.destroy();
         
         m_ntp_event_thread.interrupt();
         m_ntp_event_thread = null;
-        
-        m_listeners.clear();
-        m_listeners = null;
-                
-        m_tlv_packets.clear();
-        m_tlv_packets = null;
-        
-        m_ntps.clear();
-        m_ntps = null;
-    }
-    
-    /**
-     * User can put a TLV packet to get the results as Table of MMT-SI, TLV-SI and more.
-     * @param tlv a variable TLV packet
-     * @return Return false if TLVExtractor has situation which can't parse like overflow.
-     */
-    public void putIn(byte[] tlv) throws InterruptedException {
-        if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
-            m_tlv_packets.put(tlv);
-        }
-    }
-
-    /**
-     * Extractor can send NTP via this function as asynchronous event
-     * @param ntp
-     * @throws InterruptedException
-     */
-
-    @Override
-    protected void putOut(Object object) throws InterruptedException {
-        m_ntps.put((NetworkTimeProtocolData)object);
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -135,16 +72,21 @@ public class NtpExtractor extends BaseExtractor {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.IPV4_PACKET:
                 NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
-                if ( ipv4_ntp != null ) putOut(ipv4_ntp);
-                if ( enable_logging == true ) ipv4_ntp.print();
+                if ( ipv4_ntp != null ) {
+                    putOut(new QueueData(ipv4_ntp));
+                    if ( enable_logging == true ) {
+                        ipv4_ntp.print();
+                    }
+                }
+                
                 break;
             case PacketFactory.IPV6_PACKET:
                 NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
-                if ( ipv6_ntp != null ) putOut(ipv6_ntp);
-                if ( enable_logging == true ) ipv6_ntp.print();
+                if ( ipv6_ntp != null ) {
+                    putOut(new QueueData(ipv6_ntp));
+                    if ( enable_logging == true ) ipv6_ntp.print();
+                }
                 break;
-            case PacketFactory.SIGNALLING_PACKET:
-            case PacketFactory.COMPRESSED_IP_PACKET:
             default:
                 break;
         }
