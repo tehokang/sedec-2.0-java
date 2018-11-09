@@ -59,6 +59,16 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableApplicationFilter();
         tlv_demuxer.enableGeneralDataFilter();
         
+        /**
+         * @note To add NAL prefix of Video Sample
+         */
+        tlv_demuxer.enableVideoPreModification();
+        
+        /**
+         * @note To add Sync-Word prefix of Audio Sample
+         */
+        tlv_demuxer.enableAudioPreModification();
+        
 //        tlv_demuxer.enableSiLogging();
 //        tlv_demuxer.enableNtpLogging();
 //        tlv_demuxer.enableTtmlLogging();
