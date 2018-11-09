@@ -25,6 +25,7 @@ import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
+import sedec2.util.FileUtility;
 import sedec2.util.Logger;
 
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
@@ -85,6 +86,9 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         
         audio_bs_map.clear();
         audio_bs_map = null;
+        
+        application_items.clear();
+        application_items = null;
     }
     
     public boolean put(byte[] tlv_raw) {
@@ -217,24 +221,38 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x01:
                 Logger.d(String.format("\t [TTHML-PNG] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.png", packet_id), buffer);
                 break;
             case 0x02:
                 Logger.d(String.format("\t [TTHML-SVG] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.svg", packet_id), buffer);
                 break;
             case 0x03:
                 Logger.d(String.format("\t [TTHML-PCM] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.pcm", packet_id), buffer);
                 break;
             case 0x04:
                 Logger.d(String.format("\t [TTHML-MP3] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.mp3", packet_id), buffer);
                 break;
             case 0x05:
                 Logger.d(String.format("\t [TTHML-AAC] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.aac", packet_id), buffer);
                 break;
             case 0x06:
                 Logger.d(String.format("\t [TTHML-FONT-SVG] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.font.svg", packet_id), buffer);
                 break;
             case 0x07:
                 Logger.d(String.format("\t [TTHML-FONT-WOFF] \n"));
+                FileUtility.save(
+                        String.format("ttml.mfu.0x%04x.font.woff", packet_id), buffer);
                 break;
             default:
                 break;
@@ -272,7 +290,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
         MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
-//        data.print();
+        data.print();
     }
 }
     
