@@ -38,36 +38,7 @@ public class ApplicationExtractor extends BaseExtractor {
     protected Thread m_mfu_application_event_thread;
     
     public ApplicationExtractor() {
-        m_tlv_extractor_thread = new Thread(new Runnable() {
-            @Override
-            public void run() {
-                
-                while ( m_is_running ) {
-                    try {
-                        Thread.sleep(1);
-                        if ( null != m_tlv_packets ) {
-                            byte[] tlv_raw = (byte[])m_tlv_packets.take();
-                            TypeLengthValue tlv = 
-                                    sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            process(tlv); 
-                        }
-                        
-                    } catch ( ArrayIndexOutOfBoundsException e ) {
-                        e.printStackTrace();
-                    } catch ( InterruptedException e ) {
-                        /**
-                         * @note Nothing to do
-                         */
-                    } catch ( Exception e ) {
-                        /**
-                         * @todo You should remove a line below, because TLVExtractor \n
-                         * has to keep alive even though TLVExtractor get any wrong packets.
-                         */
-                        e.printStackTrace();
-                    }
-                }        
-            }
-        });
+        super();
         
         m_mfu_application_event_thread = new Thread(new Runnable() {
 
@@ -108,8 +79,6 @@ public class ApplicationExtractor extends BaseExtractor {
                 }
             }
         });
-        
-        m_tlv_extractor_thread.start();
         m_mfu_application_event_thread.start();
     }
     

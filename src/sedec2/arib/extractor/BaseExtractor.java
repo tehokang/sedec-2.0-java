@@ -26,9 +26,9 @@ public abstract class BaseExtractor {
     protected boolean m_is_running = true;
     protected Thread m_tlv_extractor_thread;
     protected BlockingQueue<byte[]> m_tlv_packets = null;
+    protected BlockingQueue<QueueData> m_event_queue = null;
     protected List<MMTP_Packet> m_fragmented01_mmtp = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp = new ArrayList<>();
-    protected BlockingQueue<QueueData> m_event_queue = new ArrayBlockingQueue<QueueData>(100);
 
     public interface Listener {
         
@@ -50,6 +50,8 @@ public abstract class BaseExtractor {
     
     public BaseExtractor() {
         m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
+        m_event_queue = new ArrayBlockingQueue<QueueData>(100);
+        
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
@@ -61,7 +63,8 @@ public abstract class BaseExtractor {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
                                     sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
-                            process(tlv); 
+                            
+                            if ( tlv != null ) process(tlv); 
                         }
                         
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -72,8 +75,9 @@ public abstract class BaseExtractor {
                          */
                     } catch ( Exception e ) {
                         /**
-                         * @todo You should remove a line below, because TLVExtractor \n
-                         * has to keep alive even though TLVExtractor get any wrong packets.
+                         * @todo You should remove a line below like break, exit statement, 
+                         * because TLVExtractor has to keep alive even though 
+                         * TLVExtractor get any wrong packets.
                          */
                         e.printStackTrace();
                     }

@@ -25,38 +25,48 @@ import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
+import sedec2.util.Logger;
 
-class TlvCoordinator implements TlvDemultiplexer.Listener {
+class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
+    protected TlvDemultiplexer tlv_demuxer = null;
+
+    /**
+     * @note Tables to extract from TLV
+     */
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
-    protected TlvDemultiplexer tlv_demuxer = null;
-    protected BufferedOutputStream video_bs = null;
     protected DataAssetManagementTable damt = null;
     protected DataContentConfigurationTable dcct = null;
     protected DataDirectoryManagementTable ddmt = null;
-    
+
+    /**
+     * @note Video, Audio, IndexItem of Application to extract from TLV
+     */
+    protected BufferedOutputStream video_bs = null;
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
     protected Map<Integer, MFU_IndexItem.Item> application_items = new HashMap<>();
     
-    public TlvCoordinator() throws FileNotFoundException {
+    public SimpleTlvCoordinator() throws FileNotFoundException {
         tlv_demuxer = new TlvDemultiplexer();
         tlv_demuxer.addEventListener(this);
         
         tlv_demuxer.enableSiFilter();
+        tlv_demuxer.enableNtpFilter();
         tlv_demuxer.enableTtmlFilter();
         tlv_demuxer.enableAudioFilter();
         tlv_demuxer.enableVideoFilter();
         tlv_demuxer.enableApplicationFilter();
         tlv_demuxer.enableGeneralDataFilter();
         
-        tlv_demuxer.enableSiLogging();
-        tlv_demuxer.enableTtmlLogging();
+//        tlv_demuxer.enableSiLogging();
+//        tlv_demuxer.enableNtpLogging();
+//        tlv_demuxer.enableTtmlLogging();
 //        tlv_demuxer.enableAudioLogging();
 //        tlv_demuxer.enableVideoLogging();
 //        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
         
-        tlv_demuxer.addSiAllFilter();
+//        tlv_demuxer.addSiAllFilter();
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DDMT);
@@ -71,6 +81,8 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer = null;
         
         video_bs.close();
+        video_bs = null;
+        
         audio_bs_map.clear();
         audio_bs_map = null;
     }
@@ -87,11 +99,11 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DDMT: 
             ddmt = (DataDirectoryManagementTable) table;
-            ddmt.print();
+//            ddmt.print();
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DAMT:
             damt = (DataAssetManagementTable) table;
-            damt.print();
+//            damt.print();
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DCMT:
             dcct = (DataContentConfigurationTable) table;
@@ -100,7 +112,7 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -197,12 +209,41 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
-        ttml.print();
+        
+        switch ( ttml.getDataType() ) {
+            case 0x00:
+                Logger.d(String.format("\t [TTHML-DOC] \n"));
+                Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
+                break;
+            case 0x01:
+                Logger.d(String.format("\t [TTHML-PNG] \n"));
+                break;
+            case 0x02:
+                Logger.d(String.format("\t [TTHML-SVG] \n"));
+                break;
+            case 0x03:
+                Logger.d(String.format("\t [TTHML-PCM] \n"));
+                break;
+            case 0x04:
+                Logger.d(String.format("\t [TTHML-MP3] \n"));
+                break;
+            case 0x05:
+                Logger.d(String.format("\t [TTHML-AAC] \n"));
+                break;
+            case 0x06:
+                Logger.d(String.format("\t [TTHML-FONT-SVG] \n"));
+                break;
+            case 0x07:
+                Logger.d(String.format("\t [TTHML-FONT-WOFF] \n"));
+                break;
+            default:
+                break;
+        }
     }
 
     @Override
     public void onReceivedNtp(NetworkTimeProtocolData ntp) {
-        ntp.print();
+//        ntp.print();
     }
 
     @Override
@@ -211,14 +252,8 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
         /**
          * @todo File Processing
          */
-        System.out.println(String.format("packet_id : 0x%x, item_id : 0x%x, " +
+        System.out.println(String.format("[APP] packet_id : 0x%x, item_id : 0x%x, " +
                 "mpu_sequence_number : 0x%x", packet_id, item_id, mpu_sequence_number));
-    }
-
-    @Override
-    public void onReceivedGeneralData(int packet_id, byte[] buffer) {
-        MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
-//        data.print();
     }
 
     @Override
@@ -233,8 +268,14 @@ class TlvCoordinator implements TlvDemultiplexer.Listener {
             }
         }
     }
-}
 
+    @Override
+    public void onReceivedGeneralData(int packet_id, byte[] buffer) {
+        MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
+//        data.print();
+    }
+}
+    
 /**
  * TlvPacketDecoder is an example for getting 
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
@@ -252,7 +293,7 @@ public class TlvPacketDecoder {
                     "{TLV Raw File} \n");
         }
         
-        TlvCoordinator tlv_coordinator = new TlvCoordinator();
+        SimpleTlvCoordinator tlv_coordinator = new SimpleTlvCoordinator();
         
         /**
          * @note Assume.1 Getting each one TLV packet from specific file.

@@ -127,10 +127,33 @@ public class MFU_ClosedCaption extends BitReadWriter {
                     ss.subsample_i_data_size));
         }
         
+        Logger.d(String.format("data_byte is " ));
         if ( data_type == 0x0000 ) {
-            Logger.d(String.format("data_byte : \n"));
-            Logger.d(String.format("\t %s \n", new String(data_byte)));
+            Logger.d(String.format("TTHML-DOC \n"));
+            Logger.d(String.format("%s \n", new String(data_byte)));
+        } else if ( data_type == 0x0001 ) {
+            Logger.d(String.format("TTML-PNG \n"));
+            BinaryLogger.print(data_byte, 10);
+        } else if ( data_type == 0x0002 ) {
+            Logger.d(String.format("TTML-SVG \n"));
+            BinaryLogger.print(data_byte, 10);
+        } else if ( data_type == 0x0003 ) {
+            Logger.d(String.format("TTML-PCM \n"));
+            BinaryLogger.print(data_byte, 10);
+        } else if ( data_type == 0x0004 ) {
+            Logger.d(String.format("TTML-MP3 \n"));
+            BinaryLogger.print(data_byte, 10);
+        } else if ( data_type == 0x0005 ) {
+            Logger.d(String.format("TTML-AAC \n"));
+            BinaryLogger.print(data_byte, 10);            
+        } else if ( data_type == 0x0006 ) {
+            Logger.d(String.format("TTML-FONT-SVG \n"));
+            BinaryLogger.print(data_byte, 10);
+        } else if ( data_type == 0x0007 ) {
+            Logger.d(String.format("TTML-FONT_WOFF \n"));
+            BinaryLogger.print(data_byte, 10);
         } else {
+            Logger.d("\n");
             BinaryLogger.print(data_byte);
         }
     }
