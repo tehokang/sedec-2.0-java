@@ -368,7 +368,9 @@ public class TlvPacketDecoder {
                     
                     read_size += tlv_raw.length;
                     double process_percentage = (double)(read_size / file_size) * 100;
-                    System.out.print(String.format("Processing : %.2f %% \r", process_percentage));
+                    System.out.print("\033[1;31m" + 
+                            String.format("Processing : %.2f %% \r", process_percentage) + 
+                            "\u001B[0m");
                 }
                 
                 dataInputStream.close();
