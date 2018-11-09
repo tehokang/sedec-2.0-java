@@ -5,7 +5,7 @@ import java.io.FileOutputStream;
 public class FileUtility {
     public static boolean save(String filepath, byte[] buffer) {
         try {
-            FileOutputStream fstream = new FileOutputStream("ttml.mfu.0x%04x.font.svg");
+            FileOutputStream fstream = new FileOutputStream(filepath);
             fstream.write(buffer);
             fstream.close();
         } catch (Exception e) {
