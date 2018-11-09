@@ -10,17 +10,16 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 
 public class TtmlExtractor extends BaseExtractor {
+    protected final String TAG = "TtmlExtractor";
+
     public interface ITtmlExtractorListener extends BaseExtractor.Listener {
         public void onReceivedTtml(int packet_id, byte[] buffer);
     }
-
-    protected final String TAG = "TtmlExtractor";
-    protected Thread m_mfu_ttml_event_thread;
     
     public TtmlExtractor() {
         super();
         
-        m_mfu_ttml_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -29,7 +28,8 @@ public class TtmlExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_event_queue &&  (data = m_event_queue.take()) != null ) {
+                        if ( null != m_event_queue && 
+                                (data = m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITtmlExtractorListener)m_listeners.get(i)).
                                         onReceivedTtml(data.packet_id, data.data);
@@ -47,7 +47,7 @@ public class TtmlExtractor extends BaseExtractor {
                 }
             }
         });
-        m_mfu_ttml_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -56,8 +56,8 @@ public class TtmlExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_mfu_ttml_event_thread.interrupt();
-        m_mfu_ttml_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -75,7 +75,6 @@ public class TtmlExtractor extends BaseExtractor {
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
                         showMMTPInfo("TTML", mmtp_packet);
-
                         
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         for ( int i=0; i<samples.size(); i++ ) {

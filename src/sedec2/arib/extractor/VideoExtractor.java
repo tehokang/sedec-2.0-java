@@ -10,17 +10,16 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 
 public class VideoExtractor extends BaseExtractor {
+    protected final String TAG = "VideoExtractor";
+
     public interface IVideoExtractorListener extends BaseExtractor.Listener {
         public void onReceivedVideo(int packet_id, byte[] buffer);
     }
-
-    protected final String TAG = "VideoExtractor";
-    protected Thread m_mfu_video_event_thread;
     
     public VideoExtractor() {
         super();
         
-        m_mfu_video_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 QueueData data = null;
@@ -28,7 +27,8 @@ public class VideoExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         Thread.sleep(1);
-                        if ( null != m_event_queue && (data = m_event_queue.take()) != null ) {
+                        if ( null != m_event_queue && 
+                                (data = m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((IVideoExtractorListener)m_listeners.get(i)).
                                         onReceivedVideo(data.packet_id, data.data);
@@ -46,7 +46,7 @@ public class VideoExtractor extends BaseExtractor {
                 }
             }
         });
-        m_mfu_video_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -55,8 +55,8 @@ public class VideoExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_mfu_video_event_thread.interrupt();
-        m_mfu_video_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     @Override
@@ -81,7 +81,10 @@ public class VideoExtractor extends BaseExtractor {
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();
-                            System.arraycopy(nal_prefix, 0, sample_binary, 0, nal_prefix.length);    
+                            if ( m_enable_pre_modification == true ) { 
+                                System.arraycopy(nal_prefix, 0, 
+                                        sample_binary, 0, nal_prefix.length);
+                            }
                             putOut(new QueueData(mmtp_packet.getPacketId(), sample_binary));
                         }
                     } 

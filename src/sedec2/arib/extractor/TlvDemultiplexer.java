@@ -50,6 +50,16 @@ public class TlvDemultiplexer implements
         m_application_extractor = new ApplicationExtractor();
         m_generaldata_extractor = new GeneralPurposeDataExtractor();
         
+        /**
+         * @note To add NAL prefix of Video Sample
+         */
+        m_video_extractor.enablePreModification();
+        
+        /**
+         * @note To add Sync-Word prefix of Audio Sample
+         */
+        m_audio_extractor.enablePreModification();
+        
         m_si_extractor.addEventListener(this);
         m_ntp_extractor.addEventListener(this);
         m_ttml_extractor.addEventListener(this);
@@ -171,12 +181,28 @@ public class TlvDemultiplexer implements
         m_video_extractor.disableLogging();
     }
     
+    public void enableVideoPreModification() {
+        m_video_extractor.enablePreModification();
+    }
+    
+    public void disableVideoPreModification() {
+        m_video_extractor.disablePreModification();
+    }
+    
     public void enableAudioLogging() {
         m_audio_extractor.enableLogging();
     }
     
     public void disableAudioLogging() {
         m_audio_extractor.disableLogging();
+    }
+    
+    public void enableAudioPreModification() {
+        m_audio_extractor.enablePreModification();
+    }
+    
+    public void disableAudioPreModification() {
+        m_audio_extractor.disablePreModification();
     }
     
     public void enableTtmlLogging() {

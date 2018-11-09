@@ -10,17 +10,16 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 
 public class GeneralPurposeDataExtractor extends BaseExtractor {
+    protected final String TAG = "GeneralPurposeDataExtractor";
+
     public interface IGeneralPurposeDataExtractorListener extends BaseExtractor.Listener {
         public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
- 
-    protected final String TAG = "GeneralPurposeDataExtractor";
-    protected Thread m_mfu_generalpurpose_data_event_thread;
-    
+     
     public GeneralPurposeDataExtractor() {
         super();
         
-        m_mfu_generalpurpose_data_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -47,7 +46,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                 }
             }
         });
-        m_mfu_generalpurpose_data_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -56,8 +55,8 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_mfu_generalpurpose_data_event_thread.interrupt();
-        m_mfu_generalpurpose_data_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 

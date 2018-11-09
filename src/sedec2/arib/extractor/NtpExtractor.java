@@ -9,12 +9,11 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
 public class NtpExtractor extends BaseExtractor {
+    protected final String TAG = "NtpExtractor";
+
     public interface INtpExtractorListener extends BaseExtractor.Listener {
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
-
-    protected final String TAG = "NtpExtractor";
-    protected Thread m_ntp_event_thread;
     
     public class QueueData extends BaseExtractor.QueueData {
         public NetworkTimeProtocolData ntp;
@@ -27,7 +26,7 @@ public class NtpExtractor extends BaseExtractor {
     public NtpExtractor() {
         super();
         
-        m_ntp_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 QueueData data = null;
@@ -54,7 +53,7 @@ public class NtpExtractor extends BaseExtractor {
                 }
             }
         });
-        m_ntp_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -63,8 +62,8 @@ public class NtpExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_ntp_event_thread.interrupt();
-        m_ntp_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -74,7 +73,7 @@ public class NtpExtractor extends BaseExtractor {
                 NetworkTimeProtocolData ipv4_ntp = ((IPv4Packet)tlv).getNtp();
                 if ( ipv4_ntp != null ) {
                     putOut(new QueueData(ipv4_ntp));
-                    if ( enable_logging == true ) {
+                    if ( m_enable_logging == true ) {
                         ipv4_ntp.print();
                     }
                 }
@@ -84,7 +83,7 @@ public class NtpExtractor extends BaseExtractor {
                 NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
                 if ( ipv6_ntp != null ) {
                     putOut(new QueueData(ipv6_ntp));
-                    if ( enable_logging == true ) ipv6_ntp.print();
+                    if ( m_enable_logging == true ) ipv6_ntp.print();
                 }
                 break;
             default:

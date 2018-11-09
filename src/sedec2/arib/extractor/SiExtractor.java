@@ -12,6 +12,8 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.base.Table;
 
 public class SiExtractor extends BaseExtractor {
+    protected final String TAG = "SiExtractor";
+    
     public interface ITableExtractorListener extends BaseExtractor.Listener {
         public void onReceivedTable(Table table);    
     }
@@ -24,13 +26,10 @@ public class SiExtractor extends BaseExtractor {
         }
     }
     
-    protected final String TAG = "SiExtractor";
-    protected Thread m_table_event_thread;
-    
     public SiExtractor() {
         super();
         
-        m_table_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 QueueData data = null;
@@ -45,7 +44,7 @@ public class SiExtractor extends BaseExtractor {
                             if ( m_byte_id_filter.contains(table.getTableId()) == false )
                                 continue;
                             
-                            if ( enable_logging == true ) table.print();
+                            if ( m_enable_logging == true ) table.print();
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITableExtractorListener)m_listeners.get(i)).
                                         onReceivedTable(table);
@@ -63,7 +62,7 @@ public class SiExtractor extends BaseExtractor {
                 }
             }
         });
-        m_table_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -72,8 +71,8 @@ public class SiExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_table_event_thread.interrupt();
-        m_table_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 

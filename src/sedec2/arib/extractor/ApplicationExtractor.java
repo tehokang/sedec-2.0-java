@@ -35,12 +35,11 @@ public class ApplicationExtractor extends BaseExtractor {
     }
 
     protected final String TAG = "ApplicationExtractor";
-    protected Thread m_mfu_application_event_thread;
     
     public ApplicationExtractor() {
         super();
         
-        m_mfu_application_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -79,7 +78,7 @@ public class ApplicationExtractor extends BaseExtractor {
                 }
             }
         });
-        m_mfu_application_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -88,8 +87,8 @@ public class ApplicationExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_mfu_application_event_thread.interrupt();
-        m_mfu_application_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 

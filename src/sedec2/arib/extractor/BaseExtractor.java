@@ -18,12 +18,15 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.util.Logger;
 
 public abstract class BaseExtractor {
-    protected boolean enable_logging = false;
-    protected List<Listener> m_listeners = new ArrayList<>();
-    protected List<Integer> m_int_id_filter = new ArrayList<>();
-    protected List<Byte> m_byte_id_filter = new ArrayList<>();
-    
     protected boolean m_is_running = true;
+    protected boolean m_enable_logging = false;
+    protected boolean m_enable_pre_modification = true;
+
+    protected List<Listener> m_listeners = new ArrayList<>();
+    protected List<Byte> m_byte_id_filter = new ArrayList<>();
+    protected List<Integer> m_int_id_filter = new ArrayList<>();
+    
+    protected Thread m_event_thread;
     protected Thread m_tlv_extractor_thread;
     protected BlockingQueue<byte[]> m_tlv_packets = null;
     protected BlockingQueue<QueueData> m_event_queue = null;
@@ -152,15 +155,23 @@ public abstract class BaseExtractor {
     }
     
     public void enableLogging() {
-        enable_logging = true;
+        m_enable_logging = true;
     }
     
     public void disableLogging() {
-        enable_logging = false;
+        m_enable_logging = false;
     }
 
+    public void enablePreModification() {
+        m_enable_pre_modification = true;
+    }
+    
+    public void disablePreModification() {
+        m_enable_pre_modification = false;
+    }
+    
     protected void showMMTPInfo(String type, MMTP_Packet mmpt) {
-        if ( enable_logging == true ) {
+        if ( m_enable_logging == true ) {
             Logger.d(String.format("[%s] pid : 0x%04x, [%s] psn : 0x08x \n", 
                     type, mmpt.getPacketId(),
                     mmpt.getPayloadType() == 0x00 ? "MPU" : "Control Message",

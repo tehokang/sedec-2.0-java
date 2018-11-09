@@ -11,17 +11,16 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.base.BitReadWriter;
 
 public class AudioExtractor extends BaseExtractor {
+    protected final String TAG = "AudioExtractor";
+
     public interface IAudioExtractorListener extends BaseExtractor.Listener {
         public void onReceivedAudio(int packet_id, byte[] buffer);
     }
-
-    protected final String TAG = "AudioExtractor";
-    protected Thread m_mfu_audio_event_thread;
     
     public AudioExtractor() {
         super();
         
-        m_mfu_audio_event_thread = new Thread(new Runnable() {
+        m_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
@@ -48,7 +47,7 @@ public class AudioExtractor extends BaseExtractor {
                 }
             }
         });
-        m_mfu_audio_event_thread.start();
+        m_event_thread.start();
     }
     
     /**
@@ -57,8 +56,8 @@ public class AudioExtractor extends BaseExtractor {
     public void destroy() {
         super.destroy();
         
-        m_mfu_audio_event_thread.interrupt();
-        m_mfu_audio_event_thread = null;
+        m_event_thread.interrupt();
+        m_event_thread = null;
     }
     
     protected synchronized void process(TypeLengthValue tlv) 
@@ -79,21 +78,20 @@ public class AudioExtractor extends BaseExtractor {
 
                         BitReadWriter syncword = null;
                         ByteArrayOutputStream out = null;
-                        
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();
-                            
-                            syncword = new BitReadWriter(new byte[3]);
-                            syncword.writeOnBuffer((int)0x2b7, 11);    
-                            syncword.writeOnBuffer(sample_binary.length, 13);
-                            
                             out = new ByteArrayOutputStream();
-                            out.write(syncword.getBuffer());
-                            out.write(sample_binary);
                             
+                            if ( m_enable_pre_modification == true ) {
+                                syncword = new BitReadWriter(new byte[3]);
+                                syncword.writeOnBuffer((int)0x2b7, 11);    
+                                syncword.writeOnBuffer(sample_binary.length, 13);
+                                out.write(syncword.getBuffer());
+                            }
+                            out.write(sample_binary);
                             putOut(new QueueData(
                                     mmtp_packet.getPacketId(), 
                                     out.toByteArray()));
