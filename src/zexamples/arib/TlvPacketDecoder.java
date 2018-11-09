@@ -213,7 +213,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
-        
         switch ( ttml.getDataType() ) {
             case 0x00:
                 Logger.d("\t [TTHML-DOC] \n");
@@ -328,7 +327,8 @@ public class TlvPacketDecoder {
                 final long COUNT_OF_SAMPLES = 10000000;    
                 final int TLV_HEADER_LENGTH = 4;
                 long sample_counter = 0;
-                
+                double file_size = dataInputStream.available();
+                double read_size = 0;
                 while ( dataInputStream.available() > 0) {
                     /**
                      * @note Assume.2 Making a packet of TLV which has a sync byte as beginning
@@ -357,11 +357,18 @@ public class TlvPacketDecoder {
                     outputStream = null;
                     Thread.sleep(1);
                     
+                    /**
+                     * @note From here it's decoration to check counter and progress on console
+                     */
                     if ( sample_counter++ > COUNT_OF_SAMPLES ) {
                         System.out.print(String.format(
                                 "TLV Packet counter is over %d \n", COUNT_OF_SAMPLES));
                         break;
                     }
+                    
+                    read_size += tlv_raw.length;
+                    double process_percentage = (double)(read_size / file_size) * 100;
+                    System.out.print(String.format("Processing : %.2f %% \r", process_percentage));
                 }
                 
                 dataInputStream.close();
