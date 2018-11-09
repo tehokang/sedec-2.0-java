@@ -116,7 +116,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-//                mpt.print();
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -216,43 +216,43 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         
         switch ( ttml.getDataType() ) {
             case 0x00:
-                Logger.d(String.format("\t [TTHML-DOC] \n"));
+                Logger.d("\t [TTHML-DOC] \n");
                 Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
                 break;
             case 0x01:
-                Logger.d(String.format("\t [TTHML-PNG] \n"));
+                Logger.d("\t [TTHML-PNG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.png", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.png", packet_id), buffer);
                 break;
             case 0x02:
-                Logger.d(String.format("\t [TTHML-SVG] \n"));
+                Logger.d("\t [TTHML-SVG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.svg", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.svg", packet_id), buffer);
                 break;
             case 0x03:
-                Logger.d(String.format("\t [TTHML-PCM] \n"));
+                Logger.d("\t [TTHML-PCM] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.pcm", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.pcm", packet_id), buffer);
                 break;
             case 0x04:
-                Logger.d(String.format("\t [TTHML-MP3] \n"));
+                Logger.d("\t [TTHML-MP3] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.mp3", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.mp3", packet_id), buffer);
                 break;
             case 0x05:
-                Logger.d(String.format("\t [TTHML-AAC] \n"));
+                Logger.d("\t [TTHML-AAC] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.aac", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.aac", packet_id), buffer);
                 break;
             case 0x06:
-                Logger.d(String.format("\t [TTHML-FONT-SVG] \n"));
+                Logger.d("\t [TTHML-FONT-SVG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.font.svg", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.font.svg", packet_id), buffer);
                 break;
             case 0x07:
-                Logger.d(String.format("\t [TTHML-FONT-WOFF] \n"));
+                Logger.d("\t [TTHML-FONT-WOFF] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%04x.font.woff", packet_id), buffer);
+                        String.format("ttml.mfu.0x%x.font.woff", packet_id), buffer);
                 break;
             default:
                 break;
@@ -270,8 +270,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         /**
          * @todo File Processing
          */
-        System.out.println(String.format("[APP] packet_id : 0x%x, item_id : 0x%x, " +
-                "mpu_sequence_number : 0x%x", packet_id, item_id, mpu_sequence_number));
+//        System.out.println(String.format("[APP] packet_id : 0x%x, item_id : 0x%x, " +
+//                "mpu_sequence_number : 0x%x", packet_id, item_id, mpu_sequence_number));
     }
 
     @Override
