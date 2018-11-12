@@ -46,7 +46,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
      */
     protected BufferedOutputStream video_bs = null;
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
-    protected Map<Integer, MFU_IndexItem.Item> application_items = new HashMap<>();
     
     public SimpleTlvCoordinator() throws FileNotFoundException {
         tlv_demuxer = new TlvDemultiplexer();
@@ -97,9 +96,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         
         audio_bs_map.clear();
         audio_bs_map = null;
-        
-        application_items.clear();
-        application_items = null;
     }
     
     public boolean put(byte[] tlv_raw) {
@@ -127,7 +123,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -280,21 +276,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         /**
          * @todo File Processing
          */
-//        System.out.println(String.format("[APP] packet_id : 0x%x, item_id : 0x%x, " +
-//                "mpu_sequence_number : 0x%x", packet_id, item_id, mpu_sequence_number));
     }
 
     @Override
     public void onReceivedIndexItem(int packet_id, byte[] buffer) {
         MFU_IndexItem index_item = new MFU_IndexItem(buffer);
 //        index_item.print();
-        List<MFU_IndexItem.Item> items = index_item.getItems();
-        for ( int i=0; i<items.size(); i++ ) {
-            MFU_IndexItem.Item item = items.get(i);
-            if ( application_items.containsKey(item.item_id) == false ) {
-                application_items.put(item.item_id, item);
-            }
-        }
     }
 
     @Override
@@ -319,7 +306,6 @@ class ConsoleProgress {
         total_size = file_size;
         startTime = System.currentTimeMillis();
         processTime = System.currentTimeMillis();
-        
     }
     
     private static String formatInterval(final long l) {
@@ -346,7 +332,7 @@ class ConsoleProgress {
         return anim_progress_bar.toString();
     }
     
-    public static void update(int read) throws Exception {
+    public static void update(int read) {
         counter+=1;
         read_size += read;
 
@@ -396,6 +382,60 @@ class ConsoleProgress {
     }
 }
 
+class TlvFileReader {
+    private File tlv_file = null;
+    private final int TLV_HEADER_LENGTH = 4;
+    private DataInputStream input_stream  = null;
+    
+    public TlvFileReader(String tlv_file) {
+        this.tlv_file = new File(tlv_file);
+    }
+    
+    public boolean open() {
+        try {
+            input_stream  = 
+                    new DataInputStream(
+                            new BufferedInputStream(new FileInputStream(tlv_file)));
+        } catch (FileNotFoundException e) {
+            return false;
+        }
+        return true;
+    }
+    
+    public void close() throws IOException {
+        if ( input_stream != null ) input_stream.close();
+    }
+    
+    public int filesize() throws IOException {
+        if ( input_stream == null ) return 0;
+        return input_stream.available();
+    }
+    
+    public boolean readable() throws IOException {
+        if ( input_stream == null ) return false;
+        return input_stream.available() > 0 ? true : false;
+    }
+    
+    public byte[] readPacket() throws IOException {
+        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
+        /**
+         * @note Making a packet of TLV which has a sync byte as beginning
+         * In other words, user should put a perfect TLV packet with sync byte into. 
+         */
+        byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
+        input_stream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
+        
+        byte[] tlv_payload_buffer = 
+                new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
+        input_stream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
+
+        output_stream = new ByteArrayOutputStream();
+        output_stream.write(tlv_header_buffer);
+        output_stream.write(tlv_payload_buffer);
+        return output_stream.toByteArray();
+    }
+}
+
 /**
  * TlvPacketDecoder is an example for getting 
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
@@ -403,7 +443,7 @@ class ConsoleProgress {
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
  */
 public class TlvPacketDecoder {
-    public static void main(String []args) throws IOException {
+    public static void main(String []args) throws IOException, InterruptedException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
                     "I need TLV packet to be parsed as 1st parameter");
@@ -414,57 +454,27 @@ public class TlvPacketDecoder {
         }
         
         SimpleTlvCoordinator tlv_coordinator = new SimpleTlvCoordinator();
-        ByteArrayOutputStream output_stream = null;
         /**
-         * @note Assume.1 Getting each one TLV packet from specific file.
+         * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            File tlv_file = new File(args[i]);
+            TlvFileReader tlv_file_pumper = new TlvFileReader(args[i]);
+            if ( false == tlv_file_pumper.open() ) continue;
+            ConsoleProgress.start(tlv_file_pumper.filesize());
             
-            try {
-                DataInputStream input_stream  = 
-                        new DataInputStream(
-                                new BufferedInputStream(new FileInputStream(tlv_file)));
-                ConsoleProgress.start(input_stream.available());
-                final int TLV_HEADER_LENGTH = 4;
-                
-                while ( input_stream.available() > 0) {
-                    /**
-                     * @note Assume.2 Making a packet of TLV which has a sync byte as beginning
-                     * In other words, user should put a perfect TLV packet with sync byte into. 
-                     */
-                    byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
-                    input_stream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
-                    
-                    byte[] tlv_payload_buffer = 
-                            new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
-                    input_stream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
-
-                    output_stream = new ByteArrayOutputStream();
-                    output_stream.write(tlv_header_buffer);
-                    output_stream.write(tlv_payload_buffer);
-
-                    /**
-                     * @note Step.3 Putting a TLV packet into TLVExtractor \n
-                     * and you can wait for both the results of TLV as table of MPEG2 and MFU
-                     */
-                    byte[] tlv_packet = output_stream.toByteArray();
-                    if ( false == tlv_coordinator.put(tlv_packet) ) {
-                        System.out.println("Oops, they have problem to decode TLV ");
-                        break;
-                    }
-                    ConsoleProgress.update(tlv_packet.length);
-                    output_stream = null;
-                    Thread.sleep(0, 1);
-                }
-                input_stream.close();
-            } catch (Exception e) {
-                e.printStackTrace();
-                break;
+            /**
+             * @note Putting a TLV packet into TLVExtractor \n
+             * and you can wait for both the results of TLV as table of MPEG2 and MFU
+             */
+            while ( tlv_file_pumper.readable() ) {
+                byte[] tlv_packet = tlv_file_pumper.readPacket();
+                if ( tlv_packet.length == 0 || 
+                        false == tlv_coordinator.put(tlv_packet) ) break;
+                Thread.sleep(0, 1);
+                ConsoleProgress.update(tlv_packet.length);
             }
         }
-        
         /**
          * @note Destroy of TLVExtractor to not handle and released by garbage collector
          */
