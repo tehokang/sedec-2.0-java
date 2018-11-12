@@ -553,14 +553,14 @@ public class TlvPacketDecoder {
     public static void main(String []args) throws IOException, InterruptedException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
-                    "I need TLV packet to be parsed as 1st parameter");
+                    "You need TLV packet(or file) to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.decoder.TlvPacketDecoder " + 
+                    "zexamples.arib.TlvPacketDecoder " + 
                     "{TLV Raw File} \n");
         }
         
-        SimpleTlvCoordinator tlv_coordinator = new SimpleTlvCoordinator();
+        SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
@@ -577,7 +577,7 @@ public class TlvPacketDecoder {
             while ( tlv_file_pumper.readable() ) {
                 byte[] tlv_packet = tlv_file_pumper.readPacket();
                 if ( tlv_packet.length == 0 || 
-                        false == tlv_coordinator.put(tlv_packet) ) break;
+                        false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
                 ConsoleProgress.update(tlv_packet.length);
             }
@@ -586,8 +586,8 @@ public class TlvPacketDecoder {
         /**
          * @note Destroy of TLVExtractor to not handle and released by garbage collector
          */
-        tlv_coordinator.destroy();
-        tlv_coordinator = null;
+        simple_tlv_coordinator.destroy();
+        simple_tlv_coordinator = null;
         
         System.out.println("ByeBye");
         System.exit(0);
