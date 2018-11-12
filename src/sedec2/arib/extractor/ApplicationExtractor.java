@@ -14,9 +14,9 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
         public void onReceivedApplication(int packet_id, int item_id, 
-                int mpu_sequence_number,
-                byte[] buffer);
-        public void onReceivedIndexItem(int packet_id, byte[] buffer);
+                int mpu_sequence_number, byte[] buffer);
+        public void onReceivedIndexItem(int packet_id, int item_id, 
+                int mpu_sequence_number, byte[] buffer);
     }
  
     class QueueData extends BaseExtractor.QueueData {
@@ -62,6 +62,8 @@ public class ApplicationExtractor extends BaseExtractor {
                                 for ( int i=0; i<m_listeners.size(); i++ ) {
                                     ((IAppExtractorListener)m_listeners.get(i)).
                                             onReceivedIndexItem(data.packet_id, 
+                                                    data.item_id,
+                                                    data.mpu_sequence_number,
                                                     data.data);
                                 }
                             }

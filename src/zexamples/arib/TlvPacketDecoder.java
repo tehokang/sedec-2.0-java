@@ -9,6 +9,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -19,7 +21,12 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
 import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
+import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem.Item;
+import sedec2.arib.tlv.mmt.si.DescriptorFactory;
+import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
+import sedec2.arib.tlv.mmt.si.descriptors.MPU_NodeDescriptor;
 import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable;
+import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable.MPU;
 import sedec2.arib.tlv.mmt.si.tables.DataContentConfigurationTable;
 import sedec2.arib.tlv.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
@@ -28,6 +35,7 @@ import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
+import zexamples.arib.Application.SubDirectory;
 
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected TlvDemultiplexer tlv_demuxer = null;
@@ -41,6 +49,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected DataContentConfigurationTable dcct = null;
     protected DataDirectoryManagementTable ddmt = null;
 
+    protected List<Application> applications = new ArrayList<>();
     /**
      * @note Video, Audio, IndexItem of Application to extract from TLV
      */
@@ -111,10 +120,50 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case sedec2.arib.tlv.mmt.si.TableFactory.DDMT: 
             ddmt = (DataDirectoryManagementTable) table;
 //            ddmt.print();
+            boolean found_app = false;
+            for ( int i=0; i<applications.size(); i++ ) {
+                if ( applications.get(i).base_directory_path.contains(
+                        new String(ddmt.getBaseDirectoryPath())) == true ) {
+                    found_app = true;
+                    break;
+                }
+            }
+            
+            if ( found_app == false ) {
+                Application app = new Application();
+                app.base_directory_path = new String(ddmt.getBaseDirectoryPath());
+                for ( int i=0; i<ddmt.getDirectoryNodes().size(); i++ ) {
+                    SubDirectory sub_directory = app.new SubDirectory();
+                    sub_directory.node_tag = ddmt.getDirectoryNodes().get(i).node_tag;
+                    sub_directory.sub_directory_path = 
+                            new String(ddmt.getDirectoryNodes().get(i).directory_node_path_byte);
+                    app.sub_directories.add(sub_directory);
+                }
+                applications.add(app);
+            }
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DAMT:
             damt = (DataAssetManagementTable) table;
 //            damt.print();
+            
+            for ( int i=0; i<damt.getMPUs().size(); i++ ) {
+                MPU mpu = damt.getMPUs().get(i);
+                for ( int j=0; j<mpu.mpu_info_byte.size(); j++ ) {
+                    Descriptor desc = mpu.mpu_info_byte.get(j);
+                    if ( desc.getDescriptorTag() == DescriptorFactory.MPU_NODE_DESCRIPTOR ) {
+                        for ( int k=0; k<applications.size(); k++ ) {
+                            Application app = applications.get(k);
+                            for ( int n=0; n<app.sub_directories.size(); n++ ) {
+                                SubDirectory sub_directory = app.sub_directories.get(n);
+                                if ( ((MPU_NodeDescriptor)desc).getNodeTag()
+                                        == sub_directory.node_tag ) {
+                                    sub_directory.mpu_sequence_number = mpu.mpu_sequence_number;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             break;
         case sedec2.arib.tlv.mmt.si.TableFactory.DCMT:
             dcct = (DataContentConfigurationTable) table;
@@ -273,15 +322,69 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedApplication(int packet_id, int item_id, 
             int mpu_sequence_number, byte[] buffer) {
-        /**
-         * @todo File Processing
-         */
+        for ( int i=0; i<applications.size(); i++ ) {
+            Application app = applications.get(i);
+            for ( int j=0; j<app.sub_directories.size(); j++ ) {
+                SubDirectory sub_directory = app.sub_directories.get(j);
+                if ( sub_directory.mpu_sequence_number == mpu_sequence_number ) {
+                    for ( int k=0; k<sub_directory.files.size(); k++ ) {
+                        Application.File file = sub_directory.files.get(k);
+                        if ( file.item_id == item_id && file.read_completed == false ) {
+                            System.out.println(String.format("Read Completed : 0x%x",
+                                    file.item_id));
+                            file.buffer = Arrays.copyOfRange(buffer, 0, buffer.length);
+                            file.read_completed = true;
+                        }
+                    }
+                }
+            }
+        }
+        
+        for ( int i=0; i<applications.size(); i++ ) {
+            Application app = applications.get(i);
+            app.done();
+        }
     }
 
     @Override
-    public void onReceivedIndexItem(int packet_id, byte[] buffer) {
+    public void onReceivedIndexItem(int packet_id, int item_id, 
+            int mpu_sequence_number, byte[] buffer) {
         MFU_IndexItem index_item = new MFU_IndexItem(buffer);
 //        index_item.print();
+        
+        for ( int i=0; i<applications.size(); i++ ) {
+            Application app = applications.get(i);
+            for ( int j=0; j<app.sub_directories.size(); j++ ) {
+                SubDirectory sub_directory = app.sub_directories.get(j);
+                if ( sub_directory.mpu_sequence_number == mpu_sequence_number ) {
+                    boolean exist = false;
+                    for ( int k=0; k<index_item.getItems().size(); k++ ) {
+                        Item item = index_item.getItems().get(k);
+                        for ( int n=0; n<sub_directory.files.size(); n++ ) {
+                            Application.File file = sub_directory.files.get(n);
+                            if ( file.item_id == item.item_id ) { 
+                                exist = true;
+                                break;
+                            }
+                        }
+                        
+                        if ( exist == false ) {
+                            Application.File file = app.new File();
+                            file.item_id = item.item_id;
+                            file.item_size = item.item_size;
+                            file.file_name = new String(item.file_name_byte);
+                            file.original_size = item.original_size;
+                            file.compression_type = item.compression_type;
+                            file.item_version = item.item_version;
+                            file.mime_type = new String(item.item_type_byte);
+                            file.read_completed = false;
+                            file.write_completed = false;
+                            sub_directory.files.add(file);
+                        }
+                    }
+                }
+            }
+        }
     }
 
     @Override
@@ -292,15 +395,15 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 }
 
 class ConsoleProgress {
-    private static final int PROGRESS_BAR_WIDTH=30;
-    private static long counter = 0;
-    private static long startTime = 0;
-    private static long processTime = 0;
-    private static double read_size = 0;
-    private static double total_size = 0;
-    private static double bitrate_average = 0;
-    private static StringBuilder anim_progress_bar;
-    private static char[] anim_circle = new char[]{'|', '/', '-', '\\'};
+    protected static final int PROGRESS_BAR_WIDTH=30;
+    protected static long counter = 0;
+    protected static long startTime = 0;
+    protected static long processTime = 0;
+    protected static double read_size = 0;
+    protected static double total_size = 0;
+    protected static double bitrate_average = 0;
+    protected static StringBuilder anim_progress_bar;
+    protected static char[] anim_circle = new char[]{'|', '/', '-', '\\'};
     
     public static void start(double file_size) {
         total_size = file_size;
@@ -312,7 +415,7 @@ class ConsoleProgress {
         total_size = 0;
     }
     
-    private static String formatInterval(final long l) {
+    protected static String formatInterval(final long l) {
         final long hr = TimeUnit.MILLISECONDS.toHours(l);
         final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
         final long sec = TimeUnit.MILLISECONDS.toSeconds(l - 
@@ -322,7 +425,7 @@ class ConsoleProgress {
         return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
     }
     
-    private static String getProgressBar(double percent) {
+    protected static String getProgressBar(double percent) {
         int bars = (int)(percent * PROGRESS_BAR_WIDTH / 100);
         anim_progress_bar = new StringBuilder(PROGRESS_BAR_WIDTH);
         anim_progress_bar.append("[");
@@ -387,9 +490,9 @@ class ConsoleProgress {
 }
 
 class TlvFileReader {
-    private File tlv_file = null;
-    private final int TLV_HEADER_LENGTH = 4;
-    private DataInputStream input_stream  = null;
+    protected File tlv_file = null;
+    protected final int TLV_HEADER_LENGTH = 4;
+    protected DataInputStream input_stream  = null;
     
     public TlvFileReader(String tlv_file) {
         this.tlv_file = new File(tlv_file);
