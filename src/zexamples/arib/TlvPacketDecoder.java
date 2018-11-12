@@ -350,24 +350,47 @@ class ConsoleProgress {
         counter+=1;
         read_size += read;
 
+        /**
+         * @note TLV counter
+         */
         System.out.print(String.format(" TLV : %d ", counter));
         
+        /**
+         * @note Progress bar as percentage
+         */
         System.out.print(String.format("%s ", 
                 getProgressBar((double)(read_size / total_size) * 100)));
 
+        /**
+         * @note Percentage of processing while demuxing
+         */
         System.out.print("\033[1;31m" + 
                 String.format("%.2f %% ", (double)(read_size / total_size) * 100) + "\u001B[0m");
         
+        /**
+         * @note Circle animation of progressing 
+         */
         System.out.print(anim_circle[(int) (counter%4)] + " "); 
         
+        /**
+         * @note Bitrate of processing as Mbps
+         */
         bitrate_average += (((double) (1000 * read ) / 
                 (double)((System.currentTimeMillis()-processTime) )) * 
                 8) / 1024 / 1024;
         System.out.print(String.format("%4.2fMbps ", bitrate_average/counter)); 
         processTime = System.currentTimeMillis();
         
-        System.out.print(String.format("(%.2f MBytes) ", (double)(read_size/1024/1024)));
+        /**
+         * @note Total amount of processed
+         */
+        System.out.print(String.format("(%.2f / %.2f MBytes) ", 
+                (double)(read_size/1024/1024),
+                (double) total_size/1024/1024));
         
+        /**
+         * @note Duration time during demuxing
+         */
         System.out.print(String.format("%s \r", 
                 formatInterval(System.currentTimeMillis()-startTime)));
     }
@@ -438,7 +461,6 @@ public class TlvPacketDecoder {
                     Thread.sleep(0, 1);
                     ConsoleProgress.update(tlv_raw.length);
                 }
-                
                 dataInputStream.close();
             } catch (Exception e) {
                 e.printStackTrace();
