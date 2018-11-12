@@ -96,143 +96,147 @@ public class TlvDemultiplexer implements
     }
     
     public void addVideoPidFilter(int pid) {
-        m_video_extractor.addPidFilter(pid);
+        if ( m_video_extractor != null ) m_video_extractor.addPidFilter(pid);
     }
     
     public void removeVideoPidFilter(int pid) {
-        m_video_extractor.removePidFilter(pid);
+        if ( m_video_extractor != null ) m_video_extractor.removePidFilter(pid);
     }
     
     public void addAudioPidFilter(int pid) {
-        m_audio_extractor.addPidFilter(pid);
+        if ( m_audio_extractor != null ) m_audio_extractor.addPidFilter(pid);
     }
     
     public void removeAudioPidFilter(int pid) {
-        m_audio_extractor.removePidFilter(pid);
+        if ( m_audio_extractor != null ) m_audio_extractor.removePidFilter(pid);
     }
     
     public void addTtmlPidFilter(int pid) {
-        m_ttml_extractor.addPidFilter(pid);
+        if ( m_ttml_extractor != null ) m_ttml_extractor.addPidFilter(pid);
     }
     
     public void removeTtmlPidFilter(int pid) {
-        m_ttml_extractor.removePidFilter(pid);
+        if ( m_ttml_extractor != null ) m_ttml_extractor.removePidFilter(pid);
     }
     
     public void addSiFilter(byte table_id) {
-        m_si_extractor.addPidFilter(table_id);
+        if ( m_si_extractor != null ) m_si_extractor.addPidFilter(table_id);
     }
     
     public void addSiAllFilter() {
-        for ( int i=0; i<256; i++ ) {
-            m_si_extractor.addPidFilter((byte)(i & 0xff));
+        if ( m_si_extractor != null ) {
+            for ( int i=0; i<256; i++ ) {
+                m_si_extractor.addPidFilter((byte)(i & 0xff));
+            }
         }
     }
     
     public void removeSiAllFilter() {
-        for ( int i=0; i<256; i++ ) {
-            m_si_extractor.removePidFilter((byte)(i & 0xff));
+        if ( m_si_extractor != null ) {
+            for ( int i=0; i<256; i++ ) {
+                m_si_extractor.removePidFilter((byte)(i & 0xff));
+            }
         }
     }
     
     public void removeSiFilter(byte table_id) {
-        m_si_extractor.removePidFilter(table_id);
+        if ( m_si_extractor != null ) m_si_extractor.removePidFilter(table_id);
     }
     
     public void addNtpPidFilter(int pid) {
-        m_ntp_extractor.addPidFilter(pid);
+        if ( m_ntp_extractor != null ) m_ntp_extractor.addPidFilter(pid);
     }
     
     public void removeNtpPidFilter(int pid) {
-        m_ntp_extractor.removePidFilter(pid);
+        if ( m_ntp_extractor != null ) m_ntp_extractor.removePidFilter(pid);
     }
     
     public void addApplicationPidFilter(int pid) {
-        m_application_extractor.addPidFilter(pid);
+        if ( m_application_extractor != null ) m_application_extractor.addPidFilter(pid);
     }
     
     public void removeApplicationPidFilter(int pid) {
-        m_application_extractor.removePidFilter(pid);
+        if ( m_application_extractor != null ) m_application_extractor.removePidFilter(pid);
     }
     
     public void addGeneralPurposeDataPidFilter(int pid) {
-        m_generaldata_extractor.addPidFilter(pid);
+        if ( m_generaldata_extractor != null ) m_generaldata_extractor.addPidFilter(pid);
     }
     
     public void removeGeneralPurposeDataPidFilter(int pid) {
-        m_generaldata_extractor.removePidFilter(pid);
+        if ( m_generaldata_extractor != null ) m_generaldata_extractor.removePidFilter(pid);
     }
 
     public void enableVideoLogging() {
-        m_video_extractor.enableLogging();
+        if ( m_video_extractor != null ) m_video_extractor.enableLogging();
     }
     
     public void disableVideoLogging() {
-        m_video_extractor.disableLogging();
+        if ( m_video_extractor != null ) m_video_extractor.disableLogging();
     }
     
     public void enableVideoPreModification() {
-        m_video_extractor.enablePreModification();
+        if ( m_video_extractor != null ) m_video_extractor.enablePreModification();
     }
     
     public void disableVideoPreModification() {
-        m_video_extractor.disablePreModification();
+        if ( m_video_extractor != null ) m_video_extractor.disablePreModification();
     }
     
     public void enableAudioLogging() {
-        m_audio_extractor.enableLogging();
+        if ( m_audio_extractor != null ) m_audio_extractor.enableLogging();
     }
     
     public void disableAudioLogging() {
-        m_audio_extractor.disableLogging();
+        if ( m_audio_extractor != null ) m_audio_extractor.disableLogging();
     }
     
     public void enableAudioPreModification() {
-        m_audio_extractor.enablePreModification();
+        if ( m_audio_extractor != null ) m_audio_extractor.enablePreModification();
     }
     
     public void disableAudioPreModification() {
-        m_audio_extractor.disablePreModification();
+        if ( m_audio_extractor != null ) m_audio_extractor.disablePreModification();
     }
     
     public void enableTtmlLogging() {
-        m_ttml_extractor.enableLogging();
+        if ( m_ttml_extractor != null ) m_ttml_extractor.enableLogging();
     }
     
     public void disableTtmlLogging() {
-        m_ttml_extractor.disableLogging();
+        if ( m_ttml_extractor != null ) m_ttml_extractor.disableLogging();
     }
     
     public void enableSiLogging() {
-        m_si_extractor.enableLogging();
+        if ( m_si_extractor != null ) m_si_extractor.enableLogging();
     }
     
     public void disableSiLogging() {
-        m_si_extractor.disableLogging();
+        if ( m_si_extractor != null ) m_si_extractor.disableLogging();
     }
     
     public void enableNtpLogging() {
-        m_ntp_extractor.enableLogging();
+        if ( m_ntp_extractor != null ) m_ntp_extractor.enableLogging();
     }
     
     public void disableNtpLogging() {
-        m_ntp_extractor.disableLogging();
+        if ( m_ntp_extractor != null ) m_ntp_extractor.disableLogging();
     }
     
     public void enableApplicationLogging() {
-        m_application_extractor.enableLogging();
+        if ( m_application_extractor != null ) m_application_extractor.enableLogging();
     }
     
     public void disableAppLogging() {
-        m_application_extractor.disableLogging();
+        if ( m_application_extractor != null ) m_application_extractor.disableLogging();
     }
     
     public void enableGeneralDataLogging() {
-        m_generaldata_extractor.enableLogging();
+        if ( m_generaldata_extractor != null ) m_generaldata_extractor.enableLogging();
     }
     
     public void disableGeneralDataLogging() {
-        m_generaldata_extractor.disableLogging();
+        if ( m_generaldata_extractor != null ) m_generaldata_extractor.disableLogging();
     }
     
     public void enableVideoFilter() {
@@ -293,31 +297,38 @@ public class TlvDemultiplexer implements
     
     public boolean put(byte[] tlv_raw) {
         try {
-            if ( m_enable_video_filter == true ) {
+            if ( m_enable_video_filter == true && 
+                    m_video_extractor != null ) {
                 m_video_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_audio_filter == true ) {
+            if ( m_enable_audio_filter == true && 
+                    m_audio_extractor != null ) {
                 m_audio_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_ttml_filter == true ) {
+            if ( m_enable_ttml_filter == true && 
+                    m_ttml_extractor != null ) {
                 m_ttml_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_si_filter == true ) {
+            if ( m_enable_si_filter == true && 
+                    m_si_extractor != null ) {
                 m_si_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_ntp_filter == true ) {
+            if ( m_enable_ntp_filter == true && 
+                    m_ntp_extractor != null ) {
                 m_ntp_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_application_filter == true ) {
+            if ( m_enable_application_filter == true && 
+                    m_application_extractor != null ) {
                 m_application_extractor.putIn(tlv_raw);
             }
             
-            if ( m_enable_general_data_filter == true ) {
+            if ( m_enable_general_data_filter == true && 
+                    m_generaldata_extractor != null ) {
                 m_generaldata_extractor.putIn(tlv_raw);
             }
         } catch (InterruptedException e) {

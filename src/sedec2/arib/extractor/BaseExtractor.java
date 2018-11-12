@@ -18,7 +18,7 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.util.Logger;
 
 public abstract class BaseExtractor {
-    protected int m_sleep_micro_interval = 1;
+    protected int m_sleep_micro_interval = 100;
     protected boolean m_is_running = true;
     protected boolean m_enable_logging = false;
     protected boolean m_enable_pre_modification = true;
