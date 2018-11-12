@@ -12,6 +12,7 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.TimeUnit;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
@@ -302,7 +303,76 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         data.print();
     }
 }
+
+class ConsoleProgress {
+    private static final int PROGRESS_BAR_WIDTH=30;
+    private static long counter = 0;
+    private static long startTime = 0;
+    private static long processTime = 0;
+    private static double read_size = 0;
+    private static double total_size = 0;
+    private static double bitrate_average = 0;
+    private static StringBuilder anim_progress_bar;
+    private static char[] anim_circle = new char[]{'|', '/', '-', '\\'};
     
+    public static void start(double file_size) {
+        total_size = file_size;
+        startTime = System.currentTimeMillis();
+        processTime = System.currentTimeMillis();
+        
+    }
+    
+    private static String formatInterval(final long l) {
+        final long hr = TimeUnit.MILLISECONDS.toHours(l);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - 
+                TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - 
+                TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
+    }
+    
+    private static String getProgressBar(double percent) {
+        int bars = (int)(percent * PROGRESS_BAR_WIDTH / 100);
+        anim_progress_bar = new StringBuilder(PROGRESS_BAR_WIDTH);
+        anim_progress_bar.append("[");
+        for ( int i=0; i<bars; i++ ) {
+            anim_progress_bar.append("=");
+        }
+        for ( int i=PROGRESS_BAR_WIDTH-bars; i>0; i-- ) {
+            anim_progress_bar.append(" ");
+        }
+        anim_progress_bar.append("]");
+        return anim_progress_bar.toString();
+    }
+    
+    public static void update(int read) throws Exception {
+        counter+=1;
+        read_size += read;
+
+        System.out.print(String.format(" TLV : %d ", counter));
+        
+        System.out.print(String.format("%s ", 
+                getProgressBar((double)(read_size / total_size) * 100)));
+
+        System.out.print("\033[1;31m" + 
+                String.format("%.2f %% ", (double)(read_size / total_size) * 100) + "\u001B[0m");
+        
+        System.out.print(anim_circle[(int) (counter%4)] + " "); 
+        
+        bitrate_average += (((double) (1000 * read ) / 
+                (double)((System.currentTimeMillis()-processTime) )) * 
+                8) / 1024 / 1024;
+        System.out.print(String.format("%4.2fMbps ", bitrate_average/counter)); 
+        processTime = System.currentTimeMillis();
+        
+        System.out.print(String.format("(%.2f MBytes) ", (double)(read_size/1024/1024)));
+        
+        System.out.print(String.format("%s \r", 
+                formatInterval(System.currentTimeMillis()-startTime)));
+    }
+}
+
 /**
  * TlvPacketDecoder is an example for getting 
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
@@ -334,11 +404,11 @@ public class TlvPacketDecoder {
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                final long COUNT_OF_SAMPLES = 10000000;    
+                
+                ConsoleProgress.start(dataInputStream.available());
+                
                 final int TLV_HEADER_LENGTH = 4;
-                long sample_counter = 0;
-                double file_size = dataInputStream.available();
-                double read_size = 0;
+                
                 while ( dataInputStream.available() > 0) {
                     /**
                      * @note Assume.2 Making a packet of TLV which has a sync byte as beginning
@@ -365,22 +435,8 @@ public class TlvPacketDecoder {
                         break;
                     }
                     outputStream = null;
-                    Thread.sleep(1);
-                    
-                    /**
-                     * @note From here it's decoration to check counter and progress on console
-                     */
-                    if ( sample_counter++ > COUNT_OF_SAMPLES ) {
-                        System.out.print(String.format(
-                                "TLV Packet counter is over %d \n", COUNT_OF_SAMPLES));
-                        break;
-                    }
-                    
-                    read_size += tlv_raw.length;
-                    double process_percentage = (double)(read_size / file_size) * 100;
-                    System.out.print("\033[1;31m" + 
-                            String.format("Processing : %.2f %% \r", process_percentage) + 
-                            "\u001B[0m");
+                    Thread.sleep(0, 1);
+                    ConsoleProgress.update(tlv_raw.length);
                 }
                 
                 dataInputStream.close();

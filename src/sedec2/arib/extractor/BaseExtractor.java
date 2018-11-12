@@ -18,10 +18,11 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.util.Logger;
 
 public abstract class BaseExtractor {
+    protected int m_sleep_micro_interval = 1;
     protected boolean m_is_running = true;
     protected boolean m_enable_logging = false;
     protected boolean m_enable_pre_modification = true;
-
+    
     protected List<Listener> m_listeners = new ArrayList<>();
     protected List<Byte> m_byte_id_filter = new ArrayList<>();
     protected List<Integer> m_int_id_filter = new ArrayList<>();
@@ -61,7 +62,7 @@ public abstract class BaseExtractor {
                 
                 while ( m_is_running ) {
                     try {
-                        Thread.sleep(1);
+                        Thread.sleep(0, 1);
                         if ( null != m_tlv_packets ) {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
@@ -101,6 +102,10 @@ public abstract class BaseExtractor {
         
         m_listeners.clear();
         m_listeners = null;
+    }
+    
+    public void setThreadInterval(int micro_sec) {
+        m_sleep_micro_interval = micro_sec;
     }
     
     public void addEventListener(BaseExtractor.Listener listener) {
