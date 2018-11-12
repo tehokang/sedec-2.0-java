@@ -414,7 +414,7 @@ public class TlvPacketDecoder {
         }
         
         SimpleTlvCoordinator tlv_coordinator = new SimpleTlvCoordinator();
-        ByteArrayOutputStream outputStream = null;
+        ByteArrayOutputStream output_stream = null;
         /**
          * @note Assume.1 Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
@@ -423,42 +423,42 @@ public class TlvPacketDecoder {
             File tlv_file = new File(args[i]);
             
             try {
-                DataInputStream dataInputStream  = 
+                DataInputStream input_stream  = 
                         new DataInputStream(
                                 new BufferedInputStream(new FileInputStream(tlv_file)));
-                ConsoleProgress.start(dataInputStream.available());
+                ConsoleProgress.start(input_stream.available());
                 final int TLV_HEADER_LENGTH = 4;
                 
-                while ( dataInputStream.available() > 0) {
+                while ( input_stream.available() > 0) {
                     /**
                      * @note Assume.2 Making a packet of TLV which has a sync byte as beginning
                      * In other words, user should put a perfect TLV packet with sync byte into. 
                      */
                     byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
-                    dataInputStream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
+                    input_stream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
                     
                     byte[] tlv_payload_buffer = 
                             new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
-                    dataInputStream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
+                    input_stream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
 
-                    outputStream = new ByteArrayOutputStream();
-                    outputStream.write(tlv_header_buffer);
-                    outputStream.write(tlv_payload_buffer);
+                    output_stream = new ByteArrayOutputStream();
+                    output_stream.write(tlv_header_buffer);
+                    output_stream.write(tlv_payload_buffer);
 
                     /**
                      * @note Step.3 Putting a TLV packet into TLVExtractor \n
                      * and you can wait for both the results of TLV as table of MPEG2 and MFU
                      */
-                    byte[] tlv_raw = outputStream.toByteArray();
-                    if ( false == tlv_coordinator.put(tlv_raw) ) {
+                    byte[] tlv_packet = output_stream.toByteArray();
+                    if ( false == tlv_coordinator.put(tlv_packet) ) {
                         System.out.println("Oops, they have problem to decode TLV ");
                         break;
                     }
-                    ConsoleProgress.update(tlv_raw.length);
+                    ConsoleProgress.update(tlv_packet.length);
+                    output_stream = null;
                     Thread.sleep(0, 1);
-                    outputStream = null;
                 }
-                dataInputStream.close();
+                input_stream.close();
             } catch (Exception e) {
                 e.printStackTrace();
                 break;
