@@ -308,6 +308,10 @@ class ConsoleProgress {
         processTime = System.currentTimeMillis();
     }
     
+    public static void stop() {
+        total_size = 0;
+    }
+    
     private static String formatInterval(final long l) {
         final long hr = TimeUnit.MILLISECONDS.toHours(l);
         final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
@@ -461,12 +465,12 @@ public class TlvPacketDecoder {
         for ( int i=0; i<args.length; i++ ) {
             TlvFileReader tlv_file_pumper = new TlvFileReader(args[i]);
             if ( false == tlv_file_pumper.open() ) continue;
-            ConsoleProgress.start(tlv_file_pumper.filesize());
             
             /**
              * @note Putting a TLV packet into TLVExtractor \n
              * and you can wait for both the results of TLV as table of MPEG2 and MFU
              */
+            ConsoleProgress.start(tlv_file_pumper.filesize());
             while ( tlv_file_pumper.readable() ) {
                 byte[] tlv_packet = tlv_file_pumper.readPacket();
                 if ( tlv_packet.length == 0 || 
@@ -474,6 +478,7 @@ public class TlvPacketDecoder {
                 Thread.sleep(0, 1);
                 ConsoleProgress.update(tlv_packet.length);
             }
+            ConsoleProgress.stop();
         }
         /**
          * @note Destroy of TLVExtractor to not handle and released by garbage collector
