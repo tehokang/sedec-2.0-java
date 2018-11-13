@@ -21,7 +21,7 @@ public class LinkedDescriptionTable extends Table {
     protected int original_network_id;
     protected List<LinkedDescription> linked_descriptions = new ArrayList<>();
     
-    class LinkedDescription {
+    public class LinkedDescription {
         public int description_id;
         public int descriptors_loop_length;
         public List<Descriptor> descriptors = new ArrayList<>();
@@ -33,6 +33,38 @@ public class LinkedDescriptionTable extends Table {
         __decode_table_body__();
     }
 
+    public int getOriginalServiceId() {
+        return original_service_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getTransportStreamId() {
+        return transport_stream_id;
+    }
+    
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public List<LinkedDescription> getLinkedDescriptions() {
+        return linked_descriptions;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         original_service_id = readOnBuffer(16);

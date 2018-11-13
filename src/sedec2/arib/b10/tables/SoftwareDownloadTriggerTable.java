@@ -23,7 +23,7 @@ public class SoftwareDownloadTriggerTable extends Table {
     protected byte num_of_contents;
     protected List<Content> contents = new ArrayList<>();
     
-    class Content {
+    public class Content {
         public byte group;
         public int target_version;
         public int new_version;
@@ -36,7 +36,7 @@ public class SoftwareDownloadTriggerTable extends Table {
         List<Descriptor> descriptors = new ArrayList<>();
     }
     
-    class Schedule {
+    public class Schedule {
         public long start_time;
         public int duration;
     }
@@ -47,6 +47,46 @@ public class SoftwareDownloadTriggerTable extends Table {
         __decode_table_body__();
     }
 
+    public int getTableIdExt() {
+        return table_id_ext;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getTransportStreamId() {
+        return transport_stream_id;
+    }
+    
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public int getServiceId() {
+        return service_id;
+    }
+    
+    public byte getNumOfContents() {
+        return num_of_contents;
+    }
+    
+    public List<Content> getContents() {
+        return contents;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         table_id_ext = readOnBuffer(16);

@@ -23,6 +23,34 @@ public class IndexTransmissionTable extends Table {
         __decode_table_body__();
     }
 
+    public int getEventId() {
+        return event_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getDescriptorsLoopLength() {
+        return descriptors_loop_length;
+    }
+    
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         event_id = readOnBuffer(16);

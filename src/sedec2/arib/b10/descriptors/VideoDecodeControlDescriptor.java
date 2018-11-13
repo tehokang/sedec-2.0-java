@@ -17,6 +17,18 @@ public class VideoDecodeControlDescriptor extends Descriptor {
         brw.skipOnBuffer(2);
     }
 
+    public byte getStillPictureFlag() {
+        return still_picture_flag;
+    }
+    
+    public byte getSequenceEndCodeFlag() {
+        return sequence_end_code_flag;
+    }
+    
+    public byte getVideoEncodeFormat() {
+        return video_encode_format;
+    }
+    
     @Override
     public void print() {
         super._print_();

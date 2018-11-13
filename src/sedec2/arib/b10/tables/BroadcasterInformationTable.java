@@ -22,7 +22,7 @@ public class BroadcasterInformationTable extends Table {
     protected List<Descriptor> descriptors = new ArrayList<>();
     protected List<Broadcaster> broadcasters = new ArrayList<>();
     
-    class Broadcaster {
+    public class Broadcaster {
         public byte broadcaster_id;
         public int broadcaster_descriptors_length;
         public List<Descriptor> descriptors = new ArrayList<>();
@@ -34,6 +34,42 @@ public class BroadcasterInformationTable extends Table {
         __decode_table_body__();
     }
 
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public byte getBroadcastViewPriority() {
+        return broadcast_view_priority;
+    }
+    
+    public int getFirstDescriptorsLength() {
+        return first_descriptors_length;
+    }
+    
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+    
+    public List<Broadcaster> getBroadcasters() {
+        return broadcasters;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         original_network_id = readOnBuffer(16);

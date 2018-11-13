@@ -22,6 +22,18 @@ public class ParentalRatingDescriptor extends Descriptor {
         }
     }
 
+    public byte[] getCountryCode() {
+        return country_code;
+    }
+    
+    public byte getRating() {
+        return rating;
+    }
+    
+    public int getParentRatingCount() {
+        return parent_rating_count;
+    }
+    
     @Override
     protected void updateDescriptorLength() {
         descriptor_length = parent_rating_count * 4;

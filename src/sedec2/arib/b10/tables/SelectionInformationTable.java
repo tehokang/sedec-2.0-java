@@ -17,7 +17,7 @@ public class SelectionInformationTable extends Table {
     protected List<Descriptor> descriptors = new ArrayList<>();
     protected List<Service> services = new ArrayList<>();
     
-    class Service {
+    public class Service {
         public int service_id;
         public byte running_status;
         public int service_loop_length;
@@ -30,6 +30,34 @@ public class SelectionInformationTable extends Table {
         __decode_table_body__();
     }
 
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getTransmissionInfoLoopLength() {
+        return transmission_info_loop_length;
+    }
+    
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+    
+    public List<Service> getServices() {
+        return services;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         skipOnBuffer(16);

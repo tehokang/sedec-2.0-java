@@ -22,6 +22,10 @@ public class StuffingTable extends Table {
         }
     }
 
+    public byte[] getDataByte() {
+        return data_byte;
+    }
+    
     @Override
     public void print() {
         super.print();

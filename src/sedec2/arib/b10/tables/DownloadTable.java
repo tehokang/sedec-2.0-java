@@ -21,6 +21,33 @@ public class DownloadTable extends Table {
         __decode_table_body__();
     }
 
+    public byte getMakerId() {
+        return maker_id;
+    }
+    
+    public byte getModelId() {
+        return model_id;
+    }
+    
+    public byte getVersionId() {
+        return version_id;
+    }
+    
+    public int getSectionNumber() {
+        return section_number;
+    }
+    
+    public int getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public byte[] getModelInfo() {
+        return model_info;
+    }
+    public byte[] getCodeDataByte() {
+        return code_data_byte;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         maker_id = (byte) readOnBuffer(8);

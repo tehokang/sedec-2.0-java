@@ -15,7 +15,7 @@ public class DigitalCopyControlDescriptor extends Descriptor {
     protected byte component_control_length;
     protected List<ComponentControl> component_controls = new ArrayList<>();
     
-    class ComponentControl {
+    public class ComponentControl {
         public byte component_tag;
         public byte digital_recording_control_data;
         public byte maximum_bitrate_flag;

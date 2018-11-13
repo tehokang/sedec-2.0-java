@@ -21,6 +21,18 @@ public class ConditionalAccessDescriptor extends Descriptor {
         }
     }
 
+    public int getCASystemId() {
+        return CA_system_ID;
+    }
+    
+    public int getCAPid() {
+        return CA_PID;
+    }
+    
+    public byte[] getPrivateDataByte() {
+        return private_data_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

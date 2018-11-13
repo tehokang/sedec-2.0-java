@@ -25,6 +25,18 @@ public class SimpleApplicationBoundaryDescriptor extends Descriptor {
         }
     }
 
+    public byte getBoundaryExtensionCount() {
+        return boundary_extension_count;
+    }
+    
+    public byte[] getBoundaryExtensionLength() {
+        return boundary_extension_length;
+    }
+    
+    public byte[][] getBoundaryExtensionByte() {
+        return boundary_extension_byte ;
+    }
+    
     @Override
     protected void updateDescriptorLength() {
         descriptor_length=1;

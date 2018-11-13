@@ -18,6 +18,14 @@ public class DataComponentDescriptor extends Descriptor {
         }
     }
 
+    public int getDataComponentId() {
+        return data_component_id;
+    }
+    
+    public byte[] getAdditionalDtaComponentInfo() {
+        return additional_dta_component_info;
+    }
+    
     @Override
     public void print() {
         super._print_();

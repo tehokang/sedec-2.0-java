@@ -12,6 +12,10 @@ public class StreamIdentifierDescriptor extends Descriptor {
         component_tag = (byte) brw.readOnBuffer(8);
     }
 
+    public byte getComponentTag() {
+        return component_tag;
+    }
+    
     @Override
     public void print() {
         super._print_();

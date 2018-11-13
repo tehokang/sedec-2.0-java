@@ -18,6 +18,10 @@ public class DiscontinuityInformationTable extends Table {
         skipOnBuffer(7);
     }
 
+    public byte getTransitionFlag() {
+        return transition_flag;
+    }
+    
     @Override
     public void print() {
         super.print();

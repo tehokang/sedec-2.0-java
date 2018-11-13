@@ -19,7 +19,7 @@ public class ProgramMapTable extends Table {
     List<Descriptor> descriptors = new ArrayList<>();
     List<Program> programs = new ArrayList<>();
     
-    class Program {
+    public class Program {
         public byte stream_type;
         public int elementary_PID;
         public int ES_info_length;
@@ -32,6 +32,42 @@ public class ProgramMapTable extends Table {
         __decode_table_body__();
     }
 
+    public int getProgramNumber() {
+        return program_number;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getPcrPid() {
+        return PCR_PID;
+    }
+    
+    public int getProgramInfoLength() {
+        return program_info_length;
+    }
+    
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+    
+    public List<Program> getPrograms() {
+        return programs;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         program_number = readOnBuffer(16);

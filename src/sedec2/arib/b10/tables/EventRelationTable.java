@@ -21,7 +21,7 @@ public class EventRelationTable extends Table {
     protected byte relation_type;
     protected List<EventRelation> event_relations = new ArrayList<>();
     
-    class EventRelation {
+    public class EventRelation {
         public int node_id;
         public byte collection_mode;
         public int parent_node_id;
@@ -37,6 +37,38 @@ public class EventRelationTable extends Table {
         __decode_table_body__();
     }
 
+    public int getEventRelationId() {
+        return event_relation_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getInformationProviderId() {
+        return information_provider_id;
+    }
+    
+    public byte getRelationType() {
+        return relation_type;
+    }
+    
+    public List<EventRelation> getEventRelations() {
+        return event_relations;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         event_relation_id = readOnBuffer(16);

@@ -22,7 +22,7 @@ public class BouquetAssociationTable extends Table {
     protected int transport_stream_loop_length;
     protected List<TransportStream> transport_streams = new ArrayList<>();
     
-    class TransportStream {
+    public class TransportStream {
         public int transport_stream_id;
         public int original_network_id;
         public int transport_descriptors_length;
@@ -35,6 +35,42 @@ public class BouquetAssociationTable extends Table {
         __decode_table_body__();
     }
 
+    public int getBouquetId() {
+        return bouquet_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getBouquetDescriptorsLength() {
+        return bouquet_descriptors_length;
+    }
+    
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+    
+    public int getTransportStreamLoopLength() {
+        return transport_stream_loop_length;
+    }
+    
+    public List<TransportStream> getTransportStreams() {
+        return transport_streams;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         bouquet_id = readOnBuffer(16);

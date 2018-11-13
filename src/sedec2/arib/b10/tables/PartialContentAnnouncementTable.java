@@ -23,7 +23,7 @@ public class PartialContentAnnouncementTable extends Table {
     protected byte num_of_content_version;
     protected List<ContentVersion> content_versions = new ArrayList<>();
     
-    class ContentVersion {
+    public class ContentVersion {
         public int content_version;
         public int content_minor_version;
         public byte version_indicator;
@@ -33,7 +33,7 @@ public class PartialContentAnnouncementTable extends Table {
         public List<Descriptor> descriptors = new ArrayList<>();
     }
     
-    class Schedule {
+    public class Schedule {
         public long start_time;
         public long duration;
     }
@@ -44,6 +44,45 @@ public class PartialContentAnnouncementTable extends Table {
         __decode_table_body__();
     }
 
+    public int getServiceId() {
+        return service_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public int getTransportStreamId() {
+        return transport_stream_id;
+    }
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public int getContentId() {
+        return content_id;
+    }
+    
+    public byte getNumOfContentVersion() {
+        return num_of_content_version;
+    }
+    
+    public List<ContentVersion> getContentVersions() {
+        return content_versions;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         service_id = readOnBuffer(16);

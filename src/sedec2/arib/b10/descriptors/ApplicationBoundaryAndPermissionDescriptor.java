@@ -31,6 +31,26 @@ public class ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
         }
     }
 
+    public byte getPermissionBitmapCount() {
+        return permission_bitmap_count;
+    }
+    
+    public int[] getPermissionBitmap() {
+        return permission_bitmap;
+    }
+    
+    public byte getManagedURLCount() {
+        return managed_URL_count;
+    }
+    
+    public byte[] getManagedURLlength() {
+        return managed_URL_length;
+    }
+    
+    public byte[][] getManagedURLByte() {
+        return managed_URL_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

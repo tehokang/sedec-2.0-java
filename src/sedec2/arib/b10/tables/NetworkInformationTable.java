@@ -19,7 +19,7 @@ public class NetworkInformationTable extends Table {
     protected int transport_stream_loop_length;
     protected List<TransportStream> transport_streams = new ArrayList<>();
     
-    class TransportStream {
+    public class TransportStream {
         public int transport_stream_id;
         public int original_network_id;
         public int transport_descriptors_length;

@@ -19,7 +19,7 @@ public class NetworkBoardInformationTable extends Table {
     protected byte last_section_number;
     protected List<BoardInformation> board_informations = new ArrayList<>();
     
-    class BoardInformation {
+    public class BoardInformation {
         public int information_id;
         public byte information_type;
         public byte description_body_location;
@@ -36,6 +36,30 @@ public class NetworkBoardInformationTable extends Table {
         __decode_table_body__();
     }
 
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    
+    public List<BoardInformation> getBoardInformations() {
+        return board_informations;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         original_network_id = readOnBuffer(16);

@@ -22,7 +22,7 @@ public class LocalEventInformationTable extends Table {
     protected int original_network_id;
     protected List<LocalEvent> local_events = new ArrayList<>();
     
-    class LocalEvent {
+    public class LocalEvent {
         public int local_event_id;
         public int descriptors_loop_length;
         public List<Descriptor> descriptors = new ArrayList<>();
@@ -34,6 +34,41 @@ public class LocalEventInformationTable extends Table {
         __decode_table_body__();
     }
 
+    public int getEventId() {
+        return event_id;
+    }
+    
+    public byte getVersionNumber() {
+        return version_number;
+    }
+    
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+    
+    public byte getSectionNumber() {
+        return section_number;
+    }
+    
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+    public int getServiceId() {
+        return service_id;
+    }
+    
+    public int getTransportStreamId() {
+        return transport_stream_id;
+    }
+    
+    public int getOriginalNetworkId() {
+        return original_network_id;
+    }
+    
+    public List<LocalEvent> getLocalEvents() {
+        return local_events;
+    }
+    
     @Override
     protected void __decode_table_body__() {
         event_id = readOnBuffer(16);
