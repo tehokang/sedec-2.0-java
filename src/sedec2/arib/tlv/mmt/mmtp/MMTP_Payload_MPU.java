@@ -26,6 +26,18 @@ public class MMTP_Payload_MPU {
         public byte dependency_counter;
         public int item_id;
         public byte[] MFU_data_byte;
+        
+        public void print() {
+            Logger.d(String.format("data_unit_length : 0x%x (%d) \n", 
+                    data_unit_length, data_unit_length));
+            Logger.d(String.format("movie_fragment_sequence_number : 0x%x \n", 
+                    movie_fragment_sequence_number));
+            Logger.d(String.format("sample_number : 0x%d \n", sample_number));
+            Logger.d(String.format("offset : 0x%x (%d) \n", offset, offset));
+            Logger.d(String.format("item_id : 0x%x \n", item_id));
+            Logger.d(String.format("MFU_data_byte.length : 0x%x (%d) \n", 
+                    MFU_data_byte.length, MFU_data_byte.length)); 
+        }
     }
     
     public MMTP_Payload_MPU(BitReadWriter brw) {
