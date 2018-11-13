@@ -127,13 +127,13 @@ public class ApplicationExtractor extends BaseExtractor {
                             }
                         }
                         
+                        int packet_id = mmtp_packet.getPacketId();
+                        int mpu_sequence_number = mmtp_packet.getMPU().getMPUSequenceNumber();
                         List<MFU> mfus = mmtp_packet.getMPU().getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
                             int item_id = mfus.get(i).item_id;
                             putOut(new QueueData(
-                                    mmtp_packet.getPacketId(), 
-                                    item_id, 
-                                    mmtp_packet.getMPU().getMPUSequenceNumber(), 
+                                    packet_id, item_id, mpu_sequence_number, 
                                     item_id == 0x0 && is_index_item ? true : false, 
                                     samples.get(i).toByteArray() ));
                         }
