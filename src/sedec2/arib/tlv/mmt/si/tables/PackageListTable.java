@@ -15,13 +15,13 @@ public class PackageListTable extends Table {
     protected byte num_of_ip_delivery;
     protected List<Delivery> deliveries = new ArrayList<>();
     
-    class Package {
+    public class Package {
         public byte MMT_package_id_length;
         public byte [] MMT_package_id_byte;
         public MMTGeneralLocationInfo MMT_general_location_info;
     }
     
-    class Delivery {
+    public class Delivery {
         public int transport_file_id;
         public byte location_type;
         public IPv4 ipv4 = new IPv4();
@@ -32,13 +32,13 @@ public class PackageListTable extends Table {
         public List<Descriptor> descriptors = new ArrayList<>();
     }
     
-    class IPv4 {
+    public class IPv4 {
         public byte[] src_addr = new byte[4];
         public byte[] dst_addr = new byte[4];
         public int dst_port;
     }
     
-    class IPv6 {
+    public class IPv6 {
         public byte[] src_addr = new byte[16];
         public byte[] dst_addr = new byte[16];
         public int dst_port;

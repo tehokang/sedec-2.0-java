@@ -10,7 +10,6 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public class MH_ApplicationInformationTable extends Table {
-
     protected int application_type;
     protected int version_number;
     protected int current_next_indicator;

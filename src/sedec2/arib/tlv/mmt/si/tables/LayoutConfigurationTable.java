@@ -17,14 +17,14 @@ public class LayoutConfigurationTable extends Table {
     protected List<Layout> layouts = new ArrayList<>();
     protected List<Descriptor> descriptors = new ArrayList<>();
     
-    class Layout {
+    public class Layout {
         public byte layout_number;
         public byte device_id;
         public byte number_of_region;
         List<Region> regions = new ArrayList<>();
     }
     
-    class Region {
+    public class Region {
         public byte region_number;
         public byte left_top_pos_x;
         public byte left_top_pos_y;

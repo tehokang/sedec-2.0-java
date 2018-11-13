@@ -13,38 +13,38 @@ public class MMTGeneralLocationInfo {
     protected LocationType0x05 type5 = new LocationType0x05();
     protected int length = 0;
     
-    class LocationType0x00 {
+    public class LocationType0x00 {
         public int packet_id;
     }
     
-    class LocationType0x01 {
+    public class LocationType0x01 {
         public byte[] ipv4_src_addr = new byte[4];
         public byte[] ipv4_dst_addr = new byte[4];
         public int dst_port;
         public int packet_id;
     }
     
-    class LocationType0x02 {
+    public class LocationType0x02 {
         public byte[] ipv6_src_addr = new byte[16];
         public byte[] ipv6_dst_addr = new byte[16];
         public int dst_port;
         public int packet_id;
     }
     
-    class LocationType0x03 {
+    public class LocationType0x03 {
         public int network_id;
         public int MPEG_2_transport_stream_id;
         public int MPEG_2_PID;
     }
     
-    class LocationType0x04 {
+    public class LocationType0x04 {
         public byte[] ipv6_src_addr = new byte[16];
         public byte[] ipv6_dst_addr = new byte[16];
         public int dst_port;
         public int MPEG_2_PID;
     }
     
-    class LocationType0x05 {
+    public class LocationType0x05 {
         public byte URL_length;
         public byte[] URL_byte;
     }
@@ -102,6 +102,38 @@ public class MMTGeneralLocationInfo {
                 break;
         }
         length += 1; /* location_type 1 byte */
+    }
+    
+    public byte getLocationType() {
+        return location_type;
+    }
+    
+    public LocationType0x00 getType0() {
+        return type0;
+    }
+    
+    public LocationType0x01 getType1() {
+        return type1;
+    }
+    
+    public LocationType0x02 getType2() {
+        return type2;
+    }
+    
+    public LocationType0x03 getType3() {
+        return type3;
+    }
+    
+    public LocationType0x04 getType4() {
+        return type4;
+    }
+    
+    public LocationType0x05 getType5() {
+        return type5;
+    }
+    
+    public int getLength() {
+        return length;
     }
     
     public void print() {
@@ -183,37 +215,5 @@ public class MMTGeneralLocationInfo {
                 Logger.d(String.format("\t type5.URL_byte : %s \n", new String(type5.URL_byte)));
                 break;
         }
-    }
-    
-    public byte getLocationType() {
-        return location_type;
-    }
-    
-    public LocationType0x00 getType0() {
-        return type0;
-    }
-    
-    public LocationType0x01 getType1() {
-        return type1;
-    }
-    
-    public LocationType0x02 getType2() {
-        return type2;
-    }
-    
-    public LocationType0x03 getType3() {
-        return type3;
-    }
-    
-    public LocationType0x04 getType4() {
-        return type4;
-    }
-    
-    public LocationType0x05 getType5() {
-        return type5;
-    }
-    
-    public int getLength() {
-        return length;
     }
 }

@@ -9,7 +9,6 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public class MH_CommonDataTable extends Table {
-
     protected int download_data_id;
     protected byte version_number;
     protected byte current_next_indicator;

@@ -23,7 +23,7 @@ public class MH_SoftwareDownloadTriggerTable extends Table {
     protected byte num_of_contents;
     protected List<Content> contents = new ArrayList<>();
     
-    class Content {
+    public class Content {
         public byte group;
         public int target_version;
         public int new_version;
