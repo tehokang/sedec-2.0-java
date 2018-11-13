@@ -13,7 +13,7 @@ public class MPU_ExtendedTimestampDescriptor extends Descriptor {
     protected int default_pts_offset;
     protected List<Timestamp> timestamps = new ArrayList<>();
     
-    class Timestamp {
+    public class Timestamp {
         public int mpu_sequence_number;
         public byte mpu_presentation_time_leap_indicator;
         public int mpu_decoding_time_offset;
@@ -21,7 +21,7 @@ public class MPU_ExtendedTimestampDescriptor extends Descriptor {
         public List<AccessUnit> access_units = new ArrayList<>();
     }
     
-    class AccessUnit {
+    public class AccessUnit {
         public int dts_pts_offset;
         public int pts_offset;
     }
@@ -68,6 +68,26 @@ public class MPU_ExtendedTimestampDescriptor extends Descriptor {
         }
     }
 
+    public byte getPtsOffsetType() {
+        return pts_offset_type;
+    }
+    
+    public byte getTimescaleFlag() {
+        return timescale_flag;
+    }
+    
+    public int getTimeScale() {
+        return timescale;
+    }
+    
+    public int getDefaultPtsOffset() {
+        return default_pts_offset;
+    }
+    
+    public List<Timestamp> getTimestamps() {
+        return timestamps;
+    }
+    
     @Override
     public void print() {
         super._print_();

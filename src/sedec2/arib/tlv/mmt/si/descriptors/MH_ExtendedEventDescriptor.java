@@ -15,7 +15,7 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
     protected int text_length;
     protected byte[] text_char;
     
-    class Item {
+    public class Item {
         public byte item_description_length;
         public byte[] item_description_char;
         public int item_length;
@@ -62,6 +62,34 @@ public class MH_ExtendedEventDescriptor extends Descriptor {
         }
     }
 
+    public byte getDescriptorNumber() {
+        return descriptor_number;
+    }
+    
+    public byte getLastDescriptorNumber() {
+        return last_descriptor_number;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code;
+    }
+    
+    public int getLengthOfItems() {
+        return length_of_items;
+    }
+    
+    public List<Item> getItems() {
+        return items;
+    }
+    
+    public int getTextLength() {
+        return text_length;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

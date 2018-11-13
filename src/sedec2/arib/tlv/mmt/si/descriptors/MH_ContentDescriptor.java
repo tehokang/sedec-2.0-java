@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class MH_ContentDescriptor extends Descriptor {
     protected List<Content> contents = new ArrayList<>();
     
-    class Content {
+    public class Content {
         public byte content_nibble_level_1;
         public byte content_nibble_level_2;
         public byte user_nibble_1;

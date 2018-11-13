@@ -43,6 +43,38 @@ public class EventMessageDescriptor extends Descriptor {
         }
     }
 
+    public int getEventMsgGroupId() {
+        return event_msg_group_id;
+    }
+    
+    public byte getTimeMode() {
+        return time_mode;
+    }
+    
+    public long getEventMsgUTC() {
+        return event_msg_UTC;
+    }
+    
+    public long getEventMsgNPT() {
+        return event_msg_NPT;
+    }
+    
+    public long getEventMsgRelativeTime() {
+        return event_msg_relativeTime;
+    }
+    
+    public byte getEventMsgType() {
+        return event_msg_type;
+    }
+    
+    public int getEventMsgId() {
+        return event_msg_id;
+    }
+    
+    public byte[] getPrivateData() {
+        return private_data_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -8,7 +8,6 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
 public class Application {
-
     private int organization_id;
     private int application_id;
     private int application_control_code;

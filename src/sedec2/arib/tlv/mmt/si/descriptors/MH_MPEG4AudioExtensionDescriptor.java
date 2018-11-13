@@ -28,6 +28,26 @@ public class MH_MPEG4AudioExtensionDescriptor extends Descriptor {
         }
     }
 
+    public byte getASCFlag() {
+        return ASC_flag;
+    }
+    
+    public byte getNumOfLoops() {
+        return num_of_loops;
+    }
+    
+    public byte[] getAudioProfileLevelIndication() {
+        return audioProfileLevelIndication;
+    }
+    
+    public byte getASCSize() {
+        return ASC_size;
+    }
+    
+    public AudioSpecificConfig getAudioSpecificConfig() {
+        return audioSpecificConfig;
+    }
+    
     @Override
     public void print() {
         super._print_();

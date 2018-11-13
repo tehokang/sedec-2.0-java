@@ -14,12 +14,12 @@ public class MH_EventGroupDescriptor extends Descriptor {
     protected List<Group> groups = new ArrayList<>();
     protected byte[] private_data_byte;
     
-    class Event {
+    public class Event {
         public int service_id;
         public int event_id;
     }
     
-    class Group {
+    public class Group {
         public int original_network_id;
         public int tlv_stream_id;
         public int service_id;
@@ -57,6 +57,26 @@ public class MH_EventGroupDescriptor extends Descriptor {
         }
     }
 
+    public byte getGroupType() {
+        return group_type;
+    }
+    
+    public byte getEventCount() {
+        return event_count;
+    }
+    
+    public List<Event> getEvents() {
+        return events;
+    }
+    
+    public List<Group> getGroups() {
+        return groups;
+    }
+    
+    public byte[] getPrivateDataByte() {
+        return private_data_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -29,6 +29,26 @@ public class MH_ServiceDescriptor extends Descriptor {
         }
     }
 
+    public byte getServiceType() {
+        return service_type;
+    }
+    
+    public byte getServiceProviderNameLength() {
+        return service_provider_name_length;
+    }
+    
+    public byte[] getServiceProviderName() {
+        return service_provider_name;
+    }
+    
+    public byte getServiceNameLength() {
+        return service_name_length;
+    }
+    
+    public byte[] getServiceName() {
+        return service_name;
+    }
+    
     @Override
     public void print() {
         super._print_();

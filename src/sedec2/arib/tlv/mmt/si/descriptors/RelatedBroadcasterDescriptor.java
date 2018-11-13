@@ -15,7 +15,7 @@ public class RelatedBroadcasterDescriptor extends Descriptor {
     protected byte[] affiliation_id;
     protected int[] original_network_id;
     
-    class BroadcasterId {
+    public class BroadcasterId {
         public int network_id;
         public byte broadcaster_id;
     }
@@ -45,6 +45,30 @@ public class RelatedBroadcasterDescriptor extends Descriptor {
         for ( int i=0; i<num_of_original_network_id; i++ ) {
             original_network_id[i] = brw.readOnBuffer(16);
         }
+    }
+    
+    public byte getNumOfBroadcasterId() {
+        return num_of_broadcaster_id;
+    }
+    
+    public byte getNumOfAffiliationId() {
+        return num_of_affiliation_id;
+    }
+    
+    public byte getNumOfOriginalNetworkId() {
+        return num_of_original_network_id;
+    }
+
+    public List<BroadcasterId> getBroadcasterIds() {
+        return broadcaster_ids;
+    }
+    
+    public byte[] getAffiliationId() {
+        return affiliation_id;
+    }
+    
+    public int[] getOriginalNetworkId() {
+        return original_network_id;
     }
     
     @Override

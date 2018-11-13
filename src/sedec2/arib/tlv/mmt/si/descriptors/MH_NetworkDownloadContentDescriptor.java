@@ -29,12 +29,12 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
     protected byte text_length;
     protected byte[] text_char;
     
-    class IPv4 {
+    public class IPv4 {
         public byte[] address = new byte[4];
         public int port_number;   
     }
     
-    class IPv6 {
+    public class IPv6 {
         public byte[] address = new byte[16];
         public int port_number;   
     }
@@ -100,6 +100,86 @@ public class MH_NetworkDownloadContentDescriptor extends Descriptor {
         }
     }
 
+    public byte getReboot() {
+        return reboot;
+    }
+    
+    public byte getAddOn() {
+        return add_on;
+    }
+    
+    public byte getCompatibilityFlag() {
+        return compatibility_flag;
+    }
+    
+    public byte getTextInfoFlag() {
+        return text_info_flag;
+    }
+    
+    public int getComponentSize() {
+        return component_size;
+    }
+    
+    public byte getSessionProtocolNumber() {
+        return session_protocol_number;
+    }
+    
+    public int getSessionId() {
+        return session_id;
+    }
+    
+    public byte getRetry() {
+        return retry;
+    }
+    
+    public int getConnectTimer() {
+        return connect_timer;
+    }
+    
+    public byte getAddressType() {
+        return address_type;
+    }
+    
+    public IPv4 getIpv4() {
+        return ipv4;
+    }
+    
+    public IPv6 getIpv6() {
+        return ipv6;
+    }
+    
+    public byte getURLLength() {
+        return URL_length;
+    }
+    
+    public byte[] getURLByte() {
+        return URL_byte;
+    }
+    
+    public Descriptor getCompatibilityDescriptor() {
+        return compatibilityDescriptor;
+    }
+    
+    public byte getPrivateDataLength() {
+        return private_data_length;
+    }
+    
+    public byte[] getPrivateDataByte() {
+        return private_data_byte;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code;
+    }
+    
+    public byte getTextLength() {
+        return text_length;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

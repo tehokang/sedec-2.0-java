@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class EmergencyInformationDescriptor extends Descriptor {
     List<EmergencyInfo> emergency_infos = new ArrayList<>();
     
-    class EmergencyInfo {
+    public class EmergencyInfo {
         public int service_id;
         public byte start_end_flag;
         public byte signal_level;
@@ -39,6 +39,10 @@ public class EmergencyInformationDescriptor extends Descriptor {
         }
     }
 
+    public List<EmergencyInfo> getEmergencyInfos() {
+        return emergency_infos;
+    }
+    
     @Override
     public void print() {
         super._print_();

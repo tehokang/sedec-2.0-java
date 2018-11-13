@@ -30,6 +30,38 @@ public class MH_SeriesDescriptor extends Descriptor {
         }
     }
 
+    public int getSeriesId() {
+        return series_id;
+    }
+    
+    public byte getRepeatLabel() {
+        return repeat_label;
+    }
+    
+    public byte getProgramPattern() {
+        return program_pattern;
+    }
+    
+    public byte getExpireDateValidFlag() {
+        return expire_date_valid_flag;
+    }
+    
+    public int getExpireDate() {
+        return expire_date;
+    }
+    
+    public int getEpisodeNumber() {
+        return episode_number;
+    }
+    
+    public int getLastEpisodeNumber() {
+        return last_episode_number;
+    }
+    
+    public byte[] getSeriesNameChar() {
+        return series_name_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

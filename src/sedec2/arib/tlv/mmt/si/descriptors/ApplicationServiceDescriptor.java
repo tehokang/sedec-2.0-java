@@ -63,6 +63,42 @@ public class ApplicationServiceDescriptor extends Descriptor {
         }
     }
 
+    public byte getApplicationFormat() {
+        return application_format;
+    }
+    
+    public byte getDocumentResolution() {
+        return document_resolution;
+    }
+    
+    public byte getDefaultAITFlag() {
+        return default_AIT_flag;
+    }
+    
+    public byte getDTMessageFlag() {
+        return DT_message_flag;
+    }
+    
+    public byte getEMTNum() {
+        return EMT_num;
+    }
+    
+    public MMTGeneralLocationInfo getAITLocationInfo() {
+        return AIT_location_info;
+    }
+    
+    public MMTGeneralLocationInfo getDTMessageLocationInfo() {
+        return DT_message_location_info;
+    }
+    
+    public List<EMT> getEMTs() {
+        return emts;
+    }
+    
+    public byte[] getPrivateData() {
+        return private_data;
+    }
+    
     @Override
     public void print() {
         super._print_();

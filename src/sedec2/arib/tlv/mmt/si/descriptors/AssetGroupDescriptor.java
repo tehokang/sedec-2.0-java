@@ -14,6 +14,14 @@ public class AssetGroupDescriptor extends Descriptor {
         selection_level = (byte) brw.readOnBuffer(8);
     }
 
+    public byte getGroupIdentification() {
+        return group_identification;
+    }
+    
+    public byte getSelectionLevel() {
+        return selection_level;
+    }
+    
     @Override
     public void print() {
         super._print_();

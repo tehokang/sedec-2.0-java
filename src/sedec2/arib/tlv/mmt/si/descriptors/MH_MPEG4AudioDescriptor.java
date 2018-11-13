@@ -12,6 +12,10 @@ public class MH_MPEG4AudioDescriptor extends Descriptor {
         MPEG4_audio_profile_and_level = (byte) brw.readOnBuffer(8);
     }
 
+    public byte getMPEG4AudioProfileAndLevel() {
+        return MPEG4_audio_profile_and_level;
+    }
+    
     @Override
     public void print() {
         super._print_();

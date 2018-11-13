@@ -22,6 +22,18 @@ public class ScramblerDescriptor extends Descriptor {
         }
     }
 
+    public byte getLayerType() {
+        return layer_type;
+    }
+    
+    public byte getScramblerSystemId() {
+        return scrambler_system_id;
+    }
+    
+    public byte[] getPrivateData() {
+        return private_data;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -14,7 +14,7 @@ public class ContentCopyControlDescriptor extends Descriptor {
     protected byte component_control_length;
     protected List<ComponentControl> component_controls = new ArrayList<>();
     
-    class ComponentControl {
+    public class ComponentControl {
         public int component_tag;
         public byte digital_recording_control_data;
         public byte maximum_bitrate_flag;
@@ -54,6 +54,30 @@ public class ContentCopyControlDescriptor extends Descriptor {
                 component_controls.add(cc);
             }
         }
+    }
+    
+    public byte getDigitalRecordingControlData() {
+        return digital_recording_control_data;
+    }
+    
+    public byte getMaximumBitrateFlag() {
+        return maximum_bit_rate_flag;
+    }
+    
+    public byte getComponentControlFlag() {
+        return component_control_flag;
+    }
+    
+    public byte getMaximumBitrate() {
+        return maximum_bitrate;
+    }
+    
+    public byte getComponentControlLength() {
+        return component_control_length;
+    }
+    
+    public List<ComponentControl> getComponentControls() {
+        return component_controls;
     }
     
     @Override

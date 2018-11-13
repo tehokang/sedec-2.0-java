@@ -24,6 +24,22 @@ public class MH_DownloadProtectionDescriptor extends Descriptor {
         }
     }
 
+    public byte getDLSystemId() {
+        return DL_system_ID;
+    }
+    
+    public MMTGeneralLocationInfo getInfo() {
+        return info;
+    }
+    
+    public byte getEncryptProtocolNumber() {
+        return encrypt_protocol_number;
+    }
+    
+    public byte[] getEncryptInfo() {
+        return encrypt_info;
+    }
+    
     @Override
     public void print() {
         super._print_();

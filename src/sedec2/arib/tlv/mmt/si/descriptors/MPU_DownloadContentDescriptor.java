@@ -29,7 +29,7 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
     protected byte text_length;
     protected byte[] text_char;
     
-    class ItemInfo {
+    public class ItemInfo {
         public int item_id;
         public int item_size;
         public byte item_info_length;
@@ -95,6 +95,78 @@ public class MPU_DownloadContentDescriptor extends Descriptor {
         }
     }
 
+    public byte getReboot() {
+        return reboot;
+    }
+    
+    public byte getAddOn() {
+        return add_on;
+    }
+    
+    public byte getCompatibilityFlag() {
+        return compatibility_flag;
+    }
+    
+    public byte getItemInfoFlag() {
+        return item_info_flag;
+    }
+    
+    public byte getTextInfoFlag() {
+        return text_info_flag;
+    }
+    
+    public int getComponentSize() {
+        return component_size;
+    }
+    
+    public int getDownloadId() {
+        return download_id;
+    }
+    
+    public int getTimeOurValueDAM() {
+        return time_our_value_DAM;
+    }
+    
+    public int getLeakRate() {
+        return leak_rate;
+    }
+    
+    public int getComponentTag() {
+        return component_tag;
+    }
+    
+    public Descriptor getCompatibilityDescriptor() {
+        return compatibility_descriptor;
+    }
+    
+    public int getNumOfItems() {
+        return num_of_items;
+    }
+    
+    public List<ItemInfo> getItemInfos() {
+        return item_infos ;
+    }
+    
+    public byte getPrivateDataLength() {
+        return private_data_length;
+    }
+    
+    public byte[] getPrivateDataByte() {
+        return private_data_byte;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code;
+    }
+    
+    public byte getTextLength() {
+        return text_length;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -12,6 +12,10 @@ public class BackgroundColorDescriptor extends Descriptor {
         background_color = brw.readOnBuffer(24);
     }
 
+    public int getBackgroundColor() {
+        return background_color;
+    }
+    
     @Override
     public void print() {
         super._print_();

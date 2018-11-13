@@ -8,7 +8,7 @@ import sedec2.util.Logger;
 public class MH_LocalTimeOffsetDescriptor extends Descriptor {
     protected List<LocalTime> localtimes;
     
-    class LocalTime {
+    public class LocalTime {
         public int country_code;
         public byte country_region_id;
         public byte local_time_offset_polarity;
@@ -35,6 +35,10 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
         }
     }
 
+    public List<LocalTime> getLocalTimes() {
+        return localtimes;
+    }
+    
     @Override
     public void print() {
         super._print_();

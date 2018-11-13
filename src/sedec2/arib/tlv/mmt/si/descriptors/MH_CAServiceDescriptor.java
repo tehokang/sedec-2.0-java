@@ -12,7 +12,7 @@ public class MH_CAServiceDescriptor extends Descriptor {
     protected byte message_control;
     protected List<ServiceId> service_ids = new ArrayList<>();
 
-    class ServiceId {
+    public class ServiceId {
         public int service_id;
     }
     
@@ -29,6 +29,22 @@ public class MH_CAServiceDescriptor extends Descriptor {
             i-=2;
             service_ids.add(svc_id);
         }
+    }
+    
+    public int getCASystemId() {
+        return CA_system_ID;
+    }
+    
+    public byte getCABroadcasterGroupId() {
+        return ca_broadcaster_group_id;
+    }
+    
+    public byte getMessageControl() {
+        return message_control;
+    }
+    
+    public List<ServiceId> getServiceIds() {
+        return service_ids;
     }
     
     @Override

@@ -15,7 +15,7 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
     protected byte[] logo_char;
     protected byte[] reserved_future_use;
 
-    class Logo {
+    public class Logo {
         public byte logo_type;
         public byte start_section_number;
         public byte num_of_sections;

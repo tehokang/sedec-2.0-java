@@ -43,6 +43,38 @@ public class MultimediaServiceInformationDescriptor extends Descriptor {
         }
     }
     
+    public int getDataComponentId() {
+        return data_component_id;
+    }
+    
+    public int getComponentTag() {
+        return component_tag;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code;
+    }
+    
+    public byte getTextLength() {
+        return text_length;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
+    public byte getAssociatedContentsFlag() {
+        return associated_contents_flag;
+    }
+    
+    public byte getSelectorLength() {
+        return selector_length;
+    }
+    
+    public byte[] getSelectorByte() {
+        return selector_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

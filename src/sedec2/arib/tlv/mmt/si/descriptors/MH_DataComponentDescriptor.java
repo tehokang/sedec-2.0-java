@@ -24,6 +24,18 @@ public class MH_DataComponentDescriptor extends Descriptor {
         }
     }
 
+    public int getDataComponentId() {
+        return data_component_id;
+    }
+    
+    public byte[] getAdditionalDataComponentInfo() {
+        return additional_data_component_info;
+    }
+    
+    public AdditionalAribSubtitleInfo getAdditionalAribSubtitleInfo() {
+        return additional_arib_subtitle_info;
+    }
+    
     @Override
     public void print() {
         super._print_();

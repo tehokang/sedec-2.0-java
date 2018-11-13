@@ -10,7 +10,6 @@ public class AccessControlDescriptor extends Descriptor {
     protected MMTGeneralLocationInfo MMT_general_location_info;
     protected byte[] private_data;
     
-
     public AccessControlDescriptor(BitReadWriter brw) {
         super(brw);
         
@@ -23,6 +22,14 @@ public class AccessControlDescriptor extends Descriptor {
         }
     }
 
+    public int getCASystemId() {
+        return CA_system_ID;
+    }
+    
+    public MMTGeneralLocationInfo getMMTGeneralLocationInfo() {
+        return MMT_general_location_info;
+    }
+    
     @Override
     public void print() {
         super._print_();

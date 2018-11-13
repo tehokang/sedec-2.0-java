@@ -109,4 +109,48 @@ public class AudioSpecificConfig {
             }
         }
     }
+    
+    public byte getAudioObjectType() {
+        return audioObjectType;
+    }
+    
+    public byte getSamplingFrequenceIndex() {
+        return samplingFrequencyIndex;
+    }
+    
+    public int getSamplingFrequency() {
+        return samplingFrequency;
+    }
+    
+    public byte getChannelConfiguration() {
+        return channelConfiguration;
+    }
+    
+    public byte getExtensionSamplingFrequencyIndex() {
+        return extensionSamplingFrequencyIndex;
+    }
+    
+    public int getExtensionSamplingFrequency() {
+        return extensionSamplingFrequency;
+    }
+    
+    public byte getEpConfig() {
+        return epConfig;
+    }
+    
+    public byte getDirectMapping() {
+        return directMapping;
+    }
+    
+    public int getSyncExtensionType() {
+        return syncExtensionType;
+    }
+    
+    public byte getExtensionAudioObjectType() {
+        return extensionAudioObjectType;
+    }
+    
+    public byte getSBRPresentFlag() {
+        return sbrPresentFlag;
+    }
 }

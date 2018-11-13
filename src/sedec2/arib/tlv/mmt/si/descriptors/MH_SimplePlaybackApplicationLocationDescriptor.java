@@ -16,6 +16,10 @@ public class MH_SimplePlaybackApplicationLocationDescriptor extends Descriptor {
         }
     }
     
+    public byte[] getInitialPathByte() {
+        return initial_path_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

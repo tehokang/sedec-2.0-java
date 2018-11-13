@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class MH_ParentalRatingDescriptor extends Descriptor {
     List<Rating> ratings = new ArrayList<>();
     
-    class Rating {
+    public class Rating {
         public int country_code;
         public byte rating;
     }
@@ -26,6 +26,10 @@ public class MH_ParentalRatingDescriptor extends Descriptor {
         }
     }
 
+    public List<Rating> getRatings() {
+        return ratings;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -39,6 +39,38 @@ public class MH_CAContractInfoDescriptor extends Descriptor {
         }
     }
     
+    public int getCASystemId() {
+        return CA_system_ID;
+    }
+    
+    public byte getCAUnitId() {
+        return CA_unit_id;
+    }
+    
+    public byte getNumOfComponent() {
+        return num_of_component;
+    }
+    
+    public int[] getComponentTag() {
+        return component_tag;
+    }
+    
+    public byte getContractVerificationInfoLength() {
+        return contract_verification_info_length;
+    }
+    
+    public byte[] getContractVerificationInfo() {
+        return contract_verification_info;
+    }
+    
+    public byte getFeeNameLength() {
+        return fee_name_length;
+    }
+    
+    public byte[] getFeeName() {
+        return fee_name;
+    }
+    
     @Override
     public void print() {
         super._print_();

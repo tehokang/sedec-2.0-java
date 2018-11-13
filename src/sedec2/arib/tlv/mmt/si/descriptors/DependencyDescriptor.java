@@ -10,7 +10,7 @@ public class DependencyDescriptor extends Descriptor {
     protected byte num_of_dependencies;
     protected List<Asset> assets = new ArrayList<>();
     
-    class Asset {
+    public class Asset {
         public int asset_id_scheme;
         public byte asset_id_length;
         public byte[] asset_id_byte;
@@ -34,6 +34,14 @@ public class DependencyDescriptor extends Descriptor {
             }
             assets.add(asset);
         }
+    }
+    
+    public byte getNumOfDependencies() {
+        return num_of_dependencies;
+    }
+    
+    public List<Asset> getAssets() {
+        return assets;
     }
 
     @Override

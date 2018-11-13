@@ -16,6 +16,14 @@ public class PUStructureDescriptor extends Descriptor {
             MPU_sequence_number[i] = brw.readOnBuffer(32);
         }
     }
+
+    public byte getNumOfMPU() {
+        return num_of_MPU;
+    }
+    
+    public int[] getMPUSequenceNumber() {
+        return MPU_sequence_number;
+    }
     
     @Override
     public void print() {

@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class MH_ServiceListDescriptor extends Descriptor {
     protected List<Service> services = new ArrayList<>(); 
     
-    class Service {
+    public class Service {
         public int service_id;
         public byte service_type;
     }

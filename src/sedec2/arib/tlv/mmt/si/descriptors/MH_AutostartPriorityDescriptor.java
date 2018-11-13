@@ -4,7 +4,6 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
 public class MH_AutostartPriorityDescriptor extends Descriptor {
-
     private byte autostart_priority;
     
     public MH_AutostartPriorityDescriptor(BitReadWriter brw) {

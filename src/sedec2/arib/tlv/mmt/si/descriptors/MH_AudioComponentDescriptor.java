@@ -48,6 +48,54 @@ public class MH_AudioComponentDescriptor extends Descriptor {
         }
     }
 
+    public byte getStreamContent() {
+        return stream_content;
+    }
+    
+    public byte getComponentType() {
+        return component_type;
+    }
+    
+    public byte getComponentTag() {
+        return component_tag;
+    }
+    
+    public byte getStreamType() {
+        return stream_type;
+    }
+    
+    public byte getSimulcastGroupTag() {
+        return simulcast_group_tag;
+    }
+    
+    public byte getESMultiLigualFlag() {
+        return ES_multi_lingual_flag;
+    }
+    
+    public byte getMainComponentTag() {
+        return main_component_tag;
+    }
+    
+    public byte getQualityIndicator() {
+        return quality_indicator;
+    }
+    
+    public byte getSamplingRate() {
+        return sampling_rate;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code;
+    }
+    
+    public byte[] getISO639LanguageCode2() {
+        return ISO_639_language_code_2;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

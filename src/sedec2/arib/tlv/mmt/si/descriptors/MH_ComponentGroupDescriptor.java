@@ -12,7 +12,7 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
     protected byte num_of_group;
     protected List<Group> groups = new ArrayList<>();
     
-    class Group {
+    public class Group {
         public byte component_group_id;
         public byte num_of_CA_unit;
         public List<CAUnit> ca_units = new ArrayList<>();
@@ -21,7 +21,7 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
         public byte[] text_char;
     }
     
-    class CAUnit {
+    public class CAUnit {
         public byte CA_unit_id;
         public byte num_of_component;
         public int[] component_tag;
@@ -66,6 +66,22 @@ public class MH_ComponentGroupDescriptor extends Descriptor {
         }
     }
 
+    public byte getComponentGroupType() {
+        return component_group_type;
+    }
+    
+    public byte getTotalBitrateFlag() {
+        return total_bit_rate_flag;
+    }
+    
+    public byte getNumOfGroup() {
+        return num_of_group;
+    }
+    
+    public List<Group> getGroups() {
+        return groups;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -12,7 +12,7 @@ public class MH_SiParameterDescriptor extends Descriptor {
     protected int update_time;
     protected List<SiParameter> si_parameters = new ArrayList<>();
     
-    class SiParameter {
+    public class SiParameter {
         public byte table_id;
         public byte table_description_length;
         public byte[] table_description_byte;
@@ -40,6 +40,18 @@ public class MH_SiParameterDescriptor extends Descriptor {
         }
     }
 
+    public byte getParameterVersion() {
+        return parameter_version;
+    }
+    
+    public int getUpdateTime() {
+        return update_time;
+    }
+    
+    public List<SiParameter> getSiParameters() {
+        return si_parameters;
+    }
+    
     @Override
     public void print() {
         super._print_();

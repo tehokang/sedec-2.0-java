@@ -11,7 +11,7 @@ public class IpDataFlowDescriptor extends Descriptor {
     protected byte number_of_flow;
     protected List<IpDataFlow> ip_data_flows = new ArrayList<>();
     
-    class IpDataFlow {
+    public class IpDataFlow {
         public byte ip_data_flow_id;
         public byte[] src_address_32 = new byte[4];
         public byte[] dst_address_32 = new byte[4];
@@ -53,6 +53,18 @@ public class IpDataFlowDescriptor extends Descriptor {
         }
     }
 
+    public byte getIpVersion() {
+        return ip_version;
+    }
+    
+    public byte getNumberOfFlow() {
+        return number_of_flow;
+    }
+    
+    public List<IpDataFlow> getIpDataFlows() {
+        return ip_data_flows;
+    }
+    
     @Override
     public void print() {
         super._print_();

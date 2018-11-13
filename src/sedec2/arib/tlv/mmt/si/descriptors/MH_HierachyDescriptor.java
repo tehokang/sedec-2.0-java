@@ -37,6 +37,38 @@ public class MH_HierachyDescriptor extends Descriptor {
         hierachy_channel = (byte) brw.readOnBuffer(6);
     }
     
+    public byte getTemporalScalabilityFlag() {
+        return temporal_scalability_flag;
+    }
+    
+    public byte getSpatialScalabilityFlag() {
+        return spatial_scalability_flag;
+    }
+    
+    public byte getQualityScalabilityFlag() {
+        return quality_scalability_flag;
+    }
+    
+    public byte getHierachyType() {
+        return hierachy_type;
+    }
+    
+    public byte getHierachyLayerIndex() {
+        return hierachy_layer_index;
+    }
+    
+    public byte getTrefPresentFlag() {
+        return tref_present_flag;
+    }
+    
+    public byte getHierachyEmbeddedLayerIndex() {
+        return hierachy_embedded_layer_index;
+    }
+    
+    public byte getHierachyChannel() {
+        return hierachy_channel;
+    }
+    
     @Override
     public void print() {
         super._print_();

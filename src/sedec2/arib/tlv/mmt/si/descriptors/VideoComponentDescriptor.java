@@ -35,6 +35,38 @@ public class VideoComponentDescriptor extends Descriptor {
         }
     }
 
+    public byte getVideoResolution() {
+        return video_resolution;
+    }
+    
+    public byte getVideoAspectRatio() {
+        return video_aspect_ratio;
+    }
+    
+    public byte getVideoScanFlag() {
+        return video_scan_flag;
+    }
+    
+    public byte getVideoFrameRate() {
+        return video_frame_rate;
+    }
+    
+    public int getComponentTag() {
+        return component_tag;
+    }
+    
+    public byte getVideoTransferCharacteristics() {
+        return video_transfer_characteristics;
+    }
+    
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code ;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

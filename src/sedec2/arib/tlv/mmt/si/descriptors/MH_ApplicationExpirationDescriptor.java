@@ -12,6 +12,10 @@ public class MH_ApplicationExpirationDescriptor extends Descriptor {
         expiration_date_and_time = brw.readOnBuffer(40);
     }
     
+    public long getExpirationDateAndTime() {
+        return expiration_date_and_time;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -50,6 +50,74 @@ public class MH_HEVCDescriptor extends Descriptor {
         }
     }
 
+    public byte getProfileSpace() {
+        return profile_space;
+    }
+    
+    public byte getTierFlag() {
+        return tier_flag;
+    }
+    
+    public byte getProfileIdc() {
+        return profile_idc;
+    }
+    
+    public int getProfileCompatibilityIndication() {
+        return profile_compatibility_indication;
+    }
+    
+    public byte getProgressiveSourceFlag() {
+        return progressive_source_flag;
+    }
+    
+    public byte getInterlacedSourceFlag() {
+        return interlaced_source_flag;
+    }
+    
+    public byte getNonPackedConstraintFlag() {
+        return non_packed_constraint_flag;
+    }
+    
+    public byte getFrameOnlyConstraintFlag() {
+        return frame_only_constraint_flag;
+    }
+    
+    public long getReservedZero44bits() {
+        return reserved_zero_44bits;
+    }
+    
+    public byte getLevelIdc() {
+        return level_idc;
+    }
+    
+    public byte getTemporalLayerSubsetFlag() {
+        return temporal_layer_subset_flag;
+    }
+    
+    public byte getHEVCStillPresentFlag() {
+        return HEVC_still_present_flag;
+    }
+    
+    public byte getHEVC24hrPicturePresentFlag() {
+        return HEVC_24hr_picture_present_flag;
+    }
+    
+    public byte getSubPicHrdParamsNotPresentFlag() {
+        return sub_pic_hrd_params_not_present_flag;
+    }
+    
+    public byte getHDRWCcgIdc() {
+        return HDR_WCG_idc;
+    }
+    
+    public byte getTemporalIdMin() {
+        return temporal_id_min;
+    }
+    
+    public byte getTemporalIdMax() {
+        return temporal_id_max;
+    }
+    
     @Override
     public void print() {
         super._print_();

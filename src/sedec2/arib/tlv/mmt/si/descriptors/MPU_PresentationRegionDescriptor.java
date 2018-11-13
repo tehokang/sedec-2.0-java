@@ -7,9 +7,9 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
 public class MPU_PresentationRegionDescriptor extends Descriptor {
-    List<PresentationRegion> presentation_regions = new ArrayList<>();
+    protected List<PresentationRegion> presentation_regions = new ArrayList<>();
     
-    class PresentationRegion {
+    public class PresentationRegion {
         public int mpu_sequence_number;
         public byte layout_number;
         public byte region_number;
@@ -34,6 +34,10 @@ public class MPU_PresentationRegionDescriptor extends Descriptor {
         }
     }
 
+    public List<PresentationRegion> getPresentationRegions() {
+        return presentation_regions ;
+    }
+    
     @Override
     public void print() {
         super._print_();

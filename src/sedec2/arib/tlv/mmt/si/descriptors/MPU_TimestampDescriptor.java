@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class MPU_TimestampDescriptor extends Descriptor {
     protected List<MPU> mpus = new ArrayList<>();
 
-    class MPU {
+    public class MPU {
         public int mpu_sequence_number;
         public long mpu_presentation_time;
     }
@@ -26,6 +26,10 @@ public class MPU_TimestampDescriptor extends Descriptor {
         }
     }
 
+    public List<MPU> getMpus() {
+        return mpus;
+    }
+    
     @Override
     public void print() {
         super._print_();

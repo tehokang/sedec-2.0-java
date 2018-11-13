@@ -14,7 +14,7 @@ public class MH_PlaybackApplicationDescriptor extends Descriptor {
     protected byte application_priority;
     protected byte[] transport_protocol_label;
     
-    class ApplicationProfile {
+    public class ApplicationProfile {
         public int application_profile;
         public byte version_major;
         public byte version_minor;
@@ -44,6 +44,30 @@ public class MH_PlaybackApplicationDescriptor extends Descriptor {
         for ( int i=0; i<transport_protocol_label.length; i++ ) {
             transport_protocol_label[i] = (byte) brw.readOnBuffer(8);
         }
+    }
+    
+    public byte getApplicationProfilesLength() {
+        return application_profiles_length;
+    }
+    
+    public List<ApplicationProfile> getApplicationProfiles() {
+        return application_profiles;
+    }
+    
+    public byte getServiceBoundFlag() {
+        return service_bound_flag;
+    }
+    
+    public byte getVisibility() {
+        return visibility;
+    }
+    
+    public byte getApplicationPriority() {
+        return application_priority;
+    }
+    
+    public byte[] getTransportProtocolLabel() {
+        return transport_protocol_label;
     }
     
     @Override

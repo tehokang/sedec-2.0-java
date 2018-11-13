@@ -17,6 +17,18 @@ public class UtcNptReferenceDescriptor extends Descriptor {
         brw.skipOnBuffer(6);
     }
 
+    public long getUTCReference() {
+        return UTC_Reference;
+    }
+    
+    public long getNPTReference() {
+        return NPT_Reference;
+    }
+    
+    public byte getScale() {
+        return scale;
+    }
+    
     @Override
     public void print() {
         super._print_();

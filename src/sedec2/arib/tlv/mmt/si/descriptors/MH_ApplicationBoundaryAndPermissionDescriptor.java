@@ -31,6 +31,26 @@ public class MH_ApplicationBoundaryAndPermissionDescriptor extends Descriptor {
         }
     }
 
+    public byte getPermissionBitmapCount() {
+        return permission_bitmap_count;
+    }
+    
+    public int[] getPermissionBitmap() {
+        return permission_bitmap;
+    }
+    
+    public byte getManagedUrlCount() {
+        return managed_URL_count;
+    }
+    
+    public byte[] getManagedUrlLength() {
+        return managed_URL_length;
+    }
+    
+    public byte[][] getManagedUrlBytes() {
+        return managed_URL_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -54,6 +54,42 @@ public class MH_CAStartupDescriptor extends Descriptor {
         }
     }
 
+    public int getCASystemId() {
+        return CA_system_ID;
+    }
+    
+    public int getCAPRogramId() {
+        return CA_program_ID;
+    }
+    
+    public byte getSecondLoadFlag() {
+        return second_load_flag;
+    }
+    
+    public byte getLoadIndicator() {
+        return load_indicator;
+    }
+    
+    public byte getExclusionIdNum() {
+        return exclusion_ID_num;
+    }
+    
+    public int[] getExclusionCAProgramId() {
+        return exclusion_CA_program_ID;
+    }
+    
+    public byte getLoadSecurityInfoLen() {
+        return load_security_info_len;
+    }
+    
+    public byte[] getLoadSecurityInfoByte() {
+        return load_security_info_byte;
+    }
+    
+    public byte[] getPrivateDataByte() {
+        return private_data_byte;
+    }
+    
     @Override
     public void print() {
         super._print_();

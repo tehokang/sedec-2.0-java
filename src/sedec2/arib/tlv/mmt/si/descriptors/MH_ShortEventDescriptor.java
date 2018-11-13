@@ -35,6 +35,26 @@ public class MH_ShortEventDescriptor extends Descriptor {
         }
     }
 
+    public byte[] getISO639LanguageCode() {
+        return ISO_639_language_code ;
+    }
+    
+    public byte getEventNameLength() {
+        return event_name_length;
+    }
+    
+    public byte[] getEventNameChar() {
+        return event_name_char;
+    }
+    
+    public int getTextLength() {
+        return text_length;
+    }
+    
+    public byte[] getTextChar() {
+        return text_char;
+    }
+    
     @Override
     public void print() {
         super._print_();

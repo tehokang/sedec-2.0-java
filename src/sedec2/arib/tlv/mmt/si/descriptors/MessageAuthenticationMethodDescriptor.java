@@ -22,6 +22,18 @@ public class MessageAuthenticationMethodDescriptor extends Descriptor {
         }
     }
 
+    public byte getLayerType() {
+        return layer_type;
+    }
+    
+    public byte getMessageAuthenticationSystemId() {
+        return message_authentication_system_id;
+    }
+    
+    public byte[] getPrivateData() {
+        return private_data;
+    }
+    
     @Override
     public void print() {
         super._print_();

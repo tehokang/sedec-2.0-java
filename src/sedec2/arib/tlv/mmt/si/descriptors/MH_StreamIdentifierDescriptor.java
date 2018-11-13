@@ -12,6 +12,10 @@ public class MH_StreamIdentifierDescriptor extends Descriptor {
         component_tag = brw.readOnBuffer(16);
     }
 
+    public int getComponentTag() {
+        return component_tag;
+    }
+    
     @Override
     public void print() {
         super._print_();

@@ -21,12 +21,12 @@ public class MH_ExternalApplicationControlDescriptor extends Descriptor {
     protected byte blocked_application_count;
     protected List<ApplicationIdentifier> blocked_applications = new ArrayList<>();
     
-    class ApplicationIdentifier {
+    public class ApplicationIdentifier {
         public int organization_id;
         public int application_id;
     }
     
-    class OverlayControlledArea {
+    public class OverlayControlledArea {
         public byte overlay_controlled_area_tag;
         public int horizontal_pos;
         public int vertical_pos;
@@ -81,6 +81,50 @@ public class MH_ExternalApplicationControlDescriptor extends Descriptor {
             app.application_id = brw.readOnBuffer(32);
             blocked_applications.add(app);
         }
+    }
+    
+    public byte getSpecificScopeFlag() {
+        return specific_scope_flag;
+    }
+    
+    public int getTargetApplicationClass() {
+        return target_application_class;
+    }
+    
+    public byte getTargetApplicationCount() {
+        return target_application_count;
+    }
+    
+    public List<ApplicationIdentifier> getTargetApplications() {
+        return target_applications;
+    }
+    
+    public byte getPermissionBitmapCount() {
+        return permission_bitmap_count;
+    }
+    
+    public int[] getPermissionBitmap() {
+        return permission_bitmap;
+    }
+    
+    public byte getOverlayAdmissionPolarity() {
+        return overlay_admission_polarity;
+    }
+    
+    public byte getOverlayControlledAreaCount() {
+        return overlay_controlled_area_count;
+    }
+    
+    public List<OverlayControlledArea> getOverlayControlledAreas() {
+        return overlay_controlled_areas;
+    }
+    
+    public byte getBlockedApplicationCount() {
+        return blocked_application_count;
+    }
+    
+    public List<ApplicationIdentifier> getBlockedApplications() {
+        return blocked_applications;
     }
     
     @Override

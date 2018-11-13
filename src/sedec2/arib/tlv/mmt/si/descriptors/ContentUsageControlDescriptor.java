@@ -33,6 +33,30 @@ public class ContentUsageControlDescriptor extends Descriptor {
         }
     }
     
+    public byte getRemoteViewMode() {
+        return remote_view_mode;
+    }
+    
+    public byte getCopyRestrictionMode() {
+        return copy_restriction_mode;
+    }
+    
+    public byte getImageConstraintToken() {
+        return image_constraint_token;
+    }
+    
+    public byte getRetentionMode() {
+        return retention_mode;
+    }
+    
+    public byte getRetentionState() {
+        return retention_state;
+    }
+    
+    public byte getEncryptionMode() {
+        return encryption_mode;
+    }
+    
     @Override
     public void print() {
         super._print_();

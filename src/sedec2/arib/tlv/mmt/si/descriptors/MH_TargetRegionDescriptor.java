@@ -17,6 +17,14 @@ public class MH_TargetRegionDescriptor extends Descriptor {
         }
     }
 
+    public byte getRegionSpecType() {
+        return region_spec_type;
+    }
+    
+    public long getPrefectureBitmap() {
+        return prefecture_bitmap;
+    }
+
     @Override
     public void print() {
         super._print_();
