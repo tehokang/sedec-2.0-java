@@ -74,8 +74,6 @@ public class VideoExtractor extends BaseExtractor {
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        showMMTPInfo("VIDEO", mmtp_packet);
-                        
                         byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         for ( int i=0; i<samples.size(); i++ ) {

@@ -74,8 +74,6 @@ public class AudioExtractor extends BaseExtractor {
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        showMMTPInfo("AUDIO", mmtp_packet);
-
                         BitReadWriter syncword = null;
                         ByteArrayOutputStream out = null;
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);

@@ -108,11 +108,6 @@ public class ApplicationExtractor extends BaseExtractor {
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        /**
-                         * @note Please enable following if you'd like to see ttml sequence flow
-                         */
-                        showMMTPInfo("APP", mmtp_packet);
-
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         if ( samples.size() == 0 ) break;
                         

@@ -15,7 +15,6 @@ import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_SignallingMessage;
-import sedec2.util.Logger;
 
 public abstract class BaseExtractor {
     protected int m_sleep_micro_interval = 100;
@@ -173,15 +172,6 @@ public abstract class BaseExtractor {
     
     public void disablePreModification() {
         m_enable_pre_modification = false;
-    }
-    
-    protected void showMMTPInfo(String type, MMTP_Packet mmpt) {
-        if ( m_enable_logging == true ) {
-            Logger.d(String.format("[%s] pid : 0x%04x, [%s] psn : 0x%08x \n", 
-                    type, mmpt.getPacketId(),
-                    mmpt.getPayloadType() == 0x00 ? "MPU" : "Control Message",
-                    mmpt.getPacketSequenceNumber()));
-        }
     }
     
     protected List<ByteArrayOutputStream> getMFU(MMTP_Packet mmtp) 

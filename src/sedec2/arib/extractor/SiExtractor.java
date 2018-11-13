@@ -91,8 +91,6 @@ public class SiExtractor extends BaseExtractor {
                  * @note Signaling Message
                  */
                 if ( 0x02 == mmtp_packet.getPayloadType() ) {
-                    showMMTPInfo("SI", mmtp_packet);
-                    
                     Message message = getSinallingMessage(mmtp_packet);
                     if ( message != null ) {
                         List<Table> tables = message.getTables();
