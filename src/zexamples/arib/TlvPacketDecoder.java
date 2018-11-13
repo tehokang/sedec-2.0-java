@@ -1,11 +1,7 @@
 package zexamples.arib;
 
-import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.DataInputStream;
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -14,7 +10,6 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.TimeUnit;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
@@ -33,8 +28,10 @@ import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
+import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
+import sedec2.util.TlvFileReader;
 import zexamples.arib.Application.SubDirectory;
 
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
@@ -49,6 +46,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected DataContentConfigurationTable dcct = null;
     protected DataDirectoryManagementTable ddmt = null;
 
+    protected final String download_path = "./download/";
+    protected final String app_download_path = download_path + "/applications/";
+    protected final String video_download_path = download_path + "/video/";
+    protected final String audio_download_path = download_path + "/audio/";
+    protected final String ttml_download_path = download_path + "/ttml/";
+            
     protected List<Application> applications = new ArrayList<>();
     /**
      * @note Video, Audio, IndexItem of Application to extract from TLV
@@ -130,7 +133,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             }
             
             if ( found_app == false ) {
-                Application app = new Application();
+                Application app = new Application(app_download_path);
                 app.base_directory_path = new String(ddmt.getBaseDirectoryPath());
                 for ( int i=0; i<ddmt.getDirectoryNodes().size(); i++ ) {
                     SubDirectory sub_directory = app.new SubDirectory();
@@ -242,8 +245,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     public void onReceivedVideo(int packet_id, byte[] buffer) {
         try {
             if ( video_bs == null ) {
+                new File(video_download_path).mkdirs();
                 video_bs = new BufferedOutputStream(new FileOutputStream(
-                        new File(String.format("video.mfu.0x%04x.hevc", packet_id))));
+                        new File(String.format("%s/video.mfu.0x%04x.hevc", 
+                                        video_download_path, packet_id))));
+                        
             }
             video_bs.write(buffer);
         } catch (IOException e) {
@@ -255,8 +261,10 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     public void onReceivedAudio(int packet_id, byte[] buffer) {
         try {
             if ( audio_bs_map.containsKey(packet_id) == false ) {
+                new File(audio_download_path).mkdirs();
                 audio_bs_map.put(packet_id, new BufferedOutputStream(new FileOutputStream(
-                        new File(String.format("audio.mfu.0x%04x.aac",packet_id)))));
+                        new File(String.format("%s/audio.mfu.0x%04x.aac",
+                                audio_download_path, packet_id)))));
             }
             
             BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
@@ -269,45 +277,57 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
+        new File(ttml_download_path).mkdirs();
         switch ( ttml.getDataType() ) {
             case 0x00:
-                Logger.d("\t [TTHML-DOC] \n");
+                Logger.d("\t [TTML-DOC] \n");
                 Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
+                FileUtility.save(
+                        String.format("%s/ttml.mfu.0x%x.txt", 
+                                ttml_download_path, packet_id), 
+                                new String(ttml.getDataByte()));
                 break;
             case 0x01:
-                Logger.d("\t [TTHML-PNG] \n");
+                Logger.d("\t [TTML-PNG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.png", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.png", 
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x02:
-                Logger.d("\t [TTHML-SVG] \n");
+                Logger.d("\t [TTML-SVG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.svg", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.svg", 
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x03:
-                Logger.d("\t [TTHML-PCM] \n");
+                Logger.d("\t [TTML-PCM] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.pcm", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.pcm",
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x04:
-                Logger.d("\t [TTHML-MP3] \n");
+                Logger.d("\t [TTML-MP3] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.mp3", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.mp3",
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x05:
-                Logger.d("\t [TTHML-AAC] \n");
+                Logger.d("\t [TTML-AAC] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.aac", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.aac",
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x06:
-                Logger.d("\t [TTHML-FONT-SVG] \n");
+                Logger.d("\t [TTML-FONT-SVG] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.font.svg", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.font.svg",
+                                ttml_download_path, packet_id), buffer);
                 break;
             case 0x07:
-                Logger.d("\t [TTHML-FONT-WOFF] \n");
+                Logger.d("\t [TTML-FONT-WOFF] \n");
                 FileUtility.save(
-                        String.format("ttml.mfu.0x%x.font.woff", packet_id), buffer);
+                        String.format("%s/ttml.mfu.0x%x.font.woff",
+                                ttml_download_path, packet_id), buffer);
                 break;
             default:
                 break;
@@ -330,8 +350,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                     for ( int k=0; k<sub_directory.files.size(); k++ ) {
                         Application.File file = sub_directory.files.get(k);
                         if ( file.item_id == item_id && file.read_completed == false ) {
-                            System.out.println(String.format("Read Completed : 0x%x",
-                                    file.item_id));
                             file.buffer = Arrays.copyOfRange(buffer, 0, buffer.length);
                             file.read_completed = true;
                         }
@@ -341,8 +359,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         }
         
         for ( int i=0; i<applications.size(); i++ ) {
-            Application app = applications.get(i);
-            app.done();
+            applications.get(i).done();
         }
     }
 
@@ -394,155 +411,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     }
 }
 
-class ConsoleProgress {
-    protected static final int PROGRESS_BAR_WIDTH=30;
-    protected static long counter = 0;
-    protected static long startTime = 0;
-    protected static long processTime = 0;
-    protected static double read_size = 0;
-    protected static double total_size = 0;
-    protected static double bitrate_average = 0;
-    protected static StringBuilder anim_progress_bar;
-    protected static char[] anim_circle = new char[]{'|', '/', '-', '\\'};
-    
-    public static void start(double file_size) {
-        total_size = file_size;
-        startTime = System.currentTimeMillis();
-        processTime = System.currentTimeMillis();
-    }
-    
-    public static void stop() {
-        total_size = 0;
-    }
-    
-    protected static String formatInterval(final long l) {
-        final long hr = TimeUnit.MILLISECONDS.toHours(l);
-        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
-        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - 
-                TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - 
-                TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
-    }
-    
-    protected static String getProgressBar(double percent) {
-        int bars = (int)(percent * PROGRESS_BAR_WIDTH / 100);
-        anim_progress_bar = new StringBuilder(PROGRESS_BAR_WIDTH);
-        anim_progress_bar.append("[");
-        for ( int i=0; i<bars; i++ ) {
-            anim_progress_bar.append("=");
-        }
-        for ( int i=PROGRESS_BAR_WIDTH-bars; i>0; i-- ) {
-            anim_progress_bar.append(" ");
-        }
-        anim_progress_bar.append("]");
-        return anim_progress_bar.toString();
-    }
-    
-    public static void update(int read) {
-        counter+=1;
-        read_size += read;
-
-        /**
-         * @note TLV counter
-         */
-        System.out.print(String.format(" TLV : %d ", counter));
-        
-        /**
-         * @note Progress bar as percentage
-         */
-        System.out.print(String.format("%s ", 
-                getProgressBar((double)(read_size / total_size) * 100)));
-
-        /**
-         * @note Percentage of processing while demuxing
-         */
-        System.out.print("\033[1;31m" + 
-                String.format("%.2f %% ", (double)(read_size / total_size) * 100) + "\u001B[0m");
-        
-        /**
-         * @note Circle animation of progressing 
-         */
-        System.out.print(anim_circle[(int) (counter%4)] + " "); 
-        
-        /**
-         * @note Bitrate of processing as Mbps
-         */
-        bitrate_average += (((double) (1000 * read ) / 
-                (double)((System.currentTimeMillis()-processTime) )) * 
-                8) / 1024 / 1024;
-        System.out.print(String.format("%4.2fMbps ", bitrate_average/counter)); 
-        processTime = System.currentTimeMillis();
-        
-        /**
-         * @note Total amount of processed
-         */
-        System.out.print(String.format("(%.2f / %.2f MBytes) ", 
-                (double)(read_size/1024/1024),
-                (double) total_size/1024/1024));
-        
-        /**
-         * @note Duration time during demuxing
-         */
-        System.out.print(String.format("%s \r", 
-                formatInterval(System.currentTimeMillis()-startTime)));
-    }
-}
-
-class TlvFileReader {
-    protected File tlv_file = null;
-    protected final int TLV_HEADER_LENGTH = 4;
-    protected DataInputStream input_stream  = null;
-    
-    public TlvFileReader(String tlv_file) {
-        this.tlv_file = new File(tlv_file);
-    }
-    
-    public boolean open() {
-        try {
-            input_stream  = 
-                    new DataInputStream(
-                            new BufferedInputStream(new FileInputStream(tlv_file)));
-        } catch (FileNotFoundException e) {
-            return false;
-        }
-        return true;
-    }
-    
-    public void close() throws IOException {
-        if ( input_stream != null ) input_stream.close();
-    }
-    
-    public int filesize() throws IOException {
-        if ( input_stream == null ) return 0;
-        return input_stream.available();
-    }
-    
-    public boolean readable() throws IOException {
-        if ( input_stream == null ) return false;
-        return input_stream.available() > 0 ? true : false;
-    }
-    
-    public byte[] readPacket() throws IOException {
-        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
-        /**
-         * @note Making a packet of TLV which has a sync byte as beginning
-         * In other words, user should put a perfect TLV packet with sync byte into. 
-         */
-        byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
-        input_stream.read(tlv_header_buffer, 0, tlv_header_buffer.length);  
-        
-        byte[] tlv_payload_buffer = 
-                new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
-        input_stream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
-
-        output_stream = new ByteArrayOutputStream();
-        output_stream.write(tlv_header_buffer);
-        output_stream.write(tlv_payload_buffer);
-        return output_stream.toByteArray();
-    }
-}
-
 /**
  * TlvPacketDecoder is an example for getting 
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
@@ -561,6 +429,7 @@ public class TlvPacketDecoder {
         }
         
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
+        ConsoleProgress progress_bar = new ConsoleProgress();
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
@@ -573,22 +442,22 @@ public class TlvPacketDecoder {
              * @note Putting a TLV packet into TLVExtractor \n
              * and you can wait for both the results of TLV as table of MPEG2 and MFU
              */
-            ConsoleProgress.start(tlv_file_pumper.filesize());
+            progress_bar.start(tlv_file_pumper.filesize());
             while ( tlv_file_pumper.readable() ) {
                 byte[] tlv_packet = tlv_file_pumper.readPacket();
                 if ( tlv_packet.length == 0 || 
                         false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
-                ConsoleProgress.update(tlv_packet.length);
+                progress_bar.update(tlv_packet.length);
             }
-            ConsoleProgress.stop();
+            progress_bar.stop();
         }
         /**
          * @note Destroy of TLVExtractor to not handle and released by garbage collector
          */
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;
-        
+        progress_bar = null;
         System.out.println("ByeBye");
         System.exit(0);
     }

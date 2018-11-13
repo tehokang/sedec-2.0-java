@@ -9,6 +9,7 @@ import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet.HeaderExtensionByte;
+import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.mmt.mmtp.MMTP_Payload_MPU.MFU;
 
 public class ApplicationExtractor extends BaseExtractor {
@@ -113,7 +114,6 @@ public class ApplicationExtractor extends BaseExtractor {
                         showMMTPInfo("APP", mmtp_packet);
 
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
-                        
                         if ( samples.size() == 0 ) break;
                         
                         boolean is_index_item = false;
@@ -127,14 +127,14 @@ public class ApplicationExtractor extends BaseExtractor {
                             }
                         }
                         
-                        int packet_id = mmtp_packet.getPacketId();
-                        int mpu_sequence_number = mmtp_packet.getMPU().getMPUSequenceNumber();
-                        List<MFU> mfus = mmtp_packet.getMPU().getMFUList();
-                        for ( int i=0; i<mfus.size(); i++ ) {
-                            int item_id = mfus.get(i).item_id;
+                        MMTP_Payload_MPU mpu = mmtp_packet.getMPU();
+                        List<MFU> mfus = mpu.getMFUList();
+                        for ( int i=0; i<samples.size(); i++ ) {
                             putOut(new QueueData(
-                                    packet_id, item_id, mpu_sequence_number, 
-                                    item_id == 0x0 && is_index_item ? true : false, 
+                                    mmtp_packet.getPacketId(), 
+                                    mfus.get(0).item_id, 
+                                    mmtp_packet.getMPU().getMPUSequenceNumber(), 
+                                    mfus.get(0).item_id == 0x0 && is_index_item ? true : false, 
                                     samples.get(i).toByteArray() ));
                         }
                     }

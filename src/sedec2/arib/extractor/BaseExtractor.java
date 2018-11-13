@@ -177,7 +177,7 @@ public abstract class BaseExtractor {
     
     protected void showMMTPInfo(String type, MMTP_Packet mmpt) {
         if ( m_enable_logging == true ) {
-            Logger.d(String.format("[%s] pid : 0x%04x, [%s] psn : 0x08x \n", 
+            Logger.d(String.format("[%s] pid : 0x%04x, [%s] psn : 0x%08x \n", 
                     type, mmpt.getPacketId(),
                     mmpt.getPayloadType() == 0x00 ? "MPU" : "Control Message",
                     mmpt.getPacketSequenceNumber()));
@@ -210,7 +210,10 @@ public abstract class BaseExtractor {
                 ByteArrayOutputStream sample = new ByteArrayOutputStream();
                 for ( Iterator<MMTP_Packet> it = m_fragmented01_mmtp.iterator() ; 
                         it.hasNext() ; ) {
-                    MMTP_Payload_MPU mpu01 = it.next().getMPU();
+                    MMTP_Packet mmtp01 = it.next();
+                    if ( mmtp01.getPacketId() != mmtp.getPacketId() ) continue;
+                    
+                    MMTP_Payload_MPU mpu01 = mmtp01.getMPU();
                     if( mpu01.getFragmentationIndicator() == 0x01 ) {
                         mfus = mpu01.getMFUList();
                         for ( int i=0; i<mfus.size(); i++ ) {
@@ -225,7 +228,10 @@ public abstract class BaseExtractor {
                 if ( found_01_fragmentation_indicator == true ) {
                     for ( Iterator<MMTP_Packet> it = m_fragmented02_mmtp.iterator() ; 
                             it.hasNext() ; ) {
-                        MMTP_Payload_MPU mpu02 = it.next().getMPU();
+                        MMTP_Packet mmtp02 = it.next();
+                        if ( mmtp02.getPacketId() != mmtp.getPacketId() ) continue;
+                        
+                        MMTP_Payload_MPU mpu02 = mmtp02.getMPU();
                         if( mpu02.getFragmentationIndicator() == 0x02 ) {
                             mfus = mpu02.getMFUList();
                             for ( int i=0; i<mfus.size(); i++ ) {

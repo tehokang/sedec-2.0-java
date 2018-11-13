@@ -1,6 +1,8 @@
 package sedec2.util;
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
+import java.io.PrintWriter;
 
 public class FileUtility {
     public static boolean save(String filepath, byte[] buffer) {
@@ -12,6 +14,19 @@ public class FileUtility {
             e.printStackTrace();
             return false;
         } 
+        return true;
+    }
+    
+    public static boolean save(String filepath, String string) {
+        try {
+            PrintWriter out;
+            out = new PrintWriter(filepath);
+            out.println(string);
+            out.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+            return false;
+        }
         return true;
     }
 }

@@ -10,12 +10,16 @@ import java.util.zip.InflaterInputStream;
 import sedec2.util.BinaryLogger;
 
 public class Application {
-    public final String ROOT = "./download_applications/";
+    public String application_root_path;
     public String base_directory_path;
     public List<SubDirectory> sub_directories = new ArrayList<>();
 
+    public Application(String rootpath) {
+        application_root_path = rootpath;
+    }
+    
     public void done() {
-        java.io.File root_dir = new java.io.File(ROOT + "/" + base_directory_path);
+        java.io.File root_dir = new java.io.File(application_root_path + "/" + base_directory_path);
         root_dir.mkdirs();
         
         for ( int i=0; i<sub_directories.size(); i++ ) {
@@ -85,10 +89,7 @@ public class Application {
                     if ( compression_type != 0xff ) {
                         ByteArrayInputStream bais = new ByteArrayInputStream(buffer);
                         InflaterInputStream iis = new InflaterInputStream(bais);
-                        System.out.println(String.format(
-                                "item_id : 0x%x, item_size : %d, original_size : %d ", 
-                                item_id, item_size, original_size));
-                        byte[] final_buffer = new byte[item_size];
+                        byte[] final_buffer = new byte[buffer.length];
                         int count = iis.read(final_buffer);
                         while ( count != -1 ) {
                             bos.write(final_buffer, 0, count);
