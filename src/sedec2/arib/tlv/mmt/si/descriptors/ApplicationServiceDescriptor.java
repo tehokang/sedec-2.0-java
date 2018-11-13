@@ -19,7 +19,7 @@ public class ApplicationServiceDescriptor extends Descriptor {
     protected List<EMT> emts = new ArrayList<>();
     protected byte[] private_data;
     
-    class EMT {
+    public class EMT {
         public byte EMT_tag;
         public MMTGeneralLocationInfo EMT_location_info;
     }
