@@ -112,11 +112,11 @@ public class ApplicationExtractor extends BaseExtractor {
                          */
                         showMMTPInfo("APP", mmtp_packet);
 
-                        boolean is_index_item = false;
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         
                         if ( samples.size() == 0 ) break;
                         
+                        boolean is_index_item = false;
                         List<HeaderExtensionByte> header_ext = 
                                 mmtp_packet.getHeaderExtensionByte();
                         for ( int j=0; j<header_ext.size(); j++ ) {
