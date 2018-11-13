@@ -87,6 +87,7 @@ public class ApplicationExtractor extends BaseExtractor {
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
+    @Override
     public void destroy() {
         super.destroy();
         
@@ -94,6 +95,12 @@ public class ApplicationExtractor extends BaseExtractor {
         m_event_thread = null;
     }
     
+    /**
+     * Chapter 9 of ARIB B60v1-12
+     * process function can send QueueData with MFU_data_byte as event value.
+     * User can cast MFU_data_byte to MFU_IndexItem or raw data to be read.
+     */
+    @Override
     protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

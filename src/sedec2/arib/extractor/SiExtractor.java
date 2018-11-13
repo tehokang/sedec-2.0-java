@@ -68,6 +68,7 @@ public class SiExtractor extends BaseExtractor {
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
+    @Override
     public void destroy() {
         super.destroy();
         
@@ -75,6 +76,12 @@ public class SiExtractor extends BaseExtractor {
         m_event_thread = null;
     }
     
+    /**
+     * Chapter 4, 5, 7 and ARIB-B60. 
+     * process put QueueData with Table having descriptors into event queue, 
+     * user don't need to parse Message of Chapter 7
+     */
+    @Override
     protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

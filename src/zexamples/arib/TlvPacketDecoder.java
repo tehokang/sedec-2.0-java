@@ -34,6 +34,10 @@ import sedec2.util.Logger;
 import sedec2.util.TlvFileReader;
 import zexamples.arib.Application.SubDirectory;
 
+/**
+ * SimpleTlvCoordinator is an example which's using TlvDemultiplexer of sedec2 to get information
+ * of TLV as asynchronous mechanism, this is a mechanism for better performance, better visibility.
+ */
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected TlvDemultiplexer tlv_demuxer = null;
 
@@ -412,7 +416,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 }
 
 /**
- * TlvPacketDecoder is an example for getting 
+ * TlvPacketDecoder is an application as example for getting 
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
  * - NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData \n
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
@@ -439,8 +443,9 @@ public class TlvPacketDecoder {
             if ( false == tlv_file_pumper.open() ) continue;
             
             /**
-             * @note Putting a TLV packet into TLVExtractor \n
-             * and you can wait for both the results of TLV as table of MPEG2 and MFU
+             * @note Putting a TLV packet into SimpleTlvCoordinator \n
+             * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
+             * from event listener which you registered to TlvDemultiplexer
              */
             progress_bar.start(tlv_file_pumper.filesize());
             while ( tlv_file_pumper.readable() ) {
@@ -453,7 +458,7 @@ public class TlvPacketDecoder {
             progress_bar.stop();
         }
         /**
-         * @note Destroy of TLVExtractor to not handle and released by garbage collector
+         * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
          */
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;

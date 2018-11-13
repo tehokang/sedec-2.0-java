@@ -9,6 +9,9 @@ import java.util.zip.InflaterInputStream;
 
 import sedec2.util.BinaryLogger;
 
+/**
+ * Application class as example to control informations of application which can be download
+ */
 public class Application {
     public String application_root_path;
     public String base_directory_path;

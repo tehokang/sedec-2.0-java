@@ -53,6 +53,7 @@ public class TtmlExtractor extends BaseExtractor {
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
+    @Override
     public void destroy() {
         super.destroy();
         
@@ -60,6 +61,11 @@ public class TtmlExtractor extends BaseExtractor {
         m_event_thread = null;
     }
     
+    /**
+     * Chapter 9 of ARIB-B60v1-12
+     * process function put QueueData with TTML into event queue
+     */
+    @Override
     protected synchronized void process(TypeLengthValue tlv) 
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
