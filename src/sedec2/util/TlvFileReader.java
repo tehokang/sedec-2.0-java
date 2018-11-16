@@ -12,6 +12,7 @@ public class TlvFileReader {
     protected File tlv_file = null;
     protected final int TLV_HEADER_LENGTH = 4;
     protected DataInputStream input_stream  = null;
+    protected ByteArrayOutputStream output_stream = null;
     
     public TlvFileReader(String tlv_file) {
         this.tlv_file = new File(tlv_file);
@@ -43,7 +44,6 @@ public class TlvFileReader {
     }
     
     public byte[] readPacket() throws IOException {
-        ByteArrayOutputStream output_stream = new ByteArrayOutputStream();
         /**
          * @note Making a packet of TLV which has a sync byte as beginning
          * In other words, user should put a perfect TLV packet with sync byte into. 
