@@ -12,12 +12,12 @@ import sedec2.util.BinaryLogger;
 /**
  * Application class as example to control informations of application which can be download
  */
-public class Application {
+public class SimpleApplication {
     public String application_root_path;
     public String base_directory_path;
     public List<SubDirectory> sub_directories = new ArrayList<>();
 
-    public Application(String rootpath) {
+    public SimpleApplication(String rootpath) {
         application_root_path = rootpath;
     }
     

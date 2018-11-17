@@ -32,7 +32,7 @@ import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
 import sedec2.util.TlvFileReader;
-import zexamples.arib.Application.SubDirectory;
+import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
  * SimpleTlvCoordinator is an example which's using TlvDemultiplexer of sedec2 to get information
@@ -56,7 +56,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected final String audio_download_path = download_path + "/audio/";
     protected final String ttml_download_path = download_path + "/ttml/";
             
-    protected List<Application> applications = new ArrayList<>();
+    protected List<SimpleApplication> applications = new ArrayList<>();
     /**
      * @note Video, Audio, IndexItem of Application to extract from TLV
      */
@@ -137,7 +137,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             }
             
             if ( found_app == false ) {
-                Application app = new Application(app_download_path);
+                SimpleApplication app = new SimpleApplication(app_download_path);
                 app.base_directory_path = new String(ddmt.getBaseDirectoryPath());
                 for ( int i=0; i<ddmt.getDirectoryNodes().size(); i++ ) {
                     SubDirectory sub_directory = app.new SubDirectory();
@@ -159,7 +159,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                     Descriptor desc = mpu.mpu_info_byte.get(j);
                     if ( desc.getDescriptorTag() == DescriptorFactory.MPU_NODE_DESCRIPTOR ) {
                         for ( int k=0; k<applications.size(); k++ ) {
-                            Application app = applications.get(k);
+                            SimpleApplication app = applications.get(k);
                             for ( int n=0; n<app.sub_directories.size(); n++ ) {
                                 SubDirectory sub_directory = app.sub_directories.get(n);
                                 if ( ((MPU_NodeDescriptor)desc).getNodeTag()
@@ -347,12 +347,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     public void onReceivedApplication(int packet_id, int item_id, 
             int mpu_sequence_number, byte[] buffer) {
         for ( int i=0; i<applications.size(); i++ ) {
-            Application app = applications.get(i);
+            SimpleApplication app = applications.get(i);
             for ( int j=0; j<app.sub_directories.size(); j++ ) {
                 SubDirectory sub_directory = app.sub_directories.get(j);
                 if ( sub_directory.mpu_sequence_number == mpu_sequence_number ) {
                     for ( int k=0; k<sub_directory.files.size(); k++ ) {
-                        Application.File file = sub_directory.files.get(k);
+                        SimpleApplication.File file = sub_directory.files.get(k);
                         if ( file.item_id == item_id && file.read_completed == false ) {
                             file.buffer = Arrays.copyOfRange(buffer, 0, buffer.length);
                             file.read_completed = true;
@@ -374,7 +374,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 //        index_item.print();
         
         for ( int i=0; i<applications.size(); i++ ) {
-            Application app = applications.get(i);
+            SimpleApplication app = applications.get(i);
             for ( int j=0; j<app.sub_directories.size(); j++ ) {
                 SubDirectory sub_directory = app.sub_directories.get(j);
                 if ( sub_directory.mpu_sequence_number == mpu_sequence_number ) {
@@ -382,7 +382,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                     for ( int k=0; k<index_item.getItems().size(); k++ ) {
                         Item item = index_item.getItems().get(k);
                         for ( int n=0; n<sub_directory.files.size(); n++ ) {
-                            Application.File file = sub_directory.files.get(n);
+                            SimpleApplication.File file = sub_directory.files.get(n);
                             if ( file.item_id == item.item_id ) { 
                                 exist = true;
                                 break;
@@ -390,7 +390,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         }
                         
                         if ( exist == false ) {
-                            Application.File file = app.new File();
+                            SimpleApplication.File file = app.new File();
                             file.item_id = item.item_id;
                             file.item_size = item.item_size;
                             file.file_name = new String(item.file_name_byte);
