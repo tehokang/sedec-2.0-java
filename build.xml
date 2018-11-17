@@ -133,12 +133,13 @@
                 classpathref="project.classpath" 
                 version="true"
                 windowtitle="${ant.project.name} SDK Document" 
-                doctitle="${ant.project.name} SDK Document"
+                doctitle="${ant.project.name} SDK which's able to extract everything from TLV"
                 linksource="yes"
                 encoding="utf-8"
                 charset="utf-8"
                 docencoding="utf-8"
-                bottom="Copyright Humax. All rights reserved.">
+                access="public"
+                bottom="Copyright TehoKang. All rights reserved.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
             <classpath>
                 <pathelement location="${bin.dir}"/>
