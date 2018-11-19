@@ -7,6 +7,8 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class TlvFileReader {
     protected File tlv_file = null;
@@ -59,5 +61,15 @@ public class TlvFileReader {
         output_stream.write(tlv_header_buffer);
         output_stream.write(tlv_payload_buffer);
         return output_stream.toByteArray();
+    }
+    
+    public List<byte[]> readPackets(int packet_count) throws IOException {
+        List<byte[]> tlv_packets = new ArrayList<>();
+        
+        for ( int i=0; i<packet_count; i++ ) {
+            byte[] tlv_packet = readPacket();
+            tlv_packets.add(tlv_packet);
+        }
+        return tlv_packets;
     }
 }
