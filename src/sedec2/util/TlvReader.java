@@ -6,6 +6,7 @@ import java.util.List;
 
 public abstract class TlvReader {
     protected File tlv_file = null;
+    protected final int TLV_HEADER_LENGTH = 4;
     
     public TlvReader(String tlv_file) {
         this.tlv_file = new File(tlv_file);

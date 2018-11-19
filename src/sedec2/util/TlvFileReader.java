@@ -5,16 +5,10 @@ import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
-import java.io.RandomAccessFile;
-import java.nio.MappedByteBuffer;
-import java.nio.channels.FileChannel;
 
 public class TlvFileReader extends TlvReader {
-    protected final int TLV_HEADER_LENGTH = 4;
     protected DataInputStream input_stream  = null;
     protected ByteArrayOutputStream output_stream = null;
-    protected RandomAccessFile input_memory_stream = null;
-    protected MappedByteBuffer memory_buffer = null;
     
     public TlvFileReader(String tlv_file) {
         super(tlv_file);
@@ -25,11 +19,6 @@ public class TlvFileReader extends TlvReader {
             input_stream  = 
                     new DataInputStream(
                             new BufferedInputStream(new FileInputStream(tlv_file)));
-            
-            input_memory_stream = new RandomAccessFile(tlv_file, "rw");
-            memory_buffer = input_memory_stream.getChannel().map(
-                    FileChannel.MapMode.READ_ONLY, 0, 1024*1024*1024);
-            memory_buffer.load();
         } catch (IOException e) {
             e.printStackTrace();
             return false;

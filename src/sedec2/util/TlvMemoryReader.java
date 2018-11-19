@@ -7,7 +7,6 @@ import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class TlvMemoryReader extends TlvReader {
-    protected final int TLV_HEADER_LENGTH = 4;
     protected MappedByteBuffer memory_buffer = null;
     protected RandomAccessFile input_memory_stream = null;
     protected ByteArrayOutputStream output_stream = null;
@@ -61,7 +60,8 @@ public class TlvMemoryReader extends TlvReader {
         memory_buffer.get(tlv_header_buffer);
         
         byte[] tlv_payload_buffer = 
-                new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
+                new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+                        (tlv_header_buffer[3] & 0xff))];
         memory_buffer.get(tlv_payload_buffer);
         
         try {
