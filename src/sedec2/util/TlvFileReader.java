@@ -34,6 +34,7 @@ public class TlvFileReader extends TlvReader {
         try {
             if ( input_stream != null ) { 
                 input_stream.close();
+                input_stream = null;
             }
         } catch (IOException e) {
             e.printStackTrace();
@@ -41,21 +42,16 @@ public class TlvFileReader extends TlvReader {
     }
     
     @Override
-    public int filesize() {
-        try {
-            if ( input_stream != null )
-                return input_stream.available();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return 0;
+    public long filesize() {
+        return tlv_file.length();
     }
     
     @Override
     public boolean readable() {
         try {
-            if ( input_stream != null )
+            if ( input_stream != null ) {
                 return input_stream.available() > 0 ? true : false;
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -68,10 +64,12 @@ public class TlvFileReader extends TlvReader {
 
         try {
             byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
-            input_stream.read(tlv_header_buffer, 0, tlv_header_buffer.length);
+            input_stream.read(tlv_header_buffer);
+            
             byte[] tlv_payload_buffer = 
-                    new byte[((tlv_header_buffer[2] & 0xff) << 8 | (tlv_header_buffer[3] & 0xff))];
-            input_stream.read(tlv_payload_buffer, 0, tlv_payload_buffer.length);
+                    new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+                            (tlv_header_buffer[3] & 0xff))];
+            input_stream.read(tlv_payload_buffer);
 
             output_stream.write(tlv_header_buffer);
             output_stream.write(tlv_payload_buffer);

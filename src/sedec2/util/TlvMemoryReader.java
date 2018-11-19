@@ -34,6 +34,8 @@ public class TlvMemoryReader extends TlvReader {
     
     @Override
     public void close() {
+        super.close();
+        
         memory_buffer.clear();
         memory_buffer = null;
         
@@ -46,7 +48,7 @@ public class TlvMemoryReader extends TlvReader {
     }
     
     @Override
-    public int filesize()  {
+    public long filesize()  {
         if ( memory_buffer == null ) return 0;
         return memory_buffer.capacity();
     }

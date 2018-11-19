@@ -18,7 +18,7 @@ public abstract class TlvReader {
         tlv_file = null;
     }
     
-    public abstract int filesize();
+    public abstract long filesize();
     
     public abstract boolean readable();
     
