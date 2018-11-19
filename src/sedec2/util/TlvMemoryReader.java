@@ -19,15 +19,15 @@ public class TlvMemoryReader extends TlvReader {
     @Override
     public boolean open() {
         try {
-            input_memory_stream = new RandomAccessFile(tlv_file, "rw");
+            input_memory_stream = new RandomAccessFile(tlv_file, "r");
             memory_buffer = input_memory_stream.getChannel().map(
-                    FileChannel.MapMode.READ_ONLY, 0, 1024*1024*1024);
+                    FileChannel.MapMode.READ_ONLY, 0, input_memory_stream.length());
             memory_buffer.load();
+            return memory_buffer.isLoaded();
         } catch (IOException e) {
             e.printStackTrace();
-            return false;
         }
-        return true;
+        return false;
     }
     
     @Override
@@ -43,16 +43,19 @@ public class TlvMemoryReader extends TlvReader {
         }
     }
     
+    @Override
     public int filesize()  {
         if ( memory_buffer == null ) return 0;
-        return memory_buffer.limit();
+        return memory_buffer.capacity();
     }
     
+    @Override
     public boolean readable() {
         if ( memory_buffer == null ) return false;
         return memory_buffer.remaining() > 0 ? true : false;
     }
     
+    @Override
     public byte[] readPacket() {
         byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
         memory_buffer.get(tlv_header_buffer);

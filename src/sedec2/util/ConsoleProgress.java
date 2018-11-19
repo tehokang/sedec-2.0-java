@@ -5,6 +5,7 @@ import java.util.concurrent.TimeUnit;
 public class ConsoleProgress {
     protected final int PROGRESS_BAR_WIDTH=30;
     protected long counter = 0;
+    protected String counter_name = "";
     protected long startTime = 0;
     protected long processTime = 0;
     protected double read_size = 0;
@@ -12,6 +13,10 @@ public class ConsoleProgress {
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
+    
+    public ConsoleProgress(String counter_name) {
+        this.counter_name = counter_name;
+    }
     
     public void start(double file_size) {
         total_size = file_size;
@@ -54,7 +59,7 @@ public class ConsoleProgress {
         /**
          * @note TLV counter
          */
-        System.out.print(String.format(" TLV : %d ", counter));
+        System.out.print(String.format(" %s : %d ", counter_name, counter));
         
         /**
          * @note Progress bar as percentage

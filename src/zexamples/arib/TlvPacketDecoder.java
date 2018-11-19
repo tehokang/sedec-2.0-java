@@ -30,7 +30,6 @@ import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
-import sedec2.util.TlvFileReader;
 import sedec2.util.TlvMemoryReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
@@ -179,7 +178,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -433,13 +432,13 @@ public class TlvPacketDecoder {
         }
         
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
-        ConsoleProgress progress_bar = new ConsoleProgress();
+        ConsoleProgress progress_bar = new ConsoleProgress("TLV");
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvFileReader tlv_reader = new TlvFileReader(args[i]);
+            TlvMemoryReader tlv_reader = new TlvMemoryReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
             
             /**
