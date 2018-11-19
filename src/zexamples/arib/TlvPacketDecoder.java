@@ -30,7 +30,7 @@ import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
-import sedec2.util.TlvMemoryReader;
+import sedec2.util.TlvFileReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
@@ -410,7 +410,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
         MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
-        data.print();
+//        data.print();
     }
 }
 
@@ -438,7 +438,7 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvMemoryReader tlv_reader = new TlvMemoryReader(args[i]);
+            TlvFileReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
             
             /**
@@ -449,8 +449,8 @@ public class TlvPacketDecoder {
             progress_bar.start(tlv_reader.filesize());
             while ( tlv_reader.readable() ) {
                 byte[] tlv_packet = tlv_reader.readPacket();
-                if ( tlv_packet.length == 0 || 
-                        false == simple_tlv_coordinator.put(tlv_packet) ) break;
+                if ( tlv_packet.length == 0 ) continue;  
+                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
                 progress_bar.update(tlv_packet.length);
             }
