@@ -25,7 +25,7 @@ public abstract class BaseExtractor {
     /**
      * Interval of a thread loop cycle(micro-seconds)
      */
-    protected int m_sleep_micro_interval = 100;
+    protected int m_sleep_nano_interval = 100;
     
     /**
      * Flag which can stop thread or run.
@@ -165,7 +165,7 @@ public abstract class BaseExtractor {
      * @param micro_sec
      */
     public void setThreadInterval(int micro_sec) {
-        m_sleep_micro_interval = micro_sec;
+        m_sleep_nano_interval = micro_sec;
     }
     
     /**

@@ -26,7 +26,7 @@ public class VideoExtractor extends BaseExtractor {
                 
                 while ( m_is_running ) {
                     try {
-                        Thread.sleep(0, m_sleep_micro_interval);
+                        Thread.sleep(0, m_sleep_nano_interval);
                         if ( null != m_event_queue && 
                                 (data = m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {

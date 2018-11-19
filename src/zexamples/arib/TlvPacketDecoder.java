@@ -31,6 +31,7 @@ import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
 import sedec2.util.TlvFileReader;
+import sedec2.util.TlvMemoryReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
@@ -178,7 +179,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-//                mpt.print();
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -438,17 +439,17 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvFileReader tlv_file_pumper = new TlvFileReader(args[i]);
-            if ( false == tlv_file_pumper.open() ) continue;
+            TlvFileReader tlv_reader = new TlvFileReader(args[i]);
+            if ( false == tlv_reader.open() ) continue;
             
             /**
              * @note Putting a TLV packet into SimpleTlvCoordinator \n
              * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
              * from event listener which you registered to TlvDemultiplexer
              */
-            progress_bar.start(tlv_file_pumper.filesize());
-            while ( tlv_file_pumper.readable() ) {
-                byte[] tlv_packet = tlv_file_pumper.readPacket();
+            progress_bar.start(tlv_reader.filesize());
+            while ( tlv_reader.readable() ) {
+                byte[] tlv_packet = tlv_reader.readPacket();
                 if ( tlv_packet.length == 0 || 
                         false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
