@@ -39,7 +39,7 @@ public class AribTableDecoder {
                 if ( null == table ) {
                     table = sedec2.arib.tlv.si.TableFactory.createTable(table_buffer);
                     if ( null == table ) {
-                        table = sedec2.arib.tlv.mmt.si.TableFactory.createTable(table_buffer);
+                        table = sedec2.arib.tlv.container.mmt.si.TableFactory.createTable(table_buffer);
                     }
                 }
                 

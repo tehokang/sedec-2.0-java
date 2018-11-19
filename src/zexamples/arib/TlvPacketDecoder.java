@@ -12,21 +12,20 @@ import java.util.List;
 import java.util.Map;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
+import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
+import sedec2.arib.tlv.container.mmt.si.TableFactory;
+import sedec2.arib.tlv.container.mmt.si.descriptors.Descriptor;
+import sedec2.arib.tlv.container.mmt.si.descriptors.MPU_NodeDescriptor;
+import sedec2.arib.tlv.container.mmt.si.tables.DataAssetManagementTable;
+import sedec2.arib.tlv.container.mmt.si.tables.DataContentConfigurationTable;
+import sedec2.arib.tlv.container.mmt.si.tables.DataDirectoryManagementTable;
+import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
+import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
+import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
+import sedec2.arib.tlv.container.mmtp.mfu.MFU_ClosedCaption;
+import sedec2.arib.tlv.container.mmtp.mfu.MFU_GeneralPurposeData;
+import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
-import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_ClosedCaption;
-import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_GeneralPurposeData;
-import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem;
-import sedec2.arib.tlv.mmt.mmtp.mfu.MFU_IndexItem.Item;
-import sedec2.arib.tlv.mmt.si.DescriptorFactory;
-import sedec2.arib.tlv.mmt.si.descriptors.Descriptor;
-import sedec2.arib.tlv.mmt.si.descriptors.MPU_NodeDescriptor;
-import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable;
-import sedec2.arib.tlv.mmt.si.tables.DataAssetManagementTable.MPU;
-import sedec2.arib.tlv.mmt.si.tables.DataContentConfigurationTable;
-import sedec2.arib.tlv.mmt.si.tables.DataDirectoryManagementTable;
-import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable;
-import sedec2.arib.tlv.mmt.si.tables.MMT_PackageTable.Asset;
-import sedec2.arib.tlv.mmt.si.tables.PackageListTable;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
@@ -94,12 +93,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 //        tlv_demuxer.enableGeneralDataLogging();
         
 //        tlv_demuxer.addSiAllFilter();
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MPT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.PLT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DDMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DCMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.DAMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.mmt.si.TableFactory.MH_AIT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MPT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.PLT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DDMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DCMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DAMT);
+        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MH_AIT);
     }
     
     public void destroy() throws IOException {
@@ -121,10 +120,10 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedTable(Table table) {
         switch ( table.getTableId() ) {
-        case sedec2.arib.tlv.mmt.si.TableFactory.MH_AIT:
+        case TableFactory.MH_AIT:
 //            table.print();
             break;
-        case sedec2.arib.tlv.mmt.si.TableFactory.DDMT: 
+        case TableFactory.DDMT: 
             ddmt = (DataDirectoryManagementTable) table;
 //            ddmt.print();
             boolean found_app = false;
@@ -149,12 +148,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 applications.add(app);
             }
             break;
-        case sedec2.arib.tlv.mmt.si.TableFactory.DAMT:
+        case TableFactory.DAMT:
             damt = (DataAssetManagementTable) table;
 //            damt.print();
             
             for ( int i=0; i<damt.getMPUs().size(); i++ ) {
-                MPU mpu = damt.getMPUs().get(i);
+                DataAssetManagementTable.MPU mpu = damt.getMPUs().get(i);
                 for ( int j=0; j<mpu.mpu_info_byte.size(); j++ ) {
                     Descriptor desc = mpu.mpu_info_byte.get(j);
                     if ( desc.getDescriptorTag() == DescriptorFactory.MPU_NODE_DESCRIPTOR ) {
@@ -172,11 +171,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 }
             }
             break;
-        case sedec2.arib.tlv.mmt.si.TableFactory.DCMT:
+        case TableFactory.DCMT:
             dcct = (DataContentConfigurationTable) table;
 //            dcct.print();
             break;
-        case sedec2.arib.tlv.mmt.si.TableFactory.MPT:
+        case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
 //                mpt.print();
@@ -232,7 +231,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 }
             }
             break;
-        case sedec2.arib.tlv.mmt.si.TableFactory.PLT:
+        case TableFactory.PLT:
             if ( plt == null  ) {
                 plt = (PackageListTable) table;  
 //                plt.print();
@@ -380,7 +379,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 if ( sub_directory.mpu_sequence_number == mpu_sequence_number ) {
                     boolean exist = false;
                     for ( int k=0; k<index_item.getItems().size(); k++ ) {
-                        Item item = index_item.getItems().get(k);
+                        MFU_IndexItem.Item item = index_item.getItems().get(k);
                         for ( int n=0; n<sub_directory.files.size(); n++ ) {
                             SimpleApplication.File file = sub_directory.files.get(n);
                             if ( file.item_id == item.item_id ) { 

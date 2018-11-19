@@ -4,11 +4,11 @@ import java.io.IOException;
 import java.util.List;
 
 import sedec2.arib.tlv.container.PacketFactory;
+import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
+import sedec2.arib.tlv.container.mmtp.messages.Message;
 import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.SignallingPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
-import sedec2.arib.tlv.mmt.messages.Message;
-import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
 import sedec2.base.Table;
 
 public class SiExtractor extends BaseExtractor {

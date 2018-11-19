@@ -1,6 +1,6 @@
 package sedec2.arib.tlv.container.packets;
 
-import sedec2.arib.tlv.mmt.mmtp.MMTP_Packet;
+import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
