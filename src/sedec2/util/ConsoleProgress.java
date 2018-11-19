@@ -5,11 +5,11 @@ import java.util.concurrent.TimeUnit;
 public class ConsoleProgress {
     protected final int PROGRESS_BAR_WIDTH=30;
     protected long counter = 0;
-    protected String counter_name = "";
     protected long startTime = 0;
     protected long processTime = 0;
     protected double read_size = 0;
     protected double total_size = 0;
+    protected String counter_name = "";
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
@@ -20,12 +20,14 @@ public class ConsoleProgress {
     
     public void start(double file_size) {
         total_size = file_size;
+        bitrate_average = 0;
         startTime = System.currentTimeMillis();
         processTime = System.currentTimeMillis();
     }
     
     public void stop() {
         total_size = 0;
+        bitrate_average = 0;
     }
     
     protected String formatInterval(final long l) {
@@ -92,7 +94,7 @@ public class ConsoleProgress {
          */
         System.out.print(String.format("(%.2f / %.2f MBytes) ", 
                 (double)(read_size/1024/1024),
-                (double) total_size/1024/1024));
+                (double)(total_size/1024/1024) ));
         
         /**
          * @note Duration time during demuxing
