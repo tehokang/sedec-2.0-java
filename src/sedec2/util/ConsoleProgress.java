@@ -37,30 +37,6 @@ public class ConsoleProgress {
         bitrate_average = 0;
     }
     
-    protected String formatInterval(final long l) {
-        final long hr = TimeUnit.MILLISECONDS.toHours(l);
-        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
-        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - 
-                TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
-        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - 
-                TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
-        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
-    }
-    
-    protected String getProgressBar(double percent) {
-        int bars = (int)(percent * PROGRESS_BAR_WIDTH / 100);
-        anim_progress_bar = new StringBuilder(PROGRESS_BAR_WIDTH);
-        anim_progress_bar.append("[");
-        for ( int i=0; i<bars; i++ ) {
-            anim_progress_bar.append("=");
-        }
-        for ( int i=PROGRESS_BAR_WIDTH-bars; i>0; i-- ) {
-            anim_progress_bar.append(" ");
-        }
-        anim_progress_bar.append("]");
-        return anim_progress_bar.toString();
-    }
-    
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean loading_circle,
             boolean bitrate, boolean duration, boolean amount ) {
         m_enable_progress_bar = progress_bar;
@@ -134,8 +110,8 @@ public class ConsoleProgress {
                     (double)((System.currentTimeMillis()-processTime) )) * 
                     8) / 1024 / 1024;
             System.out.print(String.format("%4.2fMbps ", bitrate_average/counter));
+            processTime = System.currentTimeMillis();
         }
-        processTime = System.currentTimeMillis();
         
         /**
          * @note Total amount of processed
@@ -153,5 +129,29 @@ public class ConsoleProgress {
                     formatInterval(System.currentTimeMillis()-startTime)));
         
         System.out.print("\r");
+    }
+    
+    protected String formatInterval(final long l) {
+        final long hr = TimeUnit.MILLISECONDS.toHours(l);
+        final long min = TimeUnit.MILLISECONDS.toMinutes(l - TimeUnit.HOURS.toMillis(hr));
+        final long sec = TimeUnit.MILLISECONDS.toSeconds(l - 
+                TimeUnit.HOURS.toMillis(hr) - TimeUnit.MINUTES.toMillis(min));
+        final long ms = TimeUnit.MILLISECONDS.toMillis(l - TimeUnit.HOURS.toMillis(hr) - 
+                TimeUnit.MINUTES.toMillis(min) - TimeUnit.SECONDS.toMillis(sec));
+        return String.format("%02d:%02d:%02d.%03d", hr, min, sec, ms);
+    }
+    
+    protected String getProgressBar(double percent) {
+        int bars = (int)(percent * PROGRESS_BAR_WIDTH / 100);
+        anim_progress_bar = new StringBuilder(PROGRESS_BAR_WIDTH);
+        anim_progress_bar.append("[");
+        for ( int i=0; i<bars; i++ ) {
+            anim_progress_bar.append("=");
+        }
+        for ( int i=PROGRESS_BAR_WIDTH-bars; i>0; i-- ) {
+            anim_progress_bar.append(" ");
+        }
+        anim_progress_bar.append("]");
+        return anim_progress_bar.toString();
     }
 }
