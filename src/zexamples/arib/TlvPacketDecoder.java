@@ -451,8 +451,8 @@ public class TlvPacketDecoder {
             progress_bar.start(tlv_reader.filesize());
             while ( tlv_reader.readable() ) {
                 byte[] tlv_packet = tlv_reader.readPacket();
-                if ( tlv_packet.length == 0 ) continue;
-                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
+                if ( tlv_packet.length == 0 || 
+                        false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
                 progress_bar.update(tlv_packet.length);
             }
