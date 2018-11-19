@@ -18,6 +18,9 @@ public class TlvMemoryReader extends TlvReader {
     @Override
     public boolean open() {
         try {
+            Logger.d(String.format("TlvMemoryReader opened (%s) \n",
+                    tlv_file.getName()));
+
             input_memory_stream = new RandomAccessFile(tlv_file, "r");
             memory_buffer = input_memory_stream.getChannel().map(
                     FileChannel.MapMode.READ_ONLY, 0, input_memory_stream.length());

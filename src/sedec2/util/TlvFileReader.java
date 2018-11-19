@@ -16,6 +16,8 @@ public class TlvFileReader extends TlvReader {
     
     public boolean open() {
         try {
+            Logger.d(String.format("TlvFileReader opened (%s) \n",
+                    tlv_file.getName()));
             input_stream  = 
                     new DataInputStream(
                             new BufferedInputStream(new FileInputStream(tlv_file)));
@@ -51,7 +53,6 @@ public class TlvFileReader extends TlvReader {
     
     @Override
     public boolean readable() {
-        
         try {
             if ( input_stream != null )
                 return input_stream.available() > 0 ? true : false;
