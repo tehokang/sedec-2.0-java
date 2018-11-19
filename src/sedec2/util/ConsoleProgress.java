@@ -14,6 +14,13 @@ public class ConsoleProgress {
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
     
+    protected boolean m_enable_progress_bar = false;
+    protected boolean m_enable_percentage = false;
+    protected boolean m_enable_loading_circle = false;
+    protected boolean m_enable_bitrate = false;
+    protected boolean m_enable_duration = false;
+    protected boolean m_enable_proceed_amount = false;
+    
     public ConsoleProgress(String counter_name) {
         this.counter_name = counter_name;
     }
@@ -54,6 +61,42 @@ public class ConsoleProgress {
         return anim_progress_bar.toString();
     }
     
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean loading_circle,
+            boolean bitrate, boolean duration, boolean amount ) {
+        m_enable_progress_bar = progress_bar;
+        m_enable_percentage = percentage;
+        m_enable_loading_circle = loading_circle;
+        m_enable_bitrate = bitrate;
+        m_enable_duration = duration;
+        m_enable_proceed_amount = amount;
+        
+        return this;
+    }
+    
+    public void showProgressbar(boolean show) {
+        m_enable_progress_bar = show;
+    }
+    
+    public void showPercentage(boolean show) {
+        m_enable_percentage = show;
+    }
+    
+    public void showLoadingCircle(boolean show) {
+        m_enable_loading_circle = show;
+    }
+    
+    public void showBitrate(boolean show) {
+        m_enable_bitrate = show;
+    }
+    
+    public void showDuration(boolean show) {
+        m_enable_duration = show;
+    }
+    
+    public void showProceedAmount(boolean show) {
+        m_enable_proceed_amount = show;
+    }
+    
     public void update(int read) {
         counter+=1;
         read_size += read;
@@ -66,40 +109,47 @@ public class ConsoleProgress {
         /**
          * @note Progress bar as percentage
          */
-        System.out.print(String.format("%s ", 
-                getProgressBar((double)(read_size / total_size) * 100)));
+        if ( m_enable_progress_bar )
+            System.out.print(String.format("%s ", 
+                    getProgressBar((double)(read_size / total_size) * 100)));
 
         /**
          * @note Percentage of processing while demuxing
          */
-        System.out.print("\033[1;31m" + 
-                String.format("%.2f %% ", (double)(read_size / total_size) * 100) + "\u001B[0m");
+        if ( m_enable_percentage ) 
+            System.out.print("\033[1;31m" + String.format("%.2f %% ", 
+                    (double)(read_size / total_size) * 100) + "\u001B[0m");
         
         /**
          * @note Circle animation of progressing 
          */
-        System.out.print(anim_circle[(int) (counter%4)] + " "); 
+        if ( m_enable_loading_circle )
+            System.out.print(anim_circle[(int) (counter%4)] + " "); 
         
         /**
          * @note Bitrate of processing as Mbps
          */
-        bitrate_average += (((double) (1000 * read ) / 
-                (double)((System.currentTimeMillis()-processTime) )) * 
-                8) / 1024 / 1024;
-        System.out.print(String.format("%4.2fMbps ", bitrate_average/counter)); 
+        if ( m_enable_bitrate ) {
+            bitrate_average += (((double) (1000 * read ) / 
+                    (double)((System.currentTimeMillis()-processTime) )) * 
+                    8) / 1024 / 1024;
+            System.out.print(String.format("%4.2fMbps ", bitrate_average/counter));
+        }
         processTime = System.currentTimeMillis();
         
         /**
          * @note Total amount of processed
          */
-        System.out.print(String.format("(%.2f / %.2f MBytes) ", 
-                (double)(read_size/1024/1024),
-                (double)(total_size/1024/1024) ));
+        if ( m_enable_proceed_amount ) 
+            System.out.print(String.format("(%.2f / %.2f MBytes) ", 
+                    (double)(read_size/1024/1024),
+                    (double)(total_size/1024/1024) ));
         
         /**
          * @note Duration time during demuxing
          */
-        System.out.print(String.format("%s \r", 
-                formatInterval(System.currentTimeMillis()-startTime)));
+        if ( m_enable_duration )
+            System.out.print(String.format("%s \r",
+                    formatInterval(System.currentTimeMillis()-startTime)));
     }
 }
