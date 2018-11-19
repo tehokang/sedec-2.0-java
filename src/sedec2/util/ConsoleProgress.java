@@ -149,7 +149,9 @@ public class ConsoleProgress {
          * @note Duration time during demuxing
          */
         if ( m_enable_duration )
-            System.out.print(String.format("%s \r",
+            System.out.print(String.format("%s ",
                     formatInterval(System.currentTimeMillis()-startTime)));
+        
+        System.out.print("\r");
     }
 }
