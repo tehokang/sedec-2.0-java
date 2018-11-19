@@ -30,7 +30,7 @@ import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
-import sedec2.util.TlvMemoryReader;
+import sedec2.util.TlvFileReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
@@ -438,7 +438,7 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvMemoryReader tlv_reader = new TlvMemoryReader(args[i]);
+            TlvFileReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
             
             /**
