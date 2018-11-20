@@ -2,7 +2,6 @@ package zexamples.arib;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -23,7 +22,6 @@ import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_ClosedCaption;
-import sedec2.arib.tlv.container.mmtp.mfu.MFU_GeneralPurposeData;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
@@ -62,7 +60,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected BufferedOutputStream video_bs = null;
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
     
-    public SimpleTlvCoordinator() throws FileNotFoundException {
+    public SimpleTlvCoordinator() {
         tlv_demuxer = new TlvDemultiplexer();
         tlv_demuxer.addEventListener(this);
         
@@ -101,12 +99,16 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MH_AIT);
     }
     
-    public void destroy() throws IOException {
+    public void destroy() {
         tlv_demuxer.removeEventListener(this);
         tlv_demuxer.destroy();
         tlv_demuxer = null;
         
-        video_bs.close();
+        try {
+            video_bs.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         video_bs = null;
         
         audio_bs_map.clear();
@@ -409,7 +411,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedGeneralData(int packet_id, byte[] buffer) {
-        MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
+//        MFU_GeneralPurposeData data = new MFU_GeneralPurposeData(buffer);
 //        data.print();
     }
 }
@@ -421,7 +423,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * - MPU, MFU to be used for media which is included in MMTP Packet \n 
  */
 public class TlvPacketDecoder {
-    public static void main(String []args) throws IOException, InterruptedException {
+    public static void main(String []args) throws InterruptedException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " + 
                     "You need TLV packet(or file) to be parsed as 1st parameter");
