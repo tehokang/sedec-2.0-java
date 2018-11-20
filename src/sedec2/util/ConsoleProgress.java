@@ -7,7 +7,7 @@ public class ConsoleProgress {
     protected long counter = 0;
     protected long startTime = 0;
     protected long processTime = 0;
-    protected double read_size = 0;
+    protected long read_size = 0;
     protected double total_size = 0;
     protected String counter_name = "";
     protected double bitrate_average = 0;
@@ -73,7 +73,7 @@ public class ConsoleProgress {
         m_enable_proceed_amount = show;
     }
     
-    public void update(int read) {
+    public void update(long read) {
         counter+=1;
         read_size += read;
 
