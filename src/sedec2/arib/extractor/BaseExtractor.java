@@ -23,11 +23,6 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
  */
 public abstract class BaseExtractor {
     /**
-     * Interval of a thread loop cycle(micro-seconds)
-     */
-    protected int m_sleep_nano_interval = 100;
-    
-    /**
      * Flag which can stop thread or run.
      */
     protected boolean m_is_running = true;
@@ -115,7 +110,6 @@ public abstract class BaseExtractor {
                 
                 while ( m_is_running ) {
                     try {
-                        Thread.sleep(0, 1);
                         if ( null != m_tlv_packets ) {
                             byte[] tlv_raw = (byte[])m_tlv_packets.take();
                             TypeLengthValue tlv = 
@@ -158,14 +152,6 @@ public abstract class BaseExtractor {
         
         m_listeners.clear();
         m_listeners = null;
-    }
-    
-    /**
-     * User can set an interval of thread loop as micro-seconds
-     * @param micro_sec
-     */
-    public void setThreadInterval(int micro_sec) {
-        m_sleep_nano_interval = micro_sec;
     }
     
     /**

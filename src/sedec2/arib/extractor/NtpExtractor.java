@@ -33,7 +33,6 @@ public class NtpExtractor extends BaseExtractor {
                 
                 while ( m_is_running ) {
                     try {
-                        Thread.sleep(0, m_sleep_nano_interval);
                         if ( null != m_event_queue && 
                                 (data = (QueueData) m_event_queue.take()) != null ) {
                             

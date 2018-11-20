@@ -8,6 +8,7 @@ public class ConsoleProgress {
     protected long startTime = 0;
     protected long processTime = 0;
     protected long read_size = 0;
+    protected long read_vector = 0;
     protected double total_size = 0;
     protected String counter_name = "";
     protected double bitrate_average = 0;
@@ -107,13 +108,16 @@ public class ConsoleProgress {
          * @note Bitrate of processing as Mbps
          */
         if ( m_enable_bitrate ) {
-            bitrate_average += (((double) (1000 * read ) / 
-                    (double)((System.currentTimeMillis()-processTime) )) * 
-                    8) / 1024 / 1024;
-            System.out.print(String.format("%4.2fMbps ", bitrate_average/counter));
-            processTime = System.currentTimeMillis();
+            if ( System.currentTimeMillis()-processTime >= 1000 ) {
+                bitrate_average = read_vector;
+                processTime = System.currentTimeMillis();
+                read_vector = 0;
+           } else {
+                read_vector += read;
+            }
+            System.out.print(String.format("%4.2f Mbps ", bitrate_average*8/1024/1024));
         }
-        
+
         /**
          * @note Total amount of processed
          */
