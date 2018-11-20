@@ -109,13 +109,13 @@ public class ConsoleProgress {
          */
         if ( m_enable_bitrate ) {
             if ( System.currentTimeMillis()-processTime >= 1000 ) {
-                bitrate_average = read_vector;
+                bitrate_average = bitrate_average*8/1024/1024;
                 processTime = System.currentTimeMillis();
                 read_vector = 0;
             } else {
                 read_vector += read;
             }
-            System.out.print(String.format("%4.2f Mbps ", bitrate_average*8/1024/1024));
+            System.out.print(String.format("%4.2f Mbps ", bitrate_average));
         }
 
         /**
