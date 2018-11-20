@@ -1,12 +1,14 @@
 package sedec2.util;
 
 import java.io.File;
+import java.nio.ByteBuffer;
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class TlvReader {
     protected File tlv_file = null;
     protected final int TLV_HEADER_LENGTH = 4;
+    protected ByteBuffer output_buffer = null;
     
     public TlvReader(String tlv_file) {
         this.tlv_file = new File(tlv_file);
@@ -18,7 +20,9 @@ public abstract class TlvReader {
         tlv_file = null;
     }
     
-    public abstract long filesize();
+    public long filesize() {
+        return tlv_file.length();
+    }
     
     public abstract boolean readable();
     

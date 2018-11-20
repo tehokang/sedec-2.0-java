@@ -1,14 +1,13 @@
 package sedec2.util;
 
 import java.io.BufferedInputStream;
-import java.io.ByteArrayOutputStream;
 import java.io.DataInputStream;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.ByteBuffer;
 
 public class TlvFileReader extends TlvReader {
     protected DataInputStream input_stream  = null;
-    protected ByteArrayOutputStream output_stream = null;
     
     public TlvFileReader(String tlv_file) {
         super(tlv_file);
@@ -42,11 +41,6 @@ public class TlvFileReader extends TlvReader {
     }
     
     @Override
-    public long filesize() {
-        return tlv_file.length();
-    }
-    
-    @Override
     public boolean readable() {
         try {
             if ( input_stream != null ) {
@@ -60,7 +54,6 @@ public class TlvFileReader extends TlvReader {
     
     @Override
     public byte[] readPacket() {
-        output_stream = new ByteArrayOutputStream();
 
         try {
             byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
@@ -71,11 +64,13 @@ public class TlvFileReader extends TlvReader {
                             (tlv_header_buffer[3] & 0xff))];
             input_stream.read(tlv_payload_buffer);
 
-            output_stream.write(tlv_header_buffer);
-            output_stream.write(tlv_payload_buffer);
+            output_buffer = ByteBuffer.allocate(
+                    tlv_header_buffer.length + tlv_payload_buffer.length);
+            output_buffer.put(tlv_header_buffer);
+            output_buffer.put(tlv_payload_buffer);
         } catch (IOException e) {
             e.printStackTrace();
         }  
-        return output_stream.toByteArray();
+        return output_buffer.array();
     }
 }

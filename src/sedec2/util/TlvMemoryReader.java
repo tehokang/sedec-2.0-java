@@ -1,15 +1,14 @@
 package sedec2.util;
 
-import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.RandomAccessFile;
+import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
 public class TlvMemoryReader extends TlvReader {
     protected MappedByteBuffer memory_buffer = null;
-    protected RandomAccessFile input_memory_stream = null;
-    protected ByteArrayOutputStream output_stream = null;
+    protected RandomAccessFile input_stream = null;
     
     public TlvMemoryReader(String tlv_file) {
         super(tlv_file);
@@ -21,9 +20,9 @@ public class TlvMemoryReader extends TlvReader {
             Logger.d(String.format("TlvMemoryReader opened (%s) \n",
                     tlv_file.getName()));
 
-            input_memory_stream = new RandomAccessFile(tlv_file, "r");
-            memory_buffer = input_memory_stream.getChannel().map(
-                    FileChannel.MapMode.READ_ONLY, 0, input_memory_stream.length());
+            input_stream = new RandomAccessFile(tlv_file, "r");
+            memory_buffer = input_stream.getChannel().map(
+                    FileChannel.MapMode.READ_ONLY, 0, input_stream.length());
             memory_buffer.load();
             return memory_buffer.isLoaded();
         } catch (IOException e) {
@@ -36,21 +35,17 @@ public class TlvMemoryReader extends TlvReader {
     public void close() {
         super.close();
         
-        memory_buffer.clear();
-        memory_buffer = null;
+        if ( memory_buffer != null ) {
+            memory_buffer.clear();
+            memory_buffer = null;
+        }
         
         try {
-            input_memory_stream.close();
-            input_memory_stream = null;
+            input_stream.close();
+            input_stream = null;
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-    
-    @Override
-    public long filesize()  {
-        if ( memory_buffer == null ) return 0;
-        return memory_buffer.capacity();
     }
     
     @Override
@@ -69,13 +64,10 @@ public class TlvMemoryReader extends TlvReader {
                         (tlv_header_buffer[3] & 0xff))];
         memory_buffer.get(tlv_payload_buffer);
         
-        try {
-            output_stream = new ByteArrayOutputStream();
-            output_stream.write(tlv_header_buffer);
-            output_stream.write(tlv_payload_buffer);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        return output_stream.toByteArray();
+        output_buffer = ByteBuffer.allocate(
+                tlv_header_buffer.length + tlv_payload_buffer.length);
+        output_buffer.put(tlv_header_buffer);
+        output_buffer.put(tlv_payload_buffer);
+        return output_buffer.array();
     }
 }

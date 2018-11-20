@@ -29,6 +29,7 @@ import sedec2.util.ConsoleProgress;
 import sedec2.util.FileUtility;
 import sedec2.util.Logger;
 import sedec2.util.TlvFileReader;
+import sedec2.util.TlvReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
@@ -182,7 +183,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-//                mpt.print();
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -444,7 +445,7 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvFileReader tlv_reader = new TlvFileReader(args[i]);
+            TlvReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
             
             /**
@@ -454,13 +455,16 @@ public class TlvPacketDecoder {
              */
             progress_bar.start(tlv_reader.filesize());
             while ( tlv_reader.readable() ) {
-                byte[] tlv_packet = tlv_reader.readPacket();
+                final byte[] tlv_packet = tlv_reader.readPacket();
                 if ( tlv_packet == null || tlv_packet.length == 0 ) continue;  
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
-                progress_bar.update(tlv_packet.length);
+//                progress_bar.update(tlv_packet.length);
             }
+            progress_bar.update(tlv_reader.filesize());
             progress_bar.stop();
+            tlv_reader.close();
+            tlv_reader = null;
         }
         /**
          * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
@@ -468,6 +472,7 @@ public class TlvPacketDecoder {
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;
         progress_bar = null;
+        
         System.out.println("ByeBye");
         System.exit(0);
     }
