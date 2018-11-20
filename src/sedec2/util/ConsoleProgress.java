@@ -112,7 +112,7 @@ public class ConsoleProgress {
                 bitrate_average = read_vector;
                 processTime = System.currentTimeMillis();
                 read_vector = 0;
-           } else {
+            } else {
                 read_vector += read;
             }
             System.out.print(String.format("%4.2f Mbps ", bitrate_average*8/1024/1024));
