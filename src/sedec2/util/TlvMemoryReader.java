@@ -55,6 +55,22 @@ public class TlvMemoryReader extends TlvReader {
     }
     
     @Override
+    public int readPacket(byte[] tlv_packet) {
+        byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
+        memory_buffer.get(tlv_header_buffer);
+        
+        byte[] tlv_payload_buffer = 
+                new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+                        (tlv_header_buffer[3] & 0xff))];
+        memory_buffer.get(tlv_payload_buffer);
+        
+        output_buffer = ByteBuffer.wrap(tlv_packet);
+        output_buffer.put(tlv_header_buffer);
+        output_buffer.put(tlv_payload_buffer);
+        return tlv_header_buffer.length + tlv_payload_buffer.length;
+    }
+    
+    @Override
     public byte[] readPacket() {
         byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
         memory_buffer.get(tlv_header_buffer);

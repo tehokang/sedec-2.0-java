@@ -28,6 +28,8 @@ public abstract class TlvReader {
     
     public abstract byte[] readPacket();
     
+    public abstract int readPacket(byte[] tlv_packet);
+    
     public List<byte[]> readPackets(int packet_count) {
         List<byte[]> tlv_packets = new ArrayList<>();
         

@@ -52,11 +52,33 @@ public class TlvFileReader extends TlvReader {
         return false;
     }
     
+    public int readPacket(byte[] tlv_packet) {
+        byte[] tlv_header_buffer = null;
+        byte[] tlv_payload_buffer = null;
+        
+        try {
+            tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
+            input_stream.read(tlv_header_buffer);
+            
+            tlv_payload_buffer = 
+                    new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+                            (tlv_header_buffer[3] & 0xff))];
+            input_stream.read(tlv_payload_buffer);
+
+            output_buffer = ByteBuffer.wrap(tlv_packet);
+            output_buffer.put(tlv_header_buffer);
+            output_buffer.put(tlv_payload_buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        return tlv_header_buffer.length + tlv_payload_buffer.length;
+    }
+    
     @Override
     public byte[] readPacket() {
         byte[] tlv_header_buffer = null;
         byte[] tlv_payload_buffer = null;
-
+        
         try {
             tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
             input_stream.read(tlv_header_buffer);
