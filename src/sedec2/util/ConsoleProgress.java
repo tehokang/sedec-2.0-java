@@ -35,6 +35,7 @@ public class ConsoleProgress {
     public void stop() {
         total_size = 0;
         bitrate_average = 0;
+        System.out.print("\n");
     }
     
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean loading_circle,
