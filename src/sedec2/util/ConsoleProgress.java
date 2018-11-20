@@ -109,7 +109,7 @@ public class ConsoleProgress {
          */
         if ( m_enable_bitrate ) {
             if ( System.currentTimeMillis()-processTime >= 1000 ) {
-                bitrate_average = bitrate_average*8/1024/1024;
+                bitrate_average = bitrate_average * 8 / 1024 / 1024;
                 processTime = System.currentTimeMillis();
                 read_vector = 0;
             } else {
