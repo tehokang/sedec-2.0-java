@@ -24,7 +24,7 @@ public abstract class TlvReader {
         return tlv_file.length();
     }
     
-    public abstract boolean readable();
+    public abstract long readable();
     
     public abstract byte[] readPacket();
     

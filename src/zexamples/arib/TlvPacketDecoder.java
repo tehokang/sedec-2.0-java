@@ -454,14 +454,13 @@ public class TlvPacketDecoder {
              * from event listener which you registered to TlvDemultiplexer
              */
             progress_bar.start(tlv_reader.filesize());
-            while ( tlv_reader.readable() ) {
+            while ( tlv_reader.readable() > 0) {
                 final byte[] tlv_packet = tlv_reader.readPacket();
                 if ( tlv_packet == null || tlv_packet.length == 0 ) continue;  
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
                 progress_bar.update(tlv_packet.length);
             }
-            progress_bar.update(tlv_reader.filesize());
             progress_bar.stop();
             tlv_reader.close();
             tlv_reader = null;

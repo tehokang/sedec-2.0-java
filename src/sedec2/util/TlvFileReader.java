@@ -41,17 +41,18 @@ public class TlvFileReader extends TlvReader {
     }
     
     @Override
-    public boolean readable() {
+    public long readable() {
         try {
             if ( input_stream != null ) {
-                return input_stream.available() > 0 ? true : false;
+                return input_stream.available();
             }
         } catch (IOException e) {
             e.printStackTrace();
         }
-        return false;
+        return 0;
     }
     
+    @Override
     public int readPacket(byte[] tlv_packet) {
         byte[] tlv_header_buffer = null;
         byte[] tlv_payload_buffer = null;
