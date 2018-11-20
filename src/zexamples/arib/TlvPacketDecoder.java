@@ -183,7 +183,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
@@ -459,7 +459,7 @@ public class TlvPacketDecoder {
                 if ( tlv_packet == null || tlv_packet.length == 0 ) continue;  
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 Thread.sleep(0, 1);
-//                progress_bar.update(tlv_packet.length);
+                progress_bar.update(tlv_packet.length);
             }
             progress_bar.update(tlv_reader.filesize());
             progress_bar.stop();
