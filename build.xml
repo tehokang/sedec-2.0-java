@@ -10,7 +10,7 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
-    <property name="release.dir" value="dist"/>
+    <property name="release.dir" value="out"/>
     <property name="bin.dir" value="bin"/>
     <property name="lib.dir" value="libs"/>
     <property name="src.dir" value="src"/>
@@ -97,8 +97,7 @@
     <target depends="init,build-project" name="release-sdk">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
             basedir="${bin.dir}" 
-            includes="**/*.class" 
-            >
+            includes="**/*.class">
         </jar>
     </target>
     
