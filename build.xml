@@ -61,34 +61,44 @@
         </javac>
     </target>
               
-    <target depends="init, build" name="release-arib-example-decoder">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-decoder.jar" 
+    <target depends="init, build" name="release-arib-tlv-decoder">
+        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-tlv-decoder.jar" 
             basedir="${bin.dir}" 
             includes="**">
             <manifest>
-                <attribute name="Main-Class" value="zexamples.decoder.AribTableDecoder"/>
+                <attribute name="Main-Class" value="zexamples.arib.TlvPacketDecoder"/>
             </manifest>
             <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
         </jar>
     </target>
 
-    <target depends="init, build" name="release-dvb-example-decoder">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-dvb-decoder.jar" 
+    <target depends="init, build" name="release-arib-section-decoder">
+        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-section-decoder.jar" 
             basedir="${bin.dir}" 
             includes="**">
             <manifest>
-                <attribute name="Main-Class" value="zexamples.decoder.DvbTableDecoder"/>
+                <attribute name="Main-Class" value="zexamples.arib.AribTableDecoder"/>
             </manifest>
             <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
         </jar>
     </target>
 
-            	
+    <target depends="init, build" name="release-dvb-section-decoder">
+        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-dvb-section-decoder.jar" 
+            basedir="${bin.dir}" 
+            includes="**">
+            <manifest>
+                <attribute name="Main-Class" value="zexamples.dvb.DvbTableDecoder"/>
+            </manifest>
+            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
+        </jar>
+    </target>
+
     <target depends="init,build-project" name="release-sdk">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
             basedir="${bin.dir}" 
             includes="**/*.class" 
-            excludes="zexamples/*/*.class">
+            >
         </jar>
     </target>
     
