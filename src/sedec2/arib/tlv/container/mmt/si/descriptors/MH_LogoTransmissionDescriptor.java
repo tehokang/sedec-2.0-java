@@ -20,12 +20,12 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
         public byte start_section_number;
         public byte num_of_sections;
     }
-    
+
     public MH_LogoTransmissionDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         logo_transmission_type = (byte) brw.readOnBuffer(8);
-        
+
         switch ( logo_transmission_type ) {
             case 0x01:
                 brw.skipOnBuffer(7);
@@ -33,7 +33,7 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 brw.skipOnBuffer(4);;
                 logo_version = brw.readOnBuffer(12);
                 download_data_id = brw.readOnBuffer(16);
-                
+
                 for ( int i=descriptor_length-1-6; i>0; ) {
                     Logo logo = new Logo();
                     logo.logo_type = (byte) brw.readOnBuffer(8);
@@ -65,37 +65,37 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 break;
         }
     }
-    
+
     public byte getLogoTransmissionType() {
         return logo_transmission_type;
     }
-    
+
     public int getLogoId() {
         return logo_id;
     }
-    
+
     public int getLogoVersion() {
         return logo_version;
     }
-    
+
     public int getDownloadDataId() {
         return download_data_id;
     }
-    
+
     public byte[] getLogoChar() {
         return logo_char;
     }
-    
+
     public List<Logo> getLogos() {
         return logos;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t logo_transmission_type : 0x%x \n", logo_transmission_type));
-        
+
         switch ( logo_transmission_type ) {
             case 0x01:
                 Logger.d(String.format("\t logo_id : 0x%x \n", logo_id));
@@ -103,11 +103,11 @@ public class MH_LogoTransmissionDescriptor extends Descriptor {
                 Logger.d(String.format("\t download_data_id : 0x%x \n", download_data_id));
                 for ( int i=0; i<logos.size(); i++ ) {
                     Logo logo = logos.get(i);
-                    Logger.d(String.format("\t [%d] logo_type : 0x%x \n", 
+                    Logger.d(String.format("\t [%d] logo_type : 0x%x \n",
                             i, logo.logo_type));
                     Logger.d(String.format("\t [%d] start_section_number : 0x%x \n",
                             i, logo.start_section_number));
-                    Logger.d(String.format("\t [%d] num_of_sections : 0x%x \n", 
+                    Logger.d(String.format("\t [%d] num_of_sections : 0x%x \n",
                             i, logo.num_of_sections));
                 }
                 break;

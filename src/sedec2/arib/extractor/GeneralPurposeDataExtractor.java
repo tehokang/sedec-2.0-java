@@ -15,10 +15,10 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
     public interface IGeneralPurposeDataExtractorListener extends BaseExtractor.Listener {
         public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
-     
+
     public GeneralPurposeDataExtractor() {
         super();
-        
+
         m_event_thread = new Thread(new Runnable() {
 
             @Override
@@ -26,7 +26,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                 QueueData data = null;
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_event_queue && 
+                        if ( null != m_event_queue &&
                                 (data = m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((IGeneralPurposeDataExtractorListener)m_listeners.get(i)).
@@ -36,7 +36,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
-                        /** 
+                        /**
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
@@ -47,26 +47,28 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
         });
         m_event_thread.start();
     }
-    
+
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
+    @Override
     public void destroy() {
         super.destroy();
-        
+
         m_event_thread.interrupt();
         m_event_thread = null;
     }
-    
-    protected synchronized void process(TypeLengthValue tlv) 
+
+    @Override
+    protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
                 MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
-                
+
                 if ( mmtp_packet == null ) break;
-                
+
                 /**
                  * @note MPU-MFU
                  */
@@ -76,7 +78,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             putOut(new QueueData(
-                                    mmtp_packet.getPacketId(), 
+                                    mmtp_packet.getPacketId(),
                                     sample.toByteArray()));
                         }
                     }

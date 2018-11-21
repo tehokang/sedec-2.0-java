@@ -8,6 +8,6 @@ public class UnknownTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        
+
     }
 }

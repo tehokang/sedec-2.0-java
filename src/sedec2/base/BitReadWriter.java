@@ -6,23 +6,23 @@ import sedec2.util.Logger;
 
 public class BitReadWriter {
     protected byte[] m_buffer;
-    
+
     private int m_pos;
     private int m_out_counter;
     private int m_by_buffer;
-    
+
     public BitReadWriter(byte[] buffer) {
         m_buffer = buffer;
-        
+
         m_by_buffer = 0;
         m_pos = 0;
         m_out_counter = 8;
     }
-    
+
     public byte[] getBuffer() {
         return m_buffer;
     }
-    
+
     public byte[] getCurrentBuffer() {
         try {
             return Arrays.copyOfRange(m_buffer, m_pos, m_buffer.length);
@@ -31,7 +31,7 @@ public class BitReadWriter {
             return null;
         }
     }
-    
+
     public int calculateCRC32(byte[] temp, int real_data_length) {
         int bit_count = 0;
         int bit_in_byte = 0;
@@ -50,11 +50,11 @@ public class BitReadWriter {
             shift_reg[i] = 1;
 
         /* Calculate nr of data bits */
-        nr_bits = real_data_length*8; 
+        nr_bits = real_data_length*8;
         data = temp;
 
         while (bit_count < nr_bits) {
-            data_bit = (int) (data[byte_count]  & (0x80 >> bit_in_byte));
+            data_bit = data[byte_count]  & (0x80 >> bit_in_byte);
             data_bit = data_bit >> (7 - bit_in_byte);
             bit_in_byte++; bit_count++;
             if (bit_in_byte == 8) {
@@ -80,7 +80,7 @@ public class BitReadWriter {
 
         return(crc);
     }
-    
+
     public void skipOnBuffer(int len) {
         for ( int i=0; i<len; i++ ) {
             m_out_counter--;
@@ -91,7 +91,7 @@ public class BitReadWriter {
             }
         }
     }
-    
+
     public int readOnBuffer(int len) {
         int res = 0;
         int mask;
@@ -121,21 +121,21 @@ public class BitReadWriter {
         res = m_by_buffer;
         return res;
     }
-    
+
     public void writeOnBuffer(int value, int len) {
         int mask;
-        mask = 1 << (len-1);         
-        
+        mask = 1 << (len-1);
+
         for ( int i=0; i<len; i++ ) {
             m_by_buffer <<= 1;
             int v = value & mask;
-            if ( v != 0 ) 
+            if ( v != 0 )
                 m_by_buffer |= 1;
 
-            mask >>= 1;             
+            mask >>= 1;
             m_out_counter--;
 
-            if (m_out_counter==0) {     
+            if (m_out_counter==0) {
                 m_buffer[m_pos] =  (byte) m_by_buffer;
                 m_out_counter = 8;
                 m_pos++;
@@ -146,7 +146,7 @@ public class BitReadWriter {
 
     public void writeOnBuffer(long value, int len) {
         long mask;
-        mask = 1 << (len-1);         
+        mask = 1 << (len-1);
 
         for ( int i=0; i<len; i++ ) {
             m_by_buffer <<= 1;
@@ -154,10 +154,10 @@ public class BitReadWriter {
             if ( v != 0 )
                 m_by_buffer |= 1;
 
-            mask >>= 1;             
+            mask >>= 1;
             m_out_counter--;
 
-            if (m_out_counter==0) {     
+            if (m_out_counter==0) {
                 m_buffer[m_pos] = (byte) m_by_buffer;
                 m_out_counter = 8;
                 m_pos++;

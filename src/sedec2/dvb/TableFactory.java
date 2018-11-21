@@ -1,20 +1,20 @@
 package sedec2.dvb;
 
+import sedec2.base.Table;
+import sedec2.dvb.tables.ApplicationInformationTable;
 import sedec2.dvb.tables.BouquetAssociationTable;
+import sedec2.dvb.tables.ConditionalAccessTable;
 import sedec2.dvb.tables.DiscontinuityInformationTable;
 import sedec2.dvb.tables.EventInformationTable;
 import sedec2.dvb.tables.NetworkInformationTable;
+import sedec2.dvb.tables.ProgramAssociationTable;
+import sedec2.dvb.tables.ProgramMapTable;
 import sedec2.dvb.tables.RunningStatusTable;
 import sedec2.dvb.tables.SelectionInformationTable;
 import sedec2.dvb.tables.ServiceDescriptionTable;
 import sedec2.dvb.tables.StuffingTable;
 import sedec2.dvb.tables.TimeDateTable;
 import sedec2.dvb.tables.TimeOffsetTable;
-import sedec2.base.Table;
-import sedec2.dvb.tables.ApplicationInformationTable;
-import sedec2.dvb.tables.ConditionalAccessTable;
-import sedec2.dvb.tables.ProgramAssociationTable;
-import sedec2.dvb.tables.ProgramMapTable;
 
 public class TableFactory {
     public final static byte PROGRAM_ASSOCIATION_TABLE = (byte) 0x00;
@@ -35,10 +35,10 @@ public class TableFactory {
     public final static byte DISCONTINUITY_INFORMATION_TABLE = (byte) 0x7e;
     public final static byte SELECTION_INFORMATION_TABLE = (byte) 0x7f;
     public final static byte UNKNOWN_TABLE = (byte) 0xff;
-    
+
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
-        
+
         Table section = null;
 
         switch(table_id)
@@ -82,7 +82,7 @@ public class TableFactory {
         }
         return section;
     }
-    
+
     private TableFactory() {
         /**
          * @warning Nothing to do since this factory isn't working as instance

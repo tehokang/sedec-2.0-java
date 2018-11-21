@@ -6,7 +6,7 @@ public class UnknownDescriptor extends Descriptor {
 
     public UnknownDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         brw.skipOnBuffer(descriptor_length*8);
     }
 

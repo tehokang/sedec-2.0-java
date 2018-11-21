@@ -9,11 +9,11 @@ import java.nio.channels.FileChannel;
 public class TlvMemoryReader extends TlvReader {
     protected MappedByteBuffer memory_buffer = null;
     protected RandomAccessFile input_stream = null;
-    
+
     public TlvMemoryReader(String tlv_file) {
         super(tlv_file);
     }
-    
+
     @Override
     public boolean open() {
         try {
@@ -30,16 +30,16 @@ public class TlvMemoryReader extends TlvReader {
         }
         return false;
     }
-    
+
     @Override
     public void close() {
         super.close();
-        
+
         if ( memory_buffer != null ) {
             memory_buffer.clear();
             memory_buffer = null;
         }
-        
+
         try {
             input_stream.close();
             input_stream = null;
@@ -47,7 +47,7 @@ public class TlvMemoryReader extends TlvReader {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public long readable() {
         if ( memory_buffer != null ) {
@@ -55,33 +55,33 @@ public class TlvMemoryReader extends TlvReader {
         }
         return 0;
     }
-    
+
     @Override
     public int readPacket(byte[] tlv_packet) {
         byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
         memory_buffer.get(tlv_header_buffer);
-        
-        byte[] tlv_payload_buffer = 
-                new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+
+        byte[] tlv_payload_buffer =
+                new byte[((tlv_header_buffer[2] & 0xff) << 8 |
                         (tlv_header_buffer[3] & 0xff))];
         memory_buffer.get(tlv_payload_buffer);
-        
+
         output_buffer = ByteBuffer.wrap(tlv_packet);
         output_buffer.put(tlv_header_buffer);
         output_buffer.put(tlv_payload_buffer);
         return tlv_header_buffer.length + tlv_payload_buffer.length;
     }
-    
+
     @Override
     public byte[] readPacket() {
         byte[] tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
         memory_buffer.get(tlv_header_buffer);
-        
-        byte[] tlv_payload_buffer = 
-                new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+
+        byte[] tlv_payload_buffer =
+                new byte[((tlv_header_buffer[2] & 0xff) << 8 |
                         (tlv_header_buffer[3] & 0xff))];
         memory_buffer.get(tlv_payload_buffer);
-        
+
         output_buffer = ByteBuffer.allocate(
                 tlv_header_buffer.length + tlv_payload_buffer.length);
         output_buffer.put(tlv_header_buffer);

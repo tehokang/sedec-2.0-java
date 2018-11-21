@@ -7,12 +7,12 @@ public class MH_ExpireDescriptor extends Descriptor {
     private int time_mode;
     private long UTC_time;
     private int passed_seconds;
-    
+
     public MH_ExpireDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         time_mode = brw.readOnBuffer(8);
-        
+
         if ( 0x01 == time_mode ) {
             UTC_time = brw.readOnBuffer(64);
         } else if ( 0x04 == time_mode ) {
@@ -24,36 +24,36 @@ public class MH_ExpireDescriptor extends Descriptor {
     public int getTimeMode() {
         return time_mode;
     }
-    
+
     public double getUTCTime() {
         return UTC_time;
     }
-    
+
     public int getPassedSeconds() {
         return passed_seconds;
     }
-    
+
     public void setTimeMode(int value) {
         time_mode =  value;
     }
-    
+
     public void setUTCTime(long value) {
         UTC_time = value;
     }
-    
+
     public void setPassedSeconds(int value) {
         passed_seconds = value;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t time_mode : 0x%x \n", time_mode));
         if ( 0x01 == time_mode ) {
             Logger.d(String.format("\t UTC_time : %lf \n", UTC_time));
         } else if ( 0x04 == time_mode ) {
-            Logger.d(String.format("\t passed_seconds : 0x%x (%d) \n", 
+            Logger.d(String.format("\t passed_seconds : 0x%x (%d) \n",
                     passed_seconds, passed_seconds));
         }
         Logger.d("\n");
@@ -71,10 +71,10 @@ public class MH_ExpireDescriptor extends Descriptor {
     @Override
     public void writeDescriptor(BitReadWriter brw) {
         super.writeDescriptor(brw);
-        
+
         if ( 0 < descriptor_length ) {
             brw.writeOnBuffer(time_mode, 8);
-            
+
             if ( 0x01 == time_mode ) {
                 brw.writeOnBuffer(UTC_time, 64);
             } else if ( 0x04 == time_mode ) {

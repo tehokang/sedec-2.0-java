@@ -7,7 +7,7 @@ import sedec2.util.Logger;
 
 public class MH_LocalTimeOffsetDescriptor extends Descriptor {
     protected List<LocalTime> localtimes;
-    
+
     public class LocalTime {
         public int country_code;
         public byte country_region_id;
@@ -16,10 +16,10 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
         public int time_of_change;
         public int next_time_offset;
     }
-    
+
     public MH_LocalTimeOffsetDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         for ( int i=descriptor_length; i>0; ) {
             LocalTime localtime = new LocalTime();
             localtime.country_code = brw.readOnBuffer(24);
@@ -30,7 +30,7 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
             localtime.time_of_change = brw.readOnBuffer(40);
             localtime.next_time_offset = brw.readOnBuffer(16);
             i-=13;
-            
+
             localtimes.add(localtime);
         }
     }
@@ -38,15 +38,15 @@ public class MH_LocalTimeOffsetDescriptor extends Descriptor {
     public List<LocalTime> getLocalTimes() {
         return localtimes;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         for ( int i=0; i<localtimes.size(); i++ ) {
             LocalTime localtime = localtimes.get(i);
-            
-            Logger.d(String.format("\t [%d] country_code : 0x%x \n", 
+
+            Logger.d(String.format("\t [%d] country_code : 0x%x \n",
                     i, localtime.country_code));
             Logger.d(String.format("\t [%d] country_region_id : 0x%x \n",
                     i, localtime.country_region_id));

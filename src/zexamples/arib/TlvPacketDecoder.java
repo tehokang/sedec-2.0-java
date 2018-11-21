@@ -53,18 +53,18 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected final String video_download_path = download_path + "/video/";
     protected final String audio_download_path = download_path + "/audio/";
     protected final String ttml_download_path = download_path + "/ttml/";
-            
+
     protected List<SimpleApplication> applications = new ArrayList<>();
     /**
      * @note Video, Audio, IndexItem of Application to extract from TLV
      */
     protected BufferedOutputStream video_bs = null;
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
-    
+
     public SimpleTlvCoordinator() {
         tlv_demuxer = new TlvDemultiplexer();
         tlv_demuxer.addEventListener(this);
-        
+
         tlv_demuxer.enableSiFilter();
         tlv_demuxer.enableNtpFilter();
         tlv_demuxer.enableTtmlFilter();
@@ -72,17 +72,17 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableVideoFilter();
         tlv_demuxer.enableApplicationFilter();
         tlv_demuxer.enableGeneralDataFilter();
-        
+
         /**
          * @note To add NAL prefix of Video Sample
          */
         tlv_demuxer.enableVideoPreModification();
-        
+
         /**
          * @note To add Sync-Word prefix of Audio Sample
          */
         tlv_demuxer.enableAudioPreModification();
-        
+
 //        tlv_demuxer.enableSiLogging();
 //        tlv_demuxer.enableNtpLogging();
 //        tlv_demuxer.enableTtmlLogging();
@@ -90,7 +90,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 //        tlv_demuxer.enableVideoLogging();
 //        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
-        
+
 //        tlv_demuxer.addSiAllFilter();
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MPT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.PLT);
@@ -99,12 +99,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DAMT);
         tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MH_AIT);
     }
-    
+
     public void destroy() {
         tlv_demuxer.removeEventListener(this);
         tlv_demuxer.destroy();
         tlv_demuxer = null;
-        
+
         try {
             if ( video_bs != null ) {
                 video_bs.close();
@@ -113,22 +113,22 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         } catch (IOException e) {
             e.printStackTrace();
         }
-        
+
         audio_bs_map.clear();
         audio_bs_map = null;
     }
-    
+
     public boolean put(byte[] tlv_raw) {
         return tlv_demuxer.put(tlv_raw);
     }
-    
+
     @Override
     public void onReceivedTable(Table table) {
         switch ( table.getTableId() ) {
         case TableFactory.MH_AIT:
 //            table.print();
             break;
-        case TableFactory.DDMT: 
+        case TableFactory.DDMT:
             ddmt = (DataDirectoryManagementTable) table;
 //            ddmt.print();
             boolean found_app = false;
@@ -139,14 +139,14 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                     break;
                 }
             }
-            
+
             if ( found_app == false ) {
                 SimpleApplication app = new SimpleApplication(app_download_path);
                 app.base_directory_path = new String(ddmt.getBaseDirectoryPath());
                 for ( int i=0; i<ddmt.getDirectoryNodes().size(); i++ ) {
                     SubDirectory sub_directory = app.new SubDirectory();
                     sub_directory.node_tag = ddmt.getDirectoryNodes().get(i).node_tag;
-                    sub_directory.sub_directory_path = 
+                    sub_directory.sub_directory_path =
                             new String(ddmt.getDirectoryNodes().get(i).directory_node_path_byte);
                     app.sub_directories.add(sub_directory);
                 }
@@ -156,7 +156,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.DAMT:
             damt = (DataAssetManagementTable) table;
 //            damt.print();
-            
+
             for ( int i=0; i<damt.getMPUs().size(); i++ ) {
                 DataAssetManagementTable.MPU mpu = damt.getMPUs().get(i);
                 for ( int j=0; j<mpu.mpu_info_byte.size(); j++ ) {
@@ -183,11 +183,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-//                mpt.print();
+                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);
-                    String asset_type = new String(asset.asset_type);                            
+                    String asset_type = new String(asset.asset_type);
                     int pid = asset.getAssetId();
                     switch ( asset_type ) {
                         case "hev1":
@@ -238,15 +238,15 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             break;
         case TableFactory.PLT:
             if ( plt == null  ) {
-                plt = (PackageListTable) table;  
+                plt = (PackageListTable) table;
 //                plt.print();
-            } else if ( plt != null && plt.getVersion() != 
+            } else if ( plt != null && plt.getVersion() !=
                     ((PackageListTable)table).getVersion() ) {
                 plt = (PackageListTable) table;
                 mpt = null;
             }
             break;
-        }                
+        }
     }
 
     @Override
@@ -255,9 +255,9 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             if ( video_bs == null ) {
                 new File(video_download_path).mkdirs();
                 video_bs = new BufferedOutputStream(new FileOutputStream(
-                        new File(String.format("%s/video.mfu.0x%04x.hevc", 
+                        new File(String.format("%s/video.mfu.0x%04x.hevc",
                                         video_download_path, packet_id))));
-                        
+
             }
             video_bs.write(buffer);
         } catch (IOException e) {
@@ -274,12 +274,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         new File(String.format("%s/audio.mfu.0x%04x.aac",
                                 audio_download_path, packet_id)))));
             }
-            
+
             BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
             audio_bs.write(buffer);
         } catch (IOException e) {
             e.printStackTrace();
-        } 
+        }
     }
 
     @Override
@@ -291,20 +291,20 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 Logger.d("\t [TTML-DOC] \n");
                 Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
                 FileUtility.save(
-                        String.format("%s/ttml.mfu.0x%x.txt", 
-                                ttml_download_path, packet_id), 
+                        String.format("%s/ttml.mfu.0x%x.txt",
+                                ttml_download_path, packet_id),
                                 new String(ttml.getDataByte()));
                 break;
             case 0x01:
                 Logger.d("\t [TTML-PNG] \n");
                 FileUtility.save(
-                        String.format("%s/ttml.mfu.0x%x.png", 
+                        String.format("%s/ttml.mfu.0x%x.png",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x02:
                 Logger.d("\t [TTML-SVG] \n");
                 FileUtility.save(
-                        String.format("%s/ttml.mfu.0x%x.svg", 
+                        String.format("%s/ttml.mfu.0x%x.svg",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x03:
@@ -348,7 +348,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedApplication(int packet_id, int item_id, 
+    public void onReceivedApplication(int packet_id, int item_id,
             int mpu_sequence_number, byte[] buffer) {
         for ( int i=0; i<applications.size(); i++ ) {
             SimpleApplication app = applications.get(i);
@@ -365,18 +365,18 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 }
             }
         }
-        
+
         for ( int i=0; i<applications.size(); i++ ) {
             applications.get(i).done();
         }
     }
 
     @Override
-    public void onReceivedIndexItem(int packet_id, int item_id, 
+    public void onReceivedIndexItem(int packet_id, int item_id,
             int mpu_sequence_number, byte[] buffer) {
         MFU_IndexItem index_item = new MFU_IndexItem(buffer);
 //        index_item.print();
-        
+
         for ( int i=0; i<applications.size(); i++ ) {
             SimpleApplication app = applications.get(i);
             for ( int j=0; j<app.sub_directories.size(); j++ ) {
@@ -387,12 +387,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         MFU_IndexItem.Item item = index_item.getItems().get(k);
                         for ( int n=0; n<sub_directory.files.size(); n++ ) {
                             SimpleApplication.File file = sub_directory.files.get(n);
-                            if ( file.item_id == item.item_id ) { 
+                            if ( file.item_id == item.item_id ) {
                                 exist = true;
                                 break;
                             }
                         }
-                        
+
                         if ( exist == false ) {
                             SimpleApplication.File file = app.new File();
                             file.item_id = item.item_id;
@@ -420,26 +420,26 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 }
 
 /**
- * TlvPacketDecoder is an application as example for getting 
+ * TlvPacketDecoder is an application as example for getting
  * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
  * - NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData \n
- * - MPU, MFU to be used for media which is included in MMTP Packet \n 
+ * - MPU, MFU to be used for media which is included in MMTP Packet \n
  */
 public class TlvPacketDecoder {
     public static void main(String []args) throws InterruptedException {
         if ( args.length < 1 ) {
-            System.out.println("Oops, " + 
+            System.out.println("Oops, " +
                     "You need TLV packet(or file) to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.arib.TlvPacketDecoder " + 
+                    "zexamples.arib.TlvPacketDecoder " +
                     "{TLV Raw File} \n");
         }
-        
+
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
         ConsoleProgress progress_bar = new ConsoleProgress("TLV").
                 show(true, true, true, true, true, true);
-        
+
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
@@ -447,7 +447,7 @@ public class TlvPacketDecoder {
         for ( int i=0; i<args.length; i++ ) {
             TlvReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
-            
+
             /**
              * @note Putting a TLV packet into SimpleTlvCoordinator \n
              * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
@@ -456,7 +456,7 @@ public class TlvPacketDecoder {
             progress_bar.start(tlv_reader.filesize());
             while ( tlv_reader.readable() > 0) {
                 final byte[] tlv_packet = tlv_reader.readPacket();
-                if ( tlv_packet == null || tlv_packet.length == 0 ) continue;  
+                if ( tlv_packet == null || tlv_packet.length == 0 ) continue;
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 progress_bar.update(tlv_packet.length);
             }
@@ -470,7 +470,7 @@ public class TlvPacketDecoder {
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;
         progress_bar = null;
-        
+
         System.out.println("ByeBye");
         System.exit(0);
     }

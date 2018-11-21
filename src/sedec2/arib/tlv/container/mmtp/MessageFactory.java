@@ -11,8 +11,8 @@ public class MessageFactory {
     /** PA */
     public final static int PACKAGE_ACCESS_MESSAGE = 0x0000;
     public final static int PA_MESSAGE = PACKAGE_ACCESS_MESSAGE;
-    
-    /** 
+
+    /**
      * @note M2 SECTION could have
      *  - ECM
      *  - EMM
@@ -23,29 +23,29 @@ public class MessageFactory {
      *  - MH-BIT
      *  - MH-SDTT
      *  - MH-SDT
-     *  - MH-CDT 
+     *  - MH-CDT
      **/
     public final static int M2_SECTION_MESSAGE = 0x8000;
     public final static int M2S_MESSAGE = M2_SECTION_MESSAGE;
-    
+
     /** CA */
     public final static int CONDITIONAL_ACCESS_MESSAGE = 0x8001;
     public final static int CA_MESSAGE = CONDITIONAL_ACCESS_MESSAGE;
-    
-    /** 
+
+    /**
      * @note M2 SHORT SECTION could have
-     *  - MH-TOT 
+     *  - MH-TOT
      **/
     public final static int M2_SHORT_SECTION_MESSAGE = 0x8002;
     public final static int M2SS_MESSAGE = M2_SHORT_SECTION_MESSAGE;
-    
+
     /** DT */
     public final static int DATA_TRANSMISSION_MESSAGE = 0x8003;
     public final static int DT_MESSAGE = DATA_TRANSMISSION_MESSAGE;
-    
+
     public static Message createMessage(byte[] buffer) {
         int message_id = ((buffer[0] & 0xff) << 8) | (buffer[1] & 0xff);
-        
+
         switch ( message_id ) {
             case PACKAGE_ACCESS_MESSAGE:
                 return new PAMessage(buffer);
@@ -61,8 +61,8 @@ public class MessageFactory {
                 return null;
         }
     }
-    
+
     private MessageFactory() {
-        
+
     }
 }

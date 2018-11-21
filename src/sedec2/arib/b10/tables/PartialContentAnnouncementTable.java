@@ -22,7 +22,7 @@ public class PartialContentAnnouncementTable extends Table {
     protected int content_id;
     protected byte num_of_content_version;
     protected List<ContentVersion> content_versions = new ArrayList<>();
-    
+
     public class ContentVersion {
         public int content_version;
         public int content_minor_version;
@@ -32,57 +32,57 @@ public class PartialContentAnnouncementTable extends Table {
         public List<Schedule> schedule_descriptions = new ArrayList<>();
         public List<Descriptor> descriptors = new ArrayList<>();
     }
-    
+
     public class Schedule {
         public long start_time;
         public long duration;
     }
-    
+
     public PartialContentAnnouncementTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
     public int getServiceId() {
         return service_id;
     }
-    
+
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public int getTransportStreamId() {
         return transport_stream_id;
     }
     public int getOriginalNetworkId() {
         return original_network_id;
     }
-    
+
     public int getContentId() {
         return content_id;
     }
-    
+
     public byte getNumOfContentVersion() {
         return num_of_content_version;
     }
-    
+
     public List<ContentVersion> getContentVersions() {
         return content_versions;
     }
-    
+
     @Override
     protected void __decode_table_body__() {
         service_id = readOnBuffer(16);
@@ -95,7 +95,7 @@ public class PartialContentAnnouncementTable extends Table {
         original_network_id = readOnBuffer(16);
         content_id = readOnBuffer(32);
         num_of_content_version = (byte) readOnBuffer(8);
-        
+
         for ( int i=0; i<num_of_content_version; i++ ) {
             ContentVersion content_version = new ContentVersion();
             content_version.content_version = readOnBuffer(16);
@@ -105,7 +105,7 @@ public class PartialContentAnnouncementTable extends Table {
             content_version.content_descriptor_length = readOnBuffer(12);
             skipOnBuffer(4);
             content_version.schedule_description_length = readOnBuffer(12);
-            
+
             for ( int j=content_version.schedule_description_length; j>0; ) {
                 Schedule schedule_description = new Schedule();
                 schedule_description.start_time = readOnBuffer(40);
@@ -113,23 +113,23 @@ public class PartialContentAnnouncementTable extends Table {
                 content_version.schedule_descriptions.add(schedule_description);
                 j-=8;
             }
-            
+
             for ( int k=(content_version.content_descriptor_length-
                     content_version.schedule_description_length); k>0; ) {
-                Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+                Descriptor desc = DescriptorFactory.createDescriptor(this);
                 k-=desc.getDescriptorLength();
                 content_version.descriptors.add(desc);
             }
             content_versions.add(content_version);
         }
-        
+
         checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("service_id : 0x%x \n", service_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
@@ -139,35 +139,35 @@ public class PartialContentAnnouncementTable extends Table {
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("content_id : 0x%x \n", content_id));
         Logger.d(String.format("num_of_content_version : 0x%x \n", num_of_content_version));
-        
+
         for ( int i=0; i<content_versions.size(); i++ ) {
             ContentVersion content_version = content_versions.get(i);
-            
-            Logger.d(String.format("\t [%d] content_version : 0x%x \n", 
+
+            Logger.d(String.format("\t [%d] content_version : 0x%x \n",
                     content_version.content_version));
-            Logger.d(String.format("\t [%d] content_minor_version : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_minor_version : 0x%x \n",
                     content_version.content_minor_version));
-            Logger.d(String.format("\t [%d] version_indicator : 0x%x \n", 
+            Logger.d(String.format("\t [%d] version_indicator : 0x%x \n",
                     content_version.version_indicator));
-            Logger.d(String.format("\t [%d] content_descriptor_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] content_descriptor_length : 0x%x \n",
                     content_version.content_descriptor_length));
-            Logger.d(String.format("\t [%d] schedule_description_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] schedule_description_length : 0x%x \n",
                     content_version.schedule_description_length));
-            
+
             for ( int j=0; j<content_version.schedule_descriptions.size(); j++ ) {
-                Schedule schedule_description = 
+                Schedule schedule_description =
                         content_version.schedule_descriptions.get(j);
-                Logger.d(String.format("\t [%d] start_time : 0x%x \n", 
+                Logger.d(String.format("\t [%d] start_time : 0x%x \n",
                         schedule_description.start_time));
-                Logger.d(String.format("\t [%d] duration : 0x%x \n", 
+                Logger.d(String.format("\t [%d] duration : 0x%x \n",
                         schedule_description.duration));
             }
-            
+
             for ( int j=0; j<content_version.descriptors.size(); j++ ) {
                 content_version.descriptors.get(j).print();
             }
         }
-        
+
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,
                 (checksum_CRC32 >> 16) & 0xff,

@@ -9,20 +9,20 @@ public class MH_ServiceDescriptor extends Descriptor {
     protected byte[] service_provider_name;
     protected byte service_name_length;
     protected byte[] service_name;
-    
+
     public MH_ServiceDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         service_type = (byte) brw.readOnBuffer(8);
         service_provider_name_length = (byte) brw.readOnBuffer(8);
-        
+
         service_provider_name = new byte[service_provider_name_length];
         for ( int i=0; i<service_provider_name_length; i++ ) {
             service_provider_name[i] = (byte) brw.readOnBuffer(8);
         }
-        
+
         service_name_length = (byte) brw.readOnBuffer(8);
-        
+
         service_name = new byte[service_name_length];
         for ( int i=0; i<service_name_length; i++ ) {
             service_name[i] = (byte) brw.readOnBuffer(8);
@@ -32,31 +32,31 @@ public class MH_ServiceDescriptor extends Descriptor {
     public byte getServiceType() {
         return service_type;
     }
-    
+
     public byte getServiceProviderNameLength() {
         return service_provider_name_length;
     }
-    
+
     public byte[] getServiceProviderName() {
         return service_provider_name;
     }
-    
+
     public byte getServiceNameLength() {
         return service_name_length;
     }
-    
+
     public byte[] getServiceName() {
         return service_name;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t service_type : 0x%x \n", service_type));
-        Logger.d(String.format("\t service_provider_name_length : 0x%x \n", 
+        Logger.d(String.format("\t service_provider_name_length : 0x%x \n",
                 service_provider_name_length));
-        Logger.d(String.format("\t service_provider_name : %s \n", 
+        Logger.d(String.format("\t service_provider_name : %s \n",
                 new String(service_provider_name)));
         Logger.d(String.format("\t service_name_length : 0x%x \n", service_name_length));
         Logger.d(String.format("\t service_name : %s \n", new String(service_name)));

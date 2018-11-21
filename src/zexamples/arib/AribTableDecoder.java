@@ -12,29 +12,29 @@ import sedec2.base.Table;
 public class AribTableDecoder {
     public static void main(String []args) {
         if ( args.length < 1 ) {
-            System.out.println("Oops, " + 
+            System.out.println("Oops, " +
                     "I need mpeg2 table to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.decoder.DvbDecoder " + 
+                    "zexamples.decoder.DvbDecoder " +
                     "{Table Raw File} \n");
         }
-    
+
         for ( int i=0; i<args.length; i++ ) {
             File inOutFile = new File(args[i]);
             DataInputStream dataInputStream = null;
             try {
-               
-                dataInputStream = 
+
+                dataInputStream =
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                
+
                 long table_buffer_length = inOutFile.length();
                 byte[] table_buffer = new byte[(int) table_buffer_length];
-    
+
                 dataInputStream.readFully(table_buffer);
-    
+
                 Table table = sedec2.arib.b10.TableFactory.createTable(table_buffer);
                 if ( null == table ) {
                     table = sedec2.arib.tlv.si.TableFactory.createTable(table_buffer);
@@ -42,7 +42,7 @@ public class AribTableDecoder {
                         table = sedec2.arib.tlv.container.mmt.si.TableFactory.createTable(table_buffer);
                     }
                 }
-                
+
                 System.out.println(
                         String.format("[%d] table information \n",  i));
                 table.printBuffer();
@@ -54,7 +54,7 @@ public class AribTableDecoder {
                 e.printStackTrace();
             } finally {
                 System.out.println("ByeBye");
-            } 
+            }
         }
     }
 }

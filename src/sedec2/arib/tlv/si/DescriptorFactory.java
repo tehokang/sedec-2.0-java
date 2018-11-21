@@ -2,26 +2,26 @@ package sedec2.arib.tlv.si;
 
 import sedec2.arib.tlv.si.descriptors.ChannelBondingCableDeliverySystemDescriptor;
 import sedec2.arib.tlv.si.descriptors.Descriptor;
-import sedec2.arib.tlv.si.descriptors.ServiceListDescriptor;
-import sedec2.arib.tlv.si.descriptors.UnknownDescriptor;
 import sedec2.arib.tlv.si.descriptors.NetworkNameDescriptor;
 import sedec2.arib.tlv.si.descriptors.SateliteDeliverySystemDescriptor;
+import sedec2.arib.tlv.si.descriptors.ServiceListDescriptor;
 import sedec2.arib.tlv.si.descriptors.SystemManagementDescriptor;
+import sedec2.arib.tlv.si.descriptors.UnknownDescriptor;
 import sedec2.base.BitReadWriter;
 
 public class DescriptorFactory {
     public final static int NETWORK_NAME_DESCRIPTOR = 0x40;
     public final static int SERVICE_LIST_DESCRIPTOR = 0x41;
     public final static int SATELITE_DELIVERY_SYSTEM_DESCRIPTOR = 0x43;
-    
+
     public final static int CHANNEL_BONDING_CABLE_DELIVERY_SYSTEM_DESCRIPTOR = 0xf3;
     public final static int SYSTEM_MANAGEMENT_DESCRIPTOR = 0xfe;
-    
+
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
-    
+
     public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
-        
+
         switch ( descriptor_tag ) {
             case SYSTEM_MANAGEMENT_DESCRIPTOR:
                 return new SystemManagementDescriptor(brw);
@@ -38,8 +38,8 @@ public class DescriptorFactory {
                 return new UnknownDescriptor(brw);
         }
     }
-    
+
     private DescriptorFactory() {
-        
+
     }
 }

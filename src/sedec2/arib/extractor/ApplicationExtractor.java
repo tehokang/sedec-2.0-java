@@ -14,18 +14,18 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
 public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
-        public void onReceivedApplication(int packet_id, int item_id, 
+        public void onReceivedApplication(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);
-        public void onReceivedIndexItem(int packet_id, int item_id, 
+        public void onReceivedIndexItem(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);
     }
- 
+
     class QueueData extends BaseExtractor.QueueData {
         public int item_id;
         public int mpu_sequence_number;
         public boolean is_index_item = false;
-        
-        public QueueData(int pid, int item_id, int mpu_sequence_number, 
+
+        public QueueData(int pid, int item_id, int mpu_sequence_number,
                 boolean is_index_item, byte[] data) {
             this.data = data;
             this.packet_id = pid;
@@ -36,10 +36,10 @@ public class ApplicationExtractor extends BaseExtractor {
     }
 
     protected final String TAG = "ApplicationExtractor";
-    
+
     public ApplicationExtractor() {
         super();
-        
+
         m_event_thread = new Thread(new Runnable() {
 
             @Override
@@ -47,21 +47,21 @@ public class ApplicationExtractor extends BaseExtractor {
                 QueueData data = null;
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_event_queue && 
+                        if ( null != m_event_queue &&
                                 (data = (QueueData) m_event_queue.take()) != null ) {
-                            
+
                             if ( data.is_index_item == false ) {
                                 for ( int i=0; i<m_listeners.size(); i++ ) {
                                     ((IAppExtractorListener)m_listeners.get(i)).
-                                            onReceivedApplication(data.packet_id, 
-                                                    data.item_id, 
+                                            onReceivedApplication(data.packet_id,
+                                                    data.item_id,
                                                     data.mpu_sequence_number,
                                                     data.data);
                                 }
                             } else {
                                 for ( int i=0; i<m_listeners.size(); i++ ) {
                                     ((IAppExtractorListener)m_listeners.get(i)).
-                                            onReceivedIndexItem(data.packet_id, 
+                                            onReceivedIndexItem(data.packet_id,
                                                     data.item_id,
                                                     data.mpu_sequence_number,
                                                     data.data);
@@ -71,7 +71,7 @@ public class ApplicationExtractor extends BaseExtractor {
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
-                        /** 
+                        /**
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
@@ -82,33 +82,33 @@ public class ApplicationExtractor extends BaseExtractor {
         });
         m_event_thread.start();
     }
-    
+
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
     @Override
     public void destroy() {
         super.destroy();
-        
+
         m_event_thread.interrupt();
         m_event_thread = null;
     }
-    
+
     /**
      * Chapter 9 of ARIB B60v1-12
      * process function can send QueueData with MFU_data_byte as event value.
      * User can cast MFU_data_byte to MFU_IndexItem or raw data to be read.
      */
     @Override
-    protected synchronized void process(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
                 MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
-                
+
                 if ( mmtp_packet == null ) break;
-                
+
                 /**
                  * @note MPU-MFU
                  */
@@ -116,9 +116,9 @@ public class ApplicationExtractor extends BaseExtractor {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         if ( samples.size() == 0 ) break;
-                        
+
                         boolean is_index_item = false;
-                        List<HeaderExtensionByte> header_ext = 
+                        List<HeaderExtensionByte> header_ext =
                                 mmtp_packet.getHeaderExtensionByte();
                         for ( int j=0; j<header_ext.size(); j++ ) {
                             HeaderExtensionByte he = header_ext.get(j);
@@ -127,15 +127,15 @@ public class ApplicationExtractor extends BaseExtractor {
                                 is_index_item = true;
                             }
                         }
-                        
+
                         MMTP_Payload_MPU mpu = mmtp_packet.getMPU();
                         List<MFU> mfus = mpu.getMFUList();
                         for ( int i=0; i<samples.size(); i++ ) {
                             putOut(new QueueData(
-                                    mmtp_packet.getPacketId(), 
-                                    mfus.get(0).item_id, 
-                                    mmtp_packet.getMPU().getMPUSequenceNumber(), 
-                                    mfus.get(0).item_id == 0x0 && is_index_item ? true : false, 
+                                    mmtp_packet.getPacketId(),
+                                    mfus.get(0).item_id,
+                                    mmtp_packet.getMPU().getMPUSequenceNumber(),
+                                    mfus.get(0).item_id == 0x0 && is_index_item ? true : false,
                                     samples.get(i).toByteArray() ));
                         }
                     }

@@ -16,16 +16,16 @@ public class AudioExtractor extends BaseExtractor {
     public interface IAudioExtractorListener extends BaseExtractor.Listener {
         public void onReceivedAudio(int packet_id, byte[] buffer);
     }
-    
+
     public AudioExtractor() {
         super();
-        
+
         m_event_thread = new Thread(new Runnable() {
 
             @Override
             public void run() {
                 QueueData data = null;
-                
+
                 while ( m_is_running ) {
                     try {
                         if ( null != m_event_queue && ( data = m_event_queue.take()) != null) {
@@ -37,7 +37,7 @@ public class AudioExtractor extends BaseExtractor {
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
-                        /** 
+                        /**
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
@@ -48,32 +48,32 @@ public class AudioExtractor extends BaseExtractor {
         });
         m_event_thread.start();
     }
-    
+
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
     @Override
     public void destroy() {
         super.destroy();
-        
+
         m_event_thread.interrupt();
         m_event_thread = null;
     }
-    
+
     /**
      * Chapter 8 of ARIB-B60v1-12
      * process function send QueueData with audio data having syncword as prefix
      */
     @Override
-    protected synchronized void process(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
                 MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
-                
+
                 if ( mmtp_packet == null ) break;
-                
+
                 /**
                  * @note MPU-MFU
                  */
@@ -82,21 +82,21 @@ public class AudioExtractor extends BaseExtractor {
                         BitReadWriter syncword = null;
                         ByteArrayOutputStream out = null;
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
-                        
+
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();
                             out = new ByteArrayOutputStream();
-                            
+
                             if ( m_enable_pre_modification == true ) {
                                 syncword = new BitReadWriter(new byte[3]);
-                                syncword.writeOnBuffer((int)0x2b7, 11);    
+                                syncword.writeOnBuffer(0x2b7, 11);
                                 syncword.writeOnBuffer(sample_binary.length, 13);
                                 out.write(syncword.getBuffer());
                             }
                             out.write(sample_binary);
                             putOut(new QueueData(
-                                    mmtp_packet.getPacketId(), 
+                                    mmtp_packet.getPacketId(),
                                     out.toByteArray()));
                         }
                     }

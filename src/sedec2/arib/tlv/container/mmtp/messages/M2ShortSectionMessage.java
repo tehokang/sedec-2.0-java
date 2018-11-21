@@ -3,14 +3,14 @@ package sedec2.arib.tlv.container.mmtp.messages;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 
 public class M2ShortSectionMessage extends Message {
-    
+
     public M2ShortSectionMessage(byte[] buffer) {
         super(buffer);
-        
+
         message_id = readOnBuffer(16);
         version = readOnBuffer(8);
         length = readOnBuffer(16);
-        
+
         __decode_message_body__();
     }
 
@@ -23,11 +23,11 @@ public class M2ShortSectionMessage extends Message {
     public int getMessageLength() {
         return length + 5;
     }
-    
+
     @Override
     public void print() {
         super.print();
-        
+
         for ( int i=0; i<tables.size(); i++ ) {
             tables.get(i).print();
         }

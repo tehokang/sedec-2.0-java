@@ -6,12 +6,12 @@ import sedec2.util.Logger;
 public class MH_TargetRegionDescriptor extends Descriptor {
     protected byte region_spec_type;
     protected long prefecture_bitmap;
-    
+
     public MH_TargetRegionDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         region_spec_type = (byte) brw.readOnBuffer(8);
-        
+
         if ( region_spec_type == 0x01 ) {
             prefecture_bitmap = brw.readOnBuffer(56);
         }
@@ -20,7 +20,7 @@ public class MH_TargetRegionDescriptor extends Descriptor {
     public byte getRegionSpecType() {
         return region_spec_type;
     }
-    
+
     public long getPrefectureBitmap() {
         return prefecture_bitmap;
     }
@@ -28,9 +28,9 @@ public class MH_TargetRegionDescriptor extends Descriptor {
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t region_spec_type : 0x%x \n", region_spec_type));
-        
+
         if ( region_spec_type == 0x01 ) {
             Logger.d(String.format("\t prefecture_bitmap : 0x%x \n", prefecture_bitmap));
         }

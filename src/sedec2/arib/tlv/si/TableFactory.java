@@ -9,19 +9,19 @@ public class TableFactory {
     /** TLV-NIT */
     public final static byte ACTUAL_TLV_NETWORK_INFORMATION_TABLE = (byte) 0x40;
     public final static byte TLV_NIT_ACTUAL = ACTUAL_TLV_NETWORK_INFORMATION_TABLE;
-    
+
     public final static byte OTHER_TLV_NETWORK_INFORMATION_TABLE = (byte) 0x41;
     public final static byte TLV_NIT_OTHER = OTHER_TLV_NETWORK_INFORMATION_TABLE;
-      
+
     /** AMT */
     public final static byte ADDRESS_MAP_TABLE = (byte) 0xfe;
     public final static byte AMT = ADDRESS_MAP_TABLE;
-    
+
     public final static byte UNKNOWN_TABLE = (byte) 0xff;
 
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
-        
+
         switch ( table_id ) {
             case ACTUAL_TLV_NETWORK_INFORMATION_TABLE:
             case OTHER_TLV_NETWORK_INFORMATION_TABLE:
@@ -35,7 +35,7 @@ public class TableFactory {
         }
         return null;
     }
-    
+
     private TableFactory() {
         /**
          * @warning Nothing to do since this factory isn't working as instance

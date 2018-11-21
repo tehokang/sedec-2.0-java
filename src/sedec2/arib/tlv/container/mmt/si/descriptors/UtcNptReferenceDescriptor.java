@@ -7,10 +7,10 @@ public class UtcNptReferenceDescriptor extends Descriptor {
     protected long UTC_Reference;
     protected long NPT_Reference;
     protected byte scale;
-    
+
     public UtcNptReferenceDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         UTC_Reference = brw.readOnBuffer(64);
         NPT_Reference = brw.readOnBuffer(64);
         scale = (byte) brw.readOnBuffer(2);
@@ -20,19 +20,19 @@ public class UtcNptReferenceDescriptor extends Descriptor {
     public long getUTCReference() {
         return UTC_Reference;
     }
-    
+
     public long getNPTReference() {
         return NPT_Reference;
     }
-    
+
     public byte getScale() {
         return scale;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t UTC_Reference : 0x%x \n", UTC_Reference));
         Logger.d(String.format("\t NPT_Reference : 0x%x \n", NPT_Reference));
         Logger.d(String.format("\t scale : 0x%x \n", scale));

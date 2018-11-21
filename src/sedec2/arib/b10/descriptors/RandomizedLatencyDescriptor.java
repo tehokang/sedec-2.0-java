@@ -8,10 +8,10 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     private int rate;
     private byte randomization_end_time_flag;
     private long randomization_end_time;
-    
+
     public RandomizedLatencyDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         range = brw.readOnBuffer(16);
         rate = brw.readOnBuffer(8);
         randomization_end_time_flag = (byte) brw.readOnBuffer(1);
@@ -24,39 +24,39 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     public int getRange() {
         return range;
     }
-    
+
     public int getRate() {
         return rate;
     }
-    
+
     public byte getRandomizationEndTimeFlag() {
         return randomization_end_time_flag;
     }
-    
+
     public long getRandomizationEndTime() {
         return randomization_end_time;
     }
-    
+
     public void setRange(int value) {
         range = value;
     }
-    
+
     public void setRate(int value) {
         rate = value;
     }
-    
+
     public void setRandomizationEndTimeFlag(byte value) {
         randomization_end_time_flag = value;
     }
-    
+
     public void setRandomizationEndTime(long value) {
         randomization_end_time = value;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t range : 0x%x \n", range));
         Logger.d(String.format("\t rate : 0x%x \n", rate));
         Logger.d(String.format("\t randomization_end_time_flag : 0x%x \n",  randomization_end_time_flag));
@@ -73,7 +73,7 @@ public class RandomizedLatencyDescriptor extends Descriptor {
     @Override
     public void writeDescriptor(BitReadWriter brw) {
         super.writeDescriptor(brw);
-        
+
         brw.writeOnBuffer(range, 16);
         brw.writeOnBuffer(rate, 8);
         brw.writeOnBuffer(randomization_end_time_flag, 1);
@@ -84,5 +84,5 @@ public class RandomizedLatencyDescriptor extends Descriptor {
         }
     }
 
-    
+
 }

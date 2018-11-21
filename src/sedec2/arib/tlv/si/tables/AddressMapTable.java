@@ -24,52 +24,52 @@ public class AddressMapTable extends Table {
         public IPv6 ipv6;
         public byte[] private_data_byte;
     }
-    
+
     class IPv4 {
         public byte[] src_address_32 = new byte[4];
         public byte src_address_mask_32;
         public byte[] dst_address_32 = new byte[4];
         public byte dst_address_mask_32;
     }
-    
+
     class IPv6 {
         public byte[] src_address_128 = new byte[16];
         public byte src_address_mask_128;
         public byte[] dst_address_128 = new byte[16];
         public byte dst_address_mask_128;
     }
-    
+
     public int getTableIdExtension() {
         return table_id_extension;
     }
-    
+
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public int getNumOfService() {
         return num_of_service_id;
     }
-    
+
     public List<Service> getServices() {
         return services;
     }
-    
+
     public AddressMapTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
@@ -83,37 +83,37 @@ public class AddressMapTable extends Table {
         last_section_number = (byte) readOnBuffer(8);
         num_of_service_id = readOnBuffer(10);
         skipOnBuffer(6);
-        
+
         for ( int i=0; i<num_of_service_id; i++) {
             Service service = new Service();
             service.service_id = readOnBuffer(16);
             service.ip_version = (byte) readOnBuffer(1);
             skipOnBuffer(5);
             service.service_loop_length = readOnBuffer(10);
-            
+
             for ( int k=service.service_loop_length; k>0; ) {
                 if ( service.ip_version == 0 ) {
                     IPv4 ipv4 = new IPv4();
-                    for ( int j=0; j<4; j++ ) 
+                    for ( int j=0; j<4; j++ )
                         ipv4.src_address_32[j] = (byte) readOnBuffer(8);
                     ipv4.src_address_mask_32 = (byte) readOnBuffer(8);
-                    for ( int j=0; j<4; j++ ) 
+                    for ( int j=0; j<4; j++ )
                         ipv4.dst_address_32[j] = (byte) readOnBuffer(8);
                     ipv4.dst_address_mask_32 = (byte) readOnBuffer(8);
                     service.ipv4 = ipv4;
                     k-=10;
                 } else if ( service.ip_version == 1 ) {
                     IPv6 ipv6 = new IPv6();
-                    for ( int j=0; j<16; j++ ) 
+                    for ( int j=0; j<16; j++ )
                         ipv6.src_address_128[j] = (byte) readOnBuffer(8);
                     ipv6.src_address_mask_128 = (byte) readOnBuffer(8);
-                    for ( int j=0; j<16; j++ ) 
+                    for ( int j=0; j<16; j++ )
                         ipv6.dst_address_128[j] = (byte) readOnBuffer(8);
                     ipv6.dst_address_mask_128 = (byte) readOnBuffer(8);
                     service.ipv6 = ipv6;
                     k-=34;
                 }
-                
+
                 service.private_data_byte = new byte[k];
                 for ( int n=0; n<k; n++ ) {
                     service.private_data_byte[n] = (byte) readOnBuffer(8);
@@ -121,52 +121,52 @@ public class AddressMapTable extends Table {
             }
             services.add(service);
         }
-        
+
         checksum_CRC32 = readOnBuffer(32);
     }
 
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("table_id_extension : 0x%x \n", table_id_extension));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
         Logger.d(String.format("num_of_service_id : 0x%x \n", num_of_service_id));
-        
+
         for ( int i=0; i<services.size(); i++ ) {
             Service service = services.get(i);
             Logger.d(String.format("\t [%d] service_id : 0x%x \n", i, service.service_id));
             Logger.d(String.format("\t [%d] ip_version : 0x%x \n", i, service.ip_version));
-            Logger.d(String.format("\t [%d] service_loop_length : 0x%x \n", 
+            Logger.d(String.format("\t [%d] service_loop_length : 0x%x \n",
                     i, service.service_loop_length));
-            
+
             if ( service.ip_version == 0 ) {
-                Logger.d(String.format("\t [%d] ipv4.src_address_32 : %d.%d.%d.%d \n", 
+                Logger.d(String.format("\t [%d] ipv4.src_address_32 : %d.%d.%d.%d \n",
                         i, service.ipv4.src_address_32[0], service.ipv4.src_address_32[1],
                         service.ipv4.src_address_32[2], service.ipv4.src_address_32[3]));
-                Logger.d(String.format("\t [%d] ipv4.src_address_mask_32 : 0x%x \n", 
+                Logger.d(String.format("\t [%d] ipv4.src_address_mask_32 : 0x%x \n",
                         i, service.ipv4.src_address_mask_32));
             } else if (service.ip_version == 1) {
                 Logger.d(String.format("\t [%d] ipv6.src_address_128 : "
-                        + "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x \n", 
+                        + "%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x:%02x%02x \n",
                         i, service.ipv6.src_address_128[0], service.ipv6.src_address_128[1],
-                        service.ipv6.src_address_128[2], service.ipv6.src_address_128[3], 
+                        service.ipv6.src_address_128[2], service.ipv6.src_address_128[3],
                         service.ipv6.src_address_128[4], service.ipv6.src_address_128[5],
                         service.ipv6.src_address_128[6], service.ipv6.src_address_128[7],
                         service.ipv6.src_address_128[8], service.ipv6.src_address_128[9],
                         service.ipv6.src_address_128[10], service.ipv6.src_address_128[11],
                         service.ipv6.src_address_128[12], service.ipv6.src_address_128[12],
                         service.ipv6.src_address_128[14], service.ipv6.src_address_128[15]));
-                Logger.d(String.format("\t [%d] ipv6.src_address_mask_128 : 0x%x \n", 
+                Logger.d(String.format("\t [%d] ipv6.src_address_mask_128 : 0x%x \n",
                         i, service.ipv6.src_address_mask_128));
             }
-            
+
             BinaryLogger.print(service.private_data_byte);
         }
-        
+
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,
                 (checksum_CRC32 >> 16) & 0xff,

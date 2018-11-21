@@ -3,9 +3,9 @@ package sedec2.arib.b10.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.base.Table;
 import sedec2.arib.b10.DescriptorFactory;
 import sedec2.arib.b10.descriptors.Descriptor;
+import sedec2.base.Table;
 import sedec2.util.Logger;
 
 public class ProgramMapTable extends Table {
@@ -18,14 +18,14 @@ public class ProgramMapTable extends Table {
     private int program_info_length;
     List<Descriptor> descriptors = new ArrayList<>();
     List<Program> programs = new ArrayList<>();
-    
+
     public class Program {
         public byte stream_type;
         public int elementary_PID;
         public int ES_info_length;
         public List<Descriptor> descriptors = new ArrayList<>();
     }
-    
+
     public ProgramMapTable(byte[] buffer) {
         super(buffer);
 
@@ -35,39 +35,39 @@ public class ProgramMapTable extends Table {
     public int getProgramNumber() {
         return program_number;
     }
-    
+
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public int getPcrPid() {
         return PCR_PID;
     }
-    
+
     public int getProgramInfoLength() {
         return program_info_length;
     }
-    
+
     public List<Descriptor> getDescriptors() {
         return descriptors;
     }
-    
+
     public List<Program> getPrograms() {
         return programs;
     }
-    
+
     @Override
     protected void __decode_table_body__() {
         program_number = readOnBuffer(16);
@@ -111,7 +111,7 @@ public class ProgramMapTable extends Table {
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("program_number : 0x%x \n", program_number));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
@@ -143,5 +143,5 @@ public class ProgramMapTable extends Table {
                         checksum_CRC32 & 0xff));
         Logger.d("====================================== \n\n");
     }
-    
+
 }

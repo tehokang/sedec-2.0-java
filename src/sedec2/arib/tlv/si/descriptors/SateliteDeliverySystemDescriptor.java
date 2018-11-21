@@ -11,10 +11,10 @@ public class SateliteDeliverySystemDescriptor extends Descriptor {
     protected byte modulation;
     protected int symbol_rate;
     protected byte FEC_inner;
-    
+
     public SateliteDeliverySystemDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         frequency = brw.readOnBuffer(32);
         orbital_position = brw.readOnBuffer(16);
         west_east_flag = (byte) brw.readOnBuffer(1);
@@ -27,7 +27,7 @@ public class SateliteDeliverySystemDescriptor extends Descriptor {
     @Override
     public void print() {
         super._print_();
-        
+
         Logger.d(String.format("\t frequency : 0x%x \n", frequency));
         Logger.d(String.format("\t orbital_position : 0x%x \n", orbital_position));
         Logger.d(String.format("\t west_east_flag : 0x%x \n", west_east_flag));

@@ -7,35 +7,35 @@ import java.util.List;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
-public abstract class Message extends sedec2.base.BitReadWriter {   
+public abstract class Message extends sedec2.base.BitReadWriter {
     protected int message_id;
     protected int version;
     protected int length;
-    
+
     protected List<Table> tables = new ArrayList<>();
-    
+
     public Message(byte[] buffer) {
         super(buffer);
     }
-    
+
     public abstract int getMessageLength();
-    
+
     public int getMessageId() {
         return message_id;
     }
-    
+
     public int getVersion() {
         return version;
     }
-    
+
     public int getLength() {
         return length;
     }
-    
+
     public List<Table> getTables() {
         return tables;
     }
-    
+
     public void encode() {
         __encode_update_message_length__();
         __encode_preprare_message__();
@@ -44,7 +44,7 @@ public abstract class Message extends sedec2.base.BitReadWriter {
         __encode_write_message_header__();
         __encode_write_message_body__();
     }
-    
+
     public void print() {
         Logger.d(String.format("======= Message Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("message_id : 0x%x \n", message_id));
@@ -54,7 +54,7 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     }
 
     protected abstract void __decode_message_body__();
-    
+
     /**
      * @note internal functions to encode
      */
@@ -68,12 +68,12 @@ public abstract class Message extends sedec2.base.BitReadWriter {
 
         Arrays.fill(m_buffer, (byte)0xff);
     }
-    
+
     protected void __encode_write_message_header__() {
         writeOnBuffer( message_id, 16 );
         writeOnBuffer( version, 8);
         writeOnBuffer( length, 32);
-    }    
-    
+    }
+
     protected void __encode_write_message_body__() {};
 }

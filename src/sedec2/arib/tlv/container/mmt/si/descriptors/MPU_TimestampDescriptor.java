@@ -16,7 +16,7 @@ public class MPU_TimestampDescriptor extends Descriptor {
 
     public MPU_TimestampDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         for ( int i=descriptor_length; i>0; ) {
             MPU mpu = new MPU();
             mpu.mpu_sequence_number = brw.readOnBuffer(32);
@@ -29,16 +29,16 @@ public class MPU_TimestampDescriptor extends Descriptor {
     public List<MPU> getMpus() {
         return mpus;
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         for ( int i=0; i<mpus.size(); i++ ) {
             MPU mpu = mpus.get(i);
-            Logger.d(String.format("\t [%d] mpu_sequence_number : 0x%04x \n", 
+            Logger.d(String.format("\t [%d] mpu_sequence_number : 0x%04x \n",
                     i, mpu.mpu_sequence_number));
-            Logger.d(String.format("\t [%d] mpu_presentation_time : 0x%08x \n", 
+            Logger.d(String.format("\t [%d] mpu_presentation_time : 0x%08x \n",
                     i, mpu.mpu_presentation_time));
         }
     }

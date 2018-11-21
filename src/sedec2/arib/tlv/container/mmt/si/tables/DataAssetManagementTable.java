@@ -20,7 +20,7 @@ public class DataAssetManagementTable extends sedec2.base.Table {
     protected List<MPU> mpus = new ArrayList<>();
     protected byte component_info_length;
     protected List<Descriptor> component_info_byte = new ArrayList<>();
-            
+
     public class MPU {
         public int mpu_sequence_number;
         public int mpu_size;
@@ -33,7 +33,7 @@ public class DataAssetManagementTable extends sedec2.base.Table {
         public byte mpu_info_length;
         public List<Descriptor> mpu_info_byte = new ArrayList<>();
     }
-    
+
     public class Item {
         public int node_tag;
         public int item_id;
@@ -44,10 +44,10 @@ public class DataAssetManagementTable extends sedec2.base.Table {
         public byte item_info_length;
         public List<Descriptor> item_info_byte = new ArrayList<>();
     }
-    
+
     public DataAssetManagementTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
@@ -75,20 +75,20 @@ public class DataAssetManagementTable extends sedec2.base.Table {
             if ( mpu.index_item_flag == 1 && mpu.index_item_id_flag == 1 ) {
                 mpu.index_item_id = readOnBuffer(32);
             }
-            
+
             mpu.num_of_items = readOnBuffer(16);
-            
+
             for ( int k=0; k<mpu.num_of_items; k++ ) {
                 Item item = new Item();
                 item.node_tag = readOnBuffer(16);
-                
+
                 if ( mpu.index_item_flag == 0 ) {
                     item.item_id = readOnBuffer(32);
                     item.item_size = readOnBuffer(32);
                     item.item_version = (byte) readOnBuffer(8);
                     item.checksum_flag = (byte) readOnBuffer(1);
                     skipOnBuffer(7);
-                    
+
                     if ( item.checksum_flag == 1 ) {
                         item.item_checksum = readOnBuffer(32);
                     }
@@ -109,61 +109,61 @@ public class DataAssetManagementTable extends sedec2.base.Table {
             }
             mpus.add(mpu);
         }
-        
+
         component_info_length = (byte) readOnBuffer(8);
         for ( int p=component_info_length; p>0; ) {
             Descriptor desc = DescriptorFactory.createDescriptor(this);
             p-=desc.getDescriptorLength();
             component_info_byte.add(desc);
         }
-        
+
         checksum_CRC32 = readOnBuffer(32);
     }
-    
+
     public byte getDataTransmissionSessionId() {
         return data_transmission_session_id;
     }
-    
+
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public int getTransactionId() {
         return transaction_id;
     }
-    
+
     public int getComponentTag() {
         return component_tag;
     }
-    
+
     public int getDownloadId() {
         return download_id;
     }
-    
+
     public byte getNumOfMpus() {
         return num_of_mpus;
     }
-    
+
     public List<MPU> getMPUs() {
         return mpus;
     }
-    
+
     public byte getComponentInfoLength() {
         return component_info_length;
     }
-    
+
     public List<Descriptor> getComponentInfoByte() {
         return component_info_byte;
     }
@@ -171,8 +171,8 @@ public class DataAssetManagementTable extends sedec2.base.Table {
     @Override
     public void print() {
         super.print();
-        
-        Logger.d(String.format("data_transmission_session_id : 0x%x \n", 
+
+        Logger.d(String.format("data_transmission_session_id : 0x%x \n",
                 data_transmission_session_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
@@ -185,40 +185,40 @@ public class DataAssetManagementTable extends sedec2.base.Table {
 
         for ( int i=0; i<mpus.size(); i++ ) {
             MPU mpu = mpus.get(i);
-            Logger.d(String.format("[%d] mpu_sequence_number : 0x%x \n",  
+            Logger.d(String.format("[%d] mpu_sequence_number : 0x%x \n",
                     i, mpu.mpu_sequence_number));
-            Logger.d(String.format("[%d] mpu_size : 0x%x (%d) \n", 
+            Logger.d(String.format("[%d] mpu_size : 0x%x (%d) \n",
                     i, mpu.mpu_size, mpu.mpu_size));
             Logger.d(String.format("[%d] index_item_flag : 0x%x \n", i, mpu.index_item_flag));
-            Logger.d(String.format("[%d] index_item_id_flag : 0x%x \n", 
+            Logger.d(String.format("[%d] index_item_id_flag : 0x%x \n",
                     i, mpu.index_item_id_flag));
-            Logger.d(String.format("[%d] index_item_compression_type : 0x%x \n", 
+            Logger.d(String.format("[%d] index_item_compression_type : 0x%x \n",
                     i, mpu.index_item_compression_type));
             if ( mpu.index_item_flag == 1 && mpu.index_item_id_flag == 1 ) {
                 Logger.d(String.format("[%d] index_item_id : 0x%x \n", i, mpu.index_item_id));
             }
-            
-            Logger.d(String.format("[%d] num_of_items : 0x%x (%d) \n", 
+
+            Logger.d(String.format("[%d] num_of_items : 0x%x (%d) \n",
                     i, mpu.items.size(), mpu.items.size()));
-            
+
             for ( int k=0; k<mpu.items.size(); k++ ) {
                 Item item = mpu.items.get(k);
-                Logger.d(String.format("\t [%d] node_tag : 0x%x \n", 
+                Logger.d(String.format("\t [%d] node_tag : 0x%x \n",
                         k, item.node_tag));
-                
+
                 if ( mpu.index_item_flag == 0 ) {
-                    Logger.d(String.format("\t [%d] item_id : 0x%x \n", 
+                    Logger.d(String.format("\t [%d] item_id : 0x%x \n",
                             k, item.item_id));
-                    Logger.d(String.format("\t [%d] item_size : 0x%x (%d) \n", 
+                    Logger.d(String.format("\t [%d] item_size : 0x%x (%d) \n",
                             k, item.item_size, item.item_size));
-                    Logger.d(String.format("\t [%d] item_version : 0x%x \n", 
+                    Logger.d(String.format("\t [%d] item_version : 0x%x \n",
                             k, item.item_version));
-                    
+
                     if ( item.checksum_flag == 1 ) {
-                        Logger.d(String.format("\t [%d] item_checksum : 0x%x \n", 
+                        Logger.d(String.format("\t [%d] item_checksum : 0x%x \n",
                                 k, item.item_checksum));
                     }
-                    Logger.d(String.format("\t [%d] item_info_length : 0x%x (%d) \n", 
+                    Logger.d(String.format("\t [%d] item_info_length : 0x%x (%d) \n",
                             k, item.item_info_length, item.item_info_length));
                     Logger.d(String.format("\t [%d] item_info_byte : \n", k));
                     for ( int p=0; p<item.item_info_byte.size(); p++ ) {
@@ -226,21 +226,21 @@ public class DataAssetManagementTable extends sedec2.base.Table {
                     }
                 }
             }
-            Logger.d(String.format("[%d] mpu_info_length : 0x%x (%d) \n", 
+            Logger.d(String.format("[%d] mpu_info_length : 0x%x (%d) \n",
                     i, mpu.mpu_info_length, mpu.mpu_info_length));
             Logger.d(String.format("[%d] mpu_info : \n",  i));
             for ( int p=0; p<mpu.mpu_info_byte.size(); p++ ) {
                 mpu.mpu_info_byte.get(p).print();
             }
         }
-        
-        Logger.d(String.format("component_info_length : 0x%x (%d) \n", 
+
+        Logger.d(String.format("component_info_length : 0x%x (%d) \n",
                 component_info_length, component_info_length));
         Logger.d("component_info_byte : \n");
         for ( int p=0; p<component_info_byte.size(); p++ ) {
             component_info_byte.get(p).print();
         }
-        
+
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                 (checksum_CRC32 >> 24) & 0xff,
                 (checksum_CRC32 >> 16) & 0xff,

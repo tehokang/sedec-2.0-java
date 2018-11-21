@@ -18,14 +18,14 @@ public class ProgramMapTable extends Table {
     private int program_info_length;
     List<Descriptor> descriptors = new ArrayList<>();
     List<Program> programs = new ArrayList<>();
-    
+
     class Program {
         public byte stream_type;
         public int elementary_PID;
         public int ES_info_length;
         public List<Descriptor> descriptors = new ArrayList<>();
     }
-    
+
     public ProgramMapTable(byte[] buffer) {
         super(buffer);
 
@@ -75,7 +75,7 @@ public class ProgramMapTable extends Table {
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("program_number : 0x%x \n", program_number));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
@@ -107,5 +107,5 @@ public class ProgramMapTable extends Table {
                         checksum_CRC32 & 0xff));
         Logger.d("====================================== \n\n");
     }
-    
+
 }

@@ -44,10 +44,10 @@ public class DescriptorFactory {
     public final static int VIDEODECODE_CONTROL_DESCRIPTOR = 0xc8;
     public final static int DATA_COMPONENT_DESCRIPTOR = 0xfd;
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
-    
+
     public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
-        
+
         switch ( descriptor_tag ) {
             case APPLICATION_DESCRIPTOR:
                 return new ApplicationDescriptor(brw);
@@ -92,8 +92,8 @@ public class DescriptorFactory {
                 return new UnknownDescriptor(brw);
         }
     }
-    
+
     private DescriptorFactory() {
-        
+
     }
 }

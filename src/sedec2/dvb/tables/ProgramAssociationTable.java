@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class ProgramAssociationTable extends Table {
     public ProgramAssociationTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
@@ -19,7 +19,7 @@ public class ProgramAssociationTable extends Table {
     private byte section_number;
     private byte last_section_number;
     private List<Program> programs = new ArrayList<>();
-    
+
     class Program {
         private int program_number;
         private int pid;
@@ -27,16 +27,16 @@ public class ProgramAssociationTable extends Table {
             program_number = _program_number;
             pid = _pid;
         }
-        
+
         public int getProgramNumber() {
             return program_number;
         }
-        
+
         public int getPid() {
             return pid;
         }
     }
-    
+
     @Override
     protected void __decode_table_body__() {
         transport_stream_id = readOnBuffer(16);
@@ -60,7 +60,7 @@ public class ProgramAssociationTable extends Table {
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("transport_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));

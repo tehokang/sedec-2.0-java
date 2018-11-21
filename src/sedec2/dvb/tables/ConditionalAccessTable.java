@@ -14,33 +14,33 @@ public class ConditionalAccessTable extends Table {
     private byte section_number;
     private byte last_section_number;
     private List<Descriptor> descriptors = new ArrayList<>();
-    
+
     public ConditionalAccessTable(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
 
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public List<Descriptor> getDescriptors() {
         return descriptors;
     }
-    
+
     @Override
     protected void __decode_table_body__() {
         skipOnBuffer(18);
@@ -50,7 +50,7 @@ public class ConditionalAccessTable extends Table {
         last_section_number = (byte) readOnBuffer(8);
 
         for ( int i=(section_length-5-4); i>0; ) {
-            Descriptor desc = (Descriptor) DescriptorFactory.createDescriptor(this);
+            Descriptor desc = DescriptorFactory.createDescriptor(this);
             i-=desc.getDescriptorLength();
             descriptors.add(desc);
         }
@@ -60,7 +60,7 @@ public class ConditionalAccessTable extends Table {
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
@@ -77,5 +77,5 @@ public class ConditionalAccessTable extends Table {
         Logger.d("====================================== \n\n");
     }
 
-    
+
 }

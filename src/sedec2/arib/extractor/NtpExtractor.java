@@ -14,28 +14,28 @@ public class NtpExtractor extends BaseExtractor {
     public interface INtpExtractorListener extends BaseExtractor.Listener {
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
-    
+
     public class QueueData extends BaseExtractor.QueueData {
         public NetworkTimeProtocolData ntp;
-        
+
         public QueueData(NetworkTimeProtocolData ntp) {
             this.ntp = ntp;
         }
     }
-    
+
     public NtpExtractor() {
         super();
-        
+
         m_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 QueueData data = null;
-                
+
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_event_queue && 
+                        if ( null != m_event_queue &&
                                 (data = (QueueData) m_event_queue.take()) != null ) {
-                            
+
                             NetworkTimeProtocolData ntp = data.ntp;
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((INtpExtractorListener)m_listeners.get(i)).
@@ -54,20 +54,20 @@ public class NtpExtractor extends BaseExtractor {
         });
         m_event_thread.start();
     }
-    
+
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
     @Override
     public void destroy() {
         super.destroy();
-        
+
         m_event_thread.interrupt();
         m_event_thread = null;
     }
-    
+
     @Override
-    protected synchronized void process(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.IPV4_PACKET:
@@ -78,7 +78,7 @@ public class NtpExtractor extends BaseExtractor {
                         ipv4_ntp.print();
                     }
                 }
-                
+
                 break;
             case PacketFactory.IPV6_PACKET:
                 NetworkTimeProtocolData ipv6_ntp = ((IPv6Packet)tlv).getNtp();
@@ -91,5 +91,5 @@ public class NtpExtractor extends BaseExtractor {
                 break;
         }
     }
-    
+
 }

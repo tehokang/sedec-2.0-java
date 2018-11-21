@@ -5,31 +5,31 @@ import java.util.Arrays;
 
 import sedec2.util.Logger;
 
-public abstract class Table extends BitReadWriter {   
+public abstract class Table extends BitReadWriter {
     protected byte table_id;
     protected byte section_syntax_indicator;
     protected int section_length;
     protected byte[] m_crc;
     protected int checksum_CRC32;
-    
+
     public Table(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_header__();
     }
-    
+
     public byte getTableId() {
         return table_id;
     }
-    
+
     public int getSectionSyntaxIndicator() {
         return section_syntax_indicator;
     }
-    
+
     public int getSectionLength() {
         return section_length;
     }
-    
+
     public void encode() {
         __encode_update_table_length__();
         __encode_prepare_table__();
@@ -39,7 +39,7 @@ public abstract class Table extends BitReadWriter {
         __encode_write_table_body__();
         __encode_make_crc__();
     }
-    
+
     public void save(String filepath) {
         try {
             FileOutputStream fos = new FileOutputStream(filepath);
@@ -61,7 +61,7 @@ public abstract class Table extends BitReadWriter {
     public int getTableLength() {
         return 3 + section_length;
     }
-    
+
     /**
      * @note internal functions to decode
      */
@@ -71,7 +71,7 @@ public abstract class Table extends BitReadWriter {
         skipOnBuffer(3);
         section_length = readOnBuffer(12);
     }
-    
+
     protected abstract void __decode_table_body__();
 
     /**
@@ -88,7 +88,7 @@ public abstract class Table extends BitReadWriter {
 
         Arrays.fill(m_buffer, (byte)0xff);
     }
-    
+
     protected void __encode_write_table_header__() {
         writeOnBuffer( table_id, 8 );
         writeOnBuffer( section_syntax_indicator, 1);

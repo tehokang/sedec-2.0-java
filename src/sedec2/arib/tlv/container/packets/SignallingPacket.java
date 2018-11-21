@@ -7,15 +7,15 @@ import sedec2.base.Table;
 
 public class SignallingPacket extends TypeLengthValue {
     protected Table table;
-    
+
     public SignallingPacket(byte[] buffer) {
         super(buffer);
-        
+
         ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
         outputStream.write(buffer, 4, buffer.length-4);
-        
+
         table = TableFactory.createTable(outputStream.toByteArray());
-        
+
         if ( null != table ) {
             skipOnBuffer(table.getTableLength());
         }
@@ -24,11 +24,11 @@ public class SignallingPacket extends TypeLengthValue {
     public Table getTable() {
         return table;
     }
-    
+
     @Override
     public void print() {
         super.print();
-        
+
         if ( table != null ) {
             table.print();
         }

@@ -14,34 +14,34 @@ public class EntitlementControlMessage extends Table {
 
     public EntitlementControlMessage(byte[] buffer) {
         super(buffer);
-        
+
         __decode_table_body__();
     }
-    
+
     public int getTableIdExtension() {
         return table_id_extension;
     }
-    
+
     public byte getVersionNumber() {
         return version_number;
     }
-    
+
     public byte getCurrentNextIndicator() {
         return current_next_indicator;
     }
-    
+
     public byte getSectionNumber() {
         return section_number;
     }
-    
+
     public byte getLastSectionNumber() {
         return last_section_number;
     }
-    
+
     public byte[] getECMData() {
         return ECM_data;
     }
-    
+
     @Override
     protected void __decode_table_body__() {
         table_id_extension = readOnBuffer(16);
@@ -50,7 +50,7 @@ public class EntitlementControlMessage extends Table {
         current_next_indicator = (byte) readOnBuffer(1);
         section_number = (byte) readOnBuffer(8);
         last_section_number = (byte) readOnBuffer(8);
-        
+
         ECM_data = new byte[section_length - 5 - 4];
         for ( int i=0; i<ECM_data.length; i++ ) {
             ECM_data[i] = (byte) readOnBuffer(8);
@@ -61,14 +61,14 @@ public class EntitlementControlMessage extends Table {
     @Override
     public void print() {
         super.print();
-        
+
         Logger.d(String.format("table_id_extension : 0x%x \n", table_id_extension));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
         Logger.d(String.format("ECM_data : \n"));
-        
+
         BinaryLogger.print(ECM_data);
 
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",

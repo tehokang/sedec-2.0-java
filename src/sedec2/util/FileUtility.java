@@ -13,10 +13,10 @@ public class FileUtility {
         } catch (Exception e) {
             e.printStackTrace();
             return false;
-        } 
+        }
         return true;
     }
-    
+
     public static boolean save(String filepath, String string) {
         try {
             PrintWriter out;

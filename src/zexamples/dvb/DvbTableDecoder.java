@@ -13,47 +13,47 @@ import sedec2.dvb.TableFactory;
 public class DvbTableDecoder {
     public static void main(String []args) {
         if ( args.length < 1 ) {
-            System.out.println("Oops, " + 
+            System.out.println("Oops, " +
                     "I need mpeg2 table to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.decoder.DvbDecoder " + 
+                    "zexamples.decoder.DvbDecoder " +
                     "{Table Raw File} \n");
         }
-    
+
         for ( int i=0; i<args.length; i++ ) {
             File inOutFile = new File(args[i]);
             DataInputStream dataInputStream = null;
             try {
-               
-                dataInputStream = 
+
+                dataInputStream =
                         new DataInputStream(
                                 new BufferedInputStream(
                                         new FileInputStream(inOutFile)));
-                
+
                 long table_buffer_length = inOutFile.length();
                 byte[] table_buffer = new byte[(int) table_buffer_length];
-    
+
                 dataInputStream.readFully(table_buffer);
-    
+
                 Table table = TableFactory.createTable(table_buffer);
-                
+
                 if ( null != table ) {
                     System.out.println(
                             String.format("[%d] table information \n",  i));
 
                     table.printBuffer();
                     table.print();
-                } 
-                
-                dataInputStream.close(); 
+                }
+
+                dataInputStream.close();
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
             } finally {
                 System.out.println("ByeBye");
-            } 
+            }
         }
     }
 }

@@ -3,10 +3,10 @@ package sedec2.util;
 public class BinaryLogger {
     public static boolean PRINT = false;
     public static boolean DEBUG = true;
-    
+
     public static void print(byte[] buffer) {
         if ( PRINT == true ) {
-            Logger.p(String.format("-------- %s:print -------- \n", 
+            Logger.p(String.format("-------- %s:print -------- \n",
                     BinaryLogger.class.getSimpleName()));
 
             int j=1;
@@ -18,10 +18,10 @@ public class BinaryLogger {
             Logger.p("\n------------------------------------\n");
         }
     }
-    
+
     public static void print(byte[] buffer, int length) {
         if ( PRINT == true ) {
-            Logger.p(String.format("-------- %s:debug -------- \n", 
+            Logger.p(String.format("-------- %s:debug -------- \n",
                     BinaryLogger.class.getSimpleName()));
 
             int j=1;
@@ -34,10 +34,10 @@ public class BinaryLogger {
             Logger.p("\n------------------------------------\n");
         }
     }
-    
+
     public static void debug(byte[] buffer) {
         if ( DEBUG == true ) {
-            Logger.p(String.format("-------- %s:debug -------- \n", 
+            Logger.p(String.format("-------- %s:debug -------- \n",
                     BinaryLogger.class.getSimpleName()));
 
             int j=1;
@@ -49,10 +49,10 @@ public class BinaryLogger {
             Logger.p("\n------------------------------------\n");
         }
     }
-    
+
     public static void debug(byte[] buffer, int length) {
         if ( DEBUG == true ) {
-            Logger.p(String.format("-------- %s:debug -------- \n", 
+            Logger.p(String.format("-------- %s:debug -------- \n",
                     BinaryLogger.class.getSimpleName()));
 
             int j=1;

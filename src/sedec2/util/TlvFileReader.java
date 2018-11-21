@@ -8,16 +8,17 @@ import java.nio.ByteBuffer;
 
 public class TlvFileReader extends TlvReader {
     protected DataInputStream input_stream  = null;
-    
+
     public TlvFileReader(String tlv_file) {
         super(tlv_file);
     }
-    
+
+    @Override
     public boolean open() {
         try {
             Logger.d(String.format("TlvFileReader opened (%s) \n",
                     tlv_file.getName()));
-            input_stream  = 
+            input_stream  =
                     new DataInputStream(
                             new BufferedInputStream(new FileInputStream(tlv_file)));
         } catch (IOException e) {
@@ -26,12 +27,12 @@ public class TlvFileReader extends TlvReader {
         }
         return true;
     }
-    
+
     @Override
     public void close() {
         super.close();
         try {
-            if ( input_stream != null ) { 
+            if ( input_stream != null ) {
                 input_stream.close();
                 input_stream = null;
             }
@@ -39,7 +40,7 @@ public class TlvFileReader extends TlvReader {
             e.printStackTrace();
         }
     }
-    
+
     @Override
     public long readable() {
         try {
@@ -51,18 +52,18 @@ public class TlvFileReader extends TlvReader {
         }
         return 0;
     }
-    
+
     @Override
     public int readPacket(byte[] tlv_packet) {
         byte[] tlv_header_buffer = null;
         byte[] tlv_payload_buffer = null;
-        
+
         try {
             tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
             input_stream.read(tlv_header_buffer);
-            
-            tlv_payload_buffer = 
-                    new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+
+            tlv_payload_buffer =
+                    new byte[((tlv_header_buffer[2] & 0xff) << 8 |
                             (tlv_header_buffer[3] & 0xff))];
             input_stream.read(tlv_payload_buffer);
 
@@ -74,18 +75,18 @@ public class TlvFileReader extends TlvReader {
         }
         return tlv_header_buffer.length + tlv_payload_buffer.length;
     }
-    
+
     @Override
     public byte[] readPacket() {
         byte[] tlv_header_buffer = null;
         byte[] tlv_payload_buffer = null;
-        
+
         try {
             tlv_header_buffer = new byte[TLV_HEADER_LENGTH];
             input_stream.read(tlv_header_buffer);
-            
-            tlv_payload_buffer = 
-                    new byte[((tlv_header_buffer[2] & 0xff) << 8 | 
+
+            tlv_payload_buffer =
+                    new byte[((tlv_header_buffer[2] & 0xff) << 8 |
                             (tlv_header_buffer[3] & 0xff))];
             input_stream.read(tlv_payload_buffer);
 

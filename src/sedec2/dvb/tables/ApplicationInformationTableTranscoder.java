@@ -14,7 +14,7 @@ public class ApplicationInformationTableTranscoder extends ApplicationInformatio
     public ApplicationInformationTableTranscoder(byte[] buffer) {
         super(buffer);
     }
-    
+
     @Override
     protected void __encode_prepare_table__() {
         common_descriptors_length = 0;
@@ -27,7 +27,7 @@ public class ApplicationInformationTableTranscoder extends ApplicationInformatio
             application_loop_length += applications.get(i).getApplicationLength();
         }
     }
-    
+
     @Override
     protected void __encode_write_table_body__() {
         writeOnBuffer(test_application_flag, 1);
@@ -46,7 +46,7 @@ public class ApplicationInformationTableTranscoder extends ApplicationInformatio
 
         writeOnBuffer(0x0f, 4);
         writeOnBuffer(application_loop_length, 12);
-        
+
         for ( int i=0; i<applications.size(); i++ ) {
             applications.get(i).writeApplication(this);
         }
@@ -72,158 +72,158 @@ public class ApplicationInformationTableTranscoder extends ApplicationInformatio
         }
         return null;
     }
-    
+
     public void setApplicationUrl(byte[] base_url, byte[] init_path) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.SIMPLE_APPLICATION_LOCATION_DESCRIPTOR);
             ((SimpleApplicationLocationDescriptor)desc).setInitialPathBytes(init_path);
-            
-            desc = __findDescriptor__(app.getDescriptors(), 
+
+            desc = __findDescriptor__(app.getDescriptors(),
                     DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setBaseUrl(base_url);
         }
     }
-    
+
     public void setApplicationVersion(int major, int minor, int micro) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.APPLICATION_DESCRIPTOR);
             ((ApplicationDescriptor)desc).setApplicationVersion(major, minor, micro);
         }
     }
-    
+
     public void setApplicationVisibility(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.APPLICATION_DESCRIPTOR);
             ((ApplicationDescriptor)desc).setVisibility(value);
         }
     }
-    
+
     public void setApplicationId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
             app.setApplicationId(value);
         }
     }
-    
+
     public void setOrganizationId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
             app.setOrganizationId(value);
         }
     }
-    
+
     public void setRemoteConnection(byte value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setRemoteConnection(value);
         }
     }
-    
+
     public void setProtocolId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setProtocolId(value);
         }
     }
-    
+
     public void setOriginalNetworkId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setOriginalNetworkId(value);
         }
     }
-    
+
     public void setTransportStreamId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setTransportStreamId(value);
         }
     }
-    
+
     public void setServiceId(int value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setServiceId(value);
         }
     }
-    
+
     public void setComponentTag(byte value) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setComponentTag(value);
         }
     }
-    
-    public void setTestApplicationFlag(int value) { 
+
+    public void setTestApplicationFlag(int value) {
         test_application_flag = value;
     }
-    
-    public void setApplicationType(int value) { 
+
+    public void setApplicationType(int value) {
         application_type = value;
     }
-    
-    public void setVersionNumber(int value) { 
+
+    public void setVersionNumber(int value) {
         version_number = value;
     }
-    
+
     public void setCurrentNextIndicator(int value) {
         current_next_indicator = value;
     }
-    
-    public void setSectionNumber(int value) { 
+
+    public void setSectionNumber(int value) {
         section_number = value;
     }
-    
-    public void setLastSectionNumber(int value) { 
+
+    public void setLastSectionNumber(int value) {
         last_section_number = value;
     }
-    
+
     public void setTransportProtocolLabel(byte[] label) {
         for ( int i=0; i<applications.size(); i++ ) {
             Application app = applications.get(i);
-            Descriptor desc = 
-                    __findDescriptor__(app.getDescriptors(), 
+            Descriptor desc =
+                    __findDescriptor__(app.getDescriptors(),
                                 DescriptorFactory.APPLICATION_DESCRIPTOR);
             ((ApplicationDescriptor)desc).setTransportProtocolLabel(label);
-            
-            desc = __findDescriptor__(app.getDescriptors(), 
+
+            desc = __findDescriptor__(app.getDescriptors(),
                     DescriptorFactory.TRANSPORT_PROTOCOL_DESCRIPTOR);
             ((TransportProtocolDescriptor)desc).setTransportProtocolLabel(
                     Byte.parseByte(label.toString()));
         }
     }
-    
+
     public void setCommonDescriptors(List<Descriptor> descriptors) {
         common_descriptors = descriptors;
     }
-    
+
     public void setApplications(List<Application> _applications) {
         applications = _applications;
     }

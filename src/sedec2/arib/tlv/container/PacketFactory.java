@@ -16,7 +16,7 @@ public class PacketFactory {
 
     public static TypeLengthValue createPacket(byte[] buffer) {
         byte packet_type = (byte)(buffer[1] & 0xff);
-        
+
         switch ( packet_type ) {
             case IPV4_PACKET:
                 return new IPv4Packet(buffer);
@@ -33,7 +33,7 @@ public class PacketFactory {
         }
         return null;
     }
-    
+
     private PacketFactory() {
         /**
          * @warning Nothing to do since this factory isn't working as instance

@@ -13,36 +13,36 @@ import sedec2.base.Table;
 
 public class SiExtractor extends BaseExtractor {
     protected final String TAG = "SiExtractor";
-    
+
     public interface ITableExtractorListener extends BaseExtractor.Listener {
-        public void onReceivedTable(Table table);    
+        public void onReceivedTable(Table table);
     }
-    
+
     public class QueueData extends BaseExtractor.QueueData {
         public Table table;
-        
+
         public QueueData(Table table) {
             this.table = table;
         }
     }
-    
+
     public SiExtractor() {
         super();
-        
+
         m_event_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 QueueData data = null;
-                
+
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_event_queue && 
+                        if ( null != m_event_queue &&
                                 ( data = (QueueData) m_event_queue.take()) != null ) {
                             Table table = data.table;
-                            
+
                             if ( m_byte_id_filter.contains(table.getTableId()) == false )
                                 continue;
-                            
+
                             if ( m_enable_logging == true ) table.print();
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITableExtractorListener)m_listeners.get(i)).
@@ -52,7 +52,7 @@ public class SiExtractor extends BaseExtractor {
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
-                        /** 
+                        /**
                          * @note Nothing to do
                          */
                     } catch ( Exception e ) {
@@ -63,25 +63,25 @@ public class SiExtractor extends BaseExtractor {
         });
         m_event_thread.start();
     }
-    
+
     /**
      * User should use this function when they don't use TLVExtractor any more.
      */
     @Override
     public void destroy() {
         super.destroy();
-        
+
         m_event_thread.interrupt();
         m_event_thread = null;
     }
-    
+
     /**
-     * Chapter 4, 5, 7 and ARIB-B60. 
-     * process put QueueData with Table having descriptors into event queue, 
+     * Chapter 4, 5, 7 and ARIB-B60.
+     * process put QueueData with Table having descriptors into event queue,
      * user don't need to parse Message of Chapter 7
      */
     @Override
-    protected synchronized void process(TypeLengthValue tlv) 
+    protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
             case PacketFactory.SIGNALLING_PACKET:
@@ -90,9 +90,9 @@ public class SiExtractor extends BaseExtractor {
             case PacketFactory.COMPRESSED_IP_PACKET:
                 CompressedIpPacket cip = (CompressedIpPacket) tlv;
                 MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
-                
+
                 if ( mmtp_packet == null ) break;
-                
+
                 /**
                  * @note Signaling Message
                  */
@@ -104,7 +104,7 @@ public class SiExtractor extends BaseExtractor {
                             putOut(new QueueData(tables.get(i)));
                         }
                     }
-                } 
+                }
                 break;
         }
     }

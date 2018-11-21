@@ -8,7 +8,7 @@ import sedec2.util.Logger;
 
 public class ChannelBondingCableDeliverySystemDescriptor extends Descriptor {
     protected List<ChannelBondingInfo> channel_bonding_infos = new ArrayList<>();
-    
+
     class ChannelBondingInfo {
         public int frequency;
         public byte frame_type;
@@ -18,10 +18,10 @@ public class ChannelBondingCableDeliverySystemDescriptor extends Descriptor {
         public byte FEC_inner;
         public byte group_id;
     }
-    
+
     public ChannelBondingCableDeliverySystemDescriptor(BitReadWriter brw) {
         super(brw);
-        
+
         for ( int i=descriptor_length; i>0; ) {
             ChannelBondingInfo ch = new ChannelBondingInfo();
             ch.frequency = brw.readOnBuffer(32);
@@ -32,16 +32,16 @@ public class ChannelBondingCableDeliverySystemDescriptor extends Descriptor {
             ch.symbol_rate = brw.readOnBuffer(28);
             ch.FEC_inner = (byte) brw.readOnBuffer(4);
             ch.group_id = (byte) brw.readOnBuffer(8);
-            
-            i-=12; 
+
+            i-=12;
             channel_bonding_infos.add(ch);
         }
     }
-    
+
     @Override
     public void print() {
         super._print_();
-        
+
         for ( int i=0; i<channel_bonding_infos.size(); i++ ) {
             ChannelBondingInfo ch = channel_bonding_infos.get(i);
             Logger.d(String.format("\t [%d] frequency : 0x%x \n", i, ch.frequency));

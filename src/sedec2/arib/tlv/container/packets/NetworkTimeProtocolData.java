@@ -17,21 +17,21 @@ public class NetworkTimeProtocolData extends BitReadWriter {
     protected long origin_timestamp;
     protected long receive_timestamp;
     protected long transmit_timestamp;
-    
+
     public NetworkTimeProtocolData(byte[] buffer) {
         super(buffer);
-        
+
         leap_indicator = (byte) readOnBuffer(2);
         version = (byte) readOnBuffer(3);
         mode = (byte) readOnBuffer(3);
         stratum = (byte) readOnBuffer(8);
         poll = (byte) readOnBuffer(8);
         precision = (byte) readOnBuffer(8);
-        
+
         root_delay = readOnBuffer(32);
         root_dispersion = readOnBuffer(32);
         reference_identification = readOnBuffer(32);
-        
+
         reference_timestamp = readOnBuffer(64);
         origin_timestamp = readOnBuffer(64);
         receive_timestamp = readOnBuffer(64);

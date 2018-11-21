@@ -76,7 +76,7 @@ import sedec2.base.BitReadWriter;
 public class DescriptorFactory {
     public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0001;
     public final static int DEPENDENCY_DESCRIPTOR = 0x0002;
-    
+
     public final static int ASSET_GROUP_DESCRIPTOR = 0x8000;
     public final static int EVENT_PACKAGE_DESCRIPTOR = 0x8001;
     public final static int BACKGROUND_COLOR_DESCRIPTOR = 0x8002;
@@ -90,7 +90,7 @@ public class DescriptorFactory {
     public final static int MH_HEVC_DESCRIPTOR = 0x800a;
     public final static int MH_EVENT_GROUP_DESCRIPTOR = 0x800c;
     public final static int MH_SERVICE_LIST_DESCRIPTOR = 0x800d;
-    
+
     public final static int VIDEO_COMPONENT_DESCRIPTOR = 0x8010;
     public final static int MH_STREAM_IDENTIFIER_DESCRIPTOR = 0x8011;
     public final static int MH_CONTENT_DESCRIPTOR = 0x8012;
@@ -109,7 +109,7 @@ public class DescriptorFactory {
     public final static int MH_COMPRESSION_TYPE_DESCRIPTOR = 0x801f;
     public final static int MH_DATA_COMPONENT_DESCRIPTOR = 0x8020;
     public final static int UTC_NPT_REFERENCE_DESCRIPTOR = 0x8021;
-    
+
     public final static int MH_LOCAL_TIME_OFFSET_DESCRIPTOR = 0x8023;
     public final static int MH_COMPONENT_GROUP_DESCRIPTOR = 0x8024;
     public final static int MH_LOGO_TRANSMISSION_DESCRIPTOR = 0x8025;
@@ -132,7 +132,7 @@ public class DescriptorFactory {
     public final static int PU_STRUCTURE_DESCRIPTOR = 0x8036;
     public final static int MH_HIERACHY_DESCRIPTOR = 0x8037;
     public final static int CONTENT_COPY_CONTROL_DESCRIPTOR = 0x8038;
-    
+
     public final static int CONTENT_USAGE_CONTROL_DESCRIPTOR = 0x8039;
     public final static int MH_EXTERNAL_APPLICATION_CONTROL_DESCRIPTOR = 0x803a;
     public final static int MH_PLAYBACK_APPLICATION_DESCRIPTOR = 0x803b;
@@ -143,16 +143,16 @@ public class DescriptorFactory {
     public final static int EMERGENCY_NEWS_DESCRIPTOR = 0x8040;
     public final static int MH_CA_CONTRACT_INFORMATION_DESCRIPTOR = 0x8041;
     public final static int MH_CA_SERVICE_DESCRIPTOR= 0x8042;
-    
+
     public final static int MH_LINKAGE_DESCRIPTOR = 0xf000;
     public final static int MH_SHORT_EVENT_DESCRIPTOR = 0xf001;
     public final static int MH_EXTENDED_EVENT_DESCRIPTOR = 0xf002;
     public final static int EVENT_MESSAGE_DESCRIPTOR = 0xf003;
-    
+
     public final static int UNKNOWN_DESCRIPTOR = 0xffff;
-    
+
     public static Descriptor createDescriptor(BitReadWriter brw) {
-        int descriptor_tag = 
+        int descriptor_tag =
                 (((brw.getCurrentBuffer()[0] & 0xff) << 8) |
                 (brw.getCurrentBuffer()[1] & 0xff));
 
@@ -300,8 +300,8 @@ public class DescriptorFactory {
                 return new UnknownDescriptor(brw);
         }
     }
-    
+
     private DescriptorFactory() {
-        
+
     }
 }
