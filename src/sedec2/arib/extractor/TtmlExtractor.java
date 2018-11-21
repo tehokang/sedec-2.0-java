@@ -8,6 +8,7 @@ import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
+import sedec2.util.Logger;
 
 public class TtmlExtractor extends BaseExtractor {
     protected final String TAG = "TtmlExtractor";
@@ -35,6 +36,7 @@ public class TtmlExtractor extends BaseExtractor {
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
+                        Logger.e(TAG, "Error while emitting events \n");
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**

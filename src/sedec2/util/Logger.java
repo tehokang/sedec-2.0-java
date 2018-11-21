@@ -49,13 +49,15 @@ public class Logger
 
     public static void e(String tag, String msg) {
         if (false == tag.isEmpty() && ERROR) {
-            System.out.print(m_tag + "[" + tag + "]" + "[E] " +  msg);
+            System.out.print(m_tag + "\033[1;31m[" + tag + "]" +
+                    "[E] " +  msg + "\u001B[0m");
         }
     }
 
     public static void e(String msg) {
         /* Pure Java */
-        if ( ERROR ) System.out.print(m_tag + "[E] " +  msg);
+        if ( ERROR ) System.out.print(m_tag + "\033[1;31m[E] " +
+                "\u001B[0m" + msg);
         /* Android */
         //if(ERROR) Log.e(tag, "[E]" + msg);
     }

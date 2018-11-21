@@ -11,6 +11,7 @@ import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU.MFU;
 import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
+import sedec2.util.Logger;
 
 public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
@@ -69,6 +70,7 @@ public class ApplicationExtractor extends BaseExtractor {
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
+                        Logger.e(TAG, "Error while emitting events \n");
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**

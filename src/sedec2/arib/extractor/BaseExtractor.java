@@ -15,6 +15,7 @@ import sedec2.arib.tlv.container.mmtp.MMTP_Payload_SignallingMessage;
 import sedec2.arib.tlv.container.mmtp.MessageFactory;
 import sedec2.arib.tlv.container.mmtp.messages.Message;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
+import sedec2.util.Logger;
 
 /**
  * BaseExtractor has implementations which are able to parse TLV, MMTP packet thus
@@ -82,6 +83,8 @@ public abstract class BaseExtractor {
     protected List<MMTP_Packet> m_fragmented01_mmtp = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp = new ArrayList<>();
 
+    protected final String TAG = "BaseExtractor";
+
     public interface Listener {
 
     }
@@ -119,6 +122,7 @@ public abstract class BaseExtractor {
                         }
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
+                        Logger.e(TAG, "Error while parsing TLV \n");
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
