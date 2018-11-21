@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
+import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU.MFU;
@@ -110,19 +111,21 @@ public abstract class BaseExtractor {
         m_tlv_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
+                TypeLengthValue tlv = null;
 
                 while ( m_is_running ) {
                     try {
                         if ( null != m_tlv_packets ) {
                             byte[] tlv_raw = m_tlv_packets.take();
-                            TypeLengthValue tlv =
-                                    sedec2.arib.tlv.container.PacketFactory.createPacket(tlv_raw);
+                            tlv = PacketFactory.createPacket(tlv_raw);
 
                             if ( tlv != null ) process(tlv);
                         }
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
-                        Logger.e(TAG, "Error while parsing TLV \n");
+                        Logger.e(TAG,
+                                String.format("Error while parsing TLV (type %d)\n",
+                                tlv.getPacketType()));
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
