@@ -440,41 +440,43 @@ public class TlvPacketDecoder {
                     "{TLV Raw File} \n");
         }
 
+        SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
+        ConsoleProgress progress_bar = new ConsoleProgress("TLV").
+                show(true, true, true, true, true, true);
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
-            ConsoleProgress progress_bar = new ConsoleProgress("TLV").
-                    show(true, true, true, true, true, true);
             TlvReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
 
-            /**
-             * @note Putting a TLV packet into SimpleTlvCoordinator \n
-             * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
-             * from event listener which you registered to TlvDemultiplexer
-             */
             progress_bar.start(tlv_reader.filesize());
+
             while ( tlv_reader.readable() > 0) {
                 final byte[] tlv_packet = tlv_reader.readPacket();
                 if ( tlv_packet == null || tlv_packet.length == 0 ) continue;
+                /**
+                 * @note Putting a TLV packet into SimpleTlvCoordinator \n
+                 * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
+                 * from event listener which you registered to TlvDemultiplexer
+                 */
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 progress_bar.update(tlv_packet.length);
             }
 
-            progress_bar.stop();
-            progress_bar = null;
+            simple_tlv_coordinator.clearQueue();
 
+            progress_bar.stop();
             tlv_reader.close();
             tlv_reader = null;
-            /**
-             * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
-             */
-            simple_tlv_coordinator.destroy();
-            simple_tlv_coordinator = null;
         }
+
+        /**
+         * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
+         */
+        simple_tlv_coordinator.destroy();
+        simple_tlv_coordinator = null;
 
         System.out.println("ByeBye");
         System.exit(0);

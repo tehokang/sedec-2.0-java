@@ -148,6 +148,9 @@ public abstract class BaseExtractor {
     public void clearQueue() {
         m_tlv_packets.clear();
         m_event_queue.clear();
+
+        m_fragmented01_mmtp.clear();
+        m_fragmented02_mmtp.clear();
     }
 
     /**
