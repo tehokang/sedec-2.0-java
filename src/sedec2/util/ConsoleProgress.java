@@ -7,8 +7,8 @@ public class ConsoleProgress {
     protected long counter = 0;
     protected long startTime = 0;
     protected long processTime = 0;
-    protected long read_size = 0;
-    protected long read_vector = 0;
+    protected double read_size = 0;
+    protected double read_vector = 0;
     protected double total_size = 0;
     protected String counter_name = "";
     protected double bitrate_average = 0;
@@ -123,7 +123,7 @@ public class ConsoleProgress {
          */
         if ( m_enable_proceed_amount )
             System.out.print(String.format("(%.2f / %.2f MBytes) ",
-                    (double)(read_size/1024/1024),
+                    read_size/1024/1024,
                     total_size/1024/1024 ));
 
         /**
