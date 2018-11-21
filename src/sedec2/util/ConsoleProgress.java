@@ -10,6 +10,7 @@ public class ConsoleProgress {
     protected double read_size = 0;
     protected double read_vector = 0;
     protected double total_size = 0;
+    protected String output = "";
     protected String counter_name = "";
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
@@ -82,27 +83,27 @@ public class ConsoleProgress {
         /**
          * @note TLV counter
          */
-        System.out.print(String.format(" %s : %d ", counter_name, counter));
+        output = String.format(" %s : %d ", counter_name, counter);
 
         /**
          * @note Progress bar as percentage
          */
         if ( m_enable_progress_bar )
-            System.out.print(String.format("%s ",
-                    getProgressBar(read_size / total_size * 100)));
+            output += String.format("%s ",
+                    getProgressBar(read_size / total_size * 100));
 
         /**
          * @note Percentage of processing while demuxing
          */
         if ( m_enable_percentage )
-            System.out.print("\033[1;31m" + String.format("%.2f %% ",
-                    read_size / total_size * 100) + "\u001B[0m");
+            output += "\033[1;31m" + String.format("%.2f %% ",
+                    read_size / total_size * 100) + "\u001B[0m";
 
         /**
          * @note Circle animation of progressing
          */
         if ( m_enable_loading_circle )
-            System.out.print(anim_circle[(int) (counter%4)] + " ");
+            output += anim_circle[(int) (counter%4)] + " ";
 
         /**
          * @note Bitrate of processing as Mbps
@@ -115,25 +116,24 @@ public class ConsoleProgress {
             } else {
                 read_vector += read;
             }
-            System.out.print(String.format("%4.2f Mbps ", bitrate_average));
+            output += String.format("%4.2f Mbps ", bitrate_average);
         }
 
         /**
          * @note Total amount of processed
          */
         if ( m_enable_proceed_amount )
-            System.out.print(String.format("(%.2f / %.2f MBytes) ",
-                    read_size/1024/1024,
-                    total_size/1024/1024 ));
+            output += String.format("(%.2f / %.2f MBytes) ",
+                    read_size/1024/1024, total_size/1024/1024 );
 
         /**
          * @note Duration time during demuxing
          */
         if ( m_enable_duration )
-            System.out.print(String.format("%s ",
-                    formatInterval(System.currentTimeMillis()-startTime)));
+            output += String.format("%s ",
+                    formatInterval(System.currentTimeMillis()-startTime));
 
-        System.out.print("\r");
+        System.out.print(output + "\r");
     }
 
     protected String formatInterval(final long l) {
