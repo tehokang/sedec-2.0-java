@@ -51,7 +51,7 @@ public class TlvMemoryReader extends TlvReader {
     @Override
     public long readable() {
         if ( memory_buffer != null ) {
-            memory_buffer.remaining();
+            return memory_buffer.remaining();
         }
         return 0;
     }
