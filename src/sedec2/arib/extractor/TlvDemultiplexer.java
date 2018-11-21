@@ -60,6 +60,16 @@ public class TlvDemultiplexer implements
         m_generaldata_extractor.addEventListener(this);
     }
 
+    public void clearQueue() {
+        m_si_extractor.clearQueue();
+        m_ntp_extractor.clearQueue();
+        m_ttml_extractor.clearQueue();
+        m_video_extractor.clearQueue();
+        m_audio_extractor.clearQueue();
+        m_application_extractor.clearQueue();
+        m_generaldata_extractor.clearQueue();
+    }
+
     public void destroy() {
         m_si_extractor.removeEventListener(this);
         m_ntp_extractor.removeEventListener(this);

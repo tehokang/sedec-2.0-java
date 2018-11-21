@@ -138,6 +138,11 @@ public abstract class BaseExtractor {
         m_tlv_extractor_thread.start();
     }
 
+    public void clearQueue() {
+        m_tlv_packets.clear();
+        m_event_queue.clear();
+    }
+
     /**
      * User has to call destory() for rapid garbage collecting
      */

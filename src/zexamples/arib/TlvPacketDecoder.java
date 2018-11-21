@@ -118,6 +118,10 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         audio_bs_map = null;
     }
 
+    public void clearQueue() {
+        tlv_demuxer.clearQueue();
+    }
+
     public boolean put(byte[] tlv_raw) {
         return tlv_demuxer.put(tlv_raw);
     }
@@ -436,15 +440,14 @@ public class TlvPacketDecoder {
                     "{TLV Raw File} \n");
         }
 
-        SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
-        ConsoleProgress progress_bar = new ConsoleProgress("TLV").
-                show(true, true, true, true, true, true);
-
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
+            SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
+            ConsoleProgress progress_bar = new ConsoleProgress("TLV").
+                    show(true, true, true, true, true, true);
             TlvReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
 
@@ -460,16 +463,18 @@ public class TlvPacketDecoder {
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
                 progress_bar.update(tlv_packet.length);
             }
+
             progress_bar.stop();
+            progress_bar = null;
+
             tlv_reader.close();
             tlv_reader = null;
+            /**
+             * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
+             */
+            simple_tlv_coordinator.destroy();
+            simple_tlv_coordinator = null;
         }
-        /**
-         * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
-         */
-        simple_tlv_coordinator.destroy();
-        simple_tlv_coordinator = null;
-        progress_bar = null;
 
         System.out.println("ByeBye");
         System.exit(0);
