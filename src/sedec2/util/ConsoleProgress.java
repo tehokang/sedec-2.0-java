@@ -28,15 +28,18 @@ public class ConsoleProgress {
     }
 
     public void start(double file_size) {
-        total_size = file_size;
+        counter = 0;
+        startTime = 0;
+        processTime = 0;
+        read_size = 0;
+        read_vector = 0;
         bitrate_average = 0;
+        total_size = file_size;
         startTime = System.currentTimeMillis();
         processTime = System.currentTimeMillis();
     }
 
     public void stop() {
-        total_size = 0;
-        bitrate_average = 0;
         System.out.print("\n");
     }
 
