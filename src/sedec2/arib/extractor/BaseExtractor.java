@@ -215,10 +215,10 @@ public abstract class BaseExtractor {
      * @param obj
      * @throws InterruptedException
      */
-    protected void putOut(Object obj) throws InterruptedException {
+    protected void putOut(QueueData obj) throws InterruptedException {
         if ( obj == null ) return;
 
-        m_event_queue.put((QueueData)obj);
+        m_event_queue.put(obj);
     }
 
     /**

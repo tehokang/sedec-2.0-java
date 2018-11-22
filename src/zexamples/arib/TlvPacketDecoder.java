@@ -198,43 +198,43 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                             /**
                              * @note Video including VPS, SPS and PPS in MFU
                              */
-                            tlv_demuxer.addVideoPidFilter(pid);
+                            tlv_demuxer.addVideoFilter(pid);
                             break;
                         case "hvc1":
                             /**
                              * @note Video without VPS, SPS and PPS in MFU
                              */
-                            tlv_demuxer.addVideoPidFilter(pid);
+                            tlv_demuxer.addVideoFilter(pid);
                             break;
                         case "mp4a":
                             /**
                              * @note Audio
                              */
-                            tlv_demuxer.addAudioPidFilter(pid);
+                            tlv_demuxer.addAudioFilter(pid);
                             break;
                         case "stpp":
                             /**
                              * @note TTML
                              */
-                            tlv_demuxer.addTtmlPidFilter(pid);
+                            tlv_demuxer.addTtmlFilter(pid);
                             break;
                         case "aapp":
                             /**
                              * @note Application
                              */
-                            tlv_demuxer.addApplicationPidFilter(pid);
+                            tlv_demuxer.addApplicationFilter(pid);
                             break;
                         case "asgd":
                             /**
                              * @note Synchronous type general purpose data
                              */
-                            tlv_demuxer.addGeneralPurposeDataPidFilter(pid);
+                            tlv_demuxer.addGeneralPurposeDataFilter(pid);
                             break;
                         case "aagd":
                             /**
                              * @note Asynchronous type general purpose data
                              */
-                            tlv_demuxer.addGeneralPurposeDataPidFilter(pid);
+                            tlv_demuxer.addGeneralPurposeDataFilter(pid);
                             break;
                     }
                 }

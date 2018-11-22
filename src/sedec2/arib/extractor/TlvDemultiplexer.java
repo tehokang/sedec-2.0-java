@@ -106,27 +106,27 @@ public class TlvDemultiplexer implements
         m_listeners.remove(listener);
     }
 
-    public void addVideoPidFilter(int pid) {
+    public void addVideoFilter(int pid) {
         if ( m_video_extractor != null ) m_video_extractor.addPidFilter(pid);
     }
 
-    public void removeVideoPidFilter(int pid) {
+    public void removeVideoFilter(int pid) {
         if ( m_video_extractor != null ) m_video_extractor.removePidFilter(pid);
     }
 
-    public void addAudioPidFilter(int pid) {
+    public void addAudioFilter(int pid) {
         if ( m_audio_extractor != null ) m_audio_extractor.addPidFilter(pid);
     }
 
-    public void removeAudioPidFilter(int pid) {
+    public void removeAudioFilter(int pid) {
         if ( m_audio_extractor != null ) m_audio_extractor.removePidFilter(pid);
     }
 
-    public void addTtmlPidFilter(int pid) {
+    public void addTtmlFilter(int pid) {
         if ( m_ttml_extractor != null ) m_ttml_extractor.addPidFilter(pid);
     }
 
-    public void removeTtmlPidFilter(int pid) {
+    public void removeTtmlFilter(int pid) {
         if ( m_ttml_extractor != null ) m_ttml_extractor.removePidFilter(pid);
     }
 
@@ -154,27 +154,27 @@ public class TlvDemultiplexer implements
         if ( m_si_extractor != null ) m_si_extractor.removePidFilter(table_id);
     }
 
-    public void addNtpPidFilter(int pid) {
+    public void addNtpFilter(int pid) {
         if ( m_ntp_extractor != null ) m_ntp_extractor.addPidFilter(pid);
     }
 
-    public void removeNtpPidFilter(int pid) {
+    public void removeNtpFilter(int pid) {
         if ( m_ntp_extractor != null ) m_ntp_extractor.removePidFilter(pid);
     }
 
-    public void addApplicationPidFilter(int pid) {
+    public void addApplicationFilter(int pid) {
         if ( m_application_extractor != null ) m_application_extractor.addPidFilter(pid);
     }
 
-    public void removeApplicationPidFilter(int pid) {
+    public void removeApplicationFilter(int pid) {
         if ( m_application_extractor != null ) m_application_extractor.removePidFilter(pid);
     }
 
-    public void addGeneralPurposeDataPidFilter(int pid) {
+    public void addGeneralPurposeDataFilter(int pid) {
         if ( m_generaldata_extractor != null ) m_generaldata_extractor.addPidFilter(pid);
     }
 
-    public void removeGeneralPurposeDataPidFilter(int pid) {
+    public void removeGeneralPurposeDataFilter(int pid) {
         if ( m_generaldata_extractor != null ) m_generaldata_extractor.removePidFilter(pid);
     }
 
