@@ -238,7 +238,7 @@ Every Tables and Descriptors are based on base/Table or arib/Table and so on wha
 * Descriptor : base class of all of descriptor
 
 <center>
-    <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec-2.0-overview-general.png?raw=true"/>
+    <img src="https://github.com/tehokang/documents/blob/master/sedec/basic-table-concept.png?raw=true"/>
 </center>
 
 ## Case Of ARIB
