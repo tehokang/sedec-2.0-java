@@ -93,7 +93,6 @@ public class BitReadWriter {
     }
 
     public int readOnBuffer(int len) {
-        int res = 0;
         int mask;
         byte sp = m_buffer[m_pos];
 
@@ -118,8 +117,7 @@ public class BitReadWriter {
                     sp = m_buffer[m_pos];
             }
         }
-        res = m_by_buffer;
-        return res;
+        return m_by_buffer;
     }
 
     public void writeOnBuffer(int value, int len) {
