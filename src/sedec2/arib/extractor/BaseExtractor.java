@@ -165,6 +165,12 @@ public abstract class BaseExtractor {
         m_tlv_packets.clear();
         m_tlv_packets = null;
 
+        m_event_queue.clear();
+        m_event_queue = null;
+        
+        m_fragmented01_mmtp.clear();
+        m_fragmented02_mmtp.clear();
+        
         m_listeners.clear();
         m_listeners = null;
     }
