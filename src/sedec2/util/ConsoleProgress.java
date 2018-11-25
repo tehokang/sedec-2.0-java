@@ -1,7 +1,6 @@
 package sedec2.util;
 
 import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryUsage;
 import java.util.concurrent.TimeUnit;
 
 public class ConsoleProgress {
@@ -18,8 +17,6 @@ public class ConsoleProgress {
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
-    protected MemoryUsage heap_usage =
-            ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
 
     protected boolean m_enable_progress_bar = false;
     protected boolean m_enable_percentage = false;

@@ -40,8 +40,6 @@ public class TableFactory {
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
 
-        Table section = null;
-
         switch(table_id)
         {
             case PROGRAM_ASSOCIATION_TABLE:
