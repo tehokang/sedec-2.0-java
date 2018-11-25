@@ -4,6 +4,8 @@ public class UnknownTable extends Table {
 
     public UnknownTable(byte[] buffer) {
         super(buffer);
+
+        skipOnBuffer(section_length*8);
     }
 
     @Override

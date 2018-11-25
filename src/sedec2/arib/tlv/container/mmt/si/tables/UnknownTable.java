@@ -10,6 +10,6 @@ public class UnknownTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-
+        skipOnBuffer(length*8);
     }
 }

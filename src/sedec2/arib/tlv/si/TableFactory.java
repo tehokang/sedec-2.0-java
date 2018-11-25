@@ -29,11 +29,9 @@ public class TableFactory {
             case ADDRESS_MAP_TABLE:
                 return new AddressMapTable(buffer);
             case UNKNOWN_TABLE:
-                return new UnknownTable(buffer);
             default:
-                break;
+                return new UnknownTable(buffer);
         }
-        return null;
     }
 
     private TableFactory() {

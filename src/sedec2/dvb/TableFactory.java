@@ -1,6 +1,7 @@
 package sedec2.dvb;
 
 import sedec2.base.Table;
+import sedec2.base.UnknownTable;
 import sedec2.dvb.tables.ApplicationInformationTable;
 import sedec2.dvb.tables.BouquetAssociationTable;
 import sedec2.dvb.tables.ConditionalAccessTable;
@@ -78,9 +79,8 @@ public class TableFactory {
             case SELECTION_INFORMATION_TABLE:
                 return new SelectionInformationTable(buffer);
             default:
-                break;
+                return new UnknownTable(buffer);
         }
-        return section;
     }
 
     private TableFactory() {
