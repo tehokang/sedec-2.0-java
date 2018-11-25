@@ -442,7 +442,7 @@ public class TlvPacketDecoder {
 
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
         ConsoleProgress progress_bar = new ConsoleProgress("TLV").
-                show(true, true, true, true, true, true);
+                show(true, true, true, true, true, true, true);
         /**
          * @note Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor

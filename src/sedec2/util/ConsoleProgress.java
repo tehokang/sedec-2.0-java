@@ -1,12 +1,15 @@
 package sedec2.util;
 
+import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryUsage;
 import java.util.concurrent.TimeUnit;
 
 public class ConsoleProgress {
     protected final int PROGRESS_BAR_WIDTH=30;
     protected long counter = 0;
     protected long startTime = 0;
-    protected long processTime = 0;
+    protected long bitrate_process_time = 0;
+    protected long memory_process_time = 0;
     protected double read_size = 0;
     protected double read_vector = 0;
     protected double total_size = 0;
@@ -15,6 +18,8 @@ public class ConsoleProgress {
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
+    protected MemoryUsage heap_usage =
+            ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
 
     protected boolean m_enable_progress_bar = false;
     protected boolean m_enable_percentage = false;
@@ -22,6 +27,7 @@ public class ConsoleProgress {
     protected boolean m_enable_bitrate = false;
     protected boolean m_enable_duration = false;
     protected boolean m_enable_proceed_amount = false;
+    protected boolean m_enable_heap_usage = false;
 
     public ConsoleProgress(String counter_name) {
         this.counter_name = counter_name;
@@ -30,13 +36,14 @@ public class ConsoleProgress {
     public void start(double file_size) {
         counter = 0;
         startTime = 0;
-        processTime = 0;
+        bitrate_process_time = 0;
         read_size = 0;
         read_vector = 0;
         bitrate_average = 0;
         total_size = file_size;
         startTime = System.currentTimeMillis();
-        processTime = System.currentTimeMillis();
+        bitrate_process_time = System.currentTimeMillis();
+        memory_process_time = System.currentTimeMillis();
     }
 
     public void stop() {
@@ -44,13 +51,14 @@ public class ConsoleProgress {
     }
 
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean loading_circle,
-            boolean bitrate, boolean duration, boolean amount ) {
+            boolean bitrate, boolean duration, boolean amount, boolean heap_usage ) {
         m_enable_progress_bar = progress_bar;
         m_enable_percentage = percentage;
         m_enable_loading_circle = loading_circle;
         m_enable_bitrate = bitrate;
         m_enable_duration = duration;
         m_enable_proceed_amount = amount;
+        m_enable_heap_usage = heap_usage;
 
         return this;
     }
@@ -112,9 +120,9 @@ public class ConsoleProgress {
          * @note Bitrate of processing as Mbps
          */
         if ( m_enable_bitrate ) {
-            if ( System.currentTimeMillis()-processTime >= 1000 ) {
+            if ( System.currentTimeMillis() - bitrate_process_time >= 1000 ) {
                 bitrate_average = read_vector*8/1024/1024;
-                processTime = System.currentTimeMillis();
+                bitrate_process_time = System.currentTimeMillis();
                 read_vector = 0;
             } else {
                 read_vector += read;
@@ -135,6 +143,14 @@ public class ConsoleProgress {
         if ( m_enable_duration )
             output += String.format("%s ",
                     formatInterval(System.currentTimeMillis()-startTime));
+
+        if ( m_enable_heap_usage ) {
+            if ( System.currentTimeMillis() - memory_process_time >= 1000 ) {
+                memory_process_time = System.currentTimeMillis();
+                output += String.format("Heap : %d KBytes ",
+                        ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1024 );
+            }
+        }
 
         System.out.print(output + "\r");
     }
