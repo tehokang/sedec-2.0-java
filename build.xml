@@ -4,7 +4,7 @@
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="sedec2" >
+<project basedir="." default="build" name="sedec" >
     <property environment="env"/>
     <property name="version" value="2.0"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -13,7 +13,7 @@
     <property name="release.dir" value="out"/>
     <property name="bin.dir" value="bin"/>
     <property name="lib.dir" value="libs"/>
-    <property name="src.dir" value="src"/>
+    <property name="src.dir" value="src/main/java"/>
     <property name="doc.dir" value="${release.dir}/doc"/>
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
@@ -35,7 +35,7 @@
     <target name="clean">
         <delete dir="${bin.dir}"/>
         <delete dir="${release.dir}"/>
-    </target>              
+    </target>
               
     <target depends="build-project" name="build">
         <tstamp>
@@ -61,39 +61,6 @@
         </javac>
     </target>
               
-    <target depends="init, build" name="release-arib-tlv-decoder">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-tlv-decoder.jar" 
-            basedir="${bin.dir}" 
-            includes="**">
-            <manifest>
-                <attribute name="Main-Class" value="zexamples.arib.TlvPacketDecoder"/>
-            </manifest>
-            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
-        </jar>
-    </target>
-
-    <target depends="init, build" name="release-arib-section-decoder">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-arib-section-decoder.jar" 
-            basedir="${bin.dir}" 
-            includes="**">
-            <manifest>
-                <attribute name="Main-Class" value="zexamples.arib.AribTableDecoder"/>
-            </manifest>
-            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
-        </jar>
-    </target>
-
-    <target depends="init, build" name="release-dvb-section-decoder">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}-example-dvb-section-decoder.jar" 
-            basedir="${bin.dir}" 
-            includes="**">
-            <manifest>
-                <attribute name="Main-Class" value="zexamples.dvb.DvbTableDecoder"/>
-            </manifest>
-            <zipgroupfileset dir="${lib.dir}" includes="**/*.jar"/>
-        </jar>
-    </target>
-
     <target depends="init,build-project" name="release-sdk">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
             basedir="${bin.dir}" 
