@@ -28,6 +28,7 @@ public class ConsoleProgress {
     protected boolean m_enable_duration = false;
     protected boolean m_enable_proceed_amount = false;
     protected boolean m_enable_heap_usage = false;
+    protected boolean m_enable_cpu_usage = false;
 
     public ConsoleProgress(String counter_name) {
         this.counter_name = counter_name;
@@ -50,8 +51,54 @@ public class ConsoleProgress {
         System.out.print("\n");
     }
 
-    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean loading_circle,
-            boolean bitrate, boolean duration, boolean amount, boolean heap_usage ) {
+    public ConsoleProgress show(boolean progress_bar) {
+        m_enable_progress_bar = progress_bar;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage) {
+        this.show(progress_bar);
+        m_enable_percentage = percentage;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate) {
+        this.show(progress_bar, percentage);
+        m_enable_bitrate = bitrate;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
+            boolean duration) {
+        this.show(progress_bar, percentage, bitrate);
+        m_enable_duration = duration;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate, 
+            boolean duration, boolean amount) {
+        this.show(progress_bar, percentage, bitrate, duration);
+        m_enable_proceed_amount = amount;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate, 
+            boolean duration, boolean amount, boolean heap_usage) {
+        this.show(progress_bar, percentage, bitrate, duration, amount);
+        m_enable_heap_usage = heap_usage;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate, 
+            boolean duration, boolean amount, boolean heap_usage, boolean cpu_usage) {
+        this.show(progress_bar, percentage, bitrate, duration, amount, heap_usage);
+        m_enable_cpu_usage = cpu_usage;
+        return this;
+    }
+    
+    public ConsoleProgress show(boolean progress_bar, boolean percentage, 
+            boolean loading_circle, boolean bitrate, boolean duration, boolean amount, 
+            boolean heap_usage, boolean cpu_usage ) {
         m_enable_progress_bar = progress_bar;
         m_enable_percentage = percentage;
         m_enable_loading_circle = loading_circle;
@@ -59,32 +106,8 @@ public class ConsoleProgress {
         m_enable_duration = duration;
         m_enable_proceed_amount = amount;
         m_enable_heap_usage = heap_usage;
-
+        m_enable_cpu_usage = cpu_usage;
         return this;
-    }
-
-    public void showProgressbar(boolean show) {
-        m_enable_progress_bar = show;
-    }
-
-    public void showPercentage(boolean show) {
-        m_enable_percentage = show;
-    }
-
-    public void showLoadingCircle(boolean show) {
-        m_enable_loading_circle = show;
-    }
-
-    public void showBitrate(boolean show) {
-        m_enable_bitrate = show;
-    }
-
-    public void showDuration(boolean show) {
-        m_enable_duration = show;
-    }
-
-    public void showProceedAmount(boolean show) {
-        m_enable_proceed_amount = show;
     }
 
     public void update(long read) {
@@ -150,13 +173,22 @@ public class ConsoleProgress {
             if ( heap_usage != null ) {
                 output += String.format("Heap : %d MBytes ", 
                         heap_usage.getUsed() / 1024 / 1024);
+            }
+            
+            if ( nonheap_usage != null ) {
                 output += String.format("Non-heap : %d MBytes ", 
                         nonheap_usage.getUsed() / 1024 / 1024);
-                output += String.format("CPU : %.2f " , 
-                        ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage());
             }
         }
 
+        /**
+         * @note CPU usage during processing
+         */
+        if ( m_enable_cpu_usage ) {
+            output += String.format("CPU : %.2f " , 
+                    ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage());
+        }
+        
         /**
          * @note Duration time during demuxing
          */
