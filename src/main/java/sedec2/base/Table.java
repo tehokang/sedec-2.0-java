@@ -11,13 +11,19 @@ public abstract class Table extends BitReadWriter {
     protected int section_length;
     protected byte[] m_crc;
     protected int checksum_CRC32;
-
+    
+    protected boolean is_unknown_table = false;
+    
     public Table(byte[] buffer) {
         super(buffer);
 
         __decode_table_header__();
     }
 
+    public boolean isUnknownTable() {
+        return is_unknown_table;
+    }
+    
     public byte getTableId() {
         return table_id;
     }

@@ -250,6 +250,13 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 mpt = null;
             }
             break;
+        default:
+            if ( table.isUnknownTable() == true ) {
+                System.out.print(String.format(
+                        "It's a table which sedec couldn't decode (table_id : 0x%x)\n",
+                        table.getTableId()));
+            }
+            break;
         }
     }
 

@@ -27,6 +27,7 @@ import sedec2.arib.b10.tables.StuffingTable;
 import sedec2.arib.b10.tables.TimeDateTable;
 import sedec2.arib.b10.tables.TimeOffsetTable;
 import sedec2.base.Table;
+import sedec2.base.UnknownTable;
 
 public class TableFactory {
     /** @note PAT */
@@ -124,8 +125,6 @@ public class TableFactory {
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
 
-        Table section = null;
-
         switch ( table_id )
         {
             case PROGRAM_ASSOCIATION_TABLE:
@@ -187,9 +186,8 @@ public class TableFactory {
             case APPLICATION_INFORMATION_TABLE:
                 return new ApplicationInformationTable(buffer);
             default:
-                break;
+                return new UnknownTable(buffer);
         }
-        return section;
     }
 
     private TableFactory() {
