@@ -462,7 +462,9 @@ public class TlvPacketDecoder {
 
             while ( tlv_reader.readable() > 0) {
                 final byte[] tlv_packet = tlv_reader.readPacket();
-                if ( tlv_packet == null || tlv_packet.length == 0 ) continue;
+                if ( tlv_packet == null || 
+                        tlv_packet.length == 0 || 
+                        tlv_packet[0] != 0x7f ) continue;
                 /**
                  * @note Putting a TLV packet into SimpleTlvCoordinator \n
                  * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
