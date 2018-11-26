@@ -1,6 +1,7 @@
 package sedec2.util;
 
 import java.lang.management.ManagementFactory;
+import java.lang.management.MemoryUsage;
 import java.util.concurrent.TimeUnit;
 
 public class ConsoleProgress {
@@ -17,7 +18,9 @@ public class ConsoleProgress {
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
-
+    protected MemoryUsage heap_usage = null;
+    protected MemoryUsage nonheap_usage = null;
+    
     protected boolean m_enable_progress_bar = false;
     protected boolean m_enable_percentage = false;
     protected boolean m_enable_loading_circle = false;
@@ -135,19 +138,31 @@ public class ConsoleProgress {
                     read_size/1024/1024, total_size/1024/1024 );
 
         /**
+         * @note Memory usage during processing
+         */
+        if ( m_enable_heap_usage ) {
+            if ( System.currentTimeMillis() - memory_process_time >= 1000 ) {
+                memory_process_time = System.currentTimeMillis();
+                heap_usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
+                nonheap_usage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
+            }
+            
+            if ( heap_usage != null ) {
+                output += String.format("Heap : %d MBytes ", 
+                        heap_usage.getUsed() / 1024 / 1024);
+                output += String.format("Non-heap : %d MBytes ", 
+                        nonheap_usage.getUsed() / 1024 / 1024);
+                output += String.format("CPU : %.2f " , 
+                        ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage());
+            }
+        }
+
+        /**
          * @note Duration time during demuxing
          */
         if ( m_enable_duration )
             output += String.format("%s ",
                     formatInterval(System.currentTimeMillis()-startTime));
-
-        if ( m_enable_heap_usage ) {
-            if ( System.currentTimeMillis() - memory_process_time >= 1000 ) {
-                memory_process_time = System.currentTimeMillis();
-                output += String.format("Heap : %d KBytes ",
-                        ManagementFactory.getMemoryMXBean().getHeapMemoryUsage().getUsed() / 1024 );
-            }
-        }
 
         System.out.print(output + "\r");
     }
