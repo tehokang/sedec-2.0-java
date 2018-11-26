@@ -32,12 +32,12 @@
         </copy>
     </target>
               
-    <target name="clean">
+    <target name="distclean">
         <delete dir="${bin.dir}"/>
         <delete dir="${release.dir}"/>
     </target>
               
-    <target depends="build-project" name="build">
+    <target depends="build-project" name="versioning">
         <tstamp>
             <format property="builtat" pattern="MM/dd/yyyy hh:mm aa" />
         </tstamp>        
