@@ -2,8 +2,15 @@ package sedec2.arib.tlv.container.mmtp.messages;
 
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 
+/**
+ * Class to describe as M2Section Message of Table 7-2 of ARIB B60
+ * which contains ECM, EMM, DCM, DMM, MH-EIT, MH-CDT, MH-BIT, MH-SDTT, MH-SDT, MH-AIT of MMT-SI.
+ */
 public class M2SectionMessage extends Message {
-
+    /**
+     * Constructor to decode M2Section Message of Table 7-2
+     * @param buffer message_byte of MMTP payload
+     */
     public M2SectionMessage(byte[] buffer) {
         super(buffer);
 

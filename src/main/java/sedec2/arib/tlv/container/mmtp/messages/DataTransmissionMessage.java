@@ -2,8 +2,15 @@ package sedec2.arib.tlv.container.mmtp.messages;
 
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 
+/**
+ * Class to describe as Data Transmission Message of Table 10-5 of ARIB B60
+ * which contains DDMT, DAMT, DCCT of MMT-SI.
+ */
 public class DataTransmissionMessage extends Message {
-
+    /**
+     * Constructor to decode Data Transmission Message of Table 10-5.
+     * @param buffer message_byte of MMTP payload
+     */
     public DataTransmissionMessage(byte[] buffer) {
         super(buffer);
 

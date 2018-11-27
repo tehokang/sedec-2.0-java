@@ -3,8 +3,15 @@ package sedec2.arib.tlv.container.mmtp.messages;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 import sedec2.arib.tlv.container.mmt.si.tables.Table;
 
+/**
+ * Class to describe as CA Message of Table 7-3 of ARIB B60
+ * which contains CAT of MMT-SI.
+ */
 public class CAMessage extends Message {
-
+    /**
+     * Constructor to decode CA Message of Table 7-3
+     * @param buffer message_byte of MMTP payload
+     */
     public CAMessage(byte[] buffer) {
         super(buffer);
 

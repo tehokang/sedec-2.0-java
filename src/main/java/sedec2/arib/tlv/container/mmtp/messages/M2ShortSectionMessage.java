@@ -2,8 +2,15 @@ package sedec2.arib.tlv.container.mmtp.messages;
 
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 
+/**
+ * Class to describe as M2ShortSection Message of Table 7-4 of ARIB B60
+ * which contains MH-TOT of MMT-SI.
+ */
 public class M2ShortSectionMessage extends Message {
-
+    /**
+     * Constructor to decode M2ShortSection Message of Table 7-4
+     * @param buffer message_byte of MMTP payload
+     */
     public M2ShortSectionMessage(byte[] buffer) {
         super(buffer);
 

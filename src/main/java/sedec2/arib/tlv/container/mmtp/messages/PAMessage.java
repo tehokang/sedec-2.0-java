@@ -7,16 +7,24 @@ import sedec2.arib.tlv.container.mmt.si.TableFactory;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
+/**
+ * Class to describe as PA Message of Table 7-1 of ARIB B60
+ * which contains MPT, PLT, LCT of MMT-SI.
+ */
 public class PAMessage extends Message {
     protected byte number_of_tables;
     protected List<TableInfo> table_infos = new ArrayList<>();
 
-    class TableInfo {
+    public class TableInfo {
         public byte table_id;
         public byte table_version;
         public int table_length;
     }
 
+    /**
+     * Constructor to decode PA Message of Table 7-1
+     * @param buffer message_byte of MMTP payload
+     */
     public PAMessage(byte[] buffer) {
         super(buffer);
 
@@ -32,10 +40,18 @@ public class PAMessage extends Message {
         return length + 7;
     }
 
+    /**
+     * Gets number_of_tables of Table 7-1 of ARIB B60
+     * @return number_of_tables
+     */
     public byte getNumberOfTables() {
         return number_of_tables;
     }
 
+    /**
+     * Gets list of table in Table 7-1 of ARIB B60 which contains table_id, table_version, table_length
+     * @return table_infos list of table
+     */
     public List<TableInfo> getTableInfo() {
         return table_infos;
     }
