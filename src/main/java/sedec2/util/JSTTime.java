@@ -43,7 +43,7 @@ public class JSTTime {
 
     /**
      * Gets original 40 bits-aligned JST
-     * @return
+     * @return JST put into constructor
      */
     public long getJSTTime() {
         return JST;
