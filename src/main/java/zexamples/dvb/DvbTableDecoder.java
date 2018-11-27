@@ -10,6 +10,13 @@ import java.io.IOException;
 import sedec2.base.Table;
 import sedec2.dvb.TableFactory;
 
+/**
+ * DvbTableDecoder is an application as example for getting
+ * <ul>
+ * <li> Tables which are include in DVB specification
+ * </ul>
+ * from byte buffer as a whole of table gathered.
+ */
 public class DvbTableDecoder {
     public static void main(String []args) {
         if ( args.length < 1 ) {

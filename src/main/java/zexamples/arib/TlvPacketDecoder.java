@@ -40,7 +40,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected TlvDemultiplexer tlv_demuxer = null;
 
     /**
-     * @note Tables to extract from TLV
+     * Tables to extract from TLV
      */
     protected MMT_PackageTable mpt = null;
     protected PackageListTable plt = null;
@@ -56,7 +56,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     protected List<SimpleApplication> applications = new ArrayList<>();
     /**
-     * @note Video, Audio, IndexItem of Application to extract from TLV
+     * Video, Audio, IndexItem of Application to extract from TLV
      */
     protected BufferedOutputStream video_bs = null;
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
@@ -74,12 +74,12 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.enableGeneralDataFilter();
 
         /**
-         * @note To add NAL prefix of Video Sample
+         * To add NAL prefix of Video Sample
          */
         tlv_demuxer.enableVideoPreModification();
 
         /**
-         * @note To add Sync-Word prefix of Audio Sample
+         * To add Sync-Word prefix of Audio Sample
          */
         tlv_demuxer.enableAudioPreModification();
 
@@ -432,9 +432,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
 /**
  * TlvPacketDecoder is an application as example for getting
- * - Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet \n
- * - NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData \n
- * - MPU, MFU to be used for media which is included in MMTP Packet \n
+ * <ul>
+ * <li> Tables which are include in TLV-SI of TLV, MMT-SI of MMTP packet
+ * <li> NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData
+ * <li> MPU, MFU to be used for media which is included in MMTP Packet
+ * </ul>
  */
 public class TlvPacketDecoder {
     public static void main(String []args) throws InterruptedException {
@@ -451,7 +453,7 @@ public class TlvPacketDecoder {
         ConsoleProgress progress_bar = new ConsoleProgress("TLV").
                 show(true, true, true, true, true, false, false);
         /**
-         * @note Getting each one TLV packet from specific file.
+         * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
@@ -466,7 +468,7 @@ public class TlvPacketDecoder {
                         tlv_packet.length == 0 ||
                         tlv_packet[0] != 0x7f ) continue;
                 /**
-                 * @note Putting a TLV packet into SimpleTlvCoordinator \n
+                 * Putting a TLV packet into SimpleTlvCoordinator
                  * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
                  * from event listener which you registered to TlvDemultiplexer
                  */
@@ -482,7 +484,7 @@ public class TlvPacketDecoder {
         }
 
         /**
-         * @note Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
+         * Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
          */
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;
