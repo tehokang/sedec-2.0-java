@@ -23,7 +23,15 @@ import sedec2.util.Logger;
 public class VideoExtractor extends BaseExtractor {
     protected final String TAG = "VideoExtractor";
 
+    /**
+     * Listener to receive MFU of video
+     */
     public interface IVideoExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives video MFU which already gathered from fragmentation.
+         * @param packet_id MMT packet id
+         * @param buffer MFU_data_byte as timed data of Table 6-1 MMTP_payload
+         */
         public void onReceivedVideo(int packet_id, byte[] buffer);
     }
 

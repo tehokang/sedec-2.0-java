@@ -22,7 +22,15 @@ import sedec2.util.Logger;
 public class TtmlExtractor extends BaseExtractor {
     protected final String TAG = "TtmlExtractor";
 
+    /**
+     * Listener to receive TTML of chapter 9 of ARIB B60
+     */
     public interface ITtmlExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives TTML MFU which already gathered from fragmentation.
+         * @param packet_id MMT packet id
+         * @param buffer MFU_data_byte as non-timed data of Table 6-1, 9-1 MMTP_payload
+         */
         public void onReceivedTtml(int packet_id, byte[] buffer);
     }
 

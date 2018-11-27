@@ -19,7 +19,14 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 public class NtpExtractor extends BaseExtractor {
     protected final String TAG = "NtpExtractor";
 
+    /**
+     * Listener to receive NTP in Chapter 3 of ARIB B60 which as TLV payload
+     */
     public interface INtpExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives NTP from TLV payload as IPv4 or IPv6
+         * @param ntp Network_Time_Protocol_Data of Table 3-1 of ARIB B60
+         */
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
 

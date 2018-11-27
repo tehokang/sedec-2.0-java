@@ -29,7 +29,7 @@ public class ApplicationExtractor extends BaseExtractor {
     public interface IAppExtractorListener extends BaseExtractor.Listener {
         /**
          * Receives application MFU which has already gathered from fragmentation.
-         * @param packet_id MMT Packet Id
+         * @param packet_id MMT packet id
          * @param item_id item id of non-timed data in Table 6-1 Configuration of MMTP payload of ARIB B60
          * @param mpu_sequence_number MPU_sequence_number of Table 6-1
          * @param buffer MFU_data_byte of Table 6-1
@@ -38,11 +38,11 @@ public class ApplicationExtractor extends BaseExtractor {
                 int mpu_sequence_number, byte[] buffer);
 
         /**
-         *
-         * @param packet_id
-         * @param item_id
-         * @param mpu_sequence_number
-         * @param buffer
+         * Receives MFU which has already gathered from fragmentation.
+         * @param packet_id MMT packet id
+         * @param item_id item id of IndexItem has in Table 10-4 Configuration of Index Item of ARB B60
+         * @param mpu_sequence_number MPU_sequence_number of Table 6-1
+         * @param buffer Index_item of Table 10-4
          */
         public void onReceivedIndexItem(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);

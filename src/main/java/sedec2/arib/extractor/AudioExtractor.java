@@ -24,7 +24,15 @@ import sedec2.util.Logger;
 public class AudioExtractor extends BaseExtractor {
     protected final String TAG = "AudioExtractor";
 
+    /**
+     * Listener to receive MFU of audio
+     */
     public interface IAudioExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives audio MFU which already gathered from fragmentation.
+         * @param packet_id MMT packet id
+         * @param buffer MFU_data_byte as timed data of Table 6-1 MMTP_payload
+         */
         public void onReceivedAudio(int packet_id, byte[] buffer);
     }
 

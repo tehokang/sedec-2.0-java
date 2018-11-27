@@ -21,7 +21,15 @@ import sedec2.util.Logger;
 public class GeneralPurposeDataExtractor extends BaseExtractor {
     protected final String TAG = "GeneralPurposeDataExtractor";
 
+    /**
+     * Listener to receive MFU of General Purpose Data in Chapter 12 of ARIB B60
+     */
     public interface IGeneralPurposeDataExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives audio MFU which already gathered from fragmentation.
+         * @param packet_id MMT packet id
+         * @param buffer MFU_data_byte of Table 12-1 MMTP_payload
+         */
         public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
 
