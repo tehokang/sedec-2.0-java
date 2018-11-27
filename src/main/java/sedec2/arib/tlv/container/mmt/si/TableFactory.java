@@ -21,6 +21,29 @@ import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmt.si.tables.UnknownTable;
 import sedec2.base.Table;
 
+/**
+ * Factory to obtain a kind of table of MMT-SI like below.
+ * <ul>
+ * <li> {@link ConditionalAccessTable}
+ * <li> {@link DataAssetManagementTable}
+ * <li> {@link DataContentConfigurationTable}
+ * <li> {@link DataDirectoryManagementTable}
+ * <li> {@link DownloadControlMessage}
+ * <li> {@link DownloadManagementMessage}
+ * <li> {@link EntitlementControlMessage}
+ * <li> {@link EventMessageTable}
+ * <li> {@link LayoutConfigurationTable}
+ * <li> {@link MH_ApplicationInformationTable}
+ * <li> {@link MH_BroadcasterInformationTable}
+ * <li> {@link MH_CommonDataTable}
+ * <li> {@link MH_EventInformationTable}
+ * <li> {@link MH_ServiceDescriptionTable}
+ * <li> {@link MH_SoftwareDownloadTriggerTable}
+ * <li> {@link MH_TimeOffsetTable}
+ * <li> {@link MMT_PackageTable}
+ * <li> {@link PackageListTable}
+ * </ul>
+ */
 public class TableFactory {
     /** MMT-PT */
     public final static byte MMT_PACKAGE_TABLE = (byte) 0x20;

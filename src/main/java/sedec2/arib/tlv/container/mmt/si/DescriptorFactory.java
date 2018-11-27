@@ -73,6 +73,82 @@ import sedec2.arib.tlv.container.mmt.si.descriptors.UtcNptReferenceDescriptor;
 import sedec2.arib.tlv.container.mmt.si.descriptors.VideoComponentDescriptor;
 import sedec2.base.BitReadWriter;
 
+/**
+ * Factory to obtain a kind of descriptors of MMT-SI like below.
+ * <ul>
+ * <li> {@link AccessControlDescriptor}
+ * <li> {@link ApplicationServiceDescriptor}
+ * <li> {@link AssetGroupDescriptor}
+ * <li> {@link BackgroundColorDescriptor}
+ * <li> {@link ContentCopyControlDescriptor}
+ * <li> {@link ContentUsageControlDescriptor}
+ * <li> {@link DependencyDescriptor}
+ * <li> {@link EmergencyInformationDescriptor}
+ * <li> {@link EmergencyNewsDescriptor}
+ * <li> {@link EventMessageDescriptor}
+ * <li> {@link EventPackageDescriptor}
+ * <li> {@link IpDataFlowDescriptor}
+ * <li> {@link LinkedPuDescriptor}
+ * <li> {@link LockedCacheDescriptor}
+ * <li> {@link MH_ApplicationBoundaryAndPermissionDescriptor}
+ * <li> {@link MH_ApplicationDescriptor}
+ * <li> {@link MH_ApplicationExpirationDescriptor}
+ * <li> {@link MH_AudioComponentDescriptor}
+ * <li> {@link MH_AutostartPriorityDescriptor}
+ * <li> {@link MH_BroadcasterNameDescriptor}
+ * <li> {@link MH_CAContractInfoDescriptor}
+ * <li> {@link MH_CAServiceDescriptor}
+ * <li> {@link MH_CAStartupDescriptor}
+ * <li> {@link MH_CacheControlInfoDescriptor}
+ * <li> {@link MH_ComponentGroupDescriptor}
+ * <li> {@link MH_CompressionTypeDescriptor}
+ * <li> {@link MH_ContentDescriptor}
+ * <li> {@link MH_DataComponentDescriptor}
+ * <li> {@link MH_DownloadProtectionDescriptor}
+ * <li> {@link MH_EventGroupDescriptor}
+ * <li> {@link MH_ExpireDescriptor}
+ * <li> {@link MH_ExtendedEventDescriptor}
+ * <li> {@link MH_ExternalApplicationControlDescriptor}
+ * <li> {@link MH_HEVCDescriptor}
+ * <li> {@link MH_HierachyDescriptor}
+ * <li> {@link MH_InfoDescriptor}
+ * <li> {@link MH_LinkageDescriptor}
+ * <li> {@link MH_LocalTimeOffsetDescriptor}
+ * <li> {@link MH_LogoTransmissionDescriptor}
+ * <li> {@link MH_MPEG4AudioDescriptor}
+ * <li> {@link MH_MPEG4AudioExtensionDescriptor}
+ * <li> {@link MH_NetworkDownloadContentDescriptor}
+ * <li> {@link MH_ParentalRatingDescriptor}
+ * <li> {@link MH_PlaybackApplicationDescriptor}
+ * <li> {@link MH_RandomizedLatencyDescriptor}
+ * <li> {@link MH_SeriesDescriptor}
+ * <li> {@link MH_ServiceDescriptor}
+ * <li> {@link MH_ServiceListDescriptor}
+ * <li> {@link MH_ShortEventDescriptor}
+ * <li> {@link MH_SiParameterDescriptor}
+ * <li> {@link MH_SimpleApplicationLocationDescriptor}
+ * <li> {@link MH_SimplePlaybackApplicationLocationDescriptor}
+ * <li> {@link MH_StreamIdentifierDescriptor}
+ * <li> {@link MH_TargetRegionDescriptor}
+ * <li> {@link MH_TransportProtocolDescriptor}
+ * <li> {@link MH_TypeDescriptor}
+ * <li> {@link MPU_DownloadContentDescriptor}
+ * <li> {@link MPU_ExtendedTimestampDescriptor}
+ * <li> {@link MPU_NodeDescriptor}
+ * <li> {@link MPU_PresentationRegionDescriptor}
+ * <li> {@link MPU_TimestampDescriptor}
+ * <li> {@link MessageAuthenticationMethodDescriptor}
+ * <li> {@link MultimediaServiceInformationDescriptor}
+ * <li> {@link PUStructureDescriptor}
+ * <li> {@link RelatedBroadcasterDescriptor}
+ * <li> {@link ScramblerDescriptor}
+ * <li> {@link UnlockedCacheDescriptor}
+ * <li> {@link UtcNptReferenceDescriptor}
+ * <li> {@link VideoComponentDescriptor}
+ * <li> {@link UnknownDescriptor}
+ *
+ * </ul>
+ */
 public class DescriptorFactory {
     public final static int MPU_TIMESTAMP_DESCRIPTOR = 0x0001;
     public final static int DEPENDENCY_DESCRIPTOR = 0x0002;

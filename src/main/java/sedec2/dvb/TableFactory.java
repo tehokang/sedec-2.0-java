@@ -17,6 +17,25 @@ import sedec2.dvb.tables.StuffingTable;
 import sedec2.dvb.tables.TimeDateTable;
 import sedec2.dvb.tables.TimeOffsetTable;
 
+/**
+ * Factory to obtain a kind of table of DVB like below.
+ * <ul>
+ * <li> {@link ApplicationInformationTable}
+ * <li> {@link BouquetAssociationTable}
+ * <li> {@link ConditionalAccessTable}
+ * <li> {@link DiscontinuityInformationTable}
+ * <li> {@link EventInformationTable}
+ * <li> {@link NetworkInformationTable}
+ * <li> {@link ProgramAssociationTable}
+ * <li> {@link ProgramMapTable}
+ * <li> {@link RunningStatusTable}
+ * <li> {@link SelectionInformationTable}
+ * <li> {@link ServiceDescriptionTable}
+ * <li> {@link StuffingTable}
+ * <li> {@link TimeDateTable}
+ * <li> {@link TimeOffsetTable}
+ * </ul>
+ */
 public class TableFactory {
     public final static byte PROGRAM_ASSOCIATION_TABLE = (byte) 0x00;
     public final static byte CONDITIONAL_ACCESS_TABLE = (byte) 0x01;

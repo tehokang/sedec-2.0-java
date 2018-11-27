@@ -5,6 +5,13 @@ import sedec2.arib.tlv.si.tables.TLV_NetworkInformationTable;
 import sedec2.base.Table;
 import sedec2.base.UnknownTable;
 
+/**
+ * Factory to obtain a kind of table of TLV-SI like below.
+ * <ul>
+ * <li> {@link AddressMapTable}
+ * <li> {@link TLV_NetworkInformationTable}
+ * </ul>
+ */
 public class TableFactory {
     /** TLV-NIT */
     public final static byte ACTUAL_TLV_NETWORK_INFORMATION_TABLE = (byte) 0x40;

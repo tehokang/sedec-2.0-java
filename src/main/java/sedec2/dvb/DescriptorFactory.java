@@ -18,6 +18,25 @@ import sedec2.dvb.descriptors.TransportProtocolDescriptor;
 import sedec2.dvb.descriptors.UnknownDescriptor;
 import sedec2.dvb.descriptors.VideoDecodeControlDescriptor;
 
+/**
+ * Factory to obtain a kind of descriptors of DVB like below.
+ * <ul>
+ * <li> {@link ApplicationDescriptor}
+ * <li> {@link ApplicationNameDescriptor}
+ * <li> {@link ApplicationRecordingDescriptor}
+ * <li> {@link ApplicationUsageDescriptor}
+ * <li> {@link ConditionalAccessDescriptor}
+ * <li> {@link ConnectionRequirementDescriptor}
+ * <li> {@link DataComponentDescriptor}
+ * <li> {@link DigitalCopyControlDescriptor}
+ * <li> {@link ParentalRatingDescriptor}
+ * <li> {@link SimpleApplicationBoundaryDescriptor}
+ * <li> {@link SimpleApplicationLocationDescriptor}
+ * <li> {@link StreamIdentifierDescriptor}
+ * <li> {@link TransportProtocolDescriptor}
+ * <li> {@link VideoDecodeControlDescriptor}
+ * </ul>
+ */
 public class DescriptorFactory {
     public final static int APPLICATION_DESCRIPTOR = 0x00;
     public final static int APPLICATION_NAME_DESCRIPTOR = 0x01;

@@ -9,6 +9,16 @@ import sedec2.arib.tlv.si.descriptors.SystemManagementDescriptor;
 import sedec2.arib.tlv.si.descriptors.UnknownDescriptor;
 import sedec2.base.BitReadWriter;
 
+/**
+ * Factory to obtain a kind of descriptors of TLV-SI like below.
+ * <ul>
+ * <li> {@link ChannelBondingCableDeliverySystemDescriptor}
+ * <li> {@link NetworkNameDescriptor}
+ * <li> {@link SateliteDeliverySystemDescriptor}
+ * <li> {@link ServiceListDescriptor}
+ * <li> {@link SystemManagementDescriptor}
+ * </ul>
+ */
 public class DescriptorFactory {
     public final static int NETWORK_NAME_DESCRIPTOR = 0x40;
     public final static int SERVICE_LIST_DESCRIPTOR = 0x41;
