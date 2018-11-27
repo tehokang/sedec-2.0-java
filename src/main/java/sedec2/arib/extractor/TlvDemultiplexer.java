@@ -219,9 +219,8 @@ public class TlvDemultiplexer implements
 
     /**
      * Add a filter to get SI corresponding only to table_id of Private Section.
-     * @param talbe_id specific table id which user wants to get
+     * @param table_id specific table id which user wants to get
      *
-     * <p>
      * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
      * User can receive Table via {@link TlvDemultiplexer.Listener#onReceivedTable(Table)}
      */
