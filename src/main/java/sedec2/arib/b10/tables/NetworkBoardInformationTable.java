@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 NBIT
+ * ARIB-B10 NBIT
  */
 public class NetworkBoardInformationTable extends Table {
     protected int original_network_id;

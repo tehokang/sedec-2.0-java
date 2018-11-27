@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B60
+ * ARIB-B60
  */
 public class MH_SoftwareDownloadTriggerTable extends Table {
     protected int table_id_ext;

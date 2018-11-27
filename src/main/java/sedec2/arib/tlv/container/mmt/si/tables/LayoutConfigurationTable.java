@@ -8,7 +8,7 @@ import sedec2.arib.tlv.container.mmt.si.descriptors.Descriptor;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-b60 LCT
+ * ARIB-b60 LCT
  */
 public class LayoutConfigurationTable extends Table {
     protected byte version;

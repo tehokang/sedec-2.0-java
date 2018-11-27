@@ -9,9 +9,6 @@ import sedec2.dvb.descriptors.Application;
 import sedec2.dvb.descriptors.Descriptor;
 import sedec2.util.Logger;
 
-/**
- * @brief TS 102-812 AIT
- */
 public class ApplicationInformationTable extends Table {
 
     protected int test_application_flag;

@@ -4,7 +4,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B16 Download Section
+ * ARIB-B16 Download Section
  */
 public class DownloadTable extends Table {
     protected byte maker_id;

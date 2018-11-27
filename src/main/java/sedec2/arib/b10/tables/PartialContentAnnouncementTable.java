@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 PCAT
+ * ARIB-B10 PCAT
  */
 public class PartialContentAnnouncementTable extends Table {
     protected int service_id;

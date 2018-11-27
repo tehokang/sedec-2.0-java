@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 BAT
+ * ARIB-B10 BAT
  */
 public class BouquetAssociationTable extends Table {
     protected int bouquet_id;

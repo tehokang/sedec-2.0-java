@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 ERT
+ * ARIB-B10 ERT
  */
 public class EventRelationTable extends Table {
     protected int event_relation_id;

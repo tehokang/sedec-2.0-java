@@ -41,7 +41,7 @@ public abstract class Descriptor {
 
 
     /**
-     * @brief updateDescriptorLength should return length except for header of descriptor \n
+     * updateDescriptorLength should return length except for header of descriptor \n
      * like tag and length
      */
     protected abstract void updateDescriptorLength();

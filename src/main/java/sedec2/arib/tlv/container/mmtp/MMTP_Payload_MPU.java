@@ -183,7 +183,7 @@ public class MMTP_Payload_MPU {
 
     /**
      * Gets list of MFU which consist of timed/non-timed data
-     * @return
+     * @return list of MFU with header and payload (AKA MFU_data_byte) of MFU
      */
     public List<MFU> getMFUList() {
         return mfus;

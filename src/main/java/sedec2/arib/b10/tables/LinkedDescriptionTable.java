@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 LDT
+ * ARIB-B10 LDT
  */
 public class LinkedDescriptionTable extends Table {
     protected int original_service_id;

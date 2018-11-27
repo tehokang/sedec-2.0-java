@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B10 LIT, L-EIT
+ * ARIB-B10 LIT, L-EIT
  */
 public class LocalEventInformationTable extends Table {
     protected int event_id;

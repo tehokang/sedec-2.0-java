@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B60 TLV-NIT
+ * ARIB-B60 TLV-NIT
  */
 public class TLV_NetworkInformationTable extends Table {
     protected int network_id;

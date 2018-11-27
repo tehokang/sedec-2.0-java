@@ -9,7 +9,7 @@ import sedec2.base.Table;
 import sedec2.util.Logger;
 
 /**
- * @brief ARIB-B21 from B10 SDTT
+ * ARIB-B21 from B10 SDTT
  */
 public class SoftwareDownloadTriggerTable extends Table {
     protected int table_id_ext;
