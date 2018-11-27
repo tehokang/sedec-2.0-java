@@ -10,6 +10,15 @@ import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract TTML as MFU from MPU.
+ * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
+ * {@link BaseExtractor}
+ *
+ * <p>
+ * User can receive TTML via
+ * {@link TtmlExtractor.ITtmlExtractorListener#onReceivedTtml(int, byte[])}
+ */
 public class TtmlExtractor extends BaseExtractor {
     protected final String TAG = "TtmlExtractor";
 
@@ -17,6 +26,9 @@ public class TtmlExtractor extends BaseExtractor {
         public void onReceivedTtml(int packet_id, byte[] buffer);
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public TtmlExtractor() {
         super();
 
@@ -51,9 +63,6 @@ public class TtmlExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();
@@ -62,11 +71,13 @@ public class TtmlExtractor extends BaseExtractor {
         m_event_thread = null;
     }
 
+    @Override
     /**
      * Chapter 9 of ARIB-B60v1-12
-     * process function put QueueData with TTML into event queue
+     * Processes to put QueueData with TTML into event queue
+     *
+     * @param one TLV packet
      */
-    @Override
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

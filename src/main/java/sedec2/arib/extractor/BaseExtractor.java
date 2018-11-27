@@ -164,7 +164,8 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * User has to call destory() for rapid garbage collecting
+     * Clean up all of resource under BaseExtractor.
+     * User must call this after their job finished.
      */
     public void destroy() {
         m_is_running = false;

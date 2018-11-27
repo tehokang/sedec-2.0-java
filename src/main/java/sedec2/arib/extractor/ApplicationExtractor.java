@@ -13,10 +13,37 @@ import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract Application as MFU from MPU.
+ * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
+ * {@link BaseExtractor}
+ *
+ * User can receive information regarding application via
+ * {@link ApplicationExtractor.IAppExtractorListener#onReceivedApplication(int, int, int, byte[])}
+ * {@link ApplicationExtractor.IAppExtractorListener#onReceivedIndexItem(int, int, int, byte[])}
+ */
 public class ApplicationExtractor extends BaseExtractor {
+    /**
+     * Listener to receive informations of application
+     */
     public interface IAppExtractorListener extends BaseExtractor.Listener {
+        /**
+         * Receives application MFU which has already gathered from fragmentation.
+         * @param packet_id MMT Packet Id
+         * @param item_id item id of non-timed data in Table 6-1 Configuration of MMTP payload of ARIB B60
+         * @param mpu_sequence_number MPU_sequence_number of Table 6-1
+         * @param buffer MFU_data_byte of Table 6-1
+         */
         public void onReceivedApplication(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);
+
+        /**
+         *
+         * @param packet_id
+         * @param item_id
+         * @param mpu_sequence_number
+         * @param buffer
+         */
         public void onReceivedIndexItem(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);
     }
@@ -38,6 +65,9 @@ public class ApplicationExtractor extends BaseExtractor {
 
     protected final String TAG = "ApplicationExtractor";
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public ApplicationExtractor() {
         super();
 
@@ -85,9 +115,6 @@ public class ApplicationExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();
@@ -96,12 +123,14 @@ public class ApplicationExtractor extends BaseExtractor {
         m_event_thread = null;
     }
 
+    @Override
     /**
      * Chapter 9 of ARIB B60v1-12
-     * process function can send QueueData with MFU_data_byte as event value.
-     * User can cast MFU_data_byte to MFU_IndexItem or raw data to be read.
+     * Processes to get MPU-MFU and put it into output queue to be sent user.
+     * Final data can cast MFU_data_byte to MFU_IndexItem or raw data to be read.
+     *
+     * @param tlv one TLV packet
      */
-    @Override
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

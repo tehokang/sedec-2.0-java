@@ -11,6 +11,16 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract Audio as MFU from MPU.
+ * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
+ * {@link BaseExtractor}
+ *
+ * <p>
+ * Audio MFU can automatically include prefix like sync bytes by {@link BaseExtractor#enablePreModification()}.
+ * Then user can get audio having prefix as synchronization byte and length in AudioSyncStream.
+ * User can receive audio via {@link AudioExtractor.IAudioExtractorListener#onReceivedAudio(int, byte[])}
+ */
 public class AudioExtractor extends BaseExtractor {
     protected final String TAG = "AudioExtractor";
 
@@ -18,6 +28,9 @@ public class AudioExtractor extends BaseExtractor {
         public void onReceivedAudio(int packet_id, byte[] buffer);
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public AudioExtractor() {
         super();
 
@@ -62,11 +75,13 @@ public class AudioExtractor extends BaseExtractor {
         m_event_thread = null;
     }
 
+    @Override
     /**
      * Chapter 8 of ARIB-B60v1-12
-     * process function send QueueData with audio data having syncword as prefix
+     * Processes to get MPU-MFU and put it into output queue to be sent user
+     *
+     * @param tlv one TLV packet
      */
-    @Override
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

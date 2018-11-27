@@ -10,6 +10,14 @@ import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract General Purpose Data as MFU from MPU.
+ * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
+ * {@link BaseExtractor}
+ *
+ * User can receive data via
+ * {@link GeneralPurposeDataExtractor.IGeneralPurposeDataExtractorListener#onReceivedGeneralPurposeData(int, byte[])}
+ */
 public class GeneralPurposeDataExtractor extends BaseExtractor {
     protected final String TAG = "GeneralPurposeDataExtractor";
 
@@ -17,6 +25,9 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
         public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public GeneralPurposeDataExtractor() {
         super();
 
@@ -50,9 +61,6 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();

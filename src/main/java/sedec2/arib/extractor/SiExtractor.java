@@ -12,6 +12,17 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract SI as Table from Signaling Message in MMTP payload.
+ * {@link Table}
+ *
+ * It has inherited from BaseExtractor which has already implementations to get Table.
+ * {@link BaseExtractor}
+ * {@link BaseExtractor#getSinallingMessage(MMTP_Packet)}
+ *
+ * User can receive Table via
+ * {@link SiExtractor.ITableExtractorListener#onReceivedTable(Table)}
+ */
 public class SiExtractor extends BaseExtractor {
     protected final String TAG = "SiExtractor";
 
@@ -27,6 +38,9 @@ public class SiExtractor extends BaseExtractor {
         }
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public SiExtractor() {
         super();
 
@@ -66,9 +80,6 @@ public class SiExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();
@@ -77,12 +88,14 @@ public class SiExtractor extends BaseExtractor {
         m_event_thread = null;
     }
 
+    @Override
     /**
      * Chapter 4, 5, 7 and ARIB-B60.
-     * process put QueueData with Table having descriptors into event queue,
+     * Processes to put QueueData with Table having descriptors into event queue,
      * user don't need to parse Message of Chapter 7
+     *
+     * @param one TLV packet
      */
-    @Override
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

@@ -10,6 +10,16 @@ import sedec2.arib.tlv.container.packets.CompressedIpPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
+/**
+ * Class to extract Video as MFU from MPU.
+ * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
+ * {@link BaseExtractor}
+ *
+ * <p>
+ * Video MFU can automatically include NAL prefix by {@link BaseExtractor#enablePreModification()}.
+ * Then user can get video having prefix as NAL bytes.
+ * User can receive video via {@link VideoExtractor.IVideoExtractorListener#onReceivedVideo(int, byte[])}
+ */
 public class VideoExtractor extends BaseExtractor {
     protected final String TAG = "VideoExtractor";
 
@@ -17,6 +27,9 @@ public class VideoExtractor extends BaseExtractor {
         public void onReceivedVideo(int packet_id, byte[] buffer);
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public VideoExtractor() {
         super();
 
@@ -50,9 +63,6 @@ public class VideoExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();
@@ -61,11 +71,13 @@ public class VideoExtractor extends BaseExtractor {
         m_event_thread = null;
     }
 
+    @Override
     /**
      * Chapter 8 of ARIB-B60v1-12
-     * process function send QueueData with video data having NAL as prefix
+     * Processes to get MPU-MFU and put it into output queue to be sent user
+     *
+     * @param tlv one TLV packet
      */
-    @Override
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
@@ -82,6 +94,7 @@ public class VideoExtractor extends BaseExtractor {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
                         byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
+
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();

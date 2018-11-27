@@ -8,6 +8,14 @@ import sedec2.arib.tlv.container.packets.IPv6Packet;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
+/**
+ * Class to extract Network Time Protocol Data as IPv4, IPv6 of TLV.
+ * It has inherited from BaseExtractor which has already implementations to get.
+ * {@link BaseExtractor}
+ *
+ * User can receive NTP via
+ * {@link NtpExtractor.INtpExtractorListener#onReceivedNtp(NetworkTimeProtocolData)}
+ */
 public class NtpExtractor extends BaseExtractor {
     protected final String TAG = "NtpExtractor";
 
@@ -23,6 +31,9 @@ public class NtpExtractor extends BaseExtractor {
         }
     }
 
+    /**
+     * Constructor which start running thread to emit Event to user.
+     */
     public NtpExtractor() {
         super();
 
@@ -55,9 +66,6 @@ public class NtpExtractor extends BaseExtractor {
         m_event_thread.start();
     }
 
-    /**
-     * User should use this function when they don't use TLVExtractor any more.
-     */
     @Override
     public void destroy() {
         super.destroy();
@@ -67,6 +75,12 @@ public class NtpExtractor extends BaseExtractor {
     }
 
     @Override
+    /**
+     * Chapter 8 of ARIB-B60v1-12
+     * Processes to get NTP from TLV and put it into output queue to be sent user
+     *
+     * @param tlv one TLV packet
+     */
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {
