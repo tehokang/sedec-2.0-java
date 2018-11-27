@@ -19,9 +19,9 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
 /**
- * BaseExtractor has implementations which are able to parse TLV, MMTP packet thus
- * it is a common module which can be extend to each extractor for other purpose like
- * video, audio, ttml, application and so on.
+ * BaseExtractor has implementations which are able to parse TLV, MMTP packet.
+ * This is a common functionality which can be extend to each extractor for other purpose like
+ * adding NAL prefix into video or syncword into audio and so on.
  */
 public abstract class BaseExtractor {
     /**
@@ -86,11 +86,14 @@ public abstract class BaseExtractor {
 
     protected final String TAG = "BaseExtractor";
 
+    /**
+     * Every Extractor has to inherit from this so that user can use unified listener.
+     */
     public interface Listener {
 
     }
 
-    public class QueueData {
+    protected class QueueData {
         public int packet_id;
         public byte[] data;
 
@@ -104,6 +107,10 @@ public abstract class BaseExtractor {
         }
     }
 
+    /**
+     * Constructor which initialize queue buffer of TLV input packet, Event and
+     * start running thread with blocking queue which only run when queue obtain an input.
+     */
     public BaseExtractor() {
         m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
         m_event_queue = new ArrayBlockingQueue<QueueData>(100);
@@ -145,6 +152,9 @@ public abstract class BaseExtractor {
         m_tlv_extractor_thread.start();
     }
 
+    /**
+     * Clear all of queue containing TLV, Event and MMTP fragmented packets.
+     */
     public void clearQueue() {
         m_tlv_packets.clear();
         m_event_queue.clear();
@@ -167,17 +177,17 @@ public abstract class BaseExtractor {
 
         m_event_queue.clear();
         m_event_queue = null;
-        
+
         m_fragmented01_mmtp.clear();
         m_fragmented02_mmtp.clear();
-        
+
         m_listeners.clear();
         m_listeners = null;
     }
 
     /**
      * User can add event-listener to get information from each extractor
-     * @param listener
+     * @param listener to get information from Extractor
      */
     public void addEventListener(BaseExtractor.Listener listener) {
         if ( m_listeners.contains(listener) == false ) {
@@ -187,7 +197,7 @@ public abstract class BaseExtractor {
 
     /**
      * User can remove event-listener not to get information
-     * @param listener
+     * @param listener which added
      */
     public void removeEventListener(BaseExtractor.Listener listener) {
         if ( m_listeners.contains(listener) == true ) {
@@ -197,8 +207,8 @@ public abstract class BaseExtractor {
 
     /**
      * User should put a TLV packet into extractor, the packet will be collected as kinds of them
-     * @param tlv
-     * @throws InterruptedException
+     * @param tlv one TLV packet
+     * @throws InterruptedException occur when thread interrupted
      */
     public void putIn(byte[] tlv) throws InterruptedException {
         if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
@@ -209,27 +219,30 @@ public abstract class BaseExtractor {
     /**
      * Child extractor of BaseExtractor must implement process function to control TLV packets
      * as kinds of them. TLV can be IPv4, IPv6, CompressedPacket, SignallingPacket, NullPacket.
-     * @param tlv
-     * @throws InterruptedException
-     * @throws IOException
+     * @param tlv one TLV packet already decoded
+     * @throws InterruptedException occur when thread interrupted
+     * @throws IOException occur when ByteBuffer has problem
      */
     protected abstract void process(TypeLengthValue tlv)
             throws InterruptedException, IOException;
 
     /**
      * Internal function to make a result after a TLV
-     * @param obj
-     * @throws InterruptedException
+     * @param event to emit to user
+     * @throws InterruptedException occur when event thread has interrupted
      */
-    protected void putOut(QueueData obj) throws InterruptedException {
-        if ( obj == null ) return;
+    protected void putOut(QueueData event) throws InterruptedException {
+        if ( event == null ) return;
 
-        m_event_queue.put(obj);
+        m_event_queue.put(event);
     }
 
     /**
-     * Add an id of MMTP packet to do filtering
-     * @param id
+     * Add a filter to get MFU corresponding only to packet_id of MMTP.
+     * @param id packet_id of MMTP
+     *
+     * <p>
+     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
      */
     public void addPidFilter(int id) {
         if ( m_int_id_filter.contains(id) == false ) {
@@ -238,8 +251,11 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Add an id of Table to do filtering
-     * @param id
+     * Add a filter to get SI corresponding only to table_id of Private Section.
+     * @param id specific table id which user wants to get
+     *
+     * <p>
+     * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
      */
     public void addPidFilter(byte id) {
         if ( m_byte_id_filter.contains(id) == false ) {
@@ -248,8 +264,11 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Remove an id of MMTP packet not to do filtering
-     * @param id
+     * Remove a filter which user added corresponding only to packet_id of MMTP.
+     * @param id packet_id of MMTP
+     *
+     * <p>
+     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
      */
     public void removePidFilter(int id) {
         if ( m_int_id_filter.contains(id) == true ) {
@@ -258,8 +277,8 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Remove an id of Table not to do filtering
-     * @param id
+     * Remove a filter as table id of Private Section.
+     * @param id which user doesn't want to receive via
      */
     public void removePidFilter(byte id) {
         if ( m_byte_id_filter.contains(id) == true ) {
@@ -268,41 +287,44 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Function which can enable logging of extractors own
+     * Enable logging while extracting.
+     * {@link BaseExtractor#disableLogging()}
      */
     public void enableLogging() {
         m_enable_logging = true;
     }
 
     /**
-     * Function which can disable logging of extractors own
+     * Enable logging while extracting.
+     * {@link BaseExtractor#enableLogging()}
      */
     public void disableLogging() {
         m_enable_logging = false;
     }
 
     /**
-     * Function which can use pre-modification like NAL unit's header of video,
-     * syncword of audio. Implementor of extractor should control this flag when they set.
+     * Enable modification of which can be added.
+     * The child of BaseExtractor can get a chance to modify before final event emit.
+     * {@link BaseExtractor#disablePreModification()}
      */
     public void enablePreModification() {
         m_enable_pre_modification = true;
     }
 
     /**
-     * Function which can not use pre-modification.
-     * Extractor should pass MFU original data without modification to user when they're disabled.
+     * Disable modification of which can be added.
+     * {@link BaseExtractor#enablePreModification()}
      */
     public void disablePreModification() {
         m_enable_pre_modification = false;
     }
 
     /**
-     * Function to get a whole MFU of MMTP payload which is already gathered
-     * @param mmtp
+     * Gets a whole MFU of MMTP payload which is gathered from fragmentation.
+     * @param mmtp MMT Packet which being already decoded
      * @return MFU byte array(not fragmented, it's already collected as whole)
-     * @throws InterruptedException
-     * @throws IOException
+     * @throws InterruptedException occur when interrupted
+     * @throws IOException occur when ByteBuffer has problem
      */
     protected List<ByteArrayOutputStream> getMFU(MMTP_Packet mmtp)
             throws InterruptedException, IOException {
@@ -373,12 +395,12 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Function to get table(AKA section) of ARIB MMT-SI, TLV-SI from MMTP payload
+     * Gets table(AKA section) of ARIB MMT-SI, TLV-SI from MMTP payload
      * like PA, CA, M2Section, M2ShortSection, DataTransmissionMessage.
-     * @param mmtp
-     * @return Signal Message
-     * @throws IOException
-     * @throws InterruptedException
+     * @param mmtp MMT packet which being already decoded
+     * @return Signal Message including variable tables
+     * @throws IOException occur when ByteByffer has problem
+     * @throws InterruptedException occur when interrupted
      */
     protected Message getSinallingMessage(MMTP_Packet mmtp)
             throws IOException, InterruptedException {
