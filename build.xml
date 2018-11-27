@@ -69,7 +69,7 @@
     </target>
     
     <!-- @note : http://blog.daum.net/_blog/BlogTypeView.do?blogid=05gBm&articleno=7019813 -->
-    <target depends="release-sdk,doc" name="release-sdk-obfuscate">
+    <target depends="release-sdk" name="release-sdk-obfuscate">
         <taskdef resource="proguard/ant/task.properties"
                  classpath="${lib.dir}/proguard-6.0.3.jar" />
         <echo> ${java.home} </echo>
@@ -93,7 +93,7 @@
          </proguard>
     </target>
 
-    <target depends="release-sdk-obfuscate,doc" name="deploy">
+    <target depends="release-sdk-obfuscate" name="deploy">
         <property name="id" value="root"/>
         <property name="server_ip" value="10.0.12.157"/>
         <property name="server_path" value="/var/www/html/thkang2"/>
@@ -104,7 +104,26 @@
         </exec>
     </target>
 	
-    <target name="doc" description="generate documentation">
+    <target name="doc-internal" description="generate documentation">
+        <javadoc destdir="${doc.dir}" 
+                classpathref="project.classpath" 
+                version="true"
+                windowtitle="${ant.project.name} SDK Document" 
+                doctitle="${ant.project.name} SDK which's able to extract everything from TLV"
+                linksource="yes"
+                encoding="utf-8"
+                charset="utf-8"
+                docencoding="utf-8"
+                access="private"
+                bottom="Copyright Teho Kang. All rights reserved.">
+            <fileset dir="${src.dir}" defaultexcludes="no"/>
+            <classpath>
+                <pathelement location="${bin.dir}"/>
+            </classpath>
+        </javadoc>
+    </target>
+	
+    <target name="doc-external" description="generate documentation">
         <javadoc destdir="${doc.dir}" 
                 classpathref="project.classpath" 
                 version="true"
@@ -115,7 +134,7 @@
                 charset="utf-8"
                 docencoding="utf-8"
                 access="public"
-                bottom="Copyright TehoKang. All rights reserved.">
+                bottom="Copyright Teho Kang. All rights reserved.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
             <classpath>
                 <pathelement location="${bin.dir}"/>
