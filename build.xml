@@ -69,7 +69,7 @@
     </target>
     
     <!-- @note : http://blog.daum.net/_blog/BlogTypeView.do?blogid=05gBm&articleno=7019813 -->
-    <target depends="release-sdk" name="release-sdk-obfuscate">
+    <target depends="release-sdk,doc" name="release-sdk-obfuscate">
         <taskdef resource="proguard/ant/task.properties"
                  classpath="${lib.dir}/proguard-6.0.3.jar" />
         <echo> ${java.home} </echo>
