@@ -66,5 +66,5 @@ public class Logger
     public static boolean INFO = true;
     public static boolean WARN = true;
     public static boolean ERROR = true;
-    public static String m_tag = "SEDEC2";
+    protected static String m_tag = "SEDEC2";
 }
