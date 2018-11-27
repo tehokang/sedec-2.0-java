@@ -4,6 +4,9 @@ import java.lang.management.ManagementFactory;
 import java.lang.management.MemoryUsage;
 import java.util.concurrent.TimeUnit;
 
+/**
+ * Class to decorate progress of processing with progress bar, bitrate and more things.
+ */
 public class ConsoleProgress {
     protected final int PROGRESS_BAR_WIDTH=30;
     protected long counter = 0;
@@ -30,44 +33,81 @@ public class ConsoleProgress {
     protected boolean m_enable_heap_usage = false;
     protected boolean m_enable_cpu_usage = false;
 
+    /**
+     * Constructor with title of progress
+     * @param counter_name shown as first column
+     */
     public ConsoleProgress(String counter_name) {
         this.counter_name = counter_name;
     }
 
-    public void start(double file_size) {
-        counter = 0;
-        startTime = 0;
-        bitrate_process_time = 0;
-        read_size = 0;
-        read_vector = 0;
-        bitrate_average = 0;
-        total_size = file_size;
-        startTime = System.currentTimeMillis();
-        bitrate_process_time = System.currentTimeMillis();
-        memory_process_time = System.currentTimeMillis();
+    /**
+     * Sets whole length of progress
+     * @param total_size of progress
+     */
+    public void start(double total_size) {
+        this.counter = 0;
+        this.startTime = 0;
+        this.bitrate_process_time = 0;
+        this.read_size = 0;
+        this.read_vector = 0;
+        this.bitrate_average = 0;
+        this.total_size = total_size;
+        this.startTime = System.currentTimeMillis();
+        this.bitrate_process_time = System.currentTimeMillis();
+        this.memory_process_time = System.currentTimeMillis();
     }
 
+    /**
+     * Stop progress
+     */
     public void stop() {
         System.out.print("\n");
     }
 
+    /**
+     * Shows only progress bar during processing
+     * @param progress_bar flag to enable progress_bar
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar) {
         m_enable_progress_bar = progress_bar;
         return this;
     }
 
+    /**
+     * Shows progress bar and percentage during processing
+     * @param progress_bar flag to enable progress_bar
+     * @param percentage flag to enable percentage
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage) {
         this.show(progress_bar);
         m_enable_percentage = percentage;
         return this;
     }
 
+    /**
+     * Shows progress bar, percentage and bitrate during processing
+     * @param progress_bar flag to enable progress_bar
+     * @param percentage flag to enable percentage
+     * @param bitrate flag to enable bitrate
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate) {
         this.show(progress_bar, percentage);
         m_enable_bitrate = bitrate;
         return this;
     }
 
+    /**
+     * Shows progress bar, percentage, bitrate and duration during processing
+     * @param progress_bar flag to enable progress bar
+     * @param percentage flag to enable percentage
+     * @param bitrate flag to enable bitrate
+     * @param duration flag to enable duration
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
             boolean duration) {
         this.show(progress_bar, percentage, bitrate);
@@ -75,6 +115,15 @@ public class ConsoleProgress {
         return this;
     }
 
+    /**
+     * Show progress bar, percentage, bitrate, duration, and amount during processing
+     * @param progress_bar flag to enable progress bar
+     * @param percentage flag to enable percentage
+     * @param bitrate flag to enable bitrate
+     * @param duration flag to enable duration
+     * @param amount flag to enable amount to be proceed
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
             boolean duration, boolean amount) {
         this.show(progress_bar, percentage, bitrate, duration);
@@ -82,6 +131,16 @@ public class ConsoleProgress {
         return this;
     }
 
+    /**
+     * Show progress bar, percentage, bitrate, duration, amount and heap usage during processing
+     * @param progress_bar flag to enable progress bar
+     * @param percentage flag to enable percentage
+     * @param bitrate flag to enable bitrate
+     * @param duration flag to enable duration
+     * @param amount flag to enable amount to be proceed
+     * @param heap_usage flag to enable heap usage
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
             boolean duration, boolean amount, boolean heap_usage) {
         this.show(progress_bar, percentage, bitrate, duration, amount);
@@ -89,6 +148,17 @@ public class ConsoleProgress {
         return this;
     }
 
+    /**
+     * Show progress bar, percentage, bitrate, duration, amount, heap usage, cpu usage during processing
+     * @param progress_bar flag to enable progress bar
+     * @param percentage flag to enable percentage
+     * @param bitrate flag to enable bitrate
+     * @param duration flag to enable duration
+     * @param amount flag to enable amount to be proceed
+     * @param heap_usage flag to enable heap usage
+     * @param cpu_usage flag to enable cpu usage
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
             boolean duration, boolean amount, boolean heap_usage, boolean cpu_usage) {
         this.show(progress_bar, percentage, bitrate, duration, amount, heap_usage);
@@ -96,20 +166,32 @@ public class ConsoleProgress {
         return this;
     }
 
+    /**
+     * Show progress bar, percentage, bitrate, duration, amount, heap usage, cpu usage
+     * and loading circle during processing
+     * @param progress_bar flag to enable progress bar
+     * @param percentage flag to enable percentage
+     * @param loading_circle flag to enable loading circle
+     * @param bitrate flag to enable bitrate
+     * @param duration flag to enable duration
+     * @param amount flag to enable amount to be proceed
+     * @param heap_usage flag to enable heap usage
+     * @param cpu_usage flag to enable cpu usage
+     * @return instance of ConsoleProgress
+     */
     public ConsoleProgress show(boolean progress_bar, boolean percentage,
             boolean loading_circle, boolean bitrate, boolean duration, boolean amount,
             boolean heap_usage, boolean cpu_usage ) {
-        m_enable_progress_bar = progress_bar;
-        m_enable_percentage = percentage;
+        this.show(progress_bar, percentage, bitrate, duration, amount, heap_usage);
         m_enable_loading_circle = loading_circle;
-        m_enable_bitrate = bitrate;
-        m_enable_duration = duration;
-        m_enable_proceed_amount = amount;
-        m_enable_heap_usage = heap_usage;
         m_enable_cpu_usage = cpu_usage;
         return this;
     }
 
+    /**
+     * Updates progress as read
+     * @param read size of read
+     */
     public void update(long read) {
         counter+=1;
         read_size += read;

@@ -6,9 +6,16 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
+/**
+ * Utility class to read a TLV file as one of TlvReader
+ */
 public class TlvFileReader extends TlvReader {
     protected DataInputStream input_stream  = null;
 
+    /**
+     * Constructor with a TLV full path
+     * @param tlv_file TLV full file path
+     */
     public TlvFileReader(String tlv_file) {
         super(tlv_file);
     }

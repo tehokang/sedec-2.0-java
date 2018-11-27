@@ -1,5 +1,8 @@
 package sedec2.util;
 
+/**
+ * Class to print logs
+ */
 public class Logger
 {
     public static void p(String msg) {
@@ -62,9 +65,25 @@ public class Logger
         //if(ERROR) Log.e(tag, "[E]" + msg);
     }
 
+    /**
+     * Flag to enable/disable {@link Logger#d(String)}
+     */
     public static boolean DEBUG = true;
+
+    /**
+     * Flag to enable/disable {@link Logger#i(String)}
+     */
     public static boolean INFO = true;
+
+    /**
+     * Flag to enable/disable {@link Logger#w(String)}
+     */
     public static boolean WARN = true;
+
+    /**
+     * Flag to enable/disable {@link Logger#e(String)}
+     */
     public static boolean ERROR = true;
+
     protected static String m_tag = "SEDEC2";
 }

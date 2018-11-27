@@ -1,5 +1,8 @@
 package sedec2.util;
 
+/**
+ * Wrapper class to convert long bits to JST time
+ */
 public class JSTTime {
     protected long JST;
     protected double MJD;

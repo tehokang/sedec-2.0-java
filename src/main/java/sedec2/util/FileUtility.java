@@ -4,7 +4,16 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.PrintWriter;
 
+/**
+ * Wrapper class to utilize file processing like writing
+ */
 public class FileUtility {
+    /**
+     * Saves byte buffer as a file
+     * @param filepath target path to save with file name
+     * @param buffer to write
+     * @return true if succeed else return false
+     */
     public static boolean save(String filepath, byte[] buffer) {
         try {
             FileOutputStream fstream = new FileOutputStream(filepath);
@@ -17,6 +26,12 @@ public class FileUtility {
         return true;
     }
 
+    /**
+     * Saves String as a file
+     * @param filepath target path to save with file name
+     * @param string to write
+     * @return true if succeed else return false
+     */
     public static boolean save(String filepath, String string) {
         try {
             PrintWriter out;

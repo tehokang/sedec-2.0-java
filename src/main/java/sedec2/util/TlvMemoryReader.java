@@ -6,10 +6,17 @@ import java.nio.ByteBuffer;
 import java.nio.MappedByteBuffer;
 import java.nio.channels.FileChannel;
 
+/**
+ * Utility class to read a TLV packet as one of TlvReader on memory
+ */
 public class TlvMemoryReader extends TlvReader {
     protected MappedByteBuffer memory_buffer = null;
     protected RandomAccessFile input_stream = null;
 
+    /**
+     * Constructor with a TLV full path
+     * @param tlv_file TLV full file path
+     */
     public TlvMemoryReader(String tlv_file) {
         super(tlv_file);
     }

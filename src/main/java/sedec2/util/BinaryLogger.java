@@ -1,9 +1,23 @@
 package sedec2.util;
 
+/**
+ * Class to print byte buffer as WYSIWYG
+ */
 public class BinaryLogger {
+    /**
+     * A flag which can show result of {@link BinaryLogger#print(byte[])}
+     */
     public static boolean PRINT = false;
+
+    /**
+     * A flag which can show result of {@link BinaryLogger#debug(byte[])}
+     */
     public static boolean DEBUG = true;
 
+    /**
+     * Prints buffer from beginning to end
+     * @param buffer to print
+     */
     public static void print(byte[] buffer) {
         if ( PRINT == true ) {
             Logger.p(String.format("-------- %s:print -------- \n",
@@ -19,6 +33,11 @@ public class BinaryLogger {
         }
     }
 
+    /**
+     * Prints buffer from beginning to length of parameter
+     * @param buffer to print
+     * @param length to print by length
+     */
     public static void print(byte[] buffer, int length) {
         if ( PRINT == true ) {
             Logger.p(String.format("-------- %s:debug -------- \n",
@@ -35,6 +54,10 @@ public class BinaryLogger {
         }
     }
 
+    /**
+     * Prints buffer from beginning to end
+     * @param buffer to print
+     */
     public static void debug(byte[] buffer) {
         if ( DEBUG == true ) {
             Logger.p(String.format("-------- %s:debug -------- \n",
@@ -50,6 +73,11 @@ public class BinaryLogger {
         }
     }
 
+    /**
+     * Prints buffer from beginning to length of parameter
+     * @param buffer to print
+     * @param length to print by length
+     */
     public static void debug(byte[] buffer, int length) {
         if ( DEBUG == true ) {
             Logger.p(String.format("-------- %s:debug -------- \n",
