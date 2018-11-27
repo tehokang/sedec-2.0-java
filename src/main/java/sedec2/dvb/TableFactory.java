@@ -49,7 +49,7 @@ public class TableFactory {
             case PROGRAM_MAP_TABLE:
                 return new ProgramMapTable(buffer);
             /**
-             * @note It is related in ETSI TS 102 809 v1.4.1
+             * It's related in ETSI TS 102 809 v1.4.1
              **/
             case APPLICATION_INFORMATION_TABLE:
                 return new ApplicationInformationTable(buffer);

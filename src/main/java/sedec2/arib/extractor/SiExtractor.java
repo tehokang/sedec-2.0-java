@@ -76,7 +76,7 @@ public class SiExtractor extends BaseExtractor {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
-                         * @note Nothing to do
+                         * Nothing to do
                          */
                     } catch ( Exception e ) {
                         e.printStackTrace();
@@ -116,7 +116,7 @@ public class SiExtractor extends BaseExtractor {
                 if ( mmtp_packet == null ) break;
 
                 /**
-                 * @note Signaling Message
+                 * Signaling Message
                  */
                 if ( 0x02 == mmtp_packet.getPayloadType() ) {
                     Message message = getSinallingMessage(mmtp_packet);

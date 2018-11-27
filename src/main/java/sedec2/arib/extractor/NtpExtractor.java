@@ -62,7 +62,7 @@ public class NtpExtractor extends BaseExtractor {
                         }
                     } catch ( InterruptedException e ) {
                         /**
-                         * @note Nothing to do
+                         * Nothing to do
                          */
                     } catch ( Exception e ) {
                         e.printStackTrace();

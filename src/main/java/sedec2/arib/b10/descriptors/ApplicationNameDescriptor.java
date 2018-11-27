@@ -3,10 +3,6 @@ package sedec2.arib.b10.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ApplicationNameDescriptor
- * @note Verified
- */
 public class ApplicationNameDescriptor extends Descriptor {
     private byte[] ISO_639_language_code = new byte[3];
     private int application_name_length;

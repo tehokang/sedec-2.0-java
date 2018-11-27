@@ -3,10 +3,6 @@ package sedec2.arib.b10.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ConnectionRequirementDescriptor
- * @note Not Verified Yet
- */
 public class ConnectionRequirementDescriptor extends Descriptor {
     private boolean IP_connection_requirement_flag;
 

@@ -59,7 +59,7 @@ public class MMTP_Payload_MPU {
         if ( fragment_type == 0x02 ) {
             if ( timed_flag == 0x01 ) {
                 /**
-                 * @note timed media data
+                 * timed media data
                  */
                 if ( aggregation_flag == 0x00 ) {
                     MFU mfu = new MFU();
@@ -96,7 +96,7 @@ public class MMTP_Payload_MPU {
 
             } else {
                 /**
-                 * @note non-timed media data like application
+                 * non-timed media data like application
                  */
                 if ( aggregation_flag == 0x00 ) {
                     MFU mfu = new MFU();

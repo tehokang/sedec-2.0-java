@@ -58,7 +58,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
-                         * @note Nothing to do
+                         * Nothing to do
                          */
                     } catch ( Exception e ) {
                         e.printStackTrace();
@@ -88,7 +88,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                 if ( mmtp_packet == null ) break;
 
                 /**
-                 * @note MPU-MFU
+                 * MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {

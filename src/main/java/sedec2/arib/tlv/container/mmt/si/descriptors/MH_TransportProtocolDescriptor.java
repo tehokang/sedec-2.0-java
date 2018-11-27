@@ -7,10 +7,6 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief TransportProtocolDescriptor
- * @note Verified
- */
 public class MH_TransportProtocolDescriptor extends Descriptor {
     private static final int PROTOCOL_OBJECT_CAROUSEL = 0x0001;
     private static final int PROTOCOL_HTTP = 0x0003;
@@ -181,9 +177,6 @@ public class MH_TransportProtocolDescriptor extends Descriptor {
                     }
                 }
                 break;
-            /**
-             * @note It is related in IPTVFJ STD-0010 version 2.0
-             **/
             case PROTOCOL_DATA_CAROUSEL:
                 if(0x01 == transport.remote_connection)
                     selector_byte_length = 8;
@@ -231,9 +224,6 @@ public class MH_TransportProtocolDescriptor extends Descriptor {
                     }
                 }
                 break;
-            /**
-             * @note It is related in IPTVFJ STD-0010 version 2.0
-             **/
             case PROTOCOL_DATA_CAROUSEL:
                 brw.writeOnBuffer(transport.remote_connection, 1);
                 brw.writeOnBuffer(0x7f, 7);
@@ -293,9 +283,6 @@ public class MH_TransportProtocolDescriptor extends Descriptor {
                     }
                 }
                 break;
-            /**
-             * @note It is related in IPTVFJ STD-0010 version 2.0
-             **/
             case PROTOCOL_DATA_CAROUSEL:
                 {
                     Logger.d(String.format("\t remote_connection : 0x%x \n",

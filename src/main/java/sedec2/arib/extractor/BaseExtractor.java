@@ -136,7 +136,7 @@ public abstract class BaseExtractor {
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
-                         * @note Nothing to do
+                         * Nothing to do
                          */
                     } catch ( Exception e ) {
                         /**
@@ -418,14 +418,14 @@ public abstract class BaseExtractor {
                     break;
                 case 0x01:
                     /**
-                     * @note ARIB B60 Table 6-2
+                     * ARIB B60 Table 6-2
                      * This involves header part of divided data.
                      */
                     m_fragmented01_mmtp.add(mmtp);
                     break;
                 case 0x02:
                     /**
-                     * @note ARIB B60 Table 6-2
+                     * ARIB B60 Table 6-2
                      * This involves a part of divided data which is \n
                      * neither header part nor last part.
                      */
@@ -435,7 +435,7 @@ public abstract class BaseExtractor {
                     boolean found_01_fragmentation_indicator = false;
                     ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
                     /**
-                     * @note ARIB B60 Table 6-2, This involves last part of divided data.
+                     * ARIB B60 Table 6-2, This involves last part of divided data.
                      * In other words, it's a timing to make whole section table since 0x03 is last packet
                      * after gathering fragmented data of tables.
                      * Case.1 0x01 of fragmentation_indicator will be only one thing.

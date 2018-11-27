@@ -3,10 +3,6 @@ package sedec2.arib.b10.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ApplicationRecordingDescriptor
- * @note Not Verified Yet
- */
 public class ApplicationRecordingDescriptor extends Descriptor {
     private int scheduled_recording_flag;
     private int trick_mode_aware_flag;
@@ -181,15 +177,4 @@ public class ApplicationRecordingDescriptor extends Descriptor {
             Logger.d(String.format("\t component_tag : 0x%x \n", component_tag[i]));
         }
     }
-
-
-
-
-
-
-
-
-
-
-
 }

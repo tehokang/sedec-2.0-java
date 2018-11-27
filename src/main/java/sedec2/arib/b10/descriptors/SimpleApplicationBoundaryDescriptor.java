@@ -3,10 +3,6 @@ package sedec2.arib.b10.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief SimpleApplicationBoundaryDescriptor
- * @note Verified
- */
 public class SimpleApplicationBoundaryDescriptor extends Descriptor {
     private byte boundary_extension_count;
     private byte[] boundary_extension_length = new byte[256];

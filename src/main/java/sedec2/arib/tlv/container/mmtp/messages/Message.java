@@ -95,7 +95,7 @@ public abstract class Message extends sedec2.base.BitReadWriter {
     protected abstract void __decode_message_body__();
 
     /**
-     * @note internal functions to encode
+     * internal functions to encode
      */
     protected void __encode_update_message_length__() {};
     protected void __encode_preprare_message__() {};

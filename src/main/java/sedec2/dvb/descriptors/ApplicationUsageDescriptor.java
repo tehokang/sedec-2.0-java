@@ -3,10 +3,6 @@ package sedec2.dvb.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ApplicationUsageDescriptor
- * @note Verified
- */
 public class ApplicationUsageDescriptor extends Descriptor {
     private byte usage_type;
 

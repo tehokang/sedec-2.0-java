@@ -23,6 +23,30 @@ import sedec2.arib.b10.descriptors.UnknownDescriptor;
 import sedec2.arib.b10.descriptors.VideoDecodeControlDescriptor;
 import sedec2.base.BitReadWriter;
 
+/**
+ * Factory to obtain a kind of descriptors of ARIB B10 like below.
+ * <ul>
+ * <li> {@link ApplicationBoundaryAndPermissionDescriptor}
+ * <li> {@link ApplicationDescriptor}
+ * <li> {@link ApplicationNameDescriptor}
+ * <li> {@link ApplicationRecordingDescriptor}
+ * <li> {@link ApplicationUsageDescriptor}
+ * <li> {@link AutostartPriorityDescriptor}
+ * <li> {@link CAServiceDescriptor}
+ * <li> {@link CacheControlInfoDescriptor}
+ * <li> {@link ConditionalAccessDescriptor}
+ * <li> {@link ConnectionRequirementDescriptor}
+ * <li> {@link DataComponentDescriptor}
+ * <li> {@link DigitalCopyControlDescriptor}
+ * <li> {@link ParentalRatingDescriptor}
+ * <li> {@link RandomizedLatencyDescriptor}
+ * <li> {@link SimpleApplicationBoundaryDescriptor}
+ * <li> {@link SimpleApplicationLocationDescriptor}
+ * <li> {@link StreamIdentifierDescriptor}
+ * <li> {@link TransportProtocolDescriptor}
+ * <li> {@link VideoDecodeControlDescriptor}
+ * </ul>
+ */
 public class DescriptorFactory {
     public final static int APPLICATION_DESCRIPTOR = 0x00;
     public final static int APPLICATION_NAME_DESCRIPTOR = 0x01;
@@ -45,6 +69,11 @@ public class DescriptorFactory {
     public final static int DATA_COMPONENT_DESCRIPTOR = 0xfd;
     public final static int UNKNOWN_DESCRIPTOR = 0xff;
 
+    /**
+     * Creates specific descriptor of a kind of descriptors in ARIB B10
+     * @param brw BitReadWriter which Table own.
+     * @return one descriptor which is decoded
+     */
     public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
 

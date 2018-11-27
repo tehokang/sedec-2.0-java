@@ -11,9 +11,9 @@ public abstract class Table extends BitReadWriter {
     protected int section_length;
     protected byte[] m_crc;
     protected int checksum_CRC32;
-    
+
     protected boolean is_unknown_table = false;
-    
+
     public Table(byte[] buffer) {
         super(buffer);
 
@@ -23,7 +23,7 @@ public abstract class Table extends BitReadWriter {
     public boolean isUnknownTable() {
         return is_unknown_table;
     }
-    
+
     public byte getTableId() {
         return table_id;
     }
@@ -69,7 +69,7 @@ public abstract class Table extends BitReadWriter {
     }
 
     /**
-     * @note internal functions to decode
+     * internal functions to decode
      */
     protected void __decode_table_header__() {
         table_id = (byte) readOnBuffer(8);
@@ -81,7 +81,7 @@ public abstract class Table extends BitReadWriter {
     protected abstract void __decode_table_body__();
 
     /**
-     * @note internal functions to encode
+     * internal functions to encode
      */
     protected void __encode_update_table_length__() {};
     protected void __encode_prepare_table__() {};

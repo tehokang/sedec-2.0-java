@@ -3,10 +3,6 @@ package sedec2.dvb.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ApplicationRecordingDescriptor
- * @note Not Verified Yet
- */
 public class ApplicationRecordingDescriptor extends Descriptor {
     private int scheduled_recording_flag;
     private int trick_mode_aware_flag;

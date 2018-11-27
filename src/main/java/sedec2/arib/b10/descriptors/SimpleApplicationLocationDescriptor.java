@@ -3,10 +3,6 @@ package sedec2.arib.b10.descriptors;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief SimpleApplicationLocationDescriptor
- * @note Verified
- */
 public class SimpleApplicationLocationDescriptor extends Descriptor {
     private byte[] initial_path_bytes;
 

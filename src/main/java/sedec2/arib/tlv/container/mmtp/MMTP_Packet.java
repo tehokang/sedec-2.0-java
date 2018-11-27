@@ -32,16 +32,16 @@ public class MMTP_Packet extends BitReadWriter {
         public int hdr_ext_length;
 
         /**
-         * @note hdr_ext_type == 0x0001
+         * hdr_ext_type == 0x0001
          */
         public byte scramble_control;
         /**
-         * @note hdr_ext_type == 0x0002
+         * hdr_ext_type == 0x0002
          * Please refer to Table 10-2 of ARIB B60
          */
         public int download_id;
         /**
-         * @note hdr_ext_type == 0x0003
+         * hdr_ext_type == 0x0003
          * Please refer to Table 10-3 of ARIB B60
          */
         public int item_fragment_number;

@@ -6,10 +6,6 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-/**
- * @brief ApplicationDescriptor
- * @note Verified
- */
 public class ApplicationDescriptor extends Descriptor {
     private int application_profiles_length;
     private List<ApplicationProfile> application_profiles = new ArrayList<ApplicationProfile>();

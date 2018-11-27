@@ -6,7 +6,7 @@ public abstract class Descriptor extends sedec2.base.Descriptor {
 
     public Descriptor() {
         /**
-         * @note NOTHING TO DO, THIS IS ONLY FOR LEGACY DESCRIPTOR
+         * NOTHING TO DO, THIS IS ONLY FOR LEGACY DESCRIPTOR
          * WHICH HAS DESCRIPTOR_TAG 8 bits and DESCRIPTOR_LENGTH 8 bits
          * */
     }

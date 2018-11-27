@@ -14,7 +14,7 @@ public class UnknownDescriptor extends Descriptor {
     @Override
     protected void updateDescriptorLength() {
         /**
-         * @note NOTHING TO DO
+         * NOTHING TO DO
          */
     }
 
