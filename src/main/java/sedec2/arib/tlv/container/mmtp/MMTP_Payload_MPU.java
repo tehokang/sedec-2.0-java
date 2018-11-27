@@ -7,6 +7,9 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to describe media aware fragment MPU of Table 6-1 in ARIB B60.
+ */
 public class MMTP_Payload_MPU {
     protected int payload_length;
     protected byte fragment_type;
@@ -40,6 +43,10 @@ public class MMTP_Payload_MPU {
         }
     }
 
+    /**
+     * Constructor to decode MPU with BitReadWriter of MMTP_Packet.
+     * @param brw BitReadWriter which MMTP_Packet own.
+     */
     public MMTP_Payload_MPU(BitReadWriter brw) {
         payload_length = brw.readOnBuffer(16);
         fragment_type = (byte) brw.readOnBuffer(4);
@@ -118,38 +125,73 @@ public class MMTP_Payload_MPU {
         }
     }
 
+    /**
+     * Gets payload_length of Table 6-1 of ARIB B60
+     * @return payload_length
+     */
     public int getPayloadLength() {
         return payload_length;
     }
 
+    /**
+     * Gets fragment_type of Table 6-1 of ARIB B60
+     * @return fragment_type
+     */
     public byte getFragmentType() {
         return fragment_type;
     }
 
+    /**
+     * Gets timed_flag of Table 6-1 of ARIB B60
+     * @return timed_flag
+     */
     public byte getTimedFlag() {
         return timed_flag;
     }
 
+    /**
+     * Gets fragmentation_indicator of Table 6-1 of ARIB B60
+     * @return fragmentation_indicator
+     */
     public byte getFragmentationIndicator() {
         return fragmentation_indicator;
     }
 
+    /**
+     * Gets aggregation_flag of Table 6-1 of ARIB B60
+     * @return aggregation_flag
+     */
     public byte getAggregationFlag() {
         return aggregation_flag;
     }
 
+    /**
+     * Gets fragment_counter of Table 6-1 of ARIB B60
+     * @return fragment_counter
+     */
     public byte getFragmentCounter() {
         return fragment_counter;
     }
 
+    /**
+     * Gets MPU_sequence_number of Table 6-1 of ARIB B60
+     * @return MPU_sequence_number
+     */
     public int getMPUSequenceNumber() {
         return MPU_sequence_number;
     }
 
+    /**
+     * Gets list of MFU which consist of timed/non-timed data
+     * @return
+     */
     public List<MFU> getMFUList() {
         return mfus;
     }
 
+    /**
+     * Prints all of properties it has.
+     */
     public void print() {
         Logger.d(String.format("------- MMTP Payload ------- (%s)\n", getClass().getName()));
         Logger.d(String.format("payload_length : 0x%x (%d) \n",
