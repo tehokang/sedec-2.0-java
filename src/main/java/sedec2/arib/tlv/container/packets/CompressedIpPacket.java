@@ -5,6 +5,10 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * CompressedIpPacket is a kind of TLV which refers to ITU-R BT.1869
+ * The packet contains MMT packet which could have Video, Audio, and Data.
+ */
 public class CompressedIpPacket extends TypeLengthValue {
     protected int CID;
     protected byte SN;
@@ -127,6 +131,10 @@ public class CompressedIpPacket extends TypeLengthValue {
         }
     }
 
+    /**
+     * Constructor to decode Compressed IP Packet
+     * @param buffer one TLV raw buffer having synchronization byte
+     */
     public CompressedIpPacket(byte[] buffer) {
         super(buffer);
 

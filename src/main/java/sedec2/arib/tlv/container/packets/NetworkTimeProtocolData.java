@@ -3,6 +3,10 @@ package sedec2.arib.tlv.container.packets;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
+/**
+ * Class to parse Network Time Protocol Data.
+ * NTP refers to Table 3-1 of chapter 3 of ARIB B60
+ */
 public class NetworkTimeProtocolData extends BitReadWriter {
     protected byte leap_indicator;
     protected byte version;
@@ -18,6 +22,10 @@ public class NetworkTimeProtocolData extends BitReadWriter {
     protected long receive_timestamp;
     protected long transmit_timestamp;
 
+    /**
+     * Constructor to decode Network Time Protocol Data
+     * @param buffer NTP raw buffer inside of TLV
+     */
     public NetworkTimeProtocolData(byte[] buffer) {
         super(buffer);
 

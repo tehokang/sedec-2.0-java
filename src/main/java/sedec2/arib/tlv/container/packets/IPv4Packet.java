@@ -4,6 +4,10 @@ import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to deliver Network Time Protocol Data.
+ * NTP refers to Table 3-1 of chapter 3 of ARIB B60
+ */
 public class IPv4Packet extends TypeLengthValue {
     protected byte version;
     protected byte header_length;
@@ -23,6 +27,10 @@ public class IPv4Packet extends TypeLengthValue {
     protected NetworkTimeProtocolData ntp = null;
     protected MMTP_Packet mmtp_packet = null;
 
+    /**
+     * Constructor to decode IPv4 Packet
+     * @param buffer one TLV raw buffer having synchronization byte
+     */
     public IPv4Packet(byte[] buffer) {
         super(buffer);
 

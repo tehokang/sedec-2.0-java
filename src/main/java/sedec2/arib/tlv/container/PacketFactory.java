@@ -7,6 +7,15 @@ import sedec2.arib.tlv.container.packets.NullPacket;
 import sedec2.arib.tlv.container.packets.SignallingPacket;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 
+/**
+ * Factory to obtain a kind of TLV like below.
+ * <ul>
+ * <li> {@link IPv4Packet} which contains Network Time Protocol Data
+ * <li> {@link IPv6Packet} which contains Network Time Protocol Data
+ * <li> {@link CompressedIpPacket} which contains a MMT packet
+ * <li> {@link SignallingPacket} which contains table of TLV-SI
+ * </ul>
+ */
 public class PacketFactory {
     public final static byte IPV4_PACKET = (byte) 0x01;
     public final static byte IPV6_PACKET = (byte) 0x02;
@@ -14,6 +23,11 @@ public class PacketFactory {
     public final static byte SIGNALLING_PACKET = (byte) 0xfe;
     public final static byte NULL_PACKET = (byte) 0xff;
 
+    /**
+     * Creates specific packet of a kind of TLV
+     * @param buffer one TLV packet raw
+     * @return one TLV packet which is decoded
+     */
     public static TypeLengthValue createPacket(byte[] buffer) {
         byte packet_type = (byte)(buffer[1] & 0xff);
 

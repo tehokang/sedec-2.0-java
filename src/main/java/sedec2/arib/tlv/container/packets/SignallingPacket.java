@@ -5,9 +5,17 @@ import java.io.ByteArrayOutputStream;
 import sedec2.arib.tlv.si.TableFactory;
 import sedec2.base.Table;
 
+/**
+ * Class to deliver TLV-SI
+ * TLV-SI refers to Table 4-1 of chapter 3 of ARIB B60
+ */
 public class SignallingPacket extends TypeLengthValue {
     protected Table table;
 
+    /**
+     * Constructor to decode Signaling Packet
+     * @param buffer one TLV raw buffer having synchronization byte
+     */
     public SignallingPacket(byte[] buffer) {
         super(buffer);
 
