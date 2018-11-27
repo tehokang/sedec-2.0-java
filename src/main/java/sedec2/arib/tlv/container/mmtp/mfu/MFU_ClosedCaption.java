@@ -7,6 +7,9 @@ import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class which refers to Table 9-1 configuration of MFU for closed-caption in ARIB B60.
+ */
 public class MFU_ClosedCaption extends BitReadWriter {
     protected byte subtitle_tag;
     protected byte subtitle_sequence_number;
@@ -19,11 +22,15 @@ public class MFU_ClosedCaption extends BitReadWriter {
     protected List<SubSample> subsamples = new ArrayList<>();
     protected byte[] data_byte;
 
-    class SubSample {
+    public class SubSample {
         public byte subsample_i_data_type;
         public int subsample_i_data_size;
     }
 
+    /**
+     * Constructor to decode Table 9-1 configuration of MFU for closed-caption in ARIB B60.
+     * @param buffer MFU_data_byte of MMT packet payload.
+     */
     public MFU_ClosedCaption(byte[] buffer) {
         super(buffer);
 
@@ -72,42 +79,81 @@ public class MFU_ClosedCaption extends BitReadWriter {
         }
     }
 
+    /**
+     * Gets subtitle_tag of Table 9-1 of ARIB B60
+     * @return subtitle_tag
+     */
     public byte getSubtitleTag() {
         return subtitle_tag;
     }
 
+    /**
+     * Gets subtitle_sequence_number of Table 9-1 of ARIB B60
+     * @return subtitle_sequence_number
+     */
     public byte getSubtitleSequenceNumber() {
         return subtitle_sequence_number;
     }
 
+    /**
+     * Gets subsample_number of Table 9-1 of ARIB B60
+     * @return subsample_number
+     */
     public byte getSubsampleNumber() {
         return subsample_number;
     }
 
+    /**
+     * Gets last_subsample_number of Table 9-1 of ARIB B60
+     * @return last_subsample_number
+     */
     public byte getLastSubsampleNumber() {
         return last_subsample_number;
     }
 
+    /**
+     * Gets data_type of Table 9-1 of ARIB B60
+     * @return data_type
+     */
     public byte getDataType() {
         return data_type;
     }
 
+    /**
+     * Gets length_extension_flag of Table 9-1 of ARIB B60
+     * @return length_extension_flag
+     */
     public byte getLengthExtensionFlag() {
         return length_extension_flag;
     }
 
+    /**
+     * Gets subsample_info_list_flag of Table 9-1 of ARIB B60
+     * @return subsample_info_list_flag
+     */
     public byte getSubsampleInfoListFlag() {
         return subsample_info_list_flag;
     }
 
+    /**
+     * Gets subsamples of Table 9-1 of ARIB B60
+     * @return subsamples which comes from subsample_i_data_type to subsample_i_data_size
+     */
     public List<SubSample> getSubsamples() {
         return subsamples;
     }
 
+    /**
+     * Gets data_byte of Table 9-1 of ARIB B60
+     * @return data_byte as byte buffer
+     */
     public byte[] getDataByte() {
         return data_byte;
     }
 
+    /**
+     * Prints all of properties it has.
+     */
     public void print() {
         Logger.d(String.format("- MFU_data_byte (ClosedCaption) (%s)\n", getClass().getName()));
         Logger.d(String.format("subtitle_tag : 0x%x \n", subtitle_tag));
