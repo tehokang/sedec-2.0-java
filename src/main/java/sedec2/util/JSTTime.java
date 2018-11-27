@@ -13,6 +13,10 @@ public class JSTTime {
     protected int minute;
     protected int second;
 
+    /**
+     * Constructor with 40 bits-aligned JST as known as Japan Standard Time
+     * @param time JST 40bits
+     */
     public JSTTime(long time) {
         JST = time;
 
@@ -37,34 +41,66 @@ public class JSTTime {
         second = Integer.parseInt(second_s);
     }
 
+    /**
+     * Gets original 40 bits-aligned JST
+     * @return
+     */
     public long getJSTTime() {
         return JST;
     }
 
+    /**
+     * Gets MJD as known as Modified Julian Day
+     * @return MDJ
+     */
     public double getMJD() {
         return MJD;
     }
 
+    /**
+     * Gets year from JST
+     * @return year
+     */
     public int getYear() {
         return year;
     }
 
+    /**
+     * Gets month from JST
+     * @return month
+     */
     public int getMonth() {
         return month;
     }
 
+    /**
+     * Gets day from JST
+     * @return day
+     */
     public int getDay() {
         return day;
     }
 
+    /**
+     * Gets hour from JST
+     * @return hour
+     */
     public int getHour() {
         return hour;
     }
 
+    /**
+     * Gets minute from JST
+     * @return minute
+     */
     public int getMinute() {
         return minute;
     }
 
+    /**
+     * Gets second from JST
+     * @return second
+     */
     public int getSecond() {
         return second;
     }
