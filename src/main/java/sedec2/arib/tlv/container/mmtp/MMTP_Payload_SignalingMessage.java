@@ -5,7 +5,7 @@ import java.util.Arrays;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-public class MMTP_Payload_SignallingMessage {
+public class MMTP_Payload_SignalingMessage {
     protected byte fragmentation_indicator;
     protected byte length_extension_flag;
     protected byte aggregation_flag;
@@ -14,7 +14,7 @@ public class MMTP_Payload_SignallingMessage {
     protected int message_length;
     protected byte[] message_byte;
 
-    public MMTP_Payload_SignallingMessage(BitReadWriter brw) {
+    public MMTP_Payload_SignalingMessage(BitReadWriter brw) {
         fragmentation_indicator = (byte) brw.readOnBuffer(2);
         brw.skipOnBuffer(4);
         length_extension_flag = (byte) brw.readOnBuffer(1);

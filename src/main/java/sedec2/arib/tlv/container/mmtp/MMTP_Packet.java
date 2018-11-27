@@ -6,6 +6,9 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
+/**
+ * MMTP_Packet describes Table 6-4 of ARIB B60.
+ */
 public class MMTP_Packet extends BitReadWriter {
     protected byte version;
     protected byte packet_counter_flag;
@@ -21,7 +24,7 @@ public class MMTP_Packet extends BitReadWriter {
     protected int extension_length;
     protected List<HeaderExtensionByte> header_extension_byte = new ArrayList<>();
     protected MMTP_Payload_MPU mmtp_payload_mpu = null;
-    protected MMTP_Payload_SignallingMessage mmtp_payload_signalling_message = null;
+    protected MMTP_Payload_SignalingMessage mmtp_payload_signalling_message = null;
 
     public class HeaderExtensionByte {
         public byte hdr_ext_end_flag;
@@ -45,66 +48,136 @@ public class MMTP_Packet extends BitReadWriter {
         public int last_item_fragment_number;
     }
 
+    /**
+     * Gets header_extension_bytes when extension_flag equals to 1.
+     * @return list of header_extension_byte
+     */
     public List<HeaderExtensionByte> getHeaderExtensionByte() {
         return header_extension_byte;
     }
 
+    /**
+     * Gets MPU when payload_type equals to 0x00.
+     * @return MPU in MMTP_payload() Table 6-1 of ARIB B60
+     */
     public MMTP_Payload_MPU getMPU() {
         return mmtp_payload_mpu;
     }
 
-    public MMTP_Payload_SignallingMessage getSignallingMessage() {
+    /**
+     * Gets Signaling Message when payload_type equals to 0x02.
+     * @return Signaling Message in MMTP_payload() Table 6-1 of ARIB B60
+     */
+    public MMTP_Payload_SignalingMessage getSignalingMessage() {
         return mmtp_payload_signalling_message;
     }
 
+    /**
+     * Gets version of MMTP_packet() of Table 6-4 of ARIB B60
+     * @return version as 2bits of Table 6-4
+     */
     public byte getVersion() {
         return version;
     }
 
+    /**
+     * Gets packet_counter_flag of Table 6-4 of ARIB B60
+     * @return packet_counter_flag as 1 bit of Table 6-4
+     */
     public byte getPacketCounterFlag() {
         return packet_counter_flag;
     }
 
+    /**
+     * Gets FEC_type of Table 6-4 of ARIB B60
+     * @return FEC_type
+     */
     public byte getFECType() {
         return FEC_type;
     }
 
+    /**
+     * Gets extension_flag of Table 6-4 of ARIB B60
+     * @return extension_flag
+     */
     public byte getExtensionFlag() {
         return extension_flag;
     }
 
+    /**
+     * Gets RAP_flag of Table 6-4 of ARIB B60
+     * @return RAP_flag
+     */
     public byte getRAPFlag() {
         return RAP_flag;
     }
 
+    /**
+     * Gets payload_type of Table 6-4 of ARIB B60
+     * @return payload_type
+     */
     public byte getPayloadType() {
         return payload_type;
     }
 
+    /**
+     * Gets packet_id of Table 6-4 of ARIB B60
+     * @return packet_id
+     */
     public int getPacketId() {
         return packet_id;
     }
 
+    /**
+     * Gets timestamp of Table 6-4 of ARIB B60
+     * @return timestamp
+     */
     public int getTimestamp() {
         return timestamp;
     }
 
+    /**
+     * Gets packet_sequence_number of Table 6-4 of ARIB B60
+     * @return packet_sequence_number
+     */
     public int getPacketSequenceNumber() {
         return packet_sequence_number;
     }
 
+    /**
+     * Gets packet_counter of Table 6-4 of ARIB B60
+     * @return packet_counter
+     *
+     * It's only available when pakcet_counter_flag equals to 1.
+     */
     public int getPacketCounter() {
         return packet_counter;
     }
 
+    /**
+     * Gets extension_type of Table 6-4 of ARIB B60
+     * @return extension_type
+     *
+     * It's only available when extension_flag equals to 1.
+     */
     public int getExtensionType() {
         return extension_type;
     }
 
+    /**
+     * Gets extension_length of Table 6-4 of ARIB B60
+     * @return extension_length
+     *
+     * It's only available when extension_flag equals to 1.
+     */
     public int getExtensionLength() {
         return extension_length;
     }
 
+    /**
+     * Constructor to decode MMTP_packet of Table 6-4 of ARIB B60.
+     * @param buffer MMT packet as byte buffer
+     */
     public MMTP_Packet(byte[] buffer) {
         super(buffer);
 
@@ -153,10 +226,13 @@ public class MMTP_Packet extends BitReadWriter {
             mmtp_payload_mpu = new MMTP_Payload_MPU(this);
 
         } else if ( payload_type == 0x02 ) {
-            mmtp_payload_signalling_message = new MMTP_Payload_SignallingMessage(this);
+            mmtp_payload_signalling_message = new MMTP_Payload_SignalingMessage(this);
         }
     }
 
+    /**
+     * Prints all of properties it has.
+     */
     public void print() {
         Logger.d(String.format("======= MMTP Packet ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("version : 0x%x \n", version));

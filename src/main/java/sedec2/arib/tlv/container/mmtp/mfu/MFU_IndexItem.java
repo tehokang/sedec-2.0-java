@@ -6,6 +6,9 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
+/**
+ * Class which refers to Table 10-4 configuration of index item in ARIB B60.
+ */
 public class MFU_IndexItem extends BitReadWriter {
     protected int num_of_items;
     protected List<Item> items = new ArrayList<>();
@@ -25,7 +28,8 @@ public class MFU_IndexItem extends BitReadWriter {
     }
 
     /**
-     * @note Table 10-4 configuration of index item in ARIB B60
+     * Constructor to decode Table 10-4 configuration of index item in ARIB B60.
+     * @param buffer MFU_data_byte of MMT packet payload.
      */
     public MFU_IndexItem(byte[] buffer) {
         super(buffer);
@@ -65,14 +69,25 @@ public class MFU_IndexItem extends BitReadWriter {
         }
     }
 
+    /**
+     * Gets number of items in Index_Item of Table 10-4 in ARIB B60.
+     * @return num_of_items of Table 10-4
+     */
     public int getNumOfItems() {
         return num_of_items;
     }
 
+    /**
+     * Gets list of item data which comes from item_id to original_size in Table 10-4.
+     * @return list of item data
+     */
     public List<Item> getItems() {
         return items;
     }
 
+    /**
+     * Prints all of properties it has.
+     */
     public void print() {
         Logger.d(String.format("- MFU_data_byte (Index_item) (%s)\n", getClass().getName()));
         Logger.d(String.format("num_of_items : 0x%x (%d) \n", num_of_items, num_of_items));

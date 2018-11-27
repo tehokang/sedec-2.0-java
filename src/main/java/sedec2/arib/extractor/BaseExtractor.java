@@ -12,7 +12,7 @@ import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
 import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU;
 import sedec2.arib.tlv.container.mmtp.MMTP_Payload_MPU.MFU;
-import sedec2.arib.tlv.container.mmtp.MMTP_Payload_SignallingMessage;
+import sedec2.arib.tlv.container.mmtp.MMTP_Payload_SignalingMessage;
 import sedec2.arib.tlv.container.mmtp.MessageFactory;
 import sedec2.arib.tlv.container.mmtp.messages.Message;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
@@ -406,7 +406,7 @@ public abstract class BaseExtractor {
     protected Message getSinallingMessage(MMTP_Packet mmtp)
             throws IOException, InterruptedException {
         Message message = null;
-        MMTP_Payload_SignallingMessage signal_message = mmtp.getSignallingMessage();
+        MMTP_Payload_SignalingMessage signal_message = mmtp.getSignalingMessage();
 
         if ( signal_message != null ) {
             int fragmentaion_indicator =
@@ -444,7 +444,7 @@ public abstract class BaseExtractor {
                             m_fragmented01_mmtp.iterator() ;
                             it.hasNext() ; ) {
                         MMTP_Packet mmtp01 = it.next();
-                        MMTP_Payload_SignallingMessage sm = mmtp01.getSignallingMessage();
+                        MMTP_Payload_SignalingMessage sm = mmtp01.getSignalingMessage();
                         if( mmtp01.getPacketId() == mmtp.getPacketId() &&
                                 sm != null &&
                                 sm.getFragmentationIndicator() == 0x01 ) {
@@ -463,7 +463,7 @@ public abstract class BaseExtractor {
                                 m_fragmented02_mmtp.iterator() ;
                                 it.hasNext() ; ) {
                             MMTP_Packet mmtp02 = it.next();
-                            MMTP_Payload_SignallingMessage sm = mmtp02.getSignallingMessage();
+                            MMTP_Payload_SignalingMessage sm = mmtp02.getSignalingMessage();
                             if( mmtp02.getPacketId() == mmtp.getPacketId() &&
                                     sm != null &&
                                     sm.getFragmentationIndicator() == 0x02 ) {
