@@ -113,7 +113,7 @@ public class DescriptorFactory {
     public final static int MH_LOCAL_TIME_OFFSET_DESCRIPTOR = 0x8023;
     public final static int MH_COMPONENT_GROUP_DESCRIPTOR = 0x8024;
     public final static int MH_LOGO_TRANSMISSION_DESCRIPTOR = 0x8025;
-    public final static int MH_EXTENDED_TIMESTAMP_DESCRIPTOR = 0x8026;
+    public final static int MPU_EXTENDED_TIMESTAMP_DESCRIPTOR = 0x8026;
     public final static int MPU_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8027;
     public final static int MH_NETWORK_DOWNLOAD_CONTENT_DESCRIPTOR = 0x8028;
     public final static int MH_APPLICATION_DESCRIPTOR = 0x8029;
