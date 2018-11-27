@@ -277,7 +277,7 @@ public class DescriptorFactory {
                 return new MH_LocalTimeOffsetDescriptor(brw);
             case MH_SERVICE_DESCRIPTOR:
                 return new MH_ServiceDescriptor(brw);
-            case MH_EXTENDED_TIMESTAMP_DESCRIPTOR:
+            case MPU_EXTENDED_TIMESTAMP_DESCRIPTOR:
                 return new MPU_ExtendedTimestampDescriptor(brw);
             case MPU_DOWNLOAD_CONTENT_DESCRIPTOR:
                 return new MPU_DownloadContentDescriptor(brw);
