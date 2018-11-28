@@ -105,7 +105,7 @@
     </target>
 	
     <target name="doc-internal" description="generate documentation">
-        <javadoc destdir="${doc.dir}" 
+        <javadoc destdir="${doc.dir}/internal/" 
                 classpathref="project.classpath" 
                 version="true"
                 windowtitle="${ant.project.name} SDK Document" 
@@ -115,8 +115,14 @@
                 charset="utf-8"
                 docencoding="utf-8"
                 access="private"
-                bottom="Copyright Teho Kang. All rights reserved.">
+                bottom="Copyright © 2018, Teho Kang and/or its affiliates.
+                       All rights reserved. Use is subject to license terms.
+                       Also see the documentation redistribution policy.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
+            <![CDATA[
+                ${ant.project.name} SDK which's able to extract everything from TLV
+                <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-arib-packages.png?raw=true"/>
+            ]]>
             <classpath>
                 <pathelement location="${bin.dir}"/>
             </classpath>
@@ -124,18 +130,25 @@
     </target>
 	
     <target name="doc-external" description="generate documentation">
-        <javadoc destdir="${doc.dir}" 
+        <javadoc destdir="${doc.dir}/external/" 
                 classpathref="project.classpath" 
                 version="true"
                 windowtitle="${ant.project.name} SDK Document" 
-                doctitle="${ant.project.name} SDK which's able to extract everything from TLV"
-                linksource="yes"
+                linksource="no"
                 encoding="utf-8"
                 charset="utf-8"
                 docencoding="utf-8"
                 access="public"
-                bottom="Copyright Teho Kang. All rights reserved.">
+                bottom="Copyright © 2018, Teho Kang and/or its affiliates.
+                        All rights reserved. Use is subject to license terms.
+                        Also see the documentation redistribution policy.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
+            <doctitle>
+            <![CDATA[
+                ${ant.project.name} SDK which's able to extract everything from TLV
+                <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-arib-packages.png?raw=true"/>
+            ]]>
+            </doctitle>
             <classpath>
                 <pathelement location="${bin.dir}"/>
             </classpath>

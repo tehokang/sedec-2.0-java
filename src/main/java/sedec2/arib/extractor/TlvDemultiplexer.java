@@ -11,7 +11,14 @@ import sedec2.base.Table;
  * who can be extracted.
  * <p>
  * This is able to control all of Extractor with public interfaces and even
- * user can directly use each Extractor
+ * user can directly use each Extractor like below
+ *
+ * @see SiExtractor
+ * @see NtpExtractor
+ * @see TtmlExtractor
+ * @see VideoExtractor
+ * @see AudioExtractor
+ * @see ApplicationExtractor
  */
 public class TlvDemultiplexer implements
         SiExtractor.ITableExtractorListener, NtpExtractor.INtpExtractorListener,
