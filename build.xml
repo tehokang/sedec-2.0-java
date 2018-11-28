@@ -120,7 +120,7 @@
                        Also see the documentation redistribution policy.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
             <![CDATA[
-                ${ant.project.name} SDK which's able to extract everything from TLV
+                ${ant.project.name} (Internal) SDK which's able to extract everything from TLV
                 <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-arib-packages.png?raw=true"/>
             ]]>
             <classpath>
@@ -145,7 +145,7 @@
             <fileset dir="${src.dir}" defaultexcludes="no"/>
             <doctitle>
             <![CDATA[
-                ${ant.project.name} SDK which's able to extract everything from TLV
+                ${ant.project.name} (External) SDK which's able to extract everything from TLV
                 <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-arib-packages.png?raw=true"/>
             ]]>
             </doctitle>
