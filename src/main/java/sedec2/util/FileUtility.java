@@ -8,6 +8,8 @@ import java.io.PrintWriter;
  * Wrapper class to utilize file processing like writing
  */
 public class FileUtility {
+    protected static final String TAG = FileUtility.class.getSimpleName();
+
     /**
      * Saves byte buffer as a file
      * @param filepath target path to save with file name

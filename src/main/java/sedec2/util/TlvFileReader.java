@@ -10,6 +10,7 @@ import java.nio.ByteBuffer;
  * Utility class to read a TLV file as one of TlvReader
  */
 public class TlvFileReader extends TlvReader {
+    protected static final String TAG = TlvFileReader.class.getSimpleName();
     protected DataInputStream input_stream  = null;
 
     /**

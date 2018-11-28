@@ -10,6 +10,8 @@ import java.nio.channels.FileChannel;
  * Utility class to read a TLV packet as one of TlvReader on memory
  */
 public class TlvMemoryReader extends TlvReader {
+    protected static final String TAG = TlvMemoryReader.class.getSimpleName();
+
     protected MappedByteBuffer memory_buffer = null;
     protected RandomAccessFile input_stream = null;
 

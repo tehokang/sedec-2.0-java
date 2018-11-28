@@ -23,6 +23,8 @@ import sedec2.util.Logger;
  * {@link ApplicationExtractor.IAppExtractorListener#onReceivedIndexItem(int, int, int, byte[])}
  */
 public class ApplicationExtractor extends BaseExtractor {
+    protected static final String TAG = ApplicationExtractor.class.getSimpleName();
+
     /**
      * Listener to receive informations of application
      */
@@ -62,8 +64,6 @@ public class ApplicationExtractor extends BaseExtractor {
             this.mpu_sequence_number = mpu_sequence_number;
         }
     }
-
-    protected final String TAG = "ApplicationExtractor";
 
     /**
      * Constructor which start running thread to emit Event to user.

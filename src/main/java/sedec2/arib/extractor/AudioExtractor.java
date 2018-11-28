@@ -22,7 +22,7 @@ import sedec2.util.Logger;
  * User can receive audio via {@link AudioExtractor.IAudioExtractorListener#onReceivedAudio(int, byte[])}
  */
 public class AudioExtractor extends BaseExtractor {
-    protected final String TAG = "AudioExtractor";
+    protected static final String TAG = AudioExtractor.class.getSimpleName();
 
     /**
      * Listener to receive MFU of audio

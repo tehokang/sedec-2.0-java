@@ -20,7 +20,7 @@ import sedec2.util.Logger;
  * {@link TtmlExtractor.ITtmlExtractorListener#onReceivedTtml(int, byte[])}
  */
 public class TtmlExtractor extends BaseExtractor {
-    protected final String TAG = "TtmlExtractor";
+    protected static final String TAG = TtmlExtractor.class.getSimpleName();
 
     /**
      * Listener to receive TTML of chapter 9 of ARIB B60

@@ -21,7 +21,7 @@ import sedec2.util.Logger;
  * User can receive video via {@link VideoExtractor.IVideoExtractorListener#onReceivedVideo(int, byte[])}
  */
 public class VideoExtractor extends BaseExtractor {
-    protected final String TAG = "VideoExtractor";
+    protected static final String TAG = VideoExtractor.class.getSimpleName();
 
     /**
      * Listener to receive MFU of video

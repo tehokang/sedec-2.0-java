@@ -17,7 +17,7 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
  * {@link NtpExtractor.INtpExtractorListener#onReceivedNtp(NetworkTimeProtocolData)}
  */
 public class NtpExtractor extends BaseExtractor {
-    protected final String TAG = "NtpExtractor";
+    protected static final String TAG = NtpExtractor.class.getSimpleName();
 
     /**
      * Listener to receive NTP in Chapter 3 of ARIB B60 which as TLV payload

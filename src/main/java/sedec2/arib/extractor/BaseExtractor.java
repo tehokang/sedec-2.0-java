@@ -84,7 +84,7 @@ public abstract class BaseExtractor {
     protected List<MMTP_Packet> m_fragmented01_mmtp = new ArrayList<>();
     protected List<MMTP_Packet> m_fragmented02_mmtp = new ArrayList<>();
 
-    protected final String TAG = "BaseExtractor";
+    protected static final String TAG = BaseExtractor.class.getSimpleName();
 
     /**
      * Every Extractor has to inherit from this so that user can use unified listener.

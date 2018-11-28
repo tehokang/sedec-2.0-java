@@ -25,6 +25,8 @@ public class TlvDemultiplexer implements
         TtmlExtractor.ITtmlExtractorListener, VideoExtractor.IVideoExtractorListener,
         AudioExtractor.IAudioExtractorListener, ApplicationExtractor.IAppExtractorListener,
         GeneralPurposeDataExtractor.IGeneralPurposeDataExtractorListener {
+    protected static final String TAG = TlvDemultiplexer.class.getSimpleName();
+
     /**
      * Listener to get information after putting TLV into here
      * The listener can be added or removed via <br>

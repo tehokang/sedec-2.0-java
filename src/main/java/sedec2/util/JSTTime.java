@@ -4,6 +4,8 @@ package sedec2.util;
  * Wrapper class to convert long bits to JST time
  */
 public class JSTTime {
+    protected static final String TAG = JSTTime.class.getSimpleName();
+
     protected long JST;
     protected double MJD;
     protected int year;

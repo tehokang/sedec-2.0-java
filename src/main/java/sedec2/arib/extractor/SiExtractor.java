@@ -24,7 +24,7 @@ import sedec2.util.Logger;
  * {@link SiExtractor.ITableExtractorListener#onReceivedTable(Table)}
  */
 public class SiExtractor extends BaseExtractor {
-    protected final String TAG = "SiExtractor";
+    protected static final String TAG = SiExtractor.class.getSimpleName();
 
     /**
      * Listener to receive tables as TLV-SI, MMT-SI of chapter 4 (TLV-SI), 7 (MMT-SI) in ARIB B60.

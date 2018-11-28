@@ -37,6 +37,7 @@ import zexamples.arib.SimpleApplication.SubDirectory;
  * of TLV as asynchronous mechanism, this is a mechanism for better performance, better visibility.
  */
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
+    protected static final String TAG = SimpleTlvCoordinator.class.getSimpleName();
     protected TlvDemultiplexer tlv_demuxer = null;
 
     /**

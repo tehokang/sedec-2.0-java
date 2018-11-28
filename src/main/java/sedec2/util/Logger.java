@@ -5,6 +5,12 @@ package sedec2.util;
  */
 public class Logger
 {
+    public static void p(String tag, String msg) {
+        if (false == tag.isEmpty() && DEBUG ) {
+            System.out.print(m_tag + "[" + tag + "]" + "[D] " +  msg);
+        }
+    }
+
     public static void p(String msg) {
         if ( DEBUG ) {
             System.out.print(msg);

@@ -9,6 +9,8 @@ import java.util.List;
  * Base class to read specific TLV file
  */
 public abstract class TlvReader {
+    protected static final String TAG = TlvReader.class.getSimpleName();
+
     protected File tlv_file = null;
     protected final int TLV_HEADER_LENGTH = 4;
     protected ByteBuffer output_buffer = null;

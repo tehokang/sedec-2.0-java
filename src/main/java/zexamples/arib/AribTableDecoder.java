@@ -17,6 +17,8 @@ import sedec2.base.Table;
  * from byte buffer as a whole of table gathered.
  */
 public class AribTableDecoder {
+    protected static final String TAG = AribTableDecoder.class.getSimpleName();
+
     public static void main(String []args) {
         if ( args.length < 1 ) {
             System.out.println("Oops, " +

@@ -19,7 +19,7 @@ import sedec2.util.Logger;
  * {@link GeneralPurposeDataExtractor.IGeneralPurposeDataExtractorListener#onReceivedGeneralPurposeData(int, byte[])}
  */
 public class GeneralPurposeDataExtractor extends BaseExtractor {
-    protected final String TAG = "GeneralPurposeDataExtractor";
+    protected static final String TAG = GeneralPurposeDataExtractor.class.getSimpleName();
 
     /**
      * Listener to receive MFU of General Purpose Data in Chapter 12 of ARIB B60

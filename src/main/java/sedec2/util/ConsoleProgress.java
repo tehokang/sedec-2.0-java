@@ -8,6 +8,8 @@ import java.util.concurrent.TimeUnit;
  * Class to decorate progress of processing with progress bar, bitrate and more things.
  */
 public class ConsoleProgress {
+    protected static final String TAG = ConsoleProgress.class.getSimpleName();
+
     protected final int PROGRESS_BAR_WIDTH=30;
     protected long counter = 0;
     protected long startTime = 0;
