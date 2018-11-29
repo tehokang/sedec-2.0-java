@@ -474,7 +474,7 @@ public class TlvPacketDecoder {
                  * from event listener which you registered to TlvDemultiplexer
                  */
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
-                progress_bar.update(tlv_packet.length);
+//                progress_bar.update(tlv_packet.length);
             }
 
             simple_tlv_coordinator.clearQueue();

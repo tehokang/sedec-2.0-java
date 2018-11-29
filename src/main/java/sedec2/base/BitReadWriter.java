@@ -164,6 +164,23 @@ public class BitReadWriter {
         }
     }
 
+    public int readUnsignedExpGolombCodedInt() {
+        return readExpGolombCodeNum();
+    }
+
+    public int readSignedExpGolombCodedInt() {
+        int codeNum = readExpGolombCodeNum();
+        return ((codeNum % 2) == 0 ? -1 : 1) * ((codeNum + 1) / 2);
+    }
+
+    protected int readExpGolombCodeNum() {
+        int leadingZeros = 0;
+        while ( 0 == readOnBuffer(1) ) {
+            leadingZeros++;
+        }
+        return (1 << leadingZeros) - 1 + (leadingZeros > 0 ? readOnBuffer(leadingZeros) : 0);
+    }
+
     public void printBuffer() {
         int j=1;
         System.out.print("########### Byte Align ########### \n");

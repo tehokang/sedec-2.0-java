@@ -106,6 +106,7 @@ public class VideoExtractor extends BaseExtractor {
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();
+//                            new MFU_H265NalUnit(sample_binary).print();
                             if ( m_enable_pre_modification == true ) {
                                 System.arraycopy(nal_prefix, 0,
                                         sample_binary, 0, nal_prefix.length);
