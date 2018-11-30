@@ -146,7 +146,7 @@ public class MFU_H265NalUnit extends BitReadWriter {
         public int conf_win_bottom_offset;
         public int log2_max_pic_order_cnt_lsb_minus4;
         public boolean scaling_list_enabled_flag;
-        public int aspect_ratio_idc;
+        public byte aspect_ratio_idc;
         public int sar_width;
         public int sar_height;
         public float pixel_width_height_ratio = 1;
@@ -248,7 +248,7 @@ public class MFU_H265NalUnit extends BitReadWriter {
 
             if ( readBit() ) {
                 if ( readBit() ) {
-                    aspect_ratio_idc = readBits(8);
+                    aspect_ratio_idc = (byte) readBits(8);
                     if ( aspect_ratio_idc == 0xff ) {
                         sar_width = readBits(16);
                         sar_height = readBits(16);
