@@ -22,7 +22,6 @@ import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_ClosedCaption;
-import sedec2.arib.tlv.container.mmtp.mfu.MFU_H265NalUnit;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
@@ -274,10 +273,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             }
             video_bs.write(buffer);
             /**
-             * sedec provice wrapper class to decode SPS, AUD of H.265
+             * sedec provide wrapper class to check SPS, AUD of H.265
              */
-            MFU_H265NalUnit non_vcl_nal_unit = new MFU_H265NalUnit(buffer);
-            non_vcl_nal_unit.print();
+//            MFU_H265NalUnit non_vcl_nal_unit = new MFU_H265NalUnit(buffer);
+//            non_vcl_nal_unit.print();
+//            non_vcl_nal_unit.getSPS().print();
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -480,7 +480,7 @@ public class TlvPacketDecoder {
                  * from event listener which you registered to TlvDemultiplexer
                  */
                 if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
-//                progress_bar.update(tlv_packet.length);
+                progress_bar.update(tlv_packet.length);
             }
 
             simple_tlv_coordinator.clearQueue();

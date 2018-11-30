@@ -18,21 +18,38 @@ import sedec2.util.ParsableNalUnitBitArray;
 public class MFU_H265NalUnit extends BitReadWriter {
     protected static final String TAG = MFU_H265NalUnit.class.getSimpleName();
 
+    /**
+     * Not support yet
+     */
     public static final int VPS = 32;
+
+    /**
+     * Support
+     */
     public static final int SPS = 33;
+
+    /**
+     * Not support yet
+     */
     public static final int PPS = 34;
+
+    /**
+     * Support
+     */
     public static final int AUD = 35;
 
     protected int nal_size;
 
+    /**
+     * nal_unit_header of 7.3.1.2 of HEVC
+     */
     protected byte forbidden_zero_bit;
     protected byte nal_unit_type;
     protected byte nuh_layer_id;
     protected byte nuh_temporal_id_plus1;
+
     protected SPS seq_parameter_set_rbsp = null;
     protected AUD access_unit_delimiter_rbsp = null;
-
-    protected byte trailing_zero_8bits;
 
     public static final float[] ASPECT_RATIO_IDC_VALUES = new float[] {
             1f /* Unspecified. Assume square */,
@@ -54,6 +71,70 @@ public class MFU_H265NalUnit extends BitReadWriter {
             2f
     };
 
+    /**
+     * Skips scaling_list_data(). See H.265/HEVC (2014) 7.3.4.
+     */
+    private void skipScalingList(ParsableNalUnitBitArray reader) {
+        for (int sizeId = 0; sizeId < 4; sizeId++) {
+            for (int matrixId = 0; matrixId < 6; matrixId += sizeId == 3 ? 3 : 1) {
+                if ( !reader.readBit() ) { // scaling_list_pred_mode_flag[sizeId][matrixId]
+                    // scaling_list_pred_matrix_id_delta[sizeId][matrixId]
+                    reader.readUnsignedExpGolombCodedInt();
+                } else {
+                    int coefNum = Math.min(64, 1 << (4 + (sizeId << 1)));
+                    if (sizeId > 1) {
+                        // scaling_list_dc_coef_minus8[sizeId - 2][matrixId]
+                        reader.readSignedExpGolombCodedInt();
+                    }
+                    for (int i = 0; i < coefNum; i++) {
+                        reader.readSignedExpGolombCodedInt(); // scaling_list_delta_coef
+                    }
+                }
+            }
+        }
+    }
+
+    /**
+     * Reads the number of short term reference picture sets in a SPS as ue(v), then skips all of
+     * them. See H.265/HEVC (2014) 7.3.7.
+     */
+    private void skipShortTermRefPicSets(ParsableNalUnitBitArray reader) {
+        int num_short_term_ref_pic_sets = reader.readUnsignedExpGolombCodedInt();
+        boolean inter_ref_pic_set_prediction_flag = false;
+        int num_negative_pics;
+        int num_positive_pics;
+        // As this method applies in a SPS, the only element of NumDeltaPocs accessed is the previous
+        // one, so we just keep track of that rather than storing the whole array.
+        // RefRpsIdx = stRpsIdx - (delta_idx_minus1 + 1) and delta_idx_minus1 is always zero in SPS.
+        int previous_num_delta_pocs = 0;
+        for (int stRpsIdx = 0; stRpsIdx < num_short_term_ref_pic_sets; stRpsIdx++) {
+            if (stRpsIdx != 0) {
+                inter_ref_pic_set_prediction_flag = reader.readBit();
+            }
+            if ( inter_ref_pic_set_prediction_flag ) {
+                reader.skipBit(); // delta_rps_sign
+                reader.readUnsignedExpGolombCodedInt(); // abs_delta_rps_minus1
+                for (int j = 0; j <= previous_num_delta_pocs; j++) {
+                    if ( reader.readBit() ) { // used_by_curr_pic_flag[j]
+                        reader.skipBit(); // use_delta_flag[j]
+                    }
+                }
+            } else {
+                num_negative_pics = reader.readUnsignedExpGolombCodedInt();
+                num_positive_pics = reader.readUnsignedExpGolombCodedInt();
+                previous_num_delta_pocs = num_negative_pics + num_positive_pics;
+                for (int i = 0; i < num_negative_pics; i++) {
+                    reader.readUnsignedExpGolombCodedInt(); // delta_poc_s0_minus1[i]
+                    reader.skipBit(); // used_by_curr_pic_s0_flag[i]
+                }
+                for (int i = 0; i < num_positive_pics; i++) {
+                    reader.readUnsignedExpGolombCodedInt(); // delta_poc_s1_minus1[i]
+                    reader.skipBit(); // used_by_curr_pic_s1_flag[i]
+                }
+            }
+        }
+    }
+
     public class SPS extends ParsableNalUnitBitArray {
         public byte sps_max_sub_layers_minus1;
         public int chroma_format_idc;
@@ -69,70 +150,6 @@ public class MFU_H265NalUnit extends BitReadWriter {
         public int sar_width;
         public int sar_height;
         public float pixel_width_height_ratio = 1;
-
-        /**
-         * Skips scaling_list_data(). See H.265/HEVC (2014) 7.3.4.
-         */
-        private void skipScalingList(ParsableNalUnitBitArray reader) {
-            for (int sizeId = 0; sizeId < 4; sizeId++) {
-                for (int matrixId = 0; matrixId < 6; matrixId += sizeId == 3 ? 3 : 1) {
-                    if ( !reader.readBit() ) { // scaling_list_pred_mode_flag[sizeId][matrixId]
-                        // scaling_list_pred_matrix_id_delta[sizeId][matrixId]
-                        reader.readUnsignedExpGolombCodedInt();
-                    } else {
-                        int coefNum = Math.min(64, 1 << (4 + (sizeId << 1)));
-                        if (sizeId > 1) {
-                            // scaling_list_dc_coef_minus8[sizeId - 2][matrixId]
-                            reader.readSignedExpGolombCodedInt();
-                        }
-                        for (int i = 0; i < coefNum; i++) {
-                            reader.readSignedExpGolombCodedInt(); // scaling_list_delta_coef
-                        }
-                    }
-                }
-            }
-        }
-
-        /**
-         * Reads the number of short term reference picture sets in a SPS as ue(v), then skips all of
-         * them. See H.265/HEVC (2014) 7.3.7.
-         */
-        private void skipShortTermRefPicSets(ParsableNalUnitBitArray reader) {
-            int num_short_term_ref_pic_sets = reader.readUnsignedExpGolombCodedInt();
-            boolean inter_ref_pic_set_prediction_flag = false;
-            int num_negative_pics;
-            int num_positive_pics;
-            // As this method applies in a SPS, the only element of NumDeltaPocs accessed is the previous
-            // one, so we just keep track of that rather than storing the whole array.
-            // RefRpsIdx = stRpsIdx - (delta_idx_minus1 + 1) and delta_idx_minus1 is always zero in SPS.
-            int previous_num_delta_pocs = 0;
-            for (int stRpsIdx = 0; stRpsIdx < num_short_term_ref_pic_sets; stRpsIdx++) {
-                if (stRpsIdx != 0) {
-                    inter_ref_pic_set_prediction_flag = reader.readBit();
-                }
-                if ( inter_ref_pic_set_prediction_flag ) {
-                    reader.skipBit(); // delta_rps_sign
-                    reader.readUnsignedExpGolombCodedInt(); // abs_delta_rps_minus1
-                    for (int j = 0; j <= previous_num_delta_pocs; j++) {
-                        if ( reader.readBit() ) { // used_by_curr_pic_flag[j]
-                            reader.skipBit(); // use_delta_flag[j]
-                        }
-                    }
-                } else {
-                    num_negative_pics = reader.readUnsignedExpGolombCodedInt();
-                    num_positive_pics = reader.readUnsignedExpGolombCodedInt();
-                    previous_num_delta_pocs = num_negative_pics + num_positive_pics;
-                    for (int i = 0; i < num_negative_pics; i++) {
-                        reader.readUnsignedExpGolombCodedInt(); // delta_poc_s0_minus1[i]
-                        reader.skipBit(); // used_by_curr_pic_s0_flag[i]
-                    }
-                    for (int i = 0; i < num_positive_pics; i++) {
-                        reader.readUnsignedExpGolombCodedInt(); // delta_poc_s1_minus1[i]
-                        reader.skipBit(); // used_by_curr_pic_s1_flag[i]
-                    }
-                }
-            }
-        }
 
         public SPS(byte[] buffer) {
             super(buffer, 0, buffer.length);
