@@ -32,6 +32,10 @@ public class BitReadWriter {
         }
     }
 
+    public int getPosition() {
+        return m_pos;
+    }
+
     public int calculateCRC32(byte[] temp, int real_data_length) {
         int bit_count = 0;
         int bit_in_byte = 0;
@@ -162,23 +166,6 @@ public class BitReadWriter {
                 m_by_buffer = 0;
             }
         }
-    }
-
-    public int readUnsignedExpGolombCodedInt() {
-        return readExpGolombCodeNum();
-    }
-
-    public int readSignedExpGolombCodedInt() {
-        int codeNum = readExpGolombCodeNum();
-        return ((codeNum % 2) == 0 ? -1 : 1) * ((codeNum + 1) / 2);
-    }
-
-    protected int readExpGolombCodeNum() {
-        int leadingZeros = 0;
-        while ( 0 == readOnBuffer(1) ) {
-            leadingZeros++;
-        }
-        return (1 << leadingZeros) - 1 + (leadingZeros > 0 ? readOnBuffer(leadingZeros) : 0);
     }
 
     public void printBuffer() {
