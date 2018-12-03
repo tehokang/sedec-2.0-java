@@ -56,11 +56,11 @@ public class NetworkInformationTable extends Table {
         return descriptors;
     }
 
-    public int getTLVStreamLoopLength() {
+    public int getTsStreamLoopLength() {
         return transport_stream_loop_length;
     }
 
-    public List<TransportStream> getTLVStreams() {
+    public List<TransportStream> getTsStreams() {
         return transport_streams;
     }
 
@@ -117,15 +117,15 @@ public class NetworkInformationTable extends Table {
             desc.print();
         }
 
-        Logger.d(String.format("TLV_stream_loop_length : 0x%x \n", transport_stream_loop_length));
+        Logger.d(String.format("TS_stream_loop_length : 0x%x \n", transport_stream_loop_length));
 
         for ( int i=0; i<transport_streams.size(); i++ ) {
             TransportStream transport_stream = transport_streams.get(i);
-            Logger.d(String.format("\t [%d] tlv_stream_id : 0x%x \n", i,
+            Logger.d(String.format("\t [%d] ts_stream_id : 0x%x \n", i,
                     transport_stream.transport_stream_id));
             Logger.d(String.format("\t [%d] original_network_id : 0x%x \n", i,
                     transport_stream.original_network_id));
-            Logger.d(String.format("\t [%d] tlv_stream_descriptors_length : 0x%x \n",
+            Logger.d(String.format("\t [%d] ts_stream_descriptors_length : 0x%x \n",
                     i, transport_stream.transport_descriptors_length));
 
             for (int j=0; j<transport_stream.descriptors.size(); j++ ) {

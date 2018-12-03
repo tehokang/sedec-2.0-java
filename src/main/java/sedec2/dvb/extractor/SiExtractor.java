@@ -90,16 +90,13 @@ public class SiExtractor extends BaseExtractor {
 
     @Override
     /**
-     * Chapter 4, 5, 7 and ARIB-B60.
+     * Chapter 2 of ISO-13818
      * Processes to put QueueData with Table having descriptors into event queue,
-     * user don't need to parse Message of Chapter 7
      *
      * @param one TS packet
      */
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
-        if ( ts.getPID() == 0x0000) {
-            ts.print();
-        }
+
     }
 }

@@ -52,12 +52,12 @@ public abstract class BaseExtractor {
     protected Thread m_event_thread;
 
     /**
-     * Extracting thread which can pull out a TLV packet from TLV packets queue
+     * Extracting thread which can pull out a TS packet from TS packets queue
      */
     protected Thread m_ts_extractor_thread;
 
     /**
-     * TLV packets queue
+     * TS packets queue
      */
     protected BlockingQueue<byte[]> m_ts_packets = null;
 
@@ -90,7 +90,7 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Constructor which initialize queue buffer of TLV input packet, Event and
+     * Constructor which initialize queue buffer of TS input packet, Event and
      * start running thread with blocking queue which only run when queue obtain an input.
      */
     public BaseExtractor() {
@@ -122,8 +122,8 @@ public abstract class BaseExtractor {
                     } catch ( Exception e ) {
                         /**
                          * @todo You should remove a line below like break, exit statement,
-                         * because TLVExtractor has to keep alive even though
-                         * TLVExtractor get any wrong packets.
+                         * because TsExtractor has to keep alive even though
+                         * TsExtractor get any wrong packets.
                          */
                         e.printStackTrace();
                     }
@@ -134,7 +134,7 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Clear all of queue containing TLV, Event and MMTP fragmented packets.
+     * Clear all of queue containing TS, and fragmented packets.
      */
     public void clearQueue() {
         m_ts_packets.clear();
@@ -183,8 +183,8 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * User should put a TLV packet into extractor, the packet will be collected as kinds of them
-     * @param ts one TLV packet
+     * User should put a TS packet into extractor, the packet will be collected as kinds of them
+     * @param ts one TS packet
      * @throws InterruptedException occur when thread interrupted
      */
     public void putIn(byte[] ts) throws InterruptedException {
@@ -194,9 +194,8 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Child extractor of BaseExtractor must implement process function to control TLV packets
-     * as kinds of them. TLV can be IPv4, IPv6, CompressedPacket, SignallingPacket, NullPacket.
-     * @param tlv one TLV packet already decoded
+     * Child extractor of BaseExtractor must implement process function to control TS packets
+     * @param ts one TS packet already decoded
      * @throws InterruptedException occur when thread interrupted
      * @throws IOException occur when ByteBuffer has problem
      */
@@ -204,7 +203,7 @@ public abstract class BaseExtractor {
             throws InterruptedException, IOException;
 
     /**
-     * Internal function to make a result after a TLV
+     * Internal function to make a result after a TS
      * @param event to emit to user
      * @throws InterruptedException occur when event thread has interrupted
      */
@@ -215,11 +214,11 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Add a filter to get MFU corresponding only to packet_id of MMTP.
-     * @param id packet_id of MMTP
+     * Add a filter to get TS corresponding only to PID of TS.
+     * @param id PID of TS
      *
      * <p>
-     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
+     * Packet ID refers to PID of TS
      */
     public void addPidFilter(int id) {
         if ( m_int_id_filter.contains(id) == false ) {

@@ -29,7 +29,7 @@ public class ServiceDescriptionTable extends Table {
         __decode_table_body__();
     }
 
-    public int getTlvStreamId() {
+    public int getTsStreamId() {
         return transport_stream_id;
     }
 
@@ -109,7 +109,7 @@ public class ServiceDescriptionTable extends Table {
     public void print() {
         super.print();
 
-        Logger.d(String.format("tlv_stream_id : 0x%x \n", transport_stream_id));
+        Logger.d(String.format("ts_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("version_number : 0x%x \n", version_number));
         Logger.d(String.format("current_next_indicator : 0x%x \n",
                 current_next_indicator));

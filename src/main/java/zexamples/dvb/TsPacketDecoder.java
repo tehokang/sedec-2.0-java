@@ -39,7 +39,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
     @Override
     public void onReceivedTable(Table table) {
-
+        table.print();
     }
 }
 

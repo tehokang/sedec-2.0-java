@@ -3,7 +3,7 @@ package sedec2.dvb.ts.container;
 import sedec2.dvb.ts.container.packets.TransportStream;
 
 /**
- * Factory to obtain a kind of TLV like below.
+ * Factory to obtain a kind of TS like below.
  * <ul>
  * <li> {@link TransportStream} which contains table of ISO-13818
  * </ul>

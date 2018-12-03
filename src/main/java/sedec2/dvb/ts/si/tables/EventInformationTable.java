@@ -56,7 +56,7 @@ public class EventInformationTable extends Table {
         return last_section_number;
     }
 
-    public int getTlvStreamId() {
+    public int getTsStreamId() {
         return transport_stream_id;
     }
 
@@ -119,7 +119,7 @@ public class EventInformationTable extends Table {
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
-        Logger.d(String.format("tlv_stream_id : 0x%x \n", transport_stream_id));
+        Logger.d(String.format("ts_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("original_network_id : 0x%x \n", original_network_id));
         Logger.d(String.format("segment_last_section_number : 0x%x \n",
                 segment_last_section_number));

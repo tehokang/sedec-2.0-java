@@ -12,7 +12,7 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
     protected boolean m_enable_si_filter = false;
 
     /**
-     * Listener to get information after putting TLV into here
+     * Listener to get information after putting TS into here
      * The listener can be added or removed via <br>
      * {@link TsDemultiplexer#addEventListener(Listener)} <br>
      * {@link TsDemultiplexer#removeEventListener(Listener)}
@@ -124,7 +124,6 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
 
     /**
      * Enable or disable table_id filter, user can get table which delivered
-     * in Compressed Packet, Signaling Packet of TLV.
      * {@link TsDemultiplexer#disableSiFilter()}
      */
     public void enableSiFilter() {
@@ -133,7 +132,6 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
 
     /**
      * Enable or disable table_id filter, user can get table which delivered
-     * in Compressed Packet, Signaling Packet of TLV.
      * {@link TsDemultiplexer#enableSiFilter()}
      */
     public void disableSiFilter() {
@@ -141,13 +139,13 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
     }
 
     /**
-     * Put a TLV packet into and the packet will be decoded by each Extractor.
+     * Put a TS packet into and the packet will be decoded by each Extractor.
      * The packet can be 188 bytes as maximum
      * @param ts_raw one TS packet
      * @return return true if putting succeed or return false
      *
      * <p>
-     * Every Extractor has thread running but the thread is always paused unless user put a TLV.
+     * Every Extractor has thread running but the thread is always paused unless user put a TS.
      * This is for better performance, general thread having sleep of user make burden of performance.
      */
     public boolean put(byte[] ts_raw) {
