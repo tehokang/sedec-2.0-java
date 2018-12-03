@@ -21,13 +21,10 @@ import sedec2.arib.tlv.container.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
-import sedec2.arib.tlv.container.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FileUtility;
-import sedec2.util.Logger;
 import sedec2.util.TlvFileReader;
 import sedec2.util.TlvReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
@@ -315,6 +312,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
+        /*
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
         new File(ttml_download_path).mkdirs();
         switch ( ttml.getDataType() ) {
@@ -371,6 +369,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             default:
                 break;
         }
+        */
     }
 
     @Override
