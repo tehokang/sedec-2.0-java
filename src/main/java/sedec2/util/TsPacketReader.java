@@ -59,14 +59,14 @@ public class TsPacketReader extends FilePacketReader {
     }
 
     @Override
-    public int readPacket(byte[] tlv_packet) {
+    public int readPacket(byte[] ts_packet) {
         byte[] ts_buffer = null;
 
         try {
             ts_buffer = new byte[188];
             input_stream.read(ts_buffer);
 
-            output_buffer = ByteBuffer.wrap(tlv_packet);
+            output_buffer = ByteBuffer.wrap(ts_packet);
             output_buffer.put(ts_buffer);
         } catch (IOException e) {
             e.printStackTrace();

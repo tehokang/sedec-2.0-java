@@ -6,7 +6,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 /**
- * Base class to read specific TLV file
+ * Base class to read specific file
  */
 public abstract class FilePacketReader {
     protected static final String TAG = FilePacketReader.class.getSimpleName();
@@ -14,28 +14,28 @@ public abstract class FilePacketReader {
     protected ByteBuffer output_buffer = null;
 
     /**
-     * Constructor with TLV full path
-     * @param file Full path of TLV
+     * Constructor with full path
+     * @param file Full path
      */
     public FilePacketReader(String file) {
         this.file = new File(file);
     }
 
     /**
-     * Opens a TLV file
+     * Opens a file
      * @return true if succeed to open else return false
      */
     public abstract boolean open();
 
     /**
-     * Closes a TLV file
+     * Closes a file
      */
     public void close() {
         file = null;
     }
 
     /**
-     * Gets size of TLV file
+     * Gets size of file
      * @return file size
      */
     public long filesize() {
@@ -49,30 +49,30 @@ public abstract class FilePacketReader {
     public abstract long readable();
 
     /**
-     * Gets a TLV packet from TLV file and internal buffer point will move
-     * @return byte buffer as a TLV packet
+     * Gets a packet from file and internal buffer point will move
+     * @return byte buffer as a packet
      */
     public abstract byte[] readPacket();
 
     /**
-     * Gets a TLV packet from TLV file and internal buffer point will move
-     * @param tlv_packet byte buffer as a TLV packet which did read
-     * @return size of a TLV packet
+     * Gets a packet from file and internal buffer point will move
+     * @param a packet byte buffer as a packet which did read
+     * @return size of a packet
      */
     public abstract int readPacket(byte[] tlv_packet);
 
     /**
-     * Gets TLV packets from TLV file as much as user wants to get.
+     * Gets packets from file as much as user wants to get.
      * @param packet_count count which user wants
-     * @return list of TLV packets as byte buffer
+     * @return list of packets as byte buffer
      */
     public List<byte[]> readPackets(int packet_count) {
-        List<byte[]> tlv_packets = new ArrayList<>();
+        List<byte[]> packets = new ArrayList<>();
 
         for ( int i=0; i<packet_count; i++ ) {
-            byte[] tlv_packet = readPacket();
-            tlv_packets.add(tlv_packet);
+            byte[] packet = readPacket();
+            packets.add(packet);
         }
-        return tlv_packets;
+        return packets;
     }
 }

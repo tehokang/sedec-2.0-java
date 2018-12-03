@@ -19,8 +19,8 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         ts_demuxer.addEventListener(this);
 
         ts_demuxer.enableSiFilter();
-//        ts_demuxer.enableSiLogging();
-//        ts_demuxer.addSiAllFilter();
+        ts_demuxer.addSiAllFilter();
+//      ts_demuxer.enableSiLogging();
     }
 
     public void destroy() {

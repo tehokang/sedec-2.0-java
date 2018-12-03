@@ -1,5 +1,7 @@
 package sedec2.dvb.ts.container.packets;
 
+import java.util.Arrays;
+
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
@@ -27,7 +29,10 @@ public class TransportStream extends BitReadWriter {
         continuity_counter = (byte) readOnBuffer(4);
 
         if ( adaptation_field_control == 2 || adaptation_field_control == 3 ) {
-
+            data_byte = new byte[184];
+            for ( int i=0; i<184; i++) {
+                data_byte[i] = (byte) readOnBuffer(8);
+            }
         }
 
         if ( adaptation_field_control == 1 || adaptation_field_control == 3 ) {
@@ -67,7 +72,7 @@ public class TransportStream extends BitReadWriter {
     }
 
     public byte[] getDataByte() {
-        return data_byte;
+        return Arrays.copyOfRange(data_byte, 0, data_byte.length);
     }
 
     public void print() {

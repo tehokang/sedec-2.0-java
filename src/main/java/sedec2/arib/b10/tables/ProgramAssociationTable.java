@@ -74,8 +74,10 @@ public class ProgramAssociationTable extends Table {
             int program_number = readOnBuffer(16);
             skipOnBuffer(3);
             int pid = readOnBuffer(13);
-            Program program = new Program(program_number, pid);
-            programs.add(program);
+            if ( pid != 0x1fff ) {
+                Program program = new Program(program_number, pid);
+                programs.add(program);
+            }
             i-=4;
         }
         checksum_CRC32 = readOnBuffer(32);

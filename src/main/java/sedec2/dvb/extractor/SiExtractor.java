@@ -98,7 +98,7 @@ public class SiExtractor extends BaseExtractor {
      */
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
-
+        ts.print();
         if ( ts.getPayloadUnitStartIndicator() == 1 ) {
             Table table = TableFactory.createTable(ts.getDataByte());
             putOut(new QueueData(table));
