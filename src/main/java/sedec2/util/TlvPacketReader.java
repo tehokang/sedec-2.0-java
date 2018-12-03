@@ -9,8 +9,8 @@ import java.nio.ByteBuffer;
 /**
  * Utility class to read a TLV file as one of TlvReader
  */
-public class TlvFileReader extends PacketReader {
-    protected static final String TAG = TlvFileReader.class.getSimpleName();
+public class TlvPacketReader extends FilePacketReader {
+    protected static final String TAG = TlvPacketReader.class.getSimpleName();
     protected DataInputStream input_stream  = null;
     protected final int TLV_HEADER_LENGTH = 4;
 
@@ -18,7 +18,7 @@ public class TlvFileReader extends PacketReader {
      * Constructor with a TLV full path
      * @param tlv_file TLV full file path
      */
-    public TlvFileReader(String tlv_file) {
+    public TlvPacketReader(String tlv_file) {
         super(tlv_file);
     }
 
@@ -26,10 +26,10 @@ public class TlvFileReader extends PacketReader {
     public boolean open() {
         try {
             Logger.d(String.format("TlvFileReader opened (%s) \n",
-                    tlv_file.getName()));
+                    file.getName()));
             input_stream  =
                     new DataInputStream(
-                            new BufferedInputStream(new FileInputStream(tlv_file)));
+                            new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;

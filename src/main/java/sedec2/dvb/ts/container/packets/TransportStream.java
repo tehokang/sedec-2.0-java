@@ -38,6 +38,38 @@ public class TransportStream extends BitReadWriter {
         }
     }
 
+    public byte getTransportErrorIndicator() {
+        return transport_error_indicator;
+    }
+
+    public byte getPayloadUnitStartIndicator() {
+        return payload_unit_start_indicator;
+    }
+
+    public byte getTransportPriority() {
+        return transport_priority;
+    }
+
+    public int getPID() {
+        return PID;
+    }
+
+    public byte getTransportScramblingControl() {
+        return transport_scrambling_control;
+    }
+
+    public byte getAdaptationFieldControl() {
+        return adaptation_field_control;
+    }
+
+    public byte getContinuityCounter() {
+        return continuity_counter;
+    }
+
+    public byte[] getDataByte() {
+        return data_byte;
+    }
+
     public void print() {
         Logger.d(String.format("======= TS Header ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("sync_byte : 0x%x \n", sync_byte));

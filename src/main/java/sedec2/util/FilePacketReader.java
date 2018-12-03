@@ -8,17 +8,17 @@ import java.util.List;
 /**
  * Base class to read specific TLV file
  */
-public abstract class PacketReader {
-    protected static final String TAG = PacketReader.class.getSimpleName();
-    protected File tlv_file = null;
+public abstract class FilePacketReader {
+    protected static final String TAG = FilePacketReader.class.getSimpleName();
+    protected File file = null;
     protected ByteBuffer output_buffer = null;
 
     /**
      * Constructor with TLV full path
-     * @param tlv_file Full path of TLV
+     * @param file Full path of TLV
      */
-    public PacketReader(String tlv_file) {
-        this.tlv_file = new File(tlv_file);
+    public FilePacketReader(String file) {
+        this.file = new File(file);
     }
 
     /**
@@ -31,7 +31,7 @@ public abstract class PacketReader {
      * Closes a TLV file
      */
     public void close() {
-        tlv_file = null;
+        file = null;
     }
 
     /**
@@ -39,7 +39,7 @@ public abstract class PacketReader {
      * @return file size
      */
     public long filesize() {
-        return tlv_file.length();
+        return file.length();
     }
 
     /**

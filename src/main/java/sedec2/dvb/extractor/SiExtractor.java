@@ -20,7 +20,7 @@ public class SiExtractor extends BaseExtractor {
     protected static final String TAG = SiExtractor.class.getSimpleName();
 
     /**
-     * Listener to receive tables as TLV-SI, MMT-SI of chapter 4 (TLV-SI), 7 (MMT-SI) in ARIB B60.
+     * Listener to receive tables as SI of DVB
      */
     public interface ITableExtractorListener extends BaseExtractor.Listener {
         /**
@@ -94,10 +94,12 @@ public class SiExtractor extends BaseExtractor {
      * Processes to put QueueData with Table having descriptors into event queue,
      * user don't need to parse Message of Chapter 7
      *
-     * @param one TLV packet
+     * @param one TS packet
      */
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
-
+        if ( ts.getPID() == 0x0000) {
+            ts.print();
+        }
     }
 }

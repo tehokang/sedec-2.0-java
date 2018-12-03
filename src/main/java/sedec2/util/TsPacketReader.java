@@ -6,15 +6,15 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class TsFileReader extends PacketReader {
-    protected static final String TAG = TsFileReader.class.getSimpleName();
+public class TsPacketReader extends FilePacketReader {
+    protected static final String TAG = TsPacketReader.class.getSimpleName();
     protected DataInputStream input_stream  = null;
 
     /**
      * Constructor with a TS full path
      * @param ts_file TS full file path
      */
-    public TsFileReader(String ts_file) {
+    public TsPacketReader(String ts_file) {
         super(ts_file);
     }
 
@@ -22,10 +22,10 @@ public class TsFileReader extends PacketReader {
     public boolean open() {
         try {
             Logger.d(String.format("TsFileReader opened (%s) \n",
-                    tlv_file.getName()));
+                    file.getName()));
             input_stream  =
                     new DataInputStream(
-                            new BufferedInputStream(new FileInputStream(tlv_file)));
+                            new BufferedInputStream(new FileInputStream(file)));
         } catch (IOException e) {
             e.printStackTrace();
             return false;
