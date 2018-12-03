@@ -274,6 +274,9 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             video_bs.write(buffer);
             /**
              * sedec provide wrapper class to check SPS, AUD of H.265
+             * If user do {@link VideoExtractor#enablePreModification},
+             * the buffer will include nal_prefix as 0x00000001 of 4 bytes or
+             * the buffer starts with nal_unit_header
              */
 //            MFU_H265NalUnit non_vcl_nal_unit = new MFU_H265NalUnit(buffer);
 //            non_vcl_nal_unit.print();
@@ -295,6 +298,14 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
             BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
             audio_bs.write(buffer);
+            /**
+             * sedec provide wrapper class to check AudioSyncStream of LATM of ISO 14496-3
+             * If user do {@link AudioExtractor#enablePremodification},
+             * the buffer will include syncword and audioMuxLengthBytes of Table 1.23 of ISO14496
+             * or the buffer starts from AudioMuxElement(1).
+             */
+//            MFU_AACLatm aac = new MFU_AACLatm(buffer);
+//            aac.print();
         } catch (IOException e) {
             e.printStackTrace();
         }
