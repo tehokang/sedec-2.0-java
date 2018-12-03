@@ -1,5 +1,6 @@
 package sedec2.arib.tlv.container.mmtp.mfu;
 
+import sedec2.util.BinaryLogger;
 import sedec2.util.CodecSpecificDataUtil;
 import sedec2.util.Logger;
 import sedec2.util.ParsableBitArray;
@@ -174,6 +175,8 @@ public class MFU_AACLatm extends ParsableBitArray {
         Logger.d(String.format("--- AAC(LATM) --- (%s)\n", getClass().getName()));
         Logger.d(String.format("sample rate : %d \n", sampleRate));
         Logger.d(String.format("channelCount : %d \n", channelCount));
+        Logger.d(String.format("initData : \n"));
+        BinaryLogger.print(initData);
     }
 
 }
