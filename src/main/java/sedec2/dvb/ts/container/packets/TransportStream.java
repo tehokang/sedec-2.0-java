@@ -14,6 +14,7 @@ public class TransportStream extends BitReadWriter {
     protected byte transport_scrambling_control;
     protected byte adaptation_field_control;
     protected byte continuity_counter;
+    protected byte pointer_field;
     protected byte[] data_byte;
 
     public TransportStream(byte[] buffer) {
@@ -29,10 +30,7 @@ public class TransportStream extends BitReadWriter {
         continuity_counter = (byte) readOnBuffer(4);
 
         if ( adaptation_field_control == 2 || adaptation_field_control == 3 ) {
-            data_byte = new byte[184];
-            for ( int i=0; i<184; i++) {
-                data_byte[i] = (byte) readOnBuffer(8);
-            }
+            // Adaptation field
         }
 
         if ( adaptation_field_control == 1 || adaptation_field_control == 3 ) {
@@ -71,6 +69,14 @@ public class TransportStream extends BitReadWriter {
         return continuity_counter;
     }
 
+    public boolean hasPointerField() {
+        if ( data_byte != null &&
+                data_byte[0] == 0x00 ) {
+            return true;
+        }
+        return false;
+    }
+
     public byte[] getDataByte() {
         return Arrays.copyOfRange(data_byte, 0, data_byte.length);
     }
@@ -90,5 +96,6 @@ public class TransportStream extends BitReadWriter {
         Logger.d(String.format("adaptation_field_control : 0x%x \n",
                 adaptation_field_control));
         Logger.d(String.format("continuity_counter : 0x%x \n", continuity_counter));
+        Logger.d(String.format("pointer_field : %s \n", hasPointerField()));
     }
 }
