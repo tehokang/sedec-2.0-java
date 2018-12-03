@@ -1,0 +1,106 @@
+package zexamples.dvb;
+
+import sedec2.base.Table;
+import sedec2.dvb.extractor.TsDemultiplexer;
+import sedec2.util.ConsoleProgress;
+import sedec2.util.PacketReader;
+import sedec2.util.TsFileReader;
+
+/**
+ * SimpleTsCoordinator is an example which's using TsDemultiplexer of sedec2 to get information
+ * of TS as asynchronous mechanism, this is a mechanism for better performance, better visibility.
+ */
+class SimpleTsCoordinator implements TsDemultiplexer.Listener {
+    protected static final String TAG = SimpleTsCoordinator.class.getSimpleName();
+    protected TsDemultiplexer ts_demuxer = null;
+
+    public SimpleTsCoordinator() {
+        ts_demuxer = new TsDemultiplexer();
+        ts_demuxer.addEventListener(this);
+
+        ts_demuxer.enableSiFilter();
+//        ts_demuxer.enableSiLogging();
+//        ts_demuxer.addSiAllFilter();
+    }
+
+    public void destroy() {
+        ts_demuxer.removeEventListener(this);
+        ts_demuxer.destroy();
+        ts_demuxer = null;
+    }
+
+    public void clearQueue() {
+        ts_demuxer.clearQueue();
+    }
+
+    public boolean put(byte[] ts_raw) {
+        return ts_demuxer.put(ts_raw);
+    }
+
+    @Override
+    public void onReceivedTable(Table table) {
+
+    }
+}
+
+/**
+ * TsPacketDecoder is an application as example for getting
+ * <ul>
+ * <li> Tables which are include in SI of TS
+ * </ul>
+ */
+public class TsPacketDecoder {
+    public static void main(String []args) throws InterruptedException {
+        if ( args.length < 1 ) {
+            System.out.println("Oops, " +
+                    "You need TS packet(or file) to be parsed as 1st parameter");
+            System.out.println(
+                    "Usage: java -classpath . " +
+                    "zexamples.dvb.TsPacketDecoder " +
+                    "{TS Raw File} \n");
+        }
+
+        SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator();
+        ConsoleProgress progress_bar = new ConsoleProgress("TS").
+                show(true, true, true, true, true, false, false);
+        /**
+         * Getting each one TS packet from specific file.
+         * It assume that platform should give a TS packet to us as input of TSExtractor
+         */
+        for ( int i=0; i<args.length; i++ ) {
+            PacketReader ts_reader = new TsFileReader(args[i]);
+            if ( false == ts_reader.open() ) continue;
+
+            progress_bar.start(ts_reader.filesize());
+
+            while ( ts_reader.readable() > 0) {
+                final byte[] ts_packet = ts_reader.readPacket();
+                if ( ts_packet == null ||
+                        ts_packet.length == 0 ||
+                        ts_packet[0] != 0x7f ) continue;
+                /**
+                 * Putting a TS packet into SimpleTsCoordinator
+                 * and you can get both the results of as table of MPEG2
+                 * from event listener which you registered to TsDemultiplexer
+                 */
+                if ( false == simple_ts_coordinator.put(ts_packet) ) break;
+                progress_bar.update(ts_packet.length);
+            }
+
+            simple_ts_coordinator.clearQueue();
+
+            progress_bar.stop();
+            ts_reader.close();
+            ts_reader = null;
+        }
+
+        /**
+         * Destroy of SimpleTsCoordinator to not handle and released by garbage collector
+         */
+        simple_ts_coordinator.destroy();
+        simple_ts_coordinator = null;
+
+        System.out.println("ByeBye");
+        System.exit(0);
+    }
+}

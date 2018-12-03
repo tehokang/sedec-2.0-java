@@ -8,18 +8,16 @@ import java.util.List;
 /**
  * Base class to read specific TLV file
  */
-public abstract class TlvReader {
-    protected static final String TAG = TlvReader.class.getSimpleName();
-
+public abstract class PacketReader {
+    protected static final String TAG = PacketReader.class.getSimpleName();
     protected File tlv_file = null;
-    protected final int TLV_HEADER_LENGTH = 4;
     protected ByteBuffer output_buffer = null;
 
     /**
      * Constructor with TLV full path
      * @param tlv_file Full path of TLV
      */
-    public TlvReader(String tlv_file) {
+    public PacketReader(String tlv_file) {
         this.tlv_file = new File(tlv_file);
     }
 

@@ -9,9 +9,10 @@ import java.nio.ByteBuffer;
 /**
  * Utility class to read a TLV file as one of TlvReader
  */
-public class TlvFileReader extends TlvReader {
+public class TlvFileReader extends PacketReader {
     protected static final String TAG = TlvFileReader.class.getSimpleName();
     protected DataInputStream input_stream  = null;
+    protected final int TLV_HEADER_LENGTH = 4;
 
     /**
      * Constructor with a TLV full path

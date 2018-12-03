@@ -26,7 +26,7 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.TlvFileReader;
-import sedec2.util.TlvReader;
+import sedec2.util.PacketReader;
 import zexamples.arib.SimpleApplication.SubDirectory;
 
 /**
@@ -476,7 +476,7 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            TlvReader tlv_reader = new TlvFileReader(args[i]);
+            PacketReader tlv_reader = new TlvFileReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
 
             progress_bar.start(tlv_reader.filesize());
