@@ -8,7 +8,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 
 import sedec2.base.Table;
-import sedec2.dvb.TableFactory;
+import sedec2.dvb.ts.si.TableFactory;
 
 /**
  * DvbTableDecoder is an application as example for getting
