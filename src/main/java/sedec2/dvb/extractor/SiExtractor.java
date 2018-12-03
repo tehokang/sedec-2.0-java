@@ -2,8 +2,8 @@ package sedec2.dvb.extractor;
 
 import java.io.IOException;
 
-import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
+import sedec2.dvb.ts.container.packets.TransportStream;
 import sedec2.util.Logger;
 
 /**
@@ -96,7 +96,7 @@ public class SiExtractor extends BaseExtractor {
      *
      * @param one TLV packet
      */
-    protected synchronized void process(TypeLengthValue tlv)
+    protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
 
     }

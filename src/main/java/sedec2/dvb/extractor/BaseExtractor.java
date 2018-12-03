@@ -6,8 +6,8 @@ import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
-import sedec2.arib.tlv.container.PacketFactory;
-import sedec2.arib.tlv.container.packets.TypeLengthValue;
+import sedec2.dvb.ts.container.PacketFactory;
+import sedec2.dvb.ts.container.packets.TransportStream;
 import sedec2.util.Logger;
 
 /**
@@ -100,21 +100,20 @@ public abstract class BaseExtractor {
         m_ts_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
-                TypeLengthValue tlv = null;
+                TransportStream ts = null;
 
                 while ( m_is_running ) {
                     try {
                         if ( null != m_ts_packets ) {
-                            byte[] tlv_raw = m_ts_packets.take();
-                            tlv = PacketFactory.createPacket(tlv_raw);
+                            byte[] ts_raw = m_ts_packets.take();
+                            ts = PacketFactory.createPacket(ts_raw);
 
-                            if ( tlv != null ) process(tlv);
+                            if ( ts != null ) process(ts);
                         }
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         Logger.e(TAG,
-                                String.format("Error while parsing TLV (type %d)\n",
-                                tlv.getPacketType()));
+                                String.format("Error while parsing TS)\n"));
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
@@ -185,12 +184,12 @@ public abstract class BaseExtractor {
 
     /**
      * User should put a TLV packet into extractor, the packet will be collected as kinds of them
-     * @param tlv one TLV packet
+     * @param ts one TLV packet
      * @throws InterruptedException occur when thread interrupted
      */
-    public void putIn(byte[] tlv) throws InterruptedException {
-        if ( m_is_running == true && m_ts_packets != null && tlv != null ) {
-            m_ts_packets.put(tlv);
+    public void putIn(byte[] ts) throws InterruptedException {
+        if ( m_is_running == true && m_ts_packets != null && ts != null ) {
+            m_ts_packets.put(ts);
         }
     }
 
@@ -201,7 +200,7 @@ public abstract class BaseExtractor {
      * @throws InterruptedException occur when thread interrupted
      * @throws IOException occur when ByteBuffer has problem
      */
-    protected abstract void process(TypeLengthValue tlv)
+    protected abstract void process(TransportStream ts)
             throws InterruptedException, IOException;
 
     /**
