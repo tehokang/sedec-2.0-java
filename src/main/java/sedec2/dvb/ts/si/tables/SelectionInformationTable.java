@@ -3,9 +3,9 @@ package sedec2.dvb.ts.si.tables;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.arib.b10.DescriptorFactory;
-import sedec2.arib.b10.descriptors.Descriptor;
 import sedec2.base.Table;
+import sedec2.dvb.ts.si.DescriptorFactory;
+import sedec2.dvb.ts.si.descriptors.Descriptor;
 import sedec2.util.Logger;
 
 public class SelectionInformationTable extends Table {

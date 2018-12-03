@@ -25,7 +25,7 @@ public class SiExtractor extends BaseExtractor {
     public interface ITableExtractorListener extends BaseExtractor.Listener {
         /**
          * Receives table
-         * @param table in chapter 4, 7 of ARIB B60
+         * @param table in chapter of DVB
          */
         public void onReceivedTable(Table table);
     }

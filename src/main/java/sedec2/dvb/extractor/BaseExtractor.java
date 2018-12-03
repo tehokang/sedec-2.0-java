@@ -240,11 +240,9 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Remove a filter which user added corresponding only to packet_id of MMTP.
-     * @param id packet_id of MMTP
+     * Remove a filter which user added corresponding only to PID of TS.
+     * @param id PID of TS
      *
-     * <p>
-     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
      */
     public void removePidFilter(int id) {
         if ( m_int_id_filter.contains(id) == true ) {
