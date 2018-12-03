@@ -73,6 +73,8 @@ public class MFU_H265NalUnit extends BitReadWriter {
 
     /**
      * Skips scaling_list_data(). See H.265/HEVC (2014) 7.3.4.
+     *
+     * @param reader ParsableNalUnitBitArray utility
      */
     private void skipScalingList(ParsableNalUnitBitArray reader) {
         for (int sizeId = 0; sizeId < 4; sizeId++) {
@@ -97,6 +99,8 @@ public class MFU_H265NalUnit extends BitReadWriter {
     /**
      * Reads the number of short term reference picture sets in a SPS as ue(v), then skips all of
      * them. See H.265/HEVC (2014) 7.3.7.
+     *
+     * @param reader ParsableNalUnitBitArray utility
      */
     private void skipShortTermRefPicSets(ParsableNalUnitBitArray reader) {
         int num_short_term_ref_pic_sets = reader.readUnsignedExpGolombCodedInt();

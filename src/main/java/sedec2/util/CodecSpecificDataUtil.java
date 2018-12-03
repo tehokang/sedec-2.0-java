@@ -34,7 +34,7 @@ public final class CodecSpecificDataUtil {
 
   private static final int AUDIO_SPECIFIC_CONFIG_CHANNEL_CONFIGURATION_INVALID = -1;
   /**
-   * In the channel configurations below, <A> indicates a single channel element; (A, B) indicates a
+   * In the channel configurations below, indicates a single channel element; (A, B) indicates a
    * channel pair element; and [A] indicates a low-frequency effects element.
    * The speaker mapping short forms used are:
    * - FC: front center
@@ -98,7 +98,6 @@ public final class CodecSpecificDataUtil {
    *     position is advanced to the end of the AudioSpecificConfig.
    * @param forceReadToEnd Whether the entire AudioSpecificConfig should be read. Required for
    *     knowing the length of the configuration payload.
- * @return
    * @return A pair consisting of the sample rate in Hz and the channel count.
    * @throws ParserException If the AudioSpecificConfig cannot be parsed as it's not supported.
    */
@@ -255,7 +254,7 @@ public final class CodecSpecificDataUtil {
    *
    * @param data The data in which to search.
    * @param index The first index to test.
-   * @return The index of the first byte of the found start code, or {@link C#INDEX_UNSET}.
+   * @return The index of the first byte of the found start code, or -1
    */
   private static int findNalStartCode(byte[] data, int index) {
     int endIndex = data.length - NAL_START_CODE.length;

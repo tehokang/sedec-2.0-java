@@ -119,10 +119,12 @@
                        All rights reserved. Use is subject to license terms.
                        Also see the documentation redistribution policy.">
             <fileset dir="${src.dir}" defaultexcludes="no"/>
+            <doctitle>
             <![CDATA[
                 ${ant.project.name} (Internal) SDK which's able to extract everything from TLV
                 <img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-arib-packages.png?raw=true"/>
             ]]>
+            </doctitle>
             <classpath>
                 <pathelement location="${bin.dir}"/>
             </classpath>

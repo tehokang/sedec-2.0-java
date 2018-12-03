@@ -87,21 +87,21 @@ public class ParsableBitArray {
   }
 
   /**
-   * Returns the number of bits yet to be read.
+   * @return returns the number of bits yet to be read.
    */
   public int bitsLeft() {
     return (byteLimit - byteOffset) * 8 - bitOffset;
   }
 
   /**
-   * Returns the current bit offset.
+   * @return returns the current bit offset.
    */
   public int getPosition() {
     return byteOffset * 8 + bitOffset;
   }
 
   /**
-   * Returns the current byte offset. Must only be called when the position is byte aligned.
+   * @return returns the current byte offset. Must only be called when the position is byte aligned.
    *
    * @throws IllegalStateException If the position isn't byte aligned.
    */
