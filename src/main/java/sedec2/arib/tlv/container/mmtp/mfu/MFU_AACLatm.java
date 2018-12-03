@@ -19,6 +19,7 @@ public class MFU_AACLatm extends ParsableBitArray {
     protected int frameLengthType;
     protected int sampleRate;
     protected int channelCount;
+    protected byte[] initData;
 
     public MFU_AACLatm(byte[] buffer) throws ParserException {
         super(buffer);
@@ -29,20 +30,16 @@ public class MFU_AACLatm extends ParsableBitArray {
         __parseAudioMuxElement__();
     }
 
-    public int getAudioMuxVersionA() {
-        return audioMuxVersionA;
-    }
-
-    public int getNumSubFrames() {
-        return numSubframes;
-    }
-
     public int getSampleRate() {
         return sampleRate;
     }
 
     public int getChannelCount() {
         return channelCount;
+    }
+
+    public byte[] getInitData() {
+        return initData;
     }
 
     protected void __parseAudioMuxElement__() throws ParserException {
@@ -85,19 +82,8 @@ public class MFU_AACLatm extends ParsableBitArray {
             int startPosition = getPosition();
             int readBits = __parseAudioSpecificConfig__(this);
             setPosition(startPosition);
-            byte[] initData = new byte[(readBits + 7) / 8];
+            initData = new byte[(readBits + 7) / 8];
             readBits(initData, 0, readBits);
-            /*
-            Format format = Format.createAudioSampleFormat(formatId, MimeTypes.AUDIO_AAC, null,
-                Format.NO_VALUE, Format.NO_VALUE, channelCount, sampleRateHz,
-                Collections.singletonList(initData), null, 0, language);
-
-            if (!format.equals(this.format)) {
-              this.format = format;
-              sampleDurationUs = (C.MICROS_PER_SECOND * 1024) / format.sampleRate;
-              output.format(format);
-            }
-            */
           } else {
             int ascLen = (int) latmGetValue(this);
             int bitsRead = __parseAudioSpecificConfig__(this);
