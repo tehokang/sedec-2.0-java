@@ -280,7 +280,9 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
              */
 //            MFU_H265NalUnit non_vcl_nal_unit = new MFU_H265NalUnit(buffer);
 //            non_vcl_nal_unit.print();
-//            non_vcl_nal_unit.getSPS().print();
+//            if ( non_vcl_nal_unit.getSPS() != null ) {
+//                non_vcl_nal_unit.getSPS().print();
+//            }
         } catch (IOException e) {
             e.printStackTrace();
         }
