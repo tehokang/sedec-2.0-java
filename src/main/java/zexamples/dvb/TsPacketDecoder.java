@@ -84,7 +84,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-                progress_bar.update(ts_packet.length);
+//                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();

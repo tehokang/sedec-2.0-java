@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import sedec2.base.Table;
 import sedec2.dvb.ts.container.packets.TransportStream;
+import sedec2.dvb.ts.si.TableFactory;
 import sedec2.util.Logger;
 
 /**
@@ -98,5 +99,9 @@ public class SiExtractor extends BaseExtractor {
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
 
+        if ( ts.getPayloadUnitStartIndicator() == 1 ) {
+            Table table = TableFactory.createTable(ts.getDataByte());
+            putOut(new QueueData(table));
+        }
     }
 }

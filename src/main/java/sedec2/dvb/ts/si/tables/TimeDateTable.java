@@ -1,12 +1,12 @@
 package sedec2.dvb.ts.si.tables;
 
 import sedec2.base.Table;
-import sedec2.util.JSTTime;
 import sedec2.util.Logger;
+import sedec2.util.UTCTime;
 
 public class TimeDateTable extends Table {
-    protected long JST_time_bits;
-    protected JSTTime JST_time;
+    protected long UTC_time_bits;
+    protected UTCTime UTC_time;
 
     public TimeDateTable(byte[] buffer) {
         super(buffer);
@@ -15,50 +15,50 @@ public class TimeDateTable extends Table {
     }
 
     public long getJSTTime() {
-        return JST_time.getJSTTime();
+        return UTC_time.getJSTTime();
     }
 
     public double getMJD() {
-        return JST_time.getMJD();
+        return UTC_time.getMJD();
     }
 
     public int getYear() {
-        return JST_time.getYear();
+        return UTC_time.getYear();
     }
 
     public int getMonth() {
-        return JST_time.getMonth();
+        return UTC_time.getMonth();
     }
 
     public int getDay() {
-        return JST_time.getDay();
+        return UTC_time.getDay();
     }
 
     public int getHour() {
-        return JST_time.getHour();
+        return UTC_time.getHour();
     }
 
     public int getMinute() {
-        return JST_time.getMinute();
+        return UTC_time.getMinute();
     }
 
     public int getSecond() {
-        return JST_time.getSecond();
+        return UTC_time.getSecond();
     }
 
     @Override
     protected void __decode_table_body__() {
-        JST_time_bits = readOnBuffer(40);
-        JST_time = new JSTTime(JST_time_bits);
+        UTC_time_bits = readOnBuffer(40);
+        UTC_time = new UTCTime(UTC_time_bits);
     }
 
     @Override
     public void print() {
         super.print();
 
-        Logger.d(String.format("JST_time : %d/%d/%d %d:%d:%d \n",
-                JST_time.getYear(), JST_time.getMonth(), JST_time.getDay(),
-                JST_time.getHour(), JST_time.getMinute(), JST_time.getSecond()));
+        Logger.d(String.format("UTC_time : %d/%d/%d %d:%d:%d \n",
+                UTC_time.getYear(), UTC_time.getMonth(), UTC_time.getDay(),
+                UTC_time.getHour(), UTC_time.getMinute(), UTC_time.getSecond()));
 
     }
 

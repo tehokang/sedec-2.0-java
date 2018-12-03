@@ -6,12 +6,12 @@ import java.util.List;
 import sedec2.base.Table;
 import sedec2.dvb.ts.si.DescriptorFactory;
 import sedec2.dvb.ts.si.descriptors.Descriptor;
-import sedec2.util.JSTTime;
 import sedec2.util.Logger;
+import sedec2.util.UTCTime;
 
 public class TimeOffsetTable extends Table {
-    protected long JST_time_bits;
-    protected JSTTime JST_time;
+    protected long UTC_time_bits;
+    protected UTCTime UTC_time;
 
     protected int descriptors_loop_length;
     protected List<Descriptor> descriptors = new ArrayList<>();
@@ -23,35 +23,35 @@ public class TimeOffsetTable extends Table {
     }
 
     public long getJSTTime() {
-        return JST_time.getJSTTime();
+        return UTC_time.getJSTTime();
     }
 
     public double getMJD() {
-        return JST_time.getMJD();
+        return UTC_time.getMJD();
     }
 
     public int getYear() {
-        return JST_time.getYear();
+        return UTC_time.getYear();
     }
 
     public int getMonth() {
-        return JST_time.getMonth();
+        return UTC_time.getMonth();
     }
 
     public int getDay() {
-        return JST_time.getDay();
+        return UTC_time.getDay();
     }
 
     public int getHour() {
-        return JST_time.getHour();
+        return UTC_time.getHour();
     }
 
     public int getMinute() {
-        return JST_time.getMinute();
+        return UTC_time.getMinute();
     }
 
     public int getSecond() {
-        return JST_time.getSecond();
+        return UTC_time.getSecond();
     }
 
     public List<Descriptor> getDescriptors() {
@@ -60,8 +60,8 @@ public class TimeOffsetTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        JST_time_bits = readOnBuffer(40);
-        JST_time = new JSTTime(JST_time_bits);
+        UTC_time_bits = readOnBuffer(40);
+        UTC_time = new UTCTime(UTC_time_bits);
 
         skipOnBuffer(4);
         descriptors_loop_length = readOnBuffer(12);
@@ -79,9 +79,9 @@ public class TimeOffsetTable extends Table {
     public void print() {
         super.print();
 
-        Logger.d(String.format("JST_time : %d/%d/%d %d:%d:%d \n",
-                JST_time.getYear(), JST_time.getMonth(), JST_time.getDay(),
-                JST_time.getHour(), JST_time.getMinute(), JST_time.getSecond()));
+        Logger.d(String.format("UTC_time : %d/%d/%d %d:%d:%d \n",
+                UTC_time.getYear(), UTC_time.getMonth(), UTC_time.getDay(),
+                UTC_time.getHour(), UTC_time.getMinute(), UTC_time.getSecond()));
 
         for ( int i=0; i<descriptors.size(); i++ ) {
             descriptors.get(i).print();
