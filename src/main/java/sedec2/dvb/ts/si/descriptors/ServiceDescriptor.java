@@ -47,9 +47,9 @@ public class ServiceDescriptor extends Descriptor {
         super._print_();
 
         Logger.d(String.format("\t service_type : 0x%x \n", service_type));
-        Logger.d(String.format("\t service_provider_name : 0x%x \n",
+        Logger.d(String.format("\t service_provider_name : %s \n",
                 new String(service_provider_name)));
-        Logger.d(String.format("\t service_name : 0x%x \n",
+        Logger.d(String.format("\t service_name : %s \n",
                 new String(service_name)));
 
     }

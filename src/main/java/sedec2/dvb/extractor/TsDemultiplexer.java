@@ -69,21 +69,8 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
      * User can receive Table via {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
      */
-    public void addSiFilter(int pid) {
+    public void addFilter(int pid) {
         if ( m_si_extractor != null ) m_si_extractor.addPidFilter(pid);
-    }
-
-    /**
-     * Add all of filter to get SI which can be SI.
-     * User can receive all of tables which sedec can extract via
-     * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
-     */
-    public void addSiAllFilter() {
-        if ( m_si_extractor != null ) {
-            for ( int i=0; i<0x1fff; i++ ) {
-                m_si_extractor.addPidFilter(i);
-            }
-        }
     }
 
     /**
@@ -91,7 +78,7 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      * User can't receive any table information via
      * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
      */
-    public void removeSiAllFilter() {
+    public void removeAllFilter() {
         if ( m_si_extractor != null ) {
             for ( int i=0; i<256; i++ ) {
                 m_si_extractor.removePidFilter((byte)(i & 0xff));
@@ -104,8 +91,8 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      * @param table_id which user doesn't want to receive via
      * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
      */
-    public void removeSiFilter(byte table_id) {
-        if ( m_si_extractor != null ) m_si_extractor.removePidFilter(table_id);
+    public void removeFilter(int pid) {
+        if ( m_si_extractor != null ) m_si_extractor.removePidFilter(pid);
     }
 
     /**

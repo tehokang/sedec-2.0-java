@@ -100,6 +100,9 @@ public class SiExtractor extends BaseExtractor {
          */
         if ( ts.getAdaptationFieldControl() != 0x01 ) return;
 
+        /**
+         * Section filter by TS PID
+         */
         if ( m_int_id_filter.contains(ts.getPID()) == false ) return;
 
         ByteArrayOutputStream section_buffer = m_fragmented_section.get(ts.getPID());
