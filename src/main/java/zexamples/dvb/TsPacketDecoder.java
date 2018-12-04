@@ -58,11 +58,11 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         Program program = programs.get(i);
                         ts_demuxer.addFilter(program.getPid());
                     }
-                    pat.print();
+//                    pat.print();
                 }
                 break;
             default:
-                table.print();
+//                table.print();
                 break;
         }
     }
@@ -109,7 +109,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-//                progress_bar.update(ts_packet.length);
+                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();
