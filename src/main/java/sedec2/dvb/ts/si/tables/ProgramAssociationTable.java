@@ -20,7 +20,7 @@ public class ProgramAssociationTable extends Table {
     private byte last_section_number;
     private List<Program> programs = new ArrayList<>();
 
-    class Program {
+    public class Program {
         private int program_number;
         private int pid;
         Program(int _program_number, int _pid) {
@@ -35,6 +35,10 @@ public class ProgramAssociationTable extends Table {
         public int getPid() {
             return pid;
         }
+    }
+
+    public List<Program> getPrograms() {
+        return programs;
     }
 
     @Override
