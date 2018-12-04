@@ -60,12 +60,9 @@ public class ProgramMapTable extends Table {
             skipOnBuffer(4);
             program.ES_info_length = readOnBuffer(12);
 
-            Logger.d(String.format("ES_info_length : %d \n", program.ES_info_length));
-
             for ( int j=program.ES_info_length; j>0; )
             {
                 Descriptor desc = DescriptorFactory.createDescriptor(this);
-                desc.print();
                 j-=desc.getDescriptorLength();
                 program.descriptors.add(desc);
             }
