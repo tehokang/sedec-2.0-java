@@ -60,9 +60,12 @@ public class ProgramMapTable extends Table {
             skipOnBuffer(4);
             program.ES_info_length = readOnBuffer(12);
 
+            Logger.d(String.format("ES_info_length : %d \n", program.ES_info_length));
+
             for ( int j=program.ES_info_length; j>0; )
             {
                 Descriptor desc = DescriptorFactory.createDescriptor(this);
+                desc.print();
                 j-=desc.getDescriptorLength();
                 program.descriptors.add(desc);
             }
@@ -90,10 +93,10 @@ public class ProgramMapTable extends Table {
 
         for ( int i=0; i<programs.size(); i++ ) {
             Program program = programs.get(i);
-            Logger.d(String.format("\t [%d] Program \n", i));
-            Logger.d(String.format("\t stream_type : 0x%x \n", program.stream_type));
-            Logger.d(String.format("\t elementary_PID : 0x%x \n", program.elementary_PID));
-            Logger.d(String.format("\t ES_info_length : 0x%x \n", program.ES_info_length));
+            Logger.d(String.format("[%d] Program \n", i));
+            Logger.d(String.format("stream_type : 0x%x \n", program.stream_type));
+            Logger.d(String.format("elementary_PID : 0x%x \n", program.elementary_PID));
+            Logger.d(String.format("ES_info_length : 0x%x \n", program.ES_info_length));
 
             for ( int j=0; j<program.descriptors.size(); j++ ) {
                 program.descriptors.get(j).print();

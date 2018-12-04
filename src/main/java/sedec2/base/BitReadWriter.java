@@ -9,7 +9,7 @@ public class BitReadWriter {
 
     private int m_pos;
     private int m_out_counter;
-    private int m_by_buffer;
+    private long m_by_buffer;
 
     public BitReadWriter(byte[] buffer) {
         m_buffer = buffer;
@@ -96,7 +96,7 @@ public class BitReadWriter {
         }
     }
 
-    public int readOnBuffer(int len) {
+    public long readOnBuffer(long len) {
         int mask;
         byte sp = m_buffer[m_pos];
 
@@ -122,6 +122,34 @@ public class BitReadWriter {
             }
         }
         return m_by_buffer;
+    }
+
+    public int readOnBuffer(int len) {
+        int mask;
+        byte sp = m_buffer[m_pos];
+
+        mask = 1 << (m_out_counter-1);
+        m_by_buffer = 0;
+
+        for ( int i=0; i<len; i++ ) {
+            m_by_buffer <<= 1;
+
+            byte v = (byte)(sp & mask);
+            if ( v != 0 )
+                m_by_buffer |= 1;
+
+            mask >>=1;
+            m_out_counter--;
+
+            if ( m_out_counter == 0 ) {
+                m_out_counter = 8;
+                mask = 128;
+                m_pos++;
+                if ( m_pos < m_buffer.length)
+                    sp = m_buffer[m_pos];
+            }
+        }
+        return (int)m_by_buffer;
     }
 
     public void writeOnBuffer(int value, int len) {

@@ -59,17 +59,17 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         Program program = programs.get(i);
                         ts_demuxer.addSiFilter(program.getPid());
                     }
-                    pat.print();
+//                    pat.print();
                 }
                 break;
             case TableFactory.PROGRAM_MAP_TABLE:
                 pmt = (ProgramMapTable)table;
-                pmt.print();
+//                pmt.print();
                 break;
             case TableFactory.ACTUAL_NETWORK_INFORMATION_TABLE:
             case TableFactory.OTHER_NETWORK_INFORMATION_TABLE:
                 nit = (NetworkInformationTable)table;
-                nit.print();
+//                nit.print();
 
         }
     }

@@ -118,6 +118,7 @@ public class SiExtractor extends BaseExtractor {
                  * refers to previous section's data or not.
                  */
                 if ( ts.getPointerField() != 0x00 ) {
+                    Logger.d(String.format("pf : %d \n", ts.getPointerField()));
                     section_buffer.write(ts.getDataByte(), 1, ts.getPointerField());
                 }
                 Table table = TableFactory.createTable(section_buffer.toByteArray());
