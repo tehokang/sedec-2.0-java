@@ -63,14 +63,14 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
     }
 
     /**
-     * Add a filter to get SI corresponding only to table_id of Private Section.
+     * Add a filter to get SI corresponding only to PID by user setting.
      * @param table_id specific table id which user wants to get
      *
      * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
      * User can receive Table via {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
      */
-    public void addSiFilter(byte table_id) {
-        if ( m_si_extractor != null ) m_si_extractor.addPidFilter(table_id);
+    public void addSiFilter(int pid) {
+        if ( m_si_extractor != null ) m_si_extractor.addPidFilter(pid);
     }
 
     /**
@@ -80,8 +80,8 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      */
     public void addSiAllFilter() {
         if ( m_si_extractor != null ) {
-            for ( int i=0; i<256; i++ ) {
-                m_si_extractor.addPidFilter((byte)(i & 0xff));
+            for ( int i=0; i<0x1fff; i++ ) {
+                m_si_extractor.addPidFilter(i);
             }
         }
     }

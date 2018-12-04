@@ -1,7 +1,5 @@
 package sedec2.dvb.ts.container.packets;
 
-import java.util.Arrays;
-
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
@@ -15,7 +13,7 @@ public class TransportStream extends BitReadWriter {
     protected byte adaptation_field_control;
     protected byte continuity_counter;
     protected byte pointer_field;
-    protected byte[] data_byte;
+    protected byte[] data_byte = {0x00, };
 
     public TransportStream(byte[] buffer) {
         super(buffer);
@@ -69,16 +67,15 @@ public class TransportStream extends BitReadWriter {
         return continuity_counter;
     }
 
-    public boolean hasPointerField() {
-        if ( data_byte != null &&
-                data_byte[0] == 0x00 ) {
-            return true;
+    public byte getPointerField() {
+        if ( data_byte != null ) {
+            return data_byte[0];
         }
-        return false;
+        return 0;
     }
 
     public byte[] getDataByte() {
-        return Arrays.copyOfRange(data_byte, 0, data_byte.length);
+        return data_byte;
     }
 
     public void print() {
@@ -96,6 +93,6 @@ public class TransportStream extends BitReadWriter {
         Logger.d(String.format("adaptation_field_control : 0x%x \n",
                 adaptation_field_control));
         Logger.d(String.format("continuity_counter : 0x%x \n", continuity_counter));
-        Logger.d(String.format("pointer_field : %s \n", hasPointerField()));
+        Logger.d(String.format("pointer_field : %s \n", getPointerField()));
     }
 }

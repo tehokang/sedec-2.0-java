@@ -1,7 +1,14 @@
 package zexamples.dvb;
 
+import java.util.List;
+
 import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
+import sedec2.dvb.ts.si.TableFactory;
+import sedec2.dvb.ts.si.tables.NetworkInformationTable;
+import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
+import sedec2.dvb.ts.si.tables.ProgramAssociationTable.Program;
+import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
 import sedec2.util.TsPacketReader;
@@ -13,13 +20,17 @@ import sedec2.util.TsPacketReader;
 class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     protected static final String TAG = SimpleTsCoordinator.class.getSimpleName();
     protected TsDemultiplexer ts_demuxer = null;
+    protected ProgramAssociationTable pat = null;
+    protected ProgramMapTable pmt = null;
+    protected NetworkInformationTable nit = null;
 
     public SimpleTsCoordinator() {
         ts_demuxer = new TsDemultiplexer();
         ts_demuxer.addEventListener(this);
 
         ts_demuxer.enableSiFilter();
-        ts_demuxer.addSiAllFilter();
+        ts_demuxer.addSiFilter(0x0000);
+//        ts_demuxer.addSiAllFilter();
 //      ts_demuxer.enableSiLogging();
     }
 
@@ -39,7 +50,28 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
     @Override
     public void onReceivedTable(Table table) {
-        table.print();
+        switch ( table.getTableId() ) {
+            case TableFactory.PROGRAM_ASSOCIATION_TABLE:
+                if ( pat == null ) {
+                    pat = (ProgramAssociationTable)table;
+                    List<Program> programs = pat.getPrograms();
+                    for ( int i=0; i<programs.size(); i++ ) {
+                        Program program = programs.get(i);
+                        ts_demuxer.addSiFilter(program.getPid());
+                    }
+                    pat.print();
+                }
+                break;
+            case TableFactory.PROGRAM_MAP_TABLE:
+                pmt = (ProgramMapTable)table;
+                pmt.print();
+                break;
+            case TableFactory.ACTUAL_NETWORK_INFORMATION_TABLE:
+            case TableFactory.OTHER_NETWORK_INFORMATION_TABLE:
+                nit = (NetworkInformationTable)table;
+                nit.print();
+
+        }
     }
 }
 

@@ -1,5 +1,6 @@
 package sedec2.dvb.extractor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 
 import sedec2.base.Table;
@@ -55,10 +56,6 @@ public class SiExtractor extends BaseExtractor {
                         if ( null != m_event_queue &&
                                 ( data = (QueueData) m_event_queue.take()) != null ) {
                             Table table = data.table;
-
-                            if ( m_byte_id_filter.contains(table.getTableId()) == false )
-                                continue;
-
                             if ( m_enable_logging == true ) table.print();
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITableExtractorListener)m_listeners.get(i)).
@@ -98,9 +95,48 @@ public class SiExtractor extends BaseExtractor {
      */
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
-        if ( ts.getPID() == TableFactory.PROGRAM_ASSOCIATION_TABLE ) {
-            Table table = TableFactory.createTable(ts.getDataByte());
-            putOut(new QueueData(table));
+        /**
+         * Section already has 0x01 of adaptation field control
+         */
+        if ( ts.getAdaptationFieldControl() != 0x01 ) return;
+
+        if ( m_int_id_filter.contains(ts.getPID()) == false ) return;
+
+        ByteArrayOutputStream section_buffer = m_fragmented_section.get(ts.getPID());
+        if ( ts.getPayloadUnitStartIndicator() == 0x01 ) {
+            if ( null == section_buffer ) {
+                /**
+                 * Put begin of section
+                 */
+                section_buffer = new ByteArrayOutputStream();
+                section_buffer.write(ts.getDataByte(), 1, ts.getDataByte().length-1);
+                m_fragmented_section.put(ts.getPID(), section_buffer);
+            } else {
+                /**
+                 * Put previous buffered sections out
+                 * with being careful whether current package has pointer field which
+                 * refers to previous section's data or not.
+                 */
+                if ( ts.getPointerField() != 0x00 ) {
+                    section_buffer.write(ts.getDataByte(), 1, ts.getPointerField());
+                }
+                Table table = TableFactory.createTable(section_buffer.toByteArray());
+                putOut(new QueueData(table));
+                m_fragmented_section.remove(ts.getPID());
+                /**
+                 * Put new section into buffer
+                 */
+                section_buffer.write(ts.getDataByte(), 1 + ts.getPointerField(),
+                        ts.getDataByte().length-1-ts.getPointerField());
+                m_fragmented_section.put(ts.getPID(), section_buffer);
+            }
+        } else {
+            /**
+             * Put middle of section
+             */
+            if ( section_buffer != null ) {
+                section_buffer.write(ts.getDataByte());
+            }
         }
     }
 }

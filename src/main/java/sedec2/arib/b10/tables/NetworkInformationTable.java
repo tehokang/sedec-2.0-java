@@ -95,6 +95,7 @@ public class NetworkInformationTable extends Table {
                 j-=desc.getDescriptorLength();
                 descriptors.add(desc);
             }
+            i-= ( 6 + transport_stream.transport_descriptors_length);
             transport_streams.add(transport_stream);
         }
         checksum_CRC32 = readOnBuffer(32);

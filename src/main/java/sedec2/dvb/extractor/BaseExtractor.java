@@ -1,8 +1,11 @@
 package sedec2.dvb.extractor;
 
+import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.BlockingQueue;
 
@@ -65,6 +68,8 @@ public abstract class BaseExtractor {
      * Event queue which can sent to user
      */
     protected BlockingQueue<QueueData> m_event_queue = null;
+
+    protected Map<Integer, ByteArrayOutputStream> m_fragmented_section = new HashMap<>();
 
     protected static final String TAG = BaseExtractor.class.getSimpleName();
 
@@ -140,6 +145,7 @@ public abstract class BaseExtractor {
         m_ts_packets.clear();
         m_event_queue.clear();
 
+        m_fragmented_section.clear();
     }
 
     /**
