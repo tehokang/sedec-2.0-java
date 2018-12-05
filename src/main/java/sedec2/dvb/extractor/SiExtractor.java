@@ -116,7 +116,7 @@ public class SiExtractor extends BaseExtractor {
                 m_fragmented_section.put(ts.getPID(), section_buffer);
             } else {
                 /**
-                 * Put previous buffered sections out
+                 * Put previous buffered sections out since new section come here
                  * with being careful whether current package has pointer field which
                  * refers to previous section's data or not.
                  */
