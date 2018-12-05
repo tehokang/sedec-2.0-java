@@ -56,10 +56,10 @@ public abstract class FilePacketReader {
 
     /**
      * Gets a packet from file and internal buffer point will move
-     * @param a packet byte buffer as a packet which did read
+     * @param packet a byte buffer as a packet which did read
      * @return size of a packet
      */
-    public abstract int readPacket(byte[] tlv_packet);
+    public abstract int readPacket(byte[] packet);
 
     /**
      * Gets packets from file as much as user wants to get.

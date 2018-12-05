@@ -66,19 +66,65 @@ import sedec2.dvb.ts.si.descriptors.VideoDecodeControlDescriptor;
 /**
  * Factory to obtain a kind of descriptors of DVB like below.
  * <ul>
+ * <li> {@link AC3Descriptor}
+ * <li> {@link AdaptationFieldDataDescriptor}
+ * <li> {@link AncillaryDataDescriptor}
  * <li> {@link ApplicationDescriptor}
  * <li> {@link ApplicationNameDescriptor}
  * <li> {@link ApplicationRecordingDescriptor}
+ * <li> {@link ApplicationSignallingDescriptor}
  * <li> {@link ApplicationUsageDescriptor}
+ * <li> {@link BouquetNameDescriptor}
+ * <li> {@link CAIdentifierDescriptor}
+ * <li> {@link CableDeliverySystemDescriptor}
+ * <li> {@link CarouselIdentifierDescriptor}
+ * <li> {@link CellListDescriptor}
+ * <li> {@link ComponentDescriptor}
  * <li> {@link ConditionalAccessDescriptor}
  * <li> {@link ConnectionRequirementDescriptor}
+ * <li> {@link ContentDescriptor}
+ * <li> {@link CountryAvailabilityDescriptor}
+ * <li> {@link DataBroadcastDescriptor}
+ * <li> {@link DataBroadcastIdDescriptor}
  * <li> {@link DataComponentDescriptor}
  * <li> {@link DigitalCopyControlDescriptor}
+ * <li> {@link EnhancedAC3Descriptor}
+ * <li> {@link ExtendedEventDescriptor}
+ * <li> {@link FrequencyListDescriptor}
+ * <li> {@link ISO639LanguageDescriptor}
+ * <li> {@link LinkageDescriptor}
+ * <li> {@link LocalTimeOffsetDescriptor}
+ * <li> {@link MultilingualBouquetNameDescriptor}
+ * <li> {@link MultilingualComponentDescriptor}
+ * <li> {@link MultilingualNetworkNameDescriptor}
+ * <li> {@link MultilingualServiceNameDescriptor}
+ * <li> {@link NVODReferenceDescriptor}
+ * <li> {@link NetworkNameDescriptor}
+ * <li> {@link PDCDescriptor}
  * <li> {@link ParentalRatingDescriptor}
+ * <li> {@link PrivateDataSpecifierDescriptor}
+ * <li> {@link S2SateliteDeliverySystemDescriptor}
+ * <li> {@link SateliteDeliverySystemDescriptor}
+ * <li> {@link ScramblingDescriptor}
+ * <li> {@link ServiceDescriptor}
+ * <li> {@link ServiceListDescriptor}
+ * <li> {@link ServiceMoveDescriptor}
+ * <li> {@link ShortEventDescriptor}
+ * <li> {@link ShortSmoothingBufferDescriptor}
  * <li> {@link SimpleApplicationBoundaryDescriptor}
  * <li> {@link SimpleApplicationLocationDescriptor}
  * <li> {@link StreamIdentifierDescriptor}
+ * <li> {@link StuffingDescriptor}
+ * <li> {@link SubtitlingDescriptor}
+ * <li> {@link TelephoneDescriptor}
+ * <li> {@link TeletextDescriptor}
+ * <li> {@link TerrestrialDeliverySystemDescriptor}
+ * <li> {@link TimeShiftedEventDescriptor}
+ * <li> {@link TimeShiftedServiceDescriptor}
  * <li> {@link TransportProtocolDescriptor}
+ * <li> {@link UnknownDescriptor}
+ * <li> {@link VBIDataDescriptor}
+ * <li> {@link VBITeletextDescriptor}
  * <li> {@link VideoDecodeControlDescriptor}
  * </ul>
  */
