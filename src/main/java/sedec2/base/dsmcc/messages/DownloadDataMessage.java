@@ -1,4 +1,4 @@
-package sedec2.base.dsmcc;
+package sedec2.base.dsmcc.messages;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;

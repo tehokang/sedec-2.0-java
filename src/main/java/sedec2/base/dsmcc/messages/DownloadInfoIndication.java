@@ -1,4 +1,4 @@
-package sedec2.base.dsmcc;
+package sedec2.base.dsmcc.messages;
 
 import java.util.ArrayList;
 import java.util.List;
