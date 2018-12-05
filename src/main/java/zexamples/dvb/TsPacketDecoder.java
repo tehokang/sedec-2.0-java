@@ -69,10 +69,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                 }
                 break;
             case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
-                table.print();
+//                table.print();
                 break;
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
-                table.print();
+//                table.print();
                 break;
             default:
 //                table.print();
