@@ -9,6 +9,7 @@ import sedec2.dvb.ts.si.descriptors.ApplicationNameDescriptor;
 import sedec2.dvb.ts.si.descriptors.ApplicationRecordingDescriptor;
 import sedec2.dvb.ts.si.descriptors.ApplicationSignallingDescriptor;
 import sedec2.dvb.ts.si.descriptors.ApplicationUsageDescriptor;
+import sedec2.dvb.ts.si.descriptors.AssociationTagDescriptor;
 import sedec2.dvb.ts.si.descriptors.BouquetNameDescriptor;
 import sedec2.dvb.ts.si.descriptors.CAIdentifierDescriptor;
 import sedec2.dvb.ts.si.descriptors.CableDeliverySystemDescriptor;
@@ -22,6 +23,7 @@ import sedec2.dvb.ts.si.descriptors.CountryAvailabilityDescriptor;
 import sedec2.dvb.ts.si.descriptors.DataBroadcastDescriptor;
 import sedec2.dvb.ts.si.descriptors.DataBroadcastIdDescriptor;
 import sedec2.dvb.ts.si.descriptors.DataComponentDescriptor;
+import sedec2.dvb.ts.si.descriptors.DeferredAssociationTagsDescriptor;
 import sedec2.dvb.ts.si.descriptors.Descriptor;
 import sedec2.dvb.ts.si.descriptors.DigitalCopyControlDescriptor;
 import sedec2.dvb.ts.si.descriptors.EnhancedAC3Descriptor;
@@ -74,6 +76,7 @@ import sedec2.dvb.ts.si.descriptors.VideoDecodeControlDescriptor;
  * <li> {@link ApplicationRecordingDescriptor}
  * <li> {@link ApplicationSignallingDescriptor}
  * <li> {@link ApplicationUsageDescriptor}
+ * <li> {@link AssociationTagDescriptor}
  * <li> {@link BouquetNameDescriptor}
  * <li> {@link CAIdentifierDescriptor}
  * <li> {@link CableDeliverySystemDescriptor}
@@ -87,6 +90,7 @@ import sedec2.dvb.ts.si.descriptors.VideoDecodeControlDescriptor;
  * <li> {@link DataBroadcastDescriptor}
  * <li> {@link DataBroadcastIdDescriptor}
  * <li> {@link DataComponentDescriptor}
+ * <li> {@link DeferredAssociationTagsDescriptor}
  * <li> {@link DigitalCopyControlDescriptor}
  * <li> {@link EnhancedAC3Descriptor}
  * <li> {@link ExtendedEventDescriptor}
@@ -139,6 +143,8 @@ public class DescriptorFactory {
     public final static int SIMPLE_APPLICATION_LOCATION_DESCRIPTOR = 0x15;
     public final static int APPLICATION_USAGE_DESCRIPTOR = 0x16;
     public final static int SIMPLE_APPLICATION_BOUNDARY_DESCRIPTOR = 0x17;
+    public final static int ASSOCIATION_TAG_DESCRIPTOR = 0x20;
+    public final static int DEFERRED_ASSOCIATION_TAGS_DESCRIPTOR = 0x21;
     public final static int NETWORK_NAME_DESCRIPTOR = 0x40;
     public final static int SERVICE_LIST_DESCRIPTOR = 0x41;
     public final static int STUFFING_DESCRIPTOR = 0x42;
@@ -194,6 +200,10 @@ public class DescriptorFactory {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
 
         switch ( descriptor_tag ) {
+            case DEFERRED_ASSOCIATION_TAGS_DESCRIPTOR:
+                return new DeferredAssociationTagsDescriptor(brw);
+            case ASSOCIATION_TAG_DESCRIPTOR:
+                return new AssociationTagDescriptor(brw);
             case MULTILINGUAL_COMPONENT_DESCRIPTOR:
                 return new MultilingualComponentDescriptor(brw);
             case MULTILINGUAL_SERVICE_NAME_DESCRIPTOR:

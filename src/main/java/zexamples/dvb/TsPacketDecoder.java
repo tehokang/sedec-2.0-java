@@ -30,6 +30,13 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
         ts_demuxer.enableSiFilter();
         ts_demuxer.addFilter(0x0000); // PAT
+
+        ts_demuxer.addFilter(0x096d);
+        ts_demuxer.addFilter(0x0973);
+        ts_demuxer.addFilter(0x0974);
+        ts_demuxer.addFilter(0x0975);
+        ts_demuxer.addFilter(0x0b06);
+
 //      ts_demuxer.enableSiLogging();
     }
 
@@ -60,6 +67,12 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                     }
 //                    pat.print();
                 }
+                break;
+            case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
+                table.print();
+                break;
+            case TableFactory.DSMCC_UN_MESSAGE_TABLE:
+                table.print();
                 break;
             default:
 //                table.print();
@@ -109,7 +122,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-                progress_bar.update(ts_packet.length);
+//                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();

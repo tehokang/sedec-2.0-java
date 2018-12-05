@@ -1,4 +1,4 @@
-package sedec2.base.dsmcc.descriptors;
+package sedec2.dvb.ts.dsmcc.descriptors;
 
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;

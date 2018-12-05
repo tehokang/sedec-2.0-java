@@ -1,13 +1,14 @@
-package sedec2.base.dsmcc.messages;
+package sedec2.dvb.ts.dsmcc.messages;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.base.dsmcc.descriptors.CompatibilityDescriptor;
+import sedec2.base.BitReadWriter;
+import sedec2.dvb.ts.dsmcc.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
-public class DownloadInfoIndication extends DownloadDataMessage {
+public class DownloadInfoIndication extends DownloadControlMessage {
     protected int downloadId;
     protected int blockSize;
     protected byte windowSize;
@@ -28,41 +29,84 @@ public class DownloadInfoIndication extends DownloadDataMessage {
         public byte[] moduleInfoByte;
     }
 
-    public DownloadInfoIndication(byte[] buffer) {
-        super(buffer);
+    public DownloadInfoIndication(BitReadWriter brw) {
+        super(brw);
 
-        downloadId = readOnBuffer(32);
-        blockSize = readOnBuffer(16);
-        windowSize = (byte) readOnBuffer(8);
-        ackPeriod = (byte) readOnBuffer(8);
-        tCDownloadWindow = readOnBuffer(32);
-        tCDownloadScenario = readOnBuffer(32);
+        downloadId = brw.readOnBuffer(32);
+        blockSize = brw.readOnBuffer(16);
+        windowSize = (byte) brw.readOnBuffer(8);
+        ackPeriod = (byte) brw.readOnBuffer(8);
+        tCDownloadWindow = brw.readOnBuffer(32);
+        tCDownloadScenario = brw.readOnBuffer(32);
 
-        compatibilityDescriptor = new CompatibilityDescriptor(this);
-        numberOfModules = readOnBuffer(16);
+        compatibilityDescriptor = new CompatibilityDescriptor(brw);
+        numberOfModules = brw.readOnBuffer(16);
 
         for ( int i=0; i<numberOfModules; i++ ) {
             Module module = new Module();
-            module.moduleId = readOnBuffer(16);
-            module.moduleSize = readOnBuffer(32);
-            module.moduleVersion = (byte) readOnBuffer(8);
-            module.moduleInfoLength = (byte) readOnBuffer(8);
+            module.moduleId = brw.readOnBuffer(16);
+            module.moduleSize = brw.readOnBuffer(32);
+            module.moduleVersion = (byte) brw.readOnBuffer(8);
+            module.moduleInfoLength = (byte) brw.readOnBuffer(8);
             module.moduleInfoByte = new byte[module.moduleInfoLength];
             for ( int k=0; k<module.moduleInfoByte.length; k++ ) {
-                module.moduleInfoByte[k] = (byte) readOnBuffer(8);
+                module.moduleInfoByte[k] = (byte) brw.readOnBuffer(8);
             }
             modules.add(module);
         }
 
-        privateDataLength = readOnBuffer(16);
+        privateDataLength = brw.readOnBuffer(16);
         privateDataByte = new byte[privateDataLength];
         for ( int i=0; i<privateDataByte.length; i++ ) {
-            privateDataByte[i] = (byte) readOnBuffer(8);
+            privateDataByte[i] = (byte) brw.readOnBuffer(8);
         }
     }
 
     @Override
+    public int getDownloadId() {
+        return downloadId;
+    }
+
+    public int getBlockSize() {
+        return blockSize;
+    }
+
+    public byte getWindowSize() {
+        return windowSize;
+    }
+
+    public byte getAckPeriod() {
+        return ackPeriod;
+    }
+
+    public int getTCDownloadWindow() {
+        return tCDownloadWindow;
+    }
+
+    public int getTCDownloadScenario() {
+        return tCDownloadScenario;
+    }
+
+    public CompatibilityDescriptor getCompatabilityDescriptor() {
+        return compatibilityDescriptor;
+    }
+
+    public int getNumberOfModules() {
+        return numberOfModules;
+    }
+
+    public List<Module> getModules() {
+        return modules;
+    }
+
+    public byte[] getPrivateDataByte() {
+        return privateDataByte;
+    }
+
+    @Override
     public void print() {
+        super._print_();
+
         Logger.d(String.format("downloadId : 0x%x \n", downloadId));
         Logger.d(String.format("blockSize : 0x%x \n", blockSize));
         Logger.d(String.format("windowSize : 0x%x \n", windowSize));
@@ -77,8 +121,10 @@ public class DownloadInfoIndication extends DownloadDataMessage {
             Module module = modules.get(i);
             Logger.d(String.format("[%d] moduleId : 0x%x \n", i, module.moduleId));
             Logger.d(String.format("[%d] moduleSize : 0x%x \n", i, module.moduleSize));
-            Logger.d(String.format("[%d] moduleVersion : 0x%x \n", i, module.moduleVersion));
-            Logger.d(String.format("[%d] moduleInfoLength : 0x%x \n", i, module.moduleInfoLength));
+            Logger.d(String.format("[%d] moduleVersion : 0x%x \n",
+                    i, module.moduleVersion));
+            Logger.d(String.format("[%d] moduleInfoLength : 0x%x \n",
+                    i, module.moduleInfoLength));
             BinaryLogger.print(module.moduleInfoByte);
         }
 

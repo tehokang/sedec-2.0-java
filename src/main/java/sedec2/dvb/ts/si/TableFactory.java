@@ -2,6 +2,7 @@ package sedec2.dvb.ts.si;
 
 import sedec2.base.Table;
 import sedec2.base.UnknownTable;
+import sedec2.dvb.ts.dsmcc.DSMCCSection;
 import sedec2.dvb.ts.si.tables.ApplicationInformationTable;
 import sedec2.dvb.ts.si.tables.BouquetAssociationTable;
 import sedec2.dvb.ts.si.tables.ConditionalAccessTable;
@@ -40,6 +41,8 @@ public class TableFactory {
     public final static byte PROGRAM_ASSOCIATION_TABLE = (byte) 0x00;
     public final static byte CONDITIONAL_ACCESS_TABLE = (byte) 0x01;
     public final static byte PROGRAM_MAP_TABLE = (byte) 0x02;
+    public final static byte DSMCC_UN_MESSAGE_TABLE = 0x3b;
+    public final static byte DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE = 0x3c;
     public final static byte APPLICATION_INFORMATION_TABLE = (byte) 0x74;
     public final static byte ACTUAL_NETWORK_INFORMATION_TABLE = (byte) 0x40;
     public final static byte OTHER_NETWORK_INFORMATION_TABLE = (byte) 0x41;
@@ -61,6 +64,9 @@ public class TableFactory {
 
         switch(table_id)
         {
+            case DSMCC_UN_MESSAGE_TABLE:
+            case DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
+                return new DSMCCSection(buffer);
             case PROGRAM_ASSOCIATION_TABLE:
                 return new ProgramAssociationTable(buffer);
             case CONDITIONAL_ACCESS_TABLE:

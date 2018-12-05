@@ -1,4 +1,4 @@
-package sedec2.base.dsmcc.descriptors;
+package sedec2.dvb.ts.dsmcc.descriptors;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
@@ -13,15 +13,17 @@ public class SubDescriptor {
         subDescriptorType = (byte) brw.readOnBuffer(8);
         subDescriptorLength = (byte) brw.readOnBuffer(8);
 
-        additionalInformation = new byte[subDescriptorLength];
-        for ( int i=0; i<additionalInformation.length; i++ ) {
-            additionalInformation[i] = (byte) brw.readOnBuffer(8);
+        if ( subDescriptorLength > 0 ) {
+            additionalInformation = new byte[subDescriptorLength];
+            for ( int i=0; i<additionalInformation.length; i++ ) {
+                additionalInformation[i] = (byte) brw.readOnBuffer(8);
+            }
         }
     }
 
     public void print() {
-        Logger.d(String.format("\t subDescriptorType : 0x%d \n", subDescriptorType));
-        Logger.d(String.format("\t subDescriptorLength : 0x%d \n", subDescriptorLength));
+        Logger.d(String.format("\t subDescriptorType : 0x%x \n", subDescriptorType));
+        Logger.d(String.format("\t subDescriptorLength : 0x%x \n", subDescriptorLength));
         BinaryLogger.print(additionalInformation);
     }
 
