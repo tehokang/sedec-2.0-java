@@ -2,7 +2,7 @@ package sedec2.dvb.ts.si;
 
 import sedec2.base.Table;
 import sedec2.base.UnknownTable;
-import sedec2.dvb.ts.dsmcc.DSMCCSection;
+import sedec2.dvb.ts.dsmcc.datacarousel.DSMCCSection;
 import sedec2.dvb.ts.si.tables.ApplicationInformationTable;
 import sedec2.dvb.ts.si.tables.BouquetAssociationTable;
 import sedec2.dvb.ts.si.tables.ConditionalAccessTable;
