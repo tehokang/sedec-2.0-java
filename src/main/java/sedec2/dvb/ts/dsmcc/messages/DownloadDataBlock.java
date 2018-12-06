@@ -31,7 +31,7 @@ public class DownloadDataBlock extends DownloadDataMessage {
         Logger.d(String.format("moduleId : 0x%x \n", moduleId));
         Logger.d(String.format("moduleVersion : 0x%x \n", moduleVersion));
         Logger.d(String.format("blockNumber : 0x%x \n", blockNumber));
-        Logger.d(String.format("blockDataByte : \n"));
+        Logger.d(String.format("blockDataByte.length : 0x%x \n", blockDataByte.length));
         BinaryLogger.print(blockDataByte);
 
     }
