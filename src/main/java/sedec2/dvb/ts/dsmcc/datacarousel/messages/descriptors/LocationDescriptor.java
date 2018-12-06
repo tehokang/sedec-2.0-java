@@ -13,6 +13,10 @@ public class LocationDescriptor extends Descriptor {
         location_tag = (byte) brw.readOnBuffer(8);
     }
 
+    public byte getLocationTag() {
+        return location_tag;
+    }
+
     @Override
     public void print() {
         super._print_();

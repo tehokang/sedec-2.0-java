@@ -21,6 +21,14 @@ public class SubDescriptor {
         }
     }
 
+    public byte getSubDescriptorType() {
+        return subDescriptorType;
+    }
+
+    public byte[] getAdditionalInformation() {
+        return additionalInformation;
+    }
+
     public void print() {
         Logger.d(String.format("\t subDescriptorType : 0x%x \n", subDescriptorType));
         Logger.d(String.format("\t subDescriptorLength : 0x%x \n", subDescriptorLength));
