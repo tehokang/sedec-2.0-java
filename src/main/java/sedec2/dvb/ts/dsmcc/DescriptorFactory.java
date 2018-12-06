@@ -2,6 +2,7 @@ package sedec2.dvb.ts.dsmcc;
 
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
+import sedec2.dvb.ts.dsmcc.descriptors.LocationDescriptor;
 import sedec2.dvb.ts.dsmcc.descriptors.NTPEndpointDescriptor;
 import sedec2.dvb.ts.dsmcc.descriptors.NTPReferenceDescriptor;
 import sedec2.dvb.ts.dsmcc.descriptors.StreamEventDescriptor;
@@ -13,6 +14,7 @@ public class DescriptorFactory {
     public static final int NPT_ENDPOINT_DESCRIPTOR = 0x02;
     public static final int STREAM_MODE_DESCRIPTOR = 0x03;
     public static final int STREAM_EVENT_DESCRIPTOR = 0x04;
+    public static final int LOCATION_DESCRIPTOR = 0x06;
 
     public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
@@ -26,6 +28,8 @@ public class DescriptorFactory {
             return new StreamModeDescriptor(brw);
         case STREAM_EVENT_DESCRIPTOR:
             return new StreamEventDescriptor(brw);
+        case LOCATION_DESCRIPTOR:
+            return new LocationDescriptor(brw);
         default:
             return new UnknownDescriptor(brw);
         }

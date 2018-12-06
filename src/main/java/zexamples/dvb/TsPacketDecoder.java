@@ -72,7 +72,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 //                table.print();
                 break;
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
-//                table.print();
+                table.print();
                 break;
             default:
 //                table.print();

@@ -24,28 +24,32 @@ public class CompatibilityDescriptor {
 
     public CompatibilityDescriptor(BitReadWriter brw) {
         compatibilityDescriptorLength = brw.readOnBuffer(16);
-        descriptorCount = brw.readOnBuffer(16);
 
-        for ( int p=compatibilityDescriptorLength-2; p>0; ) {
-            Descriptor desc = new Descriptor();
-            desc.descriptorType = (byte) brw.readOnBuffer(8);
-            desc.descriptorLength = (byte) brw.readOnBuffer(8);
-            desc.specifierType = (byte) brw.readOnBuffer(8);
-            desc.specifierData = brw.readOnBuffer(24);
-            desc.model = brw.readOnBuffer(16);
-            desc.version = brw.readOnBuffer(16);
-            desc.subDescriptorCount = (byte) brw.readOnBuffer(8);
-            for ( int k=0; k<desc.subDescriptorCount; k++ ) {
-                SubDescriptor sub_desc = new SubDescriptor(brw);
-                desc.sub_descriptors.add(sub_desc);
-                p-=sub_desc.getLength();
+        if ( compatibilityDescriptorLength > 0 ) {
+            descriptorCount = brw.readOnBuffer(16);
+
+            for ( int p=compatibilityDescriptorLength-2; p>0; ) {
+                Descriptor desc = new Descriptor();
+                desc.descriptorType = (byte) brw.readOnBuffer(8);
+                desc.descriptorLength = (byte) brw.readOnBuffer(8);
+                desc.specifierType = (byte) brw.readOnBuffer(8);
+                desc.specifierData = brw.readOnBuffer(24);
+                desc.model = brw.readOnBuffer(16);
+                desc.version = brw.readOnBuffer(16);
+                desc.subDescriptorCount = (byte) brw.readOnBuffer(8);
+                for ( int k=0; k<desc.subDescriptorCount; k++ ) {
+                    SubDescriptor sub_desc = new SubDescriptor(brw);
+                    desc.sub_descriptors.add(sub_desc);
+                    p-=sub_desc.getLength();
+                }
+                p-= 11;
+                descriptors.add(desc);
             }
-            p-= 11;
-            descriptors.add(desc);
         }
     }
 
     public void print() {
+        Logger.d(String.format("\t --------------------------- (%s)\n", getClass().getName()));
         Logger.d(String.format("\t compatibilityDescriptorLength : 0x%x \n",
                 compatibilityDescriptorLength));
         Logger.d(String.format("\t descriptorCount : 0x%x \n", descriptorCount));
@@ -70,9 +74,10 @@ public class CompatibilityDescriptor {
                 desc.sub_descriptors.get(k).print();
             }
         }
+        Logger.d(String.format("\t --------------------------- \n"));
     }
 
     public int getLength() {
-        return compatibilityDescriptorLength;
+        return compatibilityDescriptorLength+2;
     }
 }

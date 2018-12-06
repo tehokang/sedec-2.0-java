@@ -28,7 +28,7 @@ public class SubtitlingDescriptor extends Descriptor {
             subtitling.subtitling_type = (byte) brw.readOnBuffer(8);
             subtitling.composition_page_id = brw.readOnBuffer(16);
             subtitling.ancillary_page_id = brw.readOnBuffer(16);
-
+            i-=8;
             subtitlings.add(subtitling);
         }
     }

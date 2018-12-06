@@ -1,6 +1,7 @@
 package sedec2.dvb.ts.dsmcc.messages;
 
 import sedec2.base.BitReadWriter;
+import sedec2.dvb.ts.dsmcc.biop.GroupInfoIndication;
 import sedec2.dvb.ts.dsmcc.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -10,7 +11,7 @@ public class DownloadServerInitiate extends DownloadControlMessage {
     protected CompatibilityDescriptor compatibilityDescriptor;
     protected int privateDataLength;
     protected byte[] privateDataByte;
-
+    protected GroupInfoIndication group_info_indication;
     public DownloadServerInitiate(BitReadWriter brw) {
         super(brw);
 
@@ -23,6 +24,7 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         for ( int i=0; i<privateDataByte.length; i++ ) {
             privateDataByte[i] = (byte) brw.readOnBuffer(8);
         }
+        group_info_indication = new GroupInfoIndication(privateDataByte);
     }
 
     public byte[] getServerId() {
@@ -44,9 +46,10 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         Logger.d(String.format("serverId : \n"));
         BinaryLogger.print(serverId);
 
-        compatibilityDescriptor.print();
+        if ( compatibilityDescriptor != null ) compatibilityDescriptor.print();
         Logger.d(String.format("privateDataLength : 0x%x \n", privateDataLength));
         BinaryLogger.print(privateDataByte);
-    }
 
+        if ( group_info_indication != null ) group_info_indication.print();
+    }
 }
