@@ -1,4 +1,4 @@
-package zexamples.arib;
+package sedec2.util;
 
 import java.io.BufferedOutputStream;
 import java.io.ByteArrayInputStream;
@@ -7,18 +7,16 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.zip.InflaterInputStream;
 
-import sedec2.util.BinaryLogger;
-
 /**
  * Application class as example to control informations of application which can be download
  */
-public class SimpleApplication {
-    protected static final String TAG = SimpleApplication.class.getSimpleName();
+public class SimpleApplicationCoordinator {
+    protected static final String TAG = SimpleApplicationCoordinator.class.getSimpleName();
     public String application_root_path;
     public String base_directory_path;
     public List<SubDirectory> sub_directories = new ArrayList<>();
 
-    public SimpleApplication(String rootpath) {
+    public SimpleApplicationCoordinator(String rootpath) {
         application_root_path = rootpath;
     }
 
