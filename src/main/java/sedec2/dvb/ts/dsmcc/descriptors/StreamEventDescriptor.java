@@ -29,6 +29,7 @@ public class StreamEventDescriptor extends Descriptor {
 
         Logger.d(String.format("\t eventId : 0x%x \n", eventId));
         Logger.d(String.format("\t eventNPT : 0x%x \n", eventNPT));
+        Logger.d(String.format("\t privateDataByte.length : 0x%x \n", privateDataByte.length));
         BinaryLogger.print(privateDataByte);
     }
 

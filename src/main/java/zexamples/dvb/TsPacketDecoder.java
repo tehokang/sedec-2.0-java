@@ -35,11 +35,16 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         // ait_multisection_teststream_ssyoo.ts
 //        ts_demuxer.addFilter(2413); // only DDB
 //        ts_demuxer.addFilter(2419); // only DDB
-        ts_demuxer.addFilter(2420); // only DDB
+//        ts_demuxer.addFilter(2420); // only DDB
 //        ts_demuxer.addFilter(2421); // only DSI
-//        ts_demuxer.addFilter(2441);
-//        ts_demuxer.addFilter(2822);
+//        ts_demuxer.addFilter(2441); // only DDB
+//        ts_demuxer.addFilter(2822); // only DDB
 
+        // mitexpert-stream_ssyoo
+//        ts_demuxer.addFilter(5004); // only DSI
+//        ts_demuxer.addFilter(5005); // only DDB
+//        ts_demuxer.addFilter(5006); // only DSI
+        ts_demuxer.addFilter(5007); // only DSI
 //      ts_demuxer.enableSiLogging();
     }
 
@@ -71,11 +76,15 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 //                    pat.print();
                 }
                 break;
+            case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
+            case TableFactory.DSMCC_STREAM_DESCRIPTORS_TABLE:
+                ((DSMCCSection) table).print();
+                break;
             case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
                 DSMCCSection dsmcc_ddb = (DSMCCSection) table;
                 /**
-                 * data_broadcast_id of DataBroadcastDescriptor should 0x0006 for data carousel
-                 * data_broadcast_id of DataBroadcastDescriptor should 0x0007 for object carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
                  */
                 dsmcc_ddb.updateToDataCarousel();
                 dsmcc_ddb.print();
@@ -83,8 +92,8 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
                 DSMCCSection dsmcc_dsi_dii = (DSMCCSection) table;
                 /**
-                 * data_broadcast_id of DataBroadcastDescriptor should 0x0006 for data carousel
-                 * data_broadcast_id of DataBroadcastDescriptor should 0x0007 for object carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
                  */
                 dsmcc_dsi_dii.updateToDataCarousel();
                 dsmcc_dsi_dii.print();

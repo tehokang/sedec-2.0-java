@@ -56,7 +56,7 @@ public abstract class Message extends BitReadWriter {
     }
 
     public int getLength() {
-        return 13 + adaptationDataByte.length;
+        return 12 + adaptationLength;
     }
 
     public void _print_() {
@@ -68,7 +68,7 @@ public abstract class Message extends BitReadWriter {
         Logger.d(String.format("adaptationLength : 0x%x \n", adaptationLength));
         Logger.d(String.format("messageLength : 0x%x \n", messageLength));
         Logger.d(String.format("adaptationType : 0x%x \n", adaptationType));
-        Logger.d(String.format("adaptationDataByte :\n"));
+        Logger.d(String.format("adaptationDataByte.length :\n", adaptationDataByte.length));
     }
 
     public abstract void print();

@@ -41,8 +41,12 @@ public class TableFactory {
     public final static byte PROGRAM_ASSOCIATION_TABLE = (byte) 0x00;
     public final static byte CONDITIONAL_ACCESS_TABLE = (byte) 0x01;
     public final static byte PROGRAM_MAP_TABLE = (byte) 0x02;
+
     public final static byte DSMCC_UN_MESSAGE_TABLE = 0x3b;
     public final static byte DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE = 0x3c;
+    public final static byte DSMCC_STREAM_DESCRIPTORS_TABLE = 0x3d;
+    public final static byte DSMCC_PRIVATE_DATA_TABLE = 0x3e;
+
     public final static byte APPLICATION_INFORMATION_TABLE = (byte) 0x74;
     public final static byte ACTUAL_NETWORK_INFORMATION_TABLE = (byte) 0x40;
     public final static byte OTHER_NETWORK_INFORMATION_TABLE = (byte) 0x41;
@@ -66,6 +70,8 @@ public class TableFactory {
         {
             case DSMCC_UN_MESSAGE_TABLE:
             case DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
+            case DSMCC_STREAM_DESCRIPTORS_TABLE:
+            case DSMCC_PRIVATE_DATA_TABLE:
                 return new DSMCCSection(buffer);
             case PROGRAM_ASSOCIATION_TABLE:
                 return new ProgramAssociationTable(buffer);

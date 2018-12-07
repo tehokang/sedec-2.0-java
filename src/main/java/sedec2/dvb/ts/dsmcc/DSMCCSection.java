@@ -129,6 +129,8 @@ public class DSMCCSection extends Table {
         Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
         Logger.d(String.format("section_number : 0x%x \n", section_number));
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
+        Logger.d(String.format("DSMCC_descriptor_list.size : 0x%x \n",
+                DSMCC_descriptor_list.size()));
         for ( int i=0; i<DSMCC_descriptor_list.size(); i++ ) {
             DSMCC_descriptor_list.get(i).print();
         }
@@ -139,5 +141,11 @@ public class DSMCCSection extends Table {
             Logger.d(String.format("private_data_byte.length : 0x%x \n", private_data_byte.length));
             BinaryLogger.print(private_data_byte);
         }
+
+        Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
+                (checksum_CRC32 >> 24) & 0xff,
+                (checksum_CRC32 >> 16) & 0xff,
+                (checksum_CRC32 >> 8) & 0xff,
+                checksum_CRC32 & 0xff));
     }
 }
