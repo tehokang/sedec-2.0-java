@@ -124,7 +124,12 @@ public class SiExtractor extends BaseExtractor {
                 if ( remaining > 0x00 ) {
                     section_buffer.write(ts.getDataByte(), 1, remaining);
                 }
+
                 Table table = TableFactory.createTable(section_buffer.toByteArray());
+                if ( m_enable_logging ) {
+                    Logger.d(String.format("PID : 0x%04x, table_id : 0x%x\n",
+                            ts.getPID(), table.getTableId()));
+                }
                 putOut(new QueueData(table));
                 m_fragmented_section.remove(ts.getPID());
                 /**
