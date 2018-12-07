@@ -75,9 +75,8 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
                 DSMCCSection dsmcc_ddb = (DSMCCSection) table;
                 /**
-                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
-                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
-                 * ... 0x000a for system software update
+                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+                 * in order to confirm which carousel user should use.
                  */
 //                dsmcc_ddb.updateToDataCarousel();
 //                dsmcc_ddb.print();
@@ -85,9 +84,8 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
                 DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
                 /**
-                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
-                 * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
-                 * ... 0x000a for system software update
+                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+                 * in order to confirm which carousel user should use.
                  */
 //                dsmcc_dsi_or_dii.updateToDataCarousel();
 //                dsmcc_dsi_or_dii.print();
