@@ -161,6 +161,9 @@ public abstract class BaseExtractor {
         m_ts_packets.clear();
         m_ts_packets = null;
 
+        m_fragmented_section.clear();
+        m_fragmented_section = null;
+
         m_event_queue.clear();
         m_event_queue = null;
 
