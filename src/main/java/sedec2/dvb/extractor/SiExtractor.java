@@ -120,9 +120,9 @@ public class SiExtractor extends BaseExtractor {
                  * with being careful whether current package has pointer field which
                  * refers to previous section's data or not.
                  */
-                if ( ts.getPointerField() != 0x00 ) {
-                    Logger.d(String.format("pf : %d \n", ts.getPointerField()));
-                    section_buffer.write(ts.getDataByte(), 1, ts.getPointerField());
+                int remaining = 0xff & ts.getPointerField();
+                if ( remaining > 0x00 ) {
+                    section_buffer.write(ts.getDataByte(), 1, remaining);
                 }
                 Table table = TableFactory.createTable(section_buffer.toByteArray());
                 putOut(new QueueData(table));
@@ -130,8 +130,8 @@ public class SiExtractor extends BaseExtractor {
                 /**
                  * Put new section into buffer
                  */
-                section_buffer.write(ts.getDataByte(), 1 + ts.getPointerField(),
-                        ts.getDataByte().length-1-ts.getPointerField());
+                section_buffer.write(ts.getDataByte(), 1 + remaining,
+                        ts.getDataByte().length-1-remaining);
                 m_fragmented_section.put(ts.getPID(), section_buffer);
             }
         } else {
