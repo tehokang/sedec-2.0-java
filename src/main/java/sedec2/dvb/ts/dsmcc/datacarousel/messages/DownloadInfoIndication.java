@@ -127,8 +127,10 @@ public class DownloadInfoIndication extends DownloadControlMessage {
             BinaryLogger.print(module.moduleInfoByte);
         }
 
-        Logger.d(String.format("privateDataByte : \n"));
-        BinaryLogger.print(privateDataByte);
+        if ( privateDataByte != null ) {
+            Logger.d(String.format("privateDataByte.length : 0x%x \n", privateDataByte.length));
+            BinaryLogger.print(privateDataByte);
+        }
     }
 
     @Override
@@ -138,8 +140,10 @@ public class DownloadInfoIndication extends DownloadControlMessage {
                 privateDataByte.length;
 
         for ( int i=0; i<modules.size(); i++ ) {
-            Module module = modules.get(i);
-            payload_length += ( 8 + module.moduleInfoByte.length );
+            payload_length += 8;
+            if ( privateDataByte != null ) {
+                payload_length += privateDataByte.length;
+            }
         }
         return header_length + payload_length;
     }

@@ -45,8 +45,10 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         BinaryLogger.print(serverId);
 
         if ( compatibilityDescriptor != null ) compatibilityDescriptor.print();
-        Logger.d(String.format("privateDataLength : 0x%x \n", privateDataLength));
-        BinaryLogger.print(privateDataByte);
+        if ( privateDataByte != null ) {
+            Logger.d(String.format("privateDataLength : 0x%x \n", privateDataByte.length));
+            BinaryLogger.print(privateDataByte);
+        }
 
         if ( group_info_indication != null ) group_info_indication.print();
     }
