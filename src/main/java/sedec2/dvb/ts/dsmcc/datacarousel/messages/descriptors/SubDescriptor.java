@@ -25,6 +25,10 @@ public class SubDescriptor {
         return subDescriptorType;
     }
 
+    public byte getSubDescriptorLength() {
+        return subDescriptorLength;
+    }
+
     public byte[] getAdditionalInformation() {
         return additionalInformation;
     }

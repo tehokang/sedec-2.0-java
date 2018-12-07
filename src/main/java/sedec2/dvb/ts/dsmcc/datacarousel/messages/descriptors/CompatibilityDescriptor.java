@@ -48,6 +48,18 @@ public class CompatibilityDescriptor {
         }
     }
 
+    public int getCompatibilityDescriptorLength() {
+        return compatibilityDescriptorLength;
+    }
+
+    public int getDescriptorCount() {
+        return descriptorCount;
+    }
+
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+
     public void print() {
         Logger.d(String.format("\t --------------------------- (%s)\n", getClass().getName()));
         Logger.d(String.format("\t compatibilityDescriptorLength : 0x%x \n",
