@@ -1,11 +1,10 @@
-package sedec2.dvb.ts.dsmcc.objectcarousel;
+package sedec2.dvb.ts.dsmcc;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.Descriptor;
 import sedec2.base.Table;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.Message;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
@@ -17,6 +16,7 @@ public class DSMCCSection extends Table {
     protected byte last_section_number;
     protected List<Descriptor> DSMCC_descriptor_list = new ArrayList<>();
     protected Message message = null;
+    protected byte[] message_byte;
 
     protected byte[] private_data_byte;
 
@@ -76,13 +76,18 @@ public class DSMCCSection extends Table {
             /**
              * userNetworkMessage() DSI, DII, DC
              */
-            message = MessageFactory.createMessage(this);
-
+            message_byte = new byte[section_length-9];
+            for ( int i=0; i<message_byte.length; i++ ) {
+                message_byte[i] = (byte) readOnBuffer(8);
+            }
         } else if ( table_id == 0x3c ) {
             /**
              * downloadDataMessage() DDB
              */
-            message = MessageFactory.createMessage(this);
+            message_byte = new byte[section_length-9];
+            for ( int i=0; i<message_byte.length; i++ ) {
+                message_byte[i] = (byte) readOnBuffer(8);
+            }
         } else if ( table_id == 0x3d ) {
             /**
              * DSMCC_descriptor_list()
@@ -103,6 +108,16 @@ public class DSMCCSection extends Table {
         }
 
         checksum_CRC32 = readOnBuffer(32);
+    }
+
+    public void updateToDataCarousel() {
+        Logger.d(String.format("updateToDataCarousel \n"));
+        message = sedec2.dvb.ts.dsmcc.datacarousel.MessageFactory.createMessage(message_byte);
+    }
+
+    public void updateToObjectCarousel() {
+        Logger.d(String.format("updateToObjectCarousel \n"));
+        message = sedec2.dvb.ts.dsmcc.objectcarousel.MessageFactory.createMessage(message_byte);
     }
 
     @Override

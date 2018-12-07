@@ -1,9 +1,9 @@
-package sedec2.dvb.ts.dsmcc.datacarousel.messages;
+package sedec2.dvb.ts.dsmcc;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.Logger;
 
-public abstract class Message {
+public abstract class Message extends BitReadWriter {
     protected byte protocolDiscriminator;
     protected byte dsmccType;
     protected int messageId;
@@ -14,7 +14,8 @@ public abstract class Message {
     protected byte adaptationType;
     protected byte[] adaptationDataByte;
 
-    public Message(BitReadWriter brw) {
+    public Message(byte[] buffer) {
+        super(buffer);
 
     }
 

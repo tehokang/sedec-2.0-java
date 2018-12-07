@@ -4,6 +4,7 @@ import java.util.List;
 
 import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
+import sedec2.dvb.ts.dsmcc.DSMCCSection;
 import sedec2.dvb.ts.si.TableFactory;
 import sedec2.dvb.ts.si.tables.NetworkInformationTable;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
@@ -31,11 +32,13 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         ts_demuxer.enableSiFilter();
         ts_demuxer.addFilter(0x0000); // PAT
 
-        ts_demuxer.addFilter(0x096d);
-        ts_demuxer.addFilter(0x0973);
-        ts_demuxer.addFilter(0x0974);
-        ts_demuxer.addFilter(0x0975);
-        ts_demuxer.addFilter(0x0b06);
+        // ait_multisection_teststream_ssyoo.ts
+//        ts_demuxer.addFilter(2413); // only DDB
+//        ts_demuxer.addFilter(2419); // only DDB
+        ts_demuxer.addFilter(2420); // only DDB
+//        ts_demuxer.addFilter(2421); // only DSI
+//        ts_demuxer.addFilter(2441);
+//        ts_demuxer.addFilter(2822);
 
 //      ts_demuxer.enableSiLogging();
     }
@@ -69,10 +72,22 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                 }
                 break;
             case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
-//                table.print();
+                DSMCCSection dsmcc_ddb = (DSMCCSection) table;
+                /**
+                 * data_broadcast_id of DataBroadcastDescriptor should 0x0006 for data carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should 0x0007 for object carousel
+                 */
+                dsmcc_ddb.updateToDataCarousel();
+                dsmcc_ddb.print();
                 break;
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
-                table.print();
+                DSMCCSection dsmcc_dsi_dii = (DSMCCSection) table;
+                /**
+                 * data_broadcast_id of DataBroadcastDescriptor should 0x0006 for data carousel
+                 * data_broadcast_id of DataBroadcastDescriptor should 0x0007 for object carousel
+                 */
+                dsmcc_dsi_dii.updateToDataCarousel();
+                dsmcc_dsi_dii.print();
                 break;
             default:
 //                table.print();

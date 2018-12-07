@@ -1,6 +1,5 @@
 package sedec2.dvb.ts.dsmcc.datacarousel.messages;
 
-import sedec2.base.BitReadWriter;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -11,17 +10,17 @@ public class DownloadServerInitiate extends DownloadControlMessage {
     protected int privateDataLength;
     protected byte[] privateDataByte;
     protected GroupInfoIndication group_info_indication;
-    public DownloadServerInitiate(BitReadWriter brw) {
-        super(brw);
+    public DownloadServerInitiate(byte[] buffer) {
+        super(buffer);
 
         for ( int i=0; i<serverId.length; i++ ) {
-            serverId[i] = (byte) brw.readOnBuffer(8);
+            serverId[i] = (byte) readOnBuffer(8);
         }
-        compatibilityDescriptor = new CompatibilityDescriptor(brw);
-        privateDataLength = brw.readOnBuffer(16);
+        compatibilityDescriptor = new CompatibilityDescriptor(this);
+        privateDataLength = readOnBuffer(16);
         privateDataByte = new byte[privateDataLength];
         for ( int i=0; i<privateDataByte.length; i++ ) {
-            privateDataByte[i] = (byte) brw.readOnBuffer(8);
+            privateDataByte[i] = (byte) readOnBuffer(8);
         }
         group_info_indication = new GroupInfoIndication(privateDataByte);
     }

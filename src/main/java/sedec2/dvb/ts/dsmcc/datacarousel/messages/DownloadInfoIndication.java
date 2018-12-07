@@ -3,7 +3,6 @@ package sedec2.dvb.ts.dsmcc.datacarousel.messages;
 import java.util.ArrayList;
 import java.util.List;
 
-import sedec2.base.BitReadWriter;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -29,36 +28,36 @@ public class DownloadInfoIndication extends DownloadControlMessage {
         public byte[] moduleInfoByte;
     }
 
-    public DownloadInfoIndication(BitReadWriter brw) {
-        super(brw);
+    public DownloadInfoIndication(byte[] buffer) {
+        super(buffer);
 
-        downloadId = brw.readOnBuffer(32);
-        blockSize = brw.readOnBuffer(16);
-        windowSize = (byte) brw.readOnBuffer(8);
-        ackPeriod = (byte) brw.readOnBuffer(8);
-        tCDownloadWindow = brw.readOnBuffer(32);
-        tCDownloadScenario = brw.readOnBuffer(32);
+        downloadId = readOnBuffer(32);
+        blockSize = readOnBuffer(16);
+        windowSize = (byte) readOnBuffer(8);
+        ackPeriod = (byte) readOnBuffer(8);
+        tCDownloadWindow = readOnBuffer(32);
+        tCDownloadScenario = readOnBuffer(32);
 
-        compatibilityDescriptor = new CompatibilityDescriptor(brw);
-        numberOfModules = brw.readOnBuffer(16);
+        compatibilityDescriptor = new CompatibilityDescriptor(this);
+        numberOfModules = readOnBuffer(16);
 
         for ( int i=0; i<numberOfModules; i++ ) {
             Module module = new Module();
-            module.moduleId = brw.readOnBuffer(16);
-            module.moduleSize = brw.readOnBuffer(32);
-            module.moduleVersion = (byte) brw.readOnBuffer(8);
-            module.moduleInfoLength = (byte) brw.readOnBuffer(8);
+            module.moduleId = readOnBuffer(16);
+            module.moduleSize = readOnBuffer(32);
+            module.moduleVersion = (byte) readOnBuffer(8);
+            module.moduleInfoLength = (byte) readOnBuffer(8);
             module.moduleInfoByte = new byte[module.moduleInfoLength];
             for ( int k=0; k<module.moduleInfoByte.length; k++ ) {
-                module.moduleInfoByte[k] = (byte) brw.readOnBuffer(8);
+                module.moduleInfoByte[k] = (byte) readOnBuffer(8);
             }
             modules.add(module);
         }
 
-        privateDataLength = brw.readOnBuffer(16);
+        privateDataLength = readOnBuffer(16);
         privateDataByte = new byte[privateDataLength];
         for ( int i=0; i<privateDataByte.length; i++ ) {
-            privateDataByte[i] = (byte) brw.readOnBuffer(8);
+            privateDataByte[i] = (byte) readOnBuffer(8);
         }
     }
 

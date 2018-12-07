@@ -1,11 +1,11 @@
-package sedec2.dvb.ts.dsmcc.datacarousel;
+package sedec2.dvb.ts.dsmcc;
 
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
-import sedec2.dvb.ts.dsmcc.datacarousel.descriptors.NTPEndpointDescriptor;
-import sedec2.dvb.ts.dsmcc.datacarousel.descriptors.NTPReferenceDescriptor;
-import sedec2.dvb.ts.dsmcc.datacarousel.descriptors.StreamEventDescriptor;
-import sedec2.dvb.ts.dsmcc.datacarousel.descriptors.StreamModeDescriptor;
+import sedec2.dvb.ts.dsmcc.descriptors.NTPEndpointDescriptor;
+import sedec2.dvb.ts.dsmcc.descriptors.NTPReferenceDescriptor;
+import sedec2.dvb.ts.dsmcc.descriptors.StreamEventDescriptor;
+import sedec2.dvb.ts.dsmcc.descriptors.StreamModeDescriptor;
 import sedec2.dvb.ts.si.descriptors.UnknownDescriptor;
 
 public class DescriptorFactory {

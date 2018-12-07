@@ -1,6 +1,5 @@
 package sedec2.dvb.ts.dsmcc.datacarousel.messages;
 
-import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
@@ -12,18 +11,18 @@ public class DownloadCancel extends DownloadControlMessage {
     protected int privateDataLength;
     protected byte[] privateDataByte;
 
-    public DownloadCancel(BitReadWriter brw) {
-        super(brw);
+    public DownloadCancel(byte[] buffer) {
+        super(buffer);
 
-        downloadId = brw.readOnBuffer(32);
-        moduleId = brw.readOnBuffer(16);
-        blockNumber = brw.readOnBuffer(16);
-        downloadCancelReason = (byte) brw.readOnBuffer(8);
-        brw.skipOnBuffer(8);
-        privateDataLength = brw.readOnBuffer(16);
+        downloadId = readOnBuffer(32);
+        moduleId = readOnBuffer(16);
+        blockNumber = readOnBuffer(16);
+        downloadCancelReason = (byte) readOnBuffer(8);
+        skipOnBuffer(8);
+        privateDataLength = readOnBuffer(16);
         privateDataByte = new byte[privateDataLength];
         for ( int i=0; i<privateDataByte.length; i++ ) {
-            privateDataByte[i] = (byte) brw.readOnBuffer(8);
+            privateDataByte[i] = (byte) readOnBuffer(8);
         }
     }
 

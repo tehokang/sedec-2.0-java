@@ -1,12 +1,11 @@
 package sedec2.dvb.ts.dsmcc.objectcarousel;
 
-import sedec2.base.BitReadWriter;
+import sedec2.dvb.ts.dsmcc.Message;
+import sedec2.dvb.ts.dsmcc.UnknownMessage;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadCancel;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadDataBlock;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadInfoIndication;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadServerInitiate;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.Message;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.UnknownMessage;
 
 public class MessageFactory {
     public static final int DOWNLOAD_INFO_REQUEST = 0x1001;
@@ -17,21 +16,20 @@ public class MessageFactory {
     public static final int DOWNLOAD_CANCEL = 0x1005;
     public static final int DOWNLOAD_SERVER_INITIATE = 0x1006;
 
-    public static Message createMessage(BitReadWriter brw) {
-        int message_id = (((brw.getCurrentBuffer()[2] & 0xff) << 8) |
-                        (brw.getCurrentBuffer()[3] & 0xff));
+    public static Message createMessage(byte[] buffer) {
+        int message_id = (((buffer[2] & 0xff) << 8) | (buffer[3] & 0xff));
 
         switch ( message_id ) {
             case DOWNLOAD_SERVER_INITIATE:
-                return new DownloadServerInitiate(brw);
+                return new DownloadServerInitiate(buffer);
             case DOWNLOAD_INFO_INDICATION:
-                return new DownloadInfoIndication(brw);
+                return new DownloadInfoIndication(buffer);
             case DOWNLOAD_CANCEL:
-                return new DownloadCancel(brw);
+                return new DownloadCancel(buffer);
             case DOWNLOAD_DATA_BLOCK:
-                return new DownloadDataBlock(brw);
+                return new DownloadDataBlock(buffer);
             default:
-                return new UnknownMessage(brw);
+                return new UnknownMessage(buffer);
         }
     }
 

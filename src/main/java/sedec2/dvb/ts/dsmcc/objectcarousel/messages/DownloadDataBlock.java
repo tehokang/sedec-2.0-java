@@ -1,6 +1,5 @@
 package sedec2.dvb.ts.dsmcc.objectcarousel.messages;
 
-import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
@@ -10,17 +9,17 @@ public class DownloadDataBlock extends DownloadDataMessage {
     protected int blockNumber;
     protected byte[] blockDataByte;
 
-    public DownloadDataBlock(BitReadWriter brw) {
-        super(brw);
+    public DownloadDataBlock(byte[] buffer) {
+        super(buffer);
 
-        moduleId = brw.readOnBuffer(16);
-        moduleVersion = (byte) brw.readOnBuffer(8);
-        brw.skipOnBuffer(8);
-        blockNumber = brw.readOnBuffer(16);
+        moduleId = readOnBuffer(16);
+        moduleVersion = (byte) readOnBuffer(8);
+        skipOnBuffer(8);
+        blockNumber = readOnBuffer(16);
         blockDataByte = new byte[messageLength-adaptationLength];
 
         for ( int i=0; i<blockDataByte.length; i++ ) {
-            blockDataByte[i] = (byte) brw.readOnBuffer(8);
+            blockDataByte[i] = (byte) readOnBuffer(8);
         }
     }
 
