@@ -68,7 +68,10 @@ public abstract class Message extends BitReadWriter {
         Logger.d(String.format("adaptationLength : 0x%x \n", adaptationLength));
         Logger.d(String.format("messageLength : 0x%x \n", messageLength));
         Logger.d(String.format("adaptationType : 0x%x \n", adaptationType));
-        Logger.d(String.format("adaptationDataByte.length :\n", adaptationDataByte.length));
+        if ( adaptationDataByte != null ) {
+            Logger.d(String.format("adaptationDataByte.length :\n",
+                    adaptationDataByte.length));
+        }
     }
 
     public abstract void print();
