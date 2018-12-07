@@ -8,11 +8,8 @@ import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadInfoIndication;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadServerInitiate;
 
 public class MessageFactory {
-    public static final int DOWNLOAD_INFO_REQUEST = 0x1001;
-    public static final int DOWNLOAD_INFO_RESPONSE = 0x1002;
-    public static final int DOWNLOAD_INFO_INDICATION = DOWNLOAD_INFO_RESPONSE;
+    public static final int DOWNLOAD_INFO_INDICATION = 0x1002;
     public static final int DOWNLOAD_DATA_BLOCK = 0x1003;
-    public static final int DOWNLOAD_DATA_REQUEST = 0x1004;
     public static final int DOWNLOAD_CANCEL = 0x1005;
     public static final int DOWNLOAD_SERVER_INITIATE = 0x1006;
 
