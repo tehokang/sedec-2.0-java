@@ -111,12 +111,10 @@ public class DSMCCSection extends Table {
     }
 
     public void updateToDataCarousel() {
-        Logger.d(String.format("updateToDataCarousel \n"));
         message = sedec2.dvb.ts.dsmcc.datacarousel.MessageFactory.createMessage(message_byte);
     }
 
     public void updateToObjectCarousel() {
-        Logger.d(String.format("updateToObjectCarousel \n"));
         message = sedec2.dvb.ts.dsmcc.objectcarousel.MessageFactory.createMessage(message_byte);
     }
 
