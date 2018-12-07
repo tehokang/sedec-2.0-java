@@ -6,7 +6,6 @@ import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
 import sedec2.dvb.ts.dsmcc.DSMCCSection;
 import sedec2.dvb.ts.si.TableFactory;
-import sedec2.dvb.ts.si.tables.NetworkInformationTable;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable.Program;
 import sedec2.dvb.ts.si.tables.ProgramMapTable;
@@ -23,28 +22,15 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     protected TsDemultiplexer ts_demuxer = null;
     protected ProgramAssociationTable pat = null;
     protected ProgramMapTable pmt = null;
-    protected NetworkInformationTable nit = null;
 
+    int ddb_counter = 0;
+    int dsi_dii_counter = 0;
     public SimpleTsCoordinator() {
         ts_demuxer = new TsDemultiplexer();
         ts_demuxer.addEventListener(this);
 
         ts_demuxer.enableSiFilter();
         ts_demuxer.addFilter(0x0000); // PAT
-
-        // ait_multisection_teststream_ssyoo.ts
-//        ts_demuxer.addFilter(2413); // only DDB
-//        ts_demuxer.addFilter(2419); // only DDB
-//        ts_demuxer.addFilter(2420); // only DDB
-//        ts_demuxer.addFilter(2421); // only DSI
-//        ts_demuxer.addFilter(2441); // only DDB
-//        ts_demuxer.addFilter(2822); // only DDB
-
-        // mitexpert-stream_ssyoo
-//        ts_demuxer.addFilter(5004); // only DSI
-//        ts_demuxer.addFilter(5005); // only DDB
-//        ts_demuxer.addFilter(5006); // only DSI
-        ts_demuxer.addFilter(5007); // only DSI
 //      ts_demuxer.enableSiLogging();
     }
 
@@ -76,27 +62,35 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 //                    pat.print();
                 }
                 break;
+            case TableFactory.PROGRAM_MAP_TABLE:
+                if ( pmt == null ) {
+                    pmt = (ProgramMapTable)table;
+//                    pmt.print();
+                }
+                break;
             case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
             case TableFactory.DSMCC_STREAM_DESCRIPTORS_TABLE:
-                ((DSMCCSection) table).print();
+//                ((DSMCCSection) table).print();
                 break;
             case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
                 DSMCCSection dsmcc_ddb = (DSMCCSection) table;
                 /**
                  * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
                  * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
+                 * ... 0x000a for system software update
                  */
-                dsmcc_ddb.updateToDataCarousel();
-                dsmcc_ddb.print();
+//                dsmcc_ddb.updateToDataCarousel();
+//                dsmcc_ddb.print();
                 break;
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
-                DSMCCSection dsmcc_dsi_dii = (DSMCCSection) table;
+                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
                 /**
                  * data_broadcast_id of DataBroadcastDescriptor should be 0x0006 for data carousel
                  * data_broadcast_id of DataBroadcastDescriptor should be 0x0007 for object carousel
+                 * ... 0x000a for system software update
                  */
-                dsmcc_dsi_dii.updateToDataCarousel();
-                dsmcc_dsi_dii.print();
+//                dsmcc_dsi_or_dii.updateToDataCarousel();
+//                dsmcc_dsi_or_dii.print();
                 break;
             default:
 //                table.print();
@@ -146,7 +140,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-//                progress_bar.update(ts_packet.length);
+                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();

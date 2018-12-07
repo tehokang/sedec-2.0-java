@@ -131,7 +131,13 @@ public class SiExtractor extends BaseExtractor {
                             ts.getPID(), table.getTableId()));
                 }
                 putOut(new QueueData(table));
+
+                /**
+                 * Clear buffer
+                 */
+                section_buffer.reset();
                 m_fragmented_section.remove(ts.getPID());
+
                 /**
                  * Put new section into buffer
                  */
