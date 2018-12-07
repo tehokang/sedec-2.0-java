@@ -77,7 +77,6 @@ public class DSMCCSection extends Table {
              * userNetworkMessage() DSI, DII, DC
              */
             message = MessageFactory.createMessage(this);
-
         } else if ( table_id == 0x3c ) {
             /**
              * downloadDataMessage() DDB
