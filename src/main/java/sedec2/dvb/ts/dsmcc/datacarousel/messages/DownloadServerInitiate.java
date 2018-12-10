@@ -10,6 +10,7 @@ public class DownloadServerInitiate extends DownloadControlMessage {
     protected int privateDataLength;
     protected byte[] privateDataByte;
     protected GroupInfoIndication group_info_indication;
+
     public DownloadServerInitiate(byte[] buffer) {
         super(buffer);
 
