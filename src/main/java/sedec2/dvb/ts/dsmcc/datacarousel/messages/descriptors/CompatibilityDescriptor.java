@@ -69,12 +69,21 @@ public class CompatibilityDescriptor {
         for ( int i=0; i<descriptors.size(); i++ ) {
             Descriptor desc = descriptors.get(i);
 
-            Logger.d(String.format("\t [%d] descriptorType : 0x%x \n",
-                    i, desc.descriptorType));
+            String descriptorType = "none";
+            if ( desc.descriptorType == 0x00 ) {
+                descriptorType = "Pad Descriptor";
+            } else if (desc.descriptorType == 0x01 ) {
+                descriptorType = "System Hardware Descriptor";
+            } else if (desc.descriptorType == 0x02 ) {
+                descriptorType = "System Software Descriptor";
+            }
+
+            Logger.d(String.format("\t [%d] descriptorType : 0x%x (%s) \n",
+                    i, desc.descriptorType, descriptorType));
             Logger.d(String.format("\t [%d] descriptorLength : 0x%x \n",
                     i, desc.descriptorLength));
-            Logger.d(String.format("\t [%d] specifierType : 0x%x \n",
-                    i, desc.specifierType));
+            Logger.d(String.format("\t [%d] specifierType : 0x%x (%s) \n",
+                    i, desc.specifierType, desc.specifierType==0x01 ? "IEEE OUI" : "reserved" ));
             Logger.d(String.format("\t [%d] specifierData : 0x%x \n",
                     i, desc.specifierData));
             Logger.d(String.format("\t [%d] model : 0x%x \n",
