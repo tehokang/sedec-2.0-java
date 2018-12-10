@@ -93,7 +93,7 @@ public class NetworkInformationTable extends Table {
             for ( int j=transport_stream.transport_descriptors_length; j>0; ) {
                 Descriptor desc = DescriptorFactory.createDescriptor(this);
                 j-=desc.getDescriptorLength();
-                descriptors.add(desc);
+                transport_stream.descriptors.add(desc);
             }
             i-= ( 6 + transport_stream.transport_descriptors_length);
             transport_streams.add(transport_stream);
