@@ -6,6 +6,7 @@ import java.util.List;
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CompatibilityDescriptor;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class GroupInfoIndication extends BitReadWriter {
@@ -62,5 +63,7 @@ public class GroupInfoIndication extends BitReadWriter {
                 group.descriptors.get(k).print();
             }
         }
+        Logger.d(String.format("privateDataLength : 0x%x \n", privateDataLength));
+        BinaryLogger.print(privateDataByte);
     }
 }
