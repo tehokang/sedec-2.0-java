@@ -91,6 +91,7 @@ public class ServiceLocation {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t componentId_tag : 0x%x \n", componentId_tag));
         Logger.d(String.format("\t component_data_length : 0x%x \n", component_data_length));
         Logger.d(String.format("\t serviceDomain_length : 0x%x \n", serviceDomain_length));
@@ -111,5 +112,6 @@ public class ServiceLocation {
                 cos_naming.initialContext_length));
         Logger.d(String.format("\t cos_naming.initialContext_data_byte : \n"));
         BinaryLogger.print(cos_naming.initialContext_data_byte);
+        Logger.d(String.format("\t - Endif of %s - \n", getClass().getName()));
     }
 }

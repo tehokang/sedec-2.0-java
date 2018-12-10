@@ -13,7 +13,7 @@ public class TaggedProfile {
     }
 
     public void print() {
-        Logger.d(String.format("\t - %s - \n", getClass().getName()));
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t profileId_tag : 0x%x \n", profileId_tag));
         Logger.d(String.format("\t profile_data_length : 0x%x (%d) \n",
                 profile_data_length, profile_data_length));

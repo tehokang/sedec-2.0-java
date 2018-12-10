@@ -62,6 +62,7 @@ public class DVBCarouselNSAPAddress {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t AFI : 0x%x \n", AFI));
         Logger.d(String.format("\t Type : 0x%x \n", Type));
         Logger.d(String.format("\t carouselId : 0x%x \n", carouselId));
@@ -70,5 +71,6 @@ public class DVBCarouselNSAPAddress {
         Logger.d(String.format("\t transport_stream_id : 0x%x \n", transport_stream_id));
         Logger.d(String.format("\t original_network_id : 0x%x \n",  original_network_id));
         Logger.d(String.format("\t service_id : 0x%x \n", service_id));
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

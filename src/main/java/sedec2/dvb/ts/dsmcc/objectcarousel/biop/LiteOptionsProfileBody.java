@@ -46,6 +46,7 @@ public class LiteOptionsProfileBody extends TaggedProfile {
 
     @Override
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t profile_data_byte_order : 0x%x \n",
                 profile_data_byte_order));
         Logger.d(String.format("\t component_count : 0x%x \n", component_count));
@@ -56,5 +57,6 @@ public class LiteOptionsProfileBody extends TaggedProfile {
             LiteOptionComponent component = lite_opt_components.get(i);
             component.print();
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

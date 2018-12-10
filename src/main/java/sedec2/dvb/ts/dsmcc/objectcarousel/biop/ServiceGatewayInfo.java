@@ -79,12 +79,14 @@ public class ServiceGatewayInfo extends BitReadWriter {
     }
 
     public void print() {
-        Logger.d(String.format("\t - %s - \n", getClass().getName()));
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         ior.print();
 
         Logger.d(String.format("\t downloadTaps_count : 0x%x \n", downloadTaps_count));
-        Logger.d(String.format("\t taps : \n"));
-        BinaryLogger.print(taps);
+        if ( downloadTaps_count > 0 ) {
+            Logger.d(String.format("\t taps : \n"));
+            BinaryLogger.print(taps);
+        }
 
         Logger.d(String.format("\t serviceContextList_count : 0x%x \n", serviceContextList_count));
         for ( int i=0; i<service_contexts.size(); i++ ) {
@@ -97,5 +99,6 @@ public class ServiceGatewayInfo extends BitReadWriter {
 
         Logger.d(String.format("\t userInfoLength : 0x%x \n", userInfoLength));
         BinaryLogger.print(userInfo_data_byte);
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

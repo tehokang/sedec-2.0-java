@@ -90,6 +90,7 @@ public class ConnBinder {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t componentId_tag : 0x%x \n",
                 componentId_tag));
         Logger.d(String.format("\t component_data_length : 0x%x \n",
@@ -121,5 +122,6 @@ public class ConnBinder {
             Logger.d(String.format("\t [%d] tap.selector_data_byte : \n"));
             BinaryLogger.print(tap.selector_data_byte);
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

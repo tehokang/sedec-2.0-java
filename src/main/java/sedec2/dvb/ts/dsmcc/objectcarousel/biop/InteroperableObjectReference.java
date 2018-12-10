@@ -56,7 +56,7 @@ public class InteroperableObjectReference {
     }
 
     public void print() {
-        Logger.d(String.format("\t - %s - \n", getClass().getName()));
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t type_id_length : 0x%x \n", type_id_length));
         Logger.d(String.format("\t type_id_byte : %s \n", new String(type_id_byte)));
         Logger.d(String.format("\t taggedProfile_count : 0x%x \n", taggedProfiles_count));
@@ -64,5 +64,6 @@ public class InteroperableObjectReference {
         for ( int i=0; i<tagged_profiles.size(); i++ ) {
             tagged_profiles.get(i).print();
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

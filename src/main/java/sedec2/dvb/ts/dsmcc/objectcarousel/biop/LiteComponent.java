@@ -36,11 +36,13 @@ public class LiteComponent {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t componentId_tag : 0x%x \n",
                 componentId_tag));
         Logger.d(String.format("\t component_data_length : 0x%x \n",
                 component_data_length));
         Logger.d(String.format("\t component_data_byte : \n"));
         BinaryLogger.print(component_data_byte);
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

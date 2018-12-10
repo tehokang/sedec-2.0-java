@@ -3,6 +3,7 @@ package sedec2.dvb.ts.dsmcc.objectcarousel.messages;
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.dvb.ts.dsmcc.objectcarousel.biop.ModuleInfo;
 import sedec2.dvb.ts.dsmcc.objectcarousel.messages.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -25,7 +26,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
         public int moduleSize;
         public byte moduleVersion;
         public byte moduleInfoLength;
-        public byte[] moduleInfoByte;
+        public ModuleInfo moduleInfo;
     }
 
     public DownloadInfoIndication(byte[] buffer) {
@@ -47,10 +48,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
             module.moduleSize = readOnBuffer(32);
             module.moduleVersion = (byte) readOnBuffer(8);
             module.moduleInfoLength = (byte) readOnBuffer(8);
-            module.moduleInfoByte = new byte[module.moduleInfoLength];
-            for ( int k=0; k<module.moduleInfoByte.length; k++ ) {
-                module.moduleInfoByte[k] = (byte) readOnBuffer(8);
-            }
+            module.moduleInfo = new ModuleInfo(this);
             modules.add(module);
         }
 
@@ -124,7 +122,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
                     i, module.moduleVersion));
             Logger.d(String.format("[%d] moduleInfoLength : 0x%x \n",
                     i, module.moduleInfoLength));
-            BinaryLogger.print(module.moduleInfoByte);
+            module.moduleInfo.print();
         }
 
         Logger.d(String.format("privateDataByte : \n"));
@@ -139,7 +137,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
 
         for ( int i=0; i<modules.size(); i++ ) {
             Module module = modules.get(i);
-            payload_length += ( 8 + module.moduleInfoByte.length );
+            payload_length += ( 8 + module.moduleInfo.getLength() );
         }
         return header_length + payload_length;
     }

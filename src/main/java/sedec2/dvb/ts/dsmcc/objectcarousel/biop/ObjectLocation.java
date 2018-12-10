@@ -65,6 +65,7 @@ public class ObjectLocation {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t componentId_tag : 0x%x \n", componentId_tag));
         Logger.d(String.format("\t component_data_length : 0x%x \n", component_data_length));
         Logger.d(String.format("\t carouselId : 0x%x \n", carouselId));
@@ -74,5 +75,6 @@ public class ObjectLocation {
         Logger.d(String.format("\t objectKey_length : 0x%x \n", objectKey_length));
         Logger.d(String.format("\t objectKey_data_byte : \n"));
         BinaryLogger.print(objectKey_data_byte);
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

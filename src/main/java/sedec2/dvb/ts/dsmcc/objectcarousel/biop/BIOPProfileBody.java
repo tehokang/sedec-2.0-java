@@ -73,5 +73,6 @@ public class BIOPProfileBody extends TaggedProfile {
         for ( int i=0; i<lite_components.size(); i++ ) {
             lite_components.get(i).print();
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }
