@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
-import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class InteroperableObjectReference {
@@ -12,13 +11,7 @@ public class InteroperableObjectReference {
     protected byte[] type_id_byte;
     protected byte[] alignment_gap;
     protected int taggedProfiles_count;
-    protected List<taggedProfile> tagged_profiles = new ArrayList<>();
-
-    public class taggedProfile {
-        public int profileId_tag;
-        public int profile_data_length;
-        public byte[] profile_data_byte;
-    }
+    protected List<TaggedProfile> tagged_profiles = new ArrayList<>();
 
     public InteroperableObjectReference(BitReadWriter brw) {
         type_id_length = brw.readOnBuffer(32);
@@ -37,13 +30,7 @@ public class InteroperableObjectReference {
 
         taggedProfiles_count = brw.readOnBuffer(32);
         for ( int i=0; i<taggedProfiles_count; i++ ) {
-            taggedProfile profile = new taggedProfile();
-            profile.profileId_tag = brw.readOnBuffer(32);
-            profile.profile_data_length = brw.readOnBuffer(32);
-            profile.profile_data_byte = new byte[profile.profile_data_length];
-            for ( int k=0; k<profile.profile_data_byte.length; k++ ) {
-                profile.profile_data_byte[k] = (byte) brw.readOnBuffer(8);
-            }
+            TaggedProfile profile = ProfileFactory.createProfile(brw);
             tagged_profiles.add(profile);
         }
     }
@@ -64,24 +51,18 @@ public class InteroperableObjectReference {
         return taggedProfiles_count;
     }
 
-    public List<taggedProfile> getTaggedProfiles() {
+    public List<TaggedProfile> getTaggedProfiles() {
         return tagged_profiles;
     }
 
     public void print() {
-        Logger.d(String.format("- %s - \n", getClass().getName()));
-        Logger.d(String.format("type_id_length : 0x%x \n", type_id_length));
-        Logger.d(String.format("type_id_byte : %s \n", new String(type_id_byte)));
-        Logger.d(String.format("taggedProfile_count : 0x%x \n", taggedProfiles_count));
+        Logger.d(String.format("\t - %s - \n", getClass().getName()));
+        Logger.d(String.format("\t type_id_length : 0x%x \n", type_id_length));
+        Logger.d(String.format("\t type_id_byte : %s \n", new String(type_id_byte)));
+        Logger.d(String.format("\t taggedProfile_count : 0x%x \n", taggedProfiles_count));
 
         for ( int i=0; i<tagged_profiles.size(); i++ ) {
-            taggedProfile profile = tagged_profiles.get(i);
-            Logger.d(String.format("[%d] profileId_tag : 0x%x \n",
-                    i, profile.profileId_tag));
-            Logger.d(String.format("[%d] profile_data_length : 0x%x \n",
-                    i, profile.profile_data_length));
-            Logger.d(String.format("[%d] profile_Data_byte : \n", i));
-            BinaryLogger.print(profile.profile_data_byte);
+            tagged_profiles.get(i).print();
         }
     }
 }

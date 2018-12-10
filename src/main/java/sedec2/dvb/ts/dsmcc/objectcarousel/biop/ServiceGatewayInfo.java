@@ -79,23 +79,23 @@ public class ServiceGatewayInfo extends BitReadWriter {
     }
 
     public void print() {
-        Logger.d(String.format("- %s - \n", getClass().getName()));
+        Logger.d(String.format("\t - %s - \n", getClass().getName()));
         ior.print();
 
-        Logger.d(String.format("downloadTaps_count : 0x%x \n", downloadTaps_count));
-        Logger.d(String.format("taps : \n"));
+        Logger.d(String.format("\t downloadTaps_count : 0x%x \n", downloadTaps_count));
+        Logger.d(String.format("\t taps : \n"));
         BinaryLogger.print(taps);
 
-        Logger.d(String.format("serviceContextList_count : 0x%x \n", serviceContextList_count));
+        Logger.d(String.format("\t serviceContextList_count : 0x%x \n", serviceContextList_count));
         for ( int i=0; i<service_contexts.size(); i++ ) {
             ServiceContext ctx = service_contexts.get(i);
-            Logger.d(String.format("[%d] context_id : 0x%x \n", i, ctx.context_id));
-            Logger.d(String.format("[%d] context_data_length : 0x%x \n",
+            Logger.d(String.format("\t [%d] context_id : 0x%x \n", i, ctx.context_id));
+            Logger.d(String.format("\t [%d] context_data_length : 0x%x \n",
                     i, ctx.context_data_length));
             BinaryLogger.print(ctx.context_data_byte);
         }
 
-        Logger.d(String.format("userInfoLength : 0x%x \n", userInfoLength));
+        Logger.d(String.format("\t userInfoLength : 0x%x \n", userInfoLength));
         BinaryLogger.print(userInfo_data_byte);
     }
 }
