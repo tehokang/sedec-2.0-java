@@ -37,6 +37,10 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         return privateDataByte;
     }
 
+    public GroupInfoIndication getGroupInfoIndication() {
+        return group_info_indication;
+    }
+
     @Override
     public void print() {
         super._print_();
