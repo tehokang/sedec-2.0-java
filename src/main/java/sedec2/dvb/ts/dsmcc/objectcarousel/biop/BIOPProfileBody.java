@@ -97,7 +97,11 @@ public class BIOPProfileBody extends Profile {
             tap.use = brw.readOnBuffer(16);
             tap.association_tag = brw.readOnBuffer(16);
             tap.selector_length = (byte) brw.readOnBuffer(8);
-
+            tap.selector_data_byte = new byte[tap.selector_length];
+            for ( int k=0; k<tap.selector_data_byte.length; k++ ) {
+                tap.selector_data_byte[k] = (byte) brw.readOnBuffer(8);
+            }
+            conn_binder.tap_others.add(tap);
         }
 
     }
