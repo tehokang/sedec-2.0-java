@@ -55,6 +55,10 @@ public class CellListDescriptor extends Descriptor {
         }
     }
 
+    public List<Cell> getCells() {
+        return cells;
+    }
+
     @Override
     public void print() {
         super._print_();
