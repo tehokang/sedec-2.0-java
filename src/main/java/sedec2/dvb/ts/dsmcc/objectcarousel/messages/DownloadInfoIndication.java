@@ -125,7 +125,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
             module.moduleInfo.print();
         }
 
-        Logger.d(String.format("privateDataByte : \n"));
+        Logger.d(String.format("privateDataByte.length : 0x%x \n", privateDataByte.length));
         BinaryLogger.print(privateDataByte);
     }
 
