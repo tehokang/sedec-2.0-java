@@ -66,8 +66,7 @@ public class TableFactory {
     public static Table createTable(byte[] buffer) {
         byte table_id = (byte)(buffer[0] & 0xff);
 
-        switch(table_id)
-        {
+        switch(table_id) {
             case DSMCC_UN_MESSAGE_TABLE:
             case DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
             case DSMCC_STREAM_DESCRIPTORS_TABLE:
