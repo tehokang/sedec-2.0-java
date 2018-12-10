@@ -4,6 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
+import sedec2.base.Descriptor;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DescriptorFactory;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
@@ -14,7 +16,7 @@ public class ServiceGatewayInfo extends BitReadWriter {
     protected byte serviceContextList_count;
     protected List<ServiceContext> service_contexts = new ArrayList<>();
     protected int userInfoLength;
-    protected byte[] userInfo_data_byte;
+    protected List<Descriptor> descriptors = new ArrayList<>();
 
     public class ServiceContext {
         public int context_id;
@@ -44,9 +46,13 @@ public class ServiceGatewayInfo extends BitReadWriter {
         }
 
         userInfoLength = readOnBuffer(16);
-        userInfo_data_byte = new byte[userInfoLength];
-        for ( int i=0; i<userInfo_data_byte.length; i++ ) {
-            userInfo_data_byte[i] = (byte) readOnBuffer(8);
+        /**
+         * Table 4.15 ServiceGatewayInfo syntax of TR 102 202
+         */
+        for ( int i=userInfoLength; i>0; ) {
+            Descriptor desc = DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
+            descriptors.add(desc);
         }
     }
 
@@ -74,8 +80,8 @@ public class ServiceGatewayInfo extends BitReadWriter {
         return userInfoLength;
     }
 
-    public byte[] getUserInfoDataByte() {
-        return userInfo_data_byte;
+    public List<Descriptor> getUserInfoDataByte() {
+        return descriptors;
     }
 
     public void print() {
@@ -98,7 +104,9 @@ public class ServiceGatewayInfo extends BitReadWriter {
         }
 
         Logger.d(String.format("\t userInfoLength : 0x%x \n", userInfoLength));
-        BinaryLogger.print(userInfo_data_byte);
+        for ( int i=0; i<descriptors.size(); i++ ) {
+            descriptors.get(i).print();
+        }
         Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

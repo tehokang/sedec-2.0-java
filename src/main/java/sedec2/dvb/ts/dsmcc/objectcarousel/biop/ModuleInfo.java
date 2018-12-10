@@ -4,7 +4,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.base.BitReadWriter;
-import sedec2.util.BinaryLogger;
+import sedec2.base.Descriptor;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DescriptorFactory;
 import sedec2.util.Logger;
 
 public class ModuleInfo {
@@ -14,7 +15,7 @@ public class ModuleInfo {
     protected byte taps_count;
     protected List<Tap> taps = new ArrayList<>();
     protected byte userInfoLength;
-    protected byte[] userInfo_data_byte;
+    protected List<Descriptor> descriptors = new ArrayList<>();
 
     public class Tap {
         public int id;
@@ -38,10 +39,10 @@ public class ModuleInfo {
         }
 
         userInfoLength = (byte) brw.readOnBuffer(8);
-        userInfo_data_byte = new byte[userInfoLength];
-
-        for ( int i=0; i<userInfo_data_byte.length; i++ ) {
-            userInfo_data_byte[i] = (byte) brw.readOnBuffer(8);
+        for ( int i=userInfoLength; i>0; ) {
+            Descriptor desc = DescriptorFactory.createDescriptor(brw);
+            i-=desc.getDescriptorLength();
+            descriptors.add(desc);
         }
     }
 
@@ -50,7 +51,12 @@ public class ModuleInfo {
         for ( int i=0; i<taps.size(); i++ ) {
             length += 7;
         }
-        length += (1 + userInfo_data_byte.length);
+        length += 1;
+
+        for ( int i=0; i<descriptors.size(); i++ ) {
+            length += descriptors.get(i).getDescriptorLength();
+        }
+
         return length;
     }
 
@@ -67,13 +73,14 @@ public class ModuleInfo {
             Logger.d(String.format("\t [%d] use : 0x%x \n", i, tap.use));
             Logger.d(String.format("\t [%d] association_tag : 0x%x \n",
                     i, tap.association_tag));
-            Logger.d(String.format("\t [%d] association_tag : 0x%x \n",
-                    i, tap.association_tag));
+            Logger.d(String.format("\t [%d] selector_length : 0x%x \n",
+                    i, tap.selector_length));
         }
 
         Logger.d(String.format("\t userInfoLength : 0x%x \n", userInfoLength));
-        Logger.d(String.format("\t userInfo_data_byte : \n"));
-        BinaryLogger.print(userInfo_data_byte);
+        for ( int i=0; i<descriptors.size(); i++ ) {
+            descriptors.get(i).print();
+        }
         Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

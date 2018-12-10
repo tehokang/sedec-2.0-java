@@ -3,6 +3,7 @@ package sedec2.dvb.ts.dsmcc.datacarousel.messages;
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CRC32Descriptor;
+import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CachingPriorityDescriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CompressedModuleDescriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.EstimatedDownloadTimeDescriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.GroupLinkDescriptor;
@@ -23,6 +24,7 @@ public class DescriptorFactory {
     public static final int EST_DOWNLOAD_TIME_DESCRIPTOR = 0x07;
     public static final int GROUP_LINK_DESCRIPTOR = 0x08;
     public static final int COMPRESSED_MODULE_DESCRIPTOR = 0x09;
+    public static final int CACHING_PRIORITY_DESCRIPTOR = 0x71;
 
     public static Descriptor createDescriptor(BitReadWriter brw) {
         int descriptor_tag = brw.getCurrentBuffer()[0] & 0x0000ff;
@@ -46,6 +48,8 @@ public class DescriptorFactory {
                 return new GroupLinkDescriptor(brw);
             case COMPRESSED_MODULE_DESCRIPTOR:
                 return new CompressedModuleDescriptor(brw);
+            case CACHING_PRIORITY_DESCRIPTOR:
+                return new CachingPriorityDescriptor(brw);
             default:
                 return new UnknownDescriptor(brw);
         }
