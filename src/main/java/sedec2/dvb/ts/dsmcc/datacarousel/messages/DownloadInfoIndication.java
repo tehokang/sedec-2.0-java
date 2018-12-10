@@ -3,6 +3,7 @@ package sedec2.dvb.ts.dsmcc.datacarousel.messages;
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.base.Descriptor;
 import sedec2.dvb.ts.dsmcc.datacarousel.messages.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -25,7 +26,7 @@ public class DownloadInfoIndication extends DownloadControlMessage {
         public int moduleSize;
         public byte moduleVersion;
         public byte moduleInfoLength;
-        public byte[] moduleInfoByte;
+        public List<Descriptor> descriptors = new ArrayList<>();
     }
 
     public DownloadInfoIndication(byte[] buffer) {
@@ -47,10 +48,12 @@ public class DownloadInfoIndication extends DownloadControlMessage {
             module.moduleSize = readOnBuffer(32);
             module.moduleVersion = (byte) readOnBuffer(8);
             module.moduleInfoLength = (byte) readOnBuffer(8);
-            module.moduleInfoByte = new byte[module.moduleInfoLength];
-            for ( int k=0; k<module.moduleInfoByte.length; k++ ) {
-                module.moduleInfoByte[k] = (byte) readOnBuffer(8);
+            for ( int k=module.moduleInfoLength; k>0;  ) {
+                Descriptor desc = DescriptorFactory.createDescriptor(this);
+                k-=desc.getDescriptorLength();
+                module.descriptors.add(desc);
             }
+
             modules.add(module);
         }
 
@@ -124,7 +127,9 @@ public class DownloadInfoIndication extends DownloadControlMessage {
                     i, module.moduleVersion));
             Logger.d(String.format("[%d] moduleInfoLength : 0x%x \n",
                     i, module.moduleInfoLength));
-            BinaryLogger.print(module.moduleInfoByte);
+            for ( i=0; i<module.descriptors.size(); i ++ ) {
+                module.descriptors.get(i).print();
+            }
         }
 
         if ( privateDataByte != null ) {
