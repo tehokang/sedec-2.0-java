@@ -1,5 +1,6 @@
 package sedec2.dvb.ts.dsmcc.objectcarousel.messages;
 
+import sedec2.dvb.ts.dsmcc.objectcarousel.biop.ServiceGatewayInfo;
 import sedec2.dvb.ts.dsmcc.objectcarousel.messages.descriptors.CompatibilityDescriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
@@ -9,6 +10,7 @@ public class DownloadServerInitiate extends DownloadControlMessage {
     protected CompatibilityDescriptor compatibilityDescriptor;
     protected int privateDataLength;
     protected byte[] privateDataByte;
+    protected ServiceGatewayInfo service_gateway_info;
 
     public DownloadServerInitiate(byte[] buffer) {
         super(buffer);
@@ -22,6 +24,7 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         for ( int i=0; i<privateDataByte.length; i++ ) {
             privateDataByte[i] = (byte) readOnBuffer(8);
         }
+        service_gateway_info = new ServiceGatewayInfo(privateDataByte);
     }
 
     public byte[] getServerId() {
@@ -47,5 +50,6 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         Logger.d(String.format("privateDataLength : 0x%x \n", privateDataLength));
         BinaryLogger.print(privateDataByte);
 
+        if ( service_gateway_info != null ) service_gateway_info.print();
     }
 }
