@@ -2,10 +2,10 @@ package sedec2.dvb.ts.dsmcc.objectcarousel;
 
 import sedec2.dvb.ts.dsmcc.Message;
 import sedec2.dvb.ts.dsmcc.UnknownMessage;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadCancel;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadDataBlock;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadInfoIndication;
-import sedec2.dvb.ts.dsmcc.datacarousel.messages.DownloadServerInitiate;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DownloadCancel;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DownloadDataBlock;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DownloadInfoIndication;
+import sedec2.dvb.ts.dsmcc.objectcarousel.messages.DownloadServerInitiate;
 
 public class MessageFactory {
     public static final int DOWNLOAD_INFO_REQUEST = 0x1001;

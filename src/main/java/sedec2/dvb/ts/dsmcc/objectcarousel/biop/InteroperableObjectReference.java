@@ -80,7 +80,7 @@ public class InteroperableObjectReference {
                     i, profile.profileId_tag));
             Logger.d(String.format("[%d] profile_data_length : 0x%x \n",
                     i, profile.profile_data_length));
-            Logger.d(String.format("[%d] profile_Data_byte : \n"));
+            Logger.d(String.format("[%d] profile_Data_byte : \n", i));
             BinaryLogger.print(profile.profile_data_byte);
         }
     }
