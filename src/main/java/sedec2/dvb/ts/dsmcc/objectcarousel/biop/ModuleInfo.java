@@ -46,6 +46,34 @@ public class ModuleInfo {
         }
     }
 
+    public int getModuleTimeOut() {
+        return moduleTimeOut;
+    }
+
+    public int getBlockTimeOut() {
+        return blockTimeOut;
+    }
+
+    public int getMinBlockTime() {
+        return minBlockTime;
+    }
+
+    public byte getTapsCount() {
+        return taps_count;
+    }
+
+    public List<Tap> getTaps() {
+        return taps;
+    }
+
+    public byte getUserInfoLength() {
+        return userInfoLength;
+    }
+
+    public List<Descriptor> getDescriptors() {
+        return descriptors;
+    }
+
     public int getLength() {
         int length = 13;
         for ( int i=0; i<taps.size(); i++ ) {
