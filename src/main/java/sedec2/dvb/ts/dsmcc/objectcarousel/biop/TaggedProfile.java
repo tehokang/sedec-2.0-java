@@ -12,6 +12,14 @@ public class TaggedProfile {
         profile_data_length = brw.readOnBuffer(32);
     }
 
+    public int getProfileIdTag() {
+        return profileId_tag;
+    }
+
+    public int getProfileDataLength() {
+        return profile_data_length;
+    }
+
     public void print() {
         Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t profileId_tag : 0x%x \n", profileId_tag));
