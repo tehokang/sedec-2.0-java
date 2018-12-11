@@ -16,7 +16,7 @@ public class DownloadDataBlock extends DownloadDataMessage {
         moduleVersion = (byte) readOnBuffer(8);
         skipOnBuffer(8);
         blockNumber = readOnBuffer(16);
-        blockDataByte = new byte[messageLength-adaptationLength];
+        blockDataByte = new byte[messageLength-adaptationLength-6];
 
         for ( int i=0; i<blockDataByte.length; i++ ) {
             blockDataByte[i] = (byte) readOnBuffer(8);
