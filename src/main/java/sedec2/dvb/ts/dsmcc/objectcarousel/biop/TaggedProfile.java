@@ -20,6 +20,10 @@ public class TaggedProfile {
         return profile_data_length;
     }
 
+    public int getLength() {
+        return 8;
+    }
+
     public void print() {
         Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t profileId_tag : 0x%x \n", profileId_tag));

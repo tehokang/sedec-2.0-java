@@ -28,6 +28,17 @@ public class LiteOptionsProfileBody extends TaggedProfile {
         }
     }
 
+    @Override
+    public int getLength() {
+        int header_length = super.getLength();
+        int payload_length = 2 + service_location.getLength();
+
+        for ( int i=0; i<lite_opt_components.size(); i++ ) {
+            payload_length += lite_opt_components.get(i).getLength();
+        }
+        return header_length + payload_length;
+    }
+
     public byte getProfileDataByteOrder() {
         return profile_data_byte_order;
     }

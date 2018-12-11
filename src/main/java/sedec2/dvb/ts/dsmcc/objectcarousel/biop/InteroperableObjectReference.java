@@ -35,6 +35,19 @@ public class InteroperableObjectReference {
         }
     }
 
+    public int getLength() {
+        int length = 4 + type_id_byte.length;
+        if ( alignment_gap != null ) {
+            length += alignment_gap.length;
+        }
+
+        length += 4;
+        for ( int i=0; i<tagged_profiles.size(); i++ ) {
+            length += tagged_profiles.get(i).getLength();
+        }
+        return length;
+    }
+
     public int getTypeIdLength() {
         return type_id_length;
     }

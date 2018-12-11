@@ -35,6 +35,17 @@ public class BIOPProfileBody extends TaggedProfile {
         }
     }
 
+    @Override
+    public int getLength() {
+        int header_length = super.getLength();
+        int payload_length = 2;
+        payload_length += ( object_location.getLength() + conn_binder.getLength() );
+        for ( int i=0; i<lite_components.size(); i++ ) {
+            payload_length += lite_components.get(i).getLength();
+        }
+        return header_length + payload_length;
+    }
+
     public byte getProfileDataByteOrder() {
         return profile_data_byte_order;
     }
