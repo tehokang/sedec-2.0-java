@@ -70,7 +70,7 @@ public class StreamMessage extends BIOPMessage {
     public void print() {
         super.print();
 
-        stream_info.print();
+        if ( stream_info != null ) stream_info.print();
         Logger.d(String.format("\t objectInfo_byte : \n"));
         BinaryLogger.print(objectInfo_byte);
 

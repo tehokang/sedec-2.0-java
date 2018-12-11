@@ -104,5 +104,7 @@ public class StreamEventMessage extends BIOPMessage {
         for ( int i=0; i<eventId.length; i++ ) {
             Logger.d(String.format("\t [%d] eventId : 0x%x \n", i, eventId[i]));
         }
+
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

@@ -90,7 +90,7 @@ public class DirectoryMessage extends BIOPMessage {
         }
 
         Logger.d(String.format("\t bindingType : 0x%x \n", bindingType));
-        ior.print();
+        if ( ior != null ) ior.print();
         Logger.d(String.format("\t objectInfo_length : 0x%x \n", objectInfo_length));
         Logger.d(String.format("\t objectInfo_byte : \n", objectInfo_byte));
         BinaryLogger.print(objectInfo_byte);

@@ -45,6 +45,7 @@ public class BIOPName {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t nameComponents_count : 0x%x \n", nameComponents_count));
         for ( int i=0; i<names.size(); i++ ) {
             Name name = names.get(i);
@@ -55,5 +56,6 @@ public class BIOPName {
             Logger.d(String.format("\t [%d] kind_data_byte : \n", i));
             BinaryLogger.print(name.kind_data_byte);
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

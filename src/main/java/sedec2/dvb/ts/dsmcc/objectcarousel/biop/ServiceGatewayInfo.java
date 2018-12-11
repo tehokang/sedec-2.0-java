@@ -86,7 +86,7 @@ public class ServiceGatewayInfo extends BitReadWriter {
 
     public void print() {
         Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
-        ior.print();
+        if ( ior != null ) ior.print();
 
         Logger.d(String.format("\t downloadTaps_count : 0x%x \n", downloadTaps_count));
         if ( downloadTaps_count > 0 ) {

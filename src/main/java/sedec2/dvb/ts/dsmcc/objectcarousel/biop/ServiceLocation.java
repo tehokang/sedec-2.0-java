@@ -96,22 +96,24 @@ public class ServiceLocation {
         Logger.d(String.format("\t component_data_length : 0x%x \n", component_data_length));
         Logger.d(String.format("\t serviceDomain_length : 0x%x \n", serviceDomain_length));
 
-        serviceDomain_data.print();
+        if ( serviceDomain_data != null ) serviceDomain_data.print();
 
-        Logger.d(String.format("\t cos_naming.nameComponents_count : 0x%x \n",
-                cos_naming.nameComponents_count));
-        for ( int i=0; i<cos_naming.names.size(); i++ ) {
-            Name name = cos_naming.names.get(i);
-            Logger.d(String.format("\t [%d] name.id_length : 0x%x \n", i, name.id_length));
-            Logger.d(String.format("\t [%d] name.id_data_byte : 0x%x \n", i, name.id_data_byte));
-            Logger.d(String.format("\t [%d] name.kind_length : 0x%x \n", i, name.kind_length));
-            Logger.d(String.format("\t [%d] name.kind_data_byte : %s \n",
-                    i, new String(name.kind_data_byte)));
+        if ( cos_naming != null ) {
+            Logger.d(String.format("\t cos_naming.nameComponents_count : 0x%x \n",
+                    cos_naming.nameComponents_count));
+            for ( int i=0; i<cos_naming.names.size(); i++ ) {
+                Name name = cos_naming.names.get(i);
+                Logger.d(String.format("\t [%d] name.id_length : 0x%x \n", i, name.id_length));
+                Logger.d(String.format("\t [%d] name.id_data_byte : 0x%x \n", i, name.id_data_byte));
+                Logger.d(String.format("\t [%d] name.kind_length : 0x%x \n", i, name.kind_length));
+                Logger.d(String.format("\t [%d] name.kind_data_byte : %s \n",
+                        i, new String(name.kind_data_byte)));
+            }
+            Logger.d(String.format("\t cos_naming.initialContext_length : 0x%x \n",
+                    cos_naming.initialContext_length));
+            Logger.d(String.format("\t cos_naming.initialContext_data_byte : \n"));
+            BinaryLogger.print(cos_naming.initialContext_data_byte);
+            Logger.d(String.format("\t - Endif of %s - \n", getClass().getName()));
         }
-        Logger.d(String.format("\t cos_naming.initialContext_length : 0x%x \n",
-                cos_naming.initialContext_length));
-        Logger.d(String.format("\t cos_naming.initialContext_data_byte : \n"));
-        BinaryLogger.print(cos_naming.initialContext_data_byte);
-        Logger.d(String.format("\t - Endif of %s - \n", getClass().getName()));
     }
 }

@@ -41,6 +41,7 @@ public class EventList {
     }
 
     public void print() {
+        Logger.d(String.format("\t - Begin of %s - \n", getClass().getName()));
         Logger.d(String.format("\t eventNames_count : 0x%x \n", eventNames_count));
 
         for ( int i=0; i<event_names.size(); i++ ) {
@@ -50,5 +51,6 @@ public class EventList {
             Logger.d(String.format("\t [%d] eventName_data_byte : \n"));
             BinaryLogger.print(name.eventName_data_byte);
         }
+        Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }
 }

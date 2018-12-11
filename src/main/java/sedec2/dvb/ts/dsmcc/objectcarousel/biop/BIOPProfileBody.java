@@ -76,10 +76,10 @@ public class BIOPProfileBody extends TaggedProfile {
                 liteComponents_count));
 
         // BIOP::ObjectLocation
-        object_location.print();
+        if ( object_location != null ) object_location.print();
 
         // DSM::ConnBinder
-        conn_binder.print();
+        if ( conn_binder != null ) conn_binder.print();
 
         for ( int i=0; i<lite_components.size(); i++ ) {
             lite_components.get(i).print();
