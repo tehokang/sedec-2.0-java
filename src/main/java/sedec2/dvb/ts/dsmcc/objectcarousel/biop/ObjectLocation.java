@@ -73,7 +73,8 @@ public class ObjectLocation {
         Logger.d(String.format("\t version_major : 0x%x \n", version_major));
         Logger.d(String.format("\t version_minor : 0x%x \n", version_minor));
         Logger.d(String.format("\t objectKey_length : 0x%x \n", objectKey_length));
-        Logger.d(String.format("\t objectKey_data_byte : \n"));
+        Logger.d(String.format("\t objectKey_data_byte : %s \n",
+                new String(objectKey_data_byte)));
         BinaryLogger.print(objectKey_data_byte);
         Logger.d(String.format("\t - End of %s - \n", getClass().getName()));
     }

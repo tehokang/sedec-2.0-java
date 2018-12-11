@@ -105,8 +105,8 @@ public class ServiceLocation {
             Logger.d(String.format("\t [%d] name.id_length : 0x%x \n", i, name.id_length));
             Logger.d(String.format("\t [%d] name.id_data_byte : 0x%x \n", i, name.id_data_byte));
             Logger.d(String.format("\t [%d] name.kind_length : 0x%x \n", i, name.kind_length));
-            Logger.d(String.format("\t [%d] name.kind_data_byte : \n", i));
-            BinaryLogger.print(name.kind_data_byte);
+            Logger.d(String.format("\t [%d] name.kind_data_byte : %s \n",
+                    i, new String(name.kind_data_byte)));
         }
         Logger.d(String.format("\t cos_naming.initialContext_length : 0x%x \n",
                 cos_naming.initialContext_length));
