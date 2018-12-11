@@ -4,7 +4,6 @@ import java.util.List;
 
 import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
-import sedec2.dvb.ts.dsmcc.DSMCCSection;
 import sedec2.dvb.ts.si.TableFactory;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable.Program;
@@ -31,7 +30,6 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
         ts_demuxer.enableSiFilter();
         ts_demuxer.addFilter(0x0000); // PAT
-        ts_demuxer.addFilter(5004);
 //        ts_demuxer.enableSiLogging();
     }
 
@@ -80,7 +78,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                  * in order to confirm which carousel user should use.
                  */
 //                DSMCCSection dsmcc_ddb = (DSMCCSection) table;
-//                dsmcc_ddb.updateToDataCarousel();
+//                dsmcc_ddb.updateToObjectCarousel();
 //                dsmcc_ddb.print();
                 break;
             case TableFactory.DSMCC_UN_MESSAGE_TABLE:
@@ -89,9 +87,9 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                  * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
                  * in order to confirm which carousel user should use.
                  */
-                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
-                dsmcc_dsi_or_dii.updateToObjectCarousel();
-                dsmcc_dsi_or_dii.print();
+//                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
+//                dsmcc_dsi_or_dii.updateToObjectCarousel();
+//                dsmcc_dsi_or_dii.print();
                 break;
             default:
 //                table.print();
@@ -141,7 +139,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-//                progress_bar.update(ts_packet.length);
+                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();
