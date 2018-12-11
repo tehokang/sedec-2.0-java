@@ -39,6 +39,10 @@ public class DownloadServerInitiate extends DownloadControlMessage {
         return privateDataByte;
     }
 
+    public ServiceGatewayInfo getServiceGatewayInfo() {
+        return service_gateway_info;
+    }
+
     @Override
     public void print() {
         super._print_();
