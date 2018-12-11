@@ -23,6 +23,22 @@ public class DownloadDataBlock extends DownloadDataMessage {
         }
     }
 
+    public int getModuleId() {
+        return moduleId;
+    }
+
+    public byte getModuleVersion() {
+        return moduleVersion;
+    }
+
+    public int getBlockNumber() {
+        return blockNumber;
+    }
+
+    public byte[] getBlockDataByte() {
+        return blockDataByte;
+    }
+
     @Override
     public void print() {
         super._print_();
