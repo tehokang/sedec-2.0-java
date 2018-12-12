@@ -1,3 +1,4 @@
+[![Build Status](https://travis-ci.com/tehokang/sedec-2.0-java.svg?token=tukzKYpBaAzTzcPeGfcg&branch=master)](https://travis-ci.com/tehokang/sedec-2.0-java)
 
 # Table of Contents
 * [Introduction](#Introduction)
