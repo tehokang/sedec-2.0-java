@@ -476,6 +476,10 @@ public class TlvPacketDecoder {
         }
 
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
+
+        /**
+         * Decoration of console user interface
+         */
         ConsoleProgress progress_bar = new ConsoleProgress("TLV").
                 show(true, true, true, true, true, false, false);
         /**
@@ -494,12 +498,23 @@ public class TlvPacketDecoder {
                         tlv_packet.length == 0 ||
                         tlv_packet[0] != 0x7f ) continue;
                 /**
-                 * Putting a TLV packet into SimpleTlvCoordinator
+                 * Case 1 of Putting a TLV raw packet into SimpleTlvCoordinator
                  * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
                  * from event listener which you registered to TlvDemultiplexer
                  */
+//                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
+
+                /**
+                 * Case 2 of Putting a TLV formatted packet into SimpleTlvCoordinator
+                 * and you can get both the results of TLV as table and MFU asynchronously
+                 * from event listener which you registered to TlvDemultiplxer
+                 */
                 TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
                 if ( false == simple_tlv_coordinator.put(tlv) ) break;
+
+                /**
+                 * Updating of console user interface
+                 */
                 progress_bar.update(tlv_packet.length);
             }
 
