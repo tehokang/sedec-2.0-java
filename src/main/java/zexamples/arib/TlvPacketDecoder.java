@@ -462,7 +462,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * from event listener which you registered to TlvDemultiplexer
  * <pre>
  * {@code
-     //tlv_packet below is a TLV packet as byte buffer
+     // tlv_packet below is a TLV packet as byte buffer
     if ( false == simple_tlv_coordinator.put(tlv_packet) ) {
         // Succeed to put a TLV packet into Extractor of Sedec
     }
@@ -474,7 +474,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * from event listener which you registered to TlvDemultiplxer
  * <pre>
  * {@code
-    //tlv_packet below is a TLV packet as byte buffer
+    // tlv_packet below is a TLV packet as byte buffer
     TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
     if ( false == simple_tlv_coordinator.put(tlv) ) {
         // Succeed to put a TLV packet into Extractor of Sedec
@@ -485,7 +485,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * tlv_packet is a TLV packet as byte buffer
  * <pre>
  * {@code
-    //tlv_packet below is a TLV packet as byte buffer
+    // First of all, user could check the scramble information from MPT, CAT
+    // tlv_packet below is a TLV packet as byte buffer
     TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
     switch ( tlv.getPacketType() ) {
         case PacketFactory.COMPRESSED_IP_PACKET:
