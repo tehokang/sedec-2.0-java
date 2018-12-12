@@ -92,13 +92,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 //        tlv_demuxer.enableApplicationLogging();
 //        tlv_demuxer.enableGeneralDataLogging();
 
-//        tlv_demuxer.addSiAllFilter();
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MPT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.PLT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DDMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DCMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.DAMT);
-        tlv_demuxer.addSiFilter(sedec2.arib.tlv.container.mmt.si.TableFactory.MH_AIT);
+        tlv_demuxer.addSiAllFilter();
     }
 
     public void destroy() {
