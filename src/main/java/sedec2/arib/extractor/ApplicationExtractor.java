@@ -144,6 +144,7 @@ public class ApplicationExtractor extends BaseExtractor {
                  * MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
+                    if ( mmtp_packet.isScrambled() == true ) break;
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         if ( samples.size() == 0 ) break;

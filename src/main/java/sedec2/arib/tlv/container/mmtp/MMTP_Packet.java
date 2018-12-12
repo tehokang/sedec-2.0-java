@@ -10,8 +10,6 @@ import sedec2.util.Logger;
  * MMTP_Packet describes Table 6-4 of ARIB B60.
  */
 public class MMTP_Packet extends BitReadWriter {
-    protected boolean m_is_scrambled = false;
-
     protected byte version;
     protected byte packet_counter_flag;
     protected byte FEC_type;
@@ -26,7 +24,7 @@ public class MMTP_Packet extends BitReadWriter {
     protected int extension_length;
     protected List<HeaderExtensionByte> header_extension_byte = new ArrayList<>();
     protected MMTP_Payload_MPU mmtp_payload_mpu = null;
-    protected byte[] mmtp_payload_bytes = null;
+    protected byte[] mmtp_payload_scramble_bytes = null;
     protected MMTP_Payload_SignalingMessage mmtp_payload_signalling_message = null;
 
     public class HeaderExtensionByte {
@@ -61,18 +59,20 @@ public class MMTP_Packet extends BitReadWriter {
 
     /**
      * Gets a flag which MMTP has scrambled or not.
+     * User must descramble MMTP payload before putting a TLV packet into Extractors.
      * @return flag which a packet has scrambled or not
      */
     public boolean isScrambled() {
-        return m_is_scrambled;
+        if ( mmtp_payload_scramble_bytes != null ) return true;
+        return false;
     }
 
     /**
      * Get payload of MMTP when payload of MMTP is scrambled
      * @return payload of MMTP as byte array
      */
-    public byte[] getPayloadBytes() {
-        return mmtp_payload_bytes;
+    public byte[] getPayloadScrambleBytes() {
+        return mmtp_payload_scramble_bytes;
     }
 
     /**
@@ -81,6 +81,7 @@ public class MMTP_Packet extends BitReadWriter {
      */
     public void updatePayload(byte[] buffer ) {
         mmtp_payload_mpu = new MMTP_Payload_MPU(new BitReadWriter(buffer));
+        mmtp_payload_scramble_bytes = null;
     }
 
     /**
@@ -208,6 +209,8 @@ public class MMTP_Packet extends BitReadWriter {
     public MMTP_Packet(byte[] buffer) {
         super(buffer);
 
+        boolean is_scrambled = false;
+
         version = (byte) readOnBuffer(2);
         packet_counter_flag = (byte) readOnBuffer(1);
         FEC_type = (byte) readOnBuffer(2);
@@ -243,7 +246,7 @@ public class MMTP_Packet extends BitReadWriter {
                          */
                         if ( ((heb00.scramble_control & 0x18) >> 3 ) == 0x02 ||
                                 ((heb00.scramble_control & 0x18) >> 3 ) == 0x03 ) {
-                            m_is_scrambled = true;
+                            is_scrambled = true;
                         }
                     } else if ( heb00.hdr_ext_type == 0x0002 ) {
                         heb00.download_id = readOnBuffer(32);
@@ -257,13 +260,18 @@ public class MMTP_Packet extends BitReadWriter {
             }
         }
 
+        /**
+         * MPU-MFU
+         */
         if ( payload_type == 0x00 ) {
-            if ( m_is_scrambled == true ) {
-                mmtp_payload_bytes = getCurrentBuffer();
+            if ( is_scrambled == true ) {
+                mmtp_payload_scramble_bytes = getCurrentBuffer();
             } else {
                 mmtp_payload_mpu = new MMTP_Payload_MPU(this);
             }
-
+        /**
+         * Signaling Message which's including MMT-SI
+         */
         } else if ( payload_type == 0x02 ) {
             mmtp_payload_signalling_message = new MMTP_Payload_SignalingMessage(this);
         }
