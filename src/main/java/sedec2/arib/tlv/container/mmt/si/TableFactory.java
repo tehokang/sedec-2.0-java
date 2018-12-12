@@ -7,6 +7,7 @@ import sedec2.arib.tlv.container.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.container.mmt.si.tables.DownloadControlMessage;
 import sedec2.arib.tlv.container.mmt.si.tables.DownloadManagementMessage;
 import sedec2.arib.tlv.container.mmt.si.tables.EntitlementControlMessage;
+import sedec2.arib.tlv.container.mmt.si.tables.EntitlementManagementMessage;
 import sedec2.arib.tlv.container.mmt.si.tables.EventMessageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.LayoutConfigurationTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MH_ApplicationInformationTable;
@@ -246,6 +247,9 @@ public class TableFactory {
             case AUTO_MH_EVENT_INFORMATION_TABLE_15:
             case AUTO_MH_EVENT_INFORMATION_TABLE_16:
                 return new MH_EventInformationTable(buffer);
+            case ENTITLEMENT_MANAGEMENT_MESSAGE_1:
+            case ENTITLEMENT_MANAGEMENT_MESSAGE_2:
+                return new EntitlementManagementMessage(buffer);
             default:
                 return new UnknownTable(buffer);
         }
