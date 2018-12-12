@@ -11,6 +11,7 @@ import java.util.List;
 import java.util.Map;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
+import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 import sedec2.arib.tlv.container.mmt.si.descriptors.Descriptor;
@@ -23,6 +24,7 @@ import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
+import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
@@ -123,6 +125,10 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     public boolean put(byte[] tlv_raw) {
         return tlv_demuxer.put(tlv_raw);
+    }
+
+    public boolean put(TypeLengthValue tlv ) {
+        return tlv_demuxer.put(tlv);
     }
 
     @Override
@@ -492,7 +498,8 @@ public class TlvPacketDecoder {
                  * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
                  * from event listener which you registered to TlvDemultiplexer
                  */
-                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
+                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
+                if ( false == simple_tlv_coordinator.put(tlv) ) break;
                 progress_bar.update(tlv_packet.length);
             }
 

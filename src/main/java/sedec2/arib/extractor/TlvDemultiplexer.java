@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
+import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 
 /**
@@ -655,6 +656,58 @@ public class TlvDemultiplexer implements
             if ( m_enable_general_data_filter == true &&
                     m_generaldata_extractor != null ) {
                 m_generaldata_extractor.putIn(tlv_raw);
+            }
+        } catch (InterruptedException e) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Put a TLV packet as formatted by sedec into and the packet will be decoded by each Extractor.
+     * The packet can be 64K bytes as maximum since packet_length of TLV has 16 bits.
+     * @param tlv one TLV packet
+     * @return return true if putting succeed or return false
+     *
+     * <p>
+     * Every Extractor has thread running but the thread is always paused unless user put a TLV.
+     * This is for better performance, general thread having sleep of user make burden of performance.
+     */
+    public boolean put(TypeLengthValue tlv) {
+        try {
+            if ( m_enable_video_filter == true &&
+                    m_video_extractor != null ) {
+                m_video_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_audio_filter == true &&
+                    m_audio_extractor != null ) {
+                m_audio_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_ttml_filter == true &&
+                    m_ttml_extractor != null ) {
+                m_ttml_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_si_filter == true &&
+                    m_si_extractor != null ) {
+                m_si_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_ntp_filter == true &&
+                    m_ntp_extractor != null ) {
+                m_ntp_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_application_filter == true &&
+                    m_application_extractor != null ) {
+                m_application_extractor.putIn(tlv);
+            }
+
+            if ( m_enable_general_data_filter == true &&
+                    m_generaldata_extractor != null ) {
+                m_generaldata_extractor.putIn(tlv);
             }
         } catch (InterruptedException e) {
             return false;

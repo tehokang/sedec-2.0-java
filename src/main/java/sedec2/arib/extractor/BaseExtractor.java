@@ -62,14 +62,24 @@ public abstract class BaseExtractor {
     protected Thread m_event_thread;
 
     /**
-     * Extracting thread which can pull out a TLV packet from TLV packets queue
+     * Extracting thread which can pull out a TLV packet from TLV packets raw queue
      */
-    protected Thread m_tlv_extractor_thread;
+    protected Thread m_tlv_raw_extractor_thread;
 
     /**
-     * TLV packets queue
+     * Extracting thread which can pull out a TLV packet from TLV packets formatted queue
      */
-    protected BlockingQueue<byte[]> m_tlv_packets = null;
+    protected Thread m_tlv_formatted_extractor_thread;
+
+    /**
+     * TLV packets queue as raw
+     */
+    protected BlockingQueue<byte[]> m_tlv_raw_packets = null;
+
+    /**
+     * TLV packets queue as formatted
+     */
+    protected BlockingQueue<TypeLengthValue> m_tlv_formatted_packets = null;
 
     /**
      * Event queue which can sent to user
@@ -112,18 +122,19 @@ public abstract class BaseExtractor {
      * start running thread with blocking queue which only run when queue obtain an input.
      */
     public BaseExtractor() {
-        m_tlv_packets = new ArrayBlockingQueue<byte[]>(100);
+        m_tlv_raw_packets = new ArrayBlockingQueue<byte[]>(100);
+        m_tlv_formatted_packets = new ArrayBlockingQueue<TypeLengthValue>(100);
         m_event_queue = new ArrayBlockingQueue<QueueData>(100);
 
-        m_tlv_extractor_thread = new Thread(new Runnable() {
+        m_tlv_raw_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 TypeLengthValue tlv = null;
 
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_tlv_packets ) {
-                            byte[] tlv_raw = m_tlv_packets.take();
+                        if ( null != m_tlv_raw_packets ) {
+                            byte[] tlv_raw = m_tlv_raw_packets.take();
                             tlv = PacketFactory.createPacket(tlv_raw);
 
                             if ( tlv != null ) process(tlv);
@@ -149,14 +160,50 @@ public abstract class BaseExtractor {
                 }
             }
         });
-        m_tlv_extractor_thread.start();
+
+        m_tlv_formatted_extractor_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TypeLengthValue tlv = null;
+
+                while ( m_is_running ) {
+                    try {
+                        if ( null != m_tlv_formatted_packets ) {
+                            tlv = m_tlv_formatted_packets.take();
+                            if ( tlv != null ) process(tlv);
+                        }
+
+                    } catch ( ArrayIndexOutOfBoundsException e ) {
+                        Logger.e(TAG,
+                                String.format("Error while parsing TLV (type %d)\n",
+                                tlv.getPacketType()));
+                        e.printStackTrace();
+                    } catch ( InterruptedException e ) {
+                        /**
+                         * Nothing to do
+                         */
+                    } catch ( Exception e ) {
+                        /**
+                         * You should remove a line below like break, exit statement,
+                         * because TLVExtractor has to keep alive even though
+                         * TLVExtractor get any wrong packets.
+                         */
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        m_tlv_formatted_extractor_thread.start();
+        m_tlv_raw_extractor_thread.start();
     }
 
     /**
      * Clear all of queue containing TLV, Event and MMTP fragmented packets.
      */
     public void clearQueue() {
-        m_tlv_packets.clear();
+        m_tlv_raw_packets.clear();
+        m_tlv_formatted_packets.clear();
         m_event_queue.clear();
 
         m_fragmented01_mmtp.clear();
@@ -170,11 +217,17 @@ public abstract class BaseExtractor {
     public void destroy() {
         m_is_running = false;
 
-        m_tlv_extractor_thread.interrupt();
-        m_tlv_extractor_thread = null;
+        m_tlv_formatted_extractor_thread.interrupt();
+        m_tlv_formatted_extractor_thread = null;
 
-        m_tlv_packets.clear();
-        m_tlv_packets = null;
+        m_tlv_raw_extractor_thread.interrupt();
+        m_tlv_raw_extractor_thread = null;
+
+        m_tlv_raw_packets.clear();
+        m_tlv_raw_packets = null;
+
+        m_tlv_formatted_packets.clear();
+        m_tlv_formatted_packets = null;
 
         m_event_queue.clear();
         m_event_queue = null;
@@ -212,8 +265,14 @@ public abstract class BaseExtractor {
      * @throws InterruptedException occur when thread interrupted
      */
     public void putIn(byte[] tlv) throws InterruptedException {
-        if ( m_is_running == true && m_tlv_packets != null && tlv != null ) {
-            m_tlv_packets.put(tlv);
+        if ( m_is_running == true && m_tlv_raw_packets != null && tlv != null ) {
+            m_tlv_raw_packets.put(tlv);
+        }
+    }
+
+    public void putIn(TypeLengthValue tlv) throws InterruptedException {
+        if ( m_is_running == true && m_tlv_raw_packets != null && tlv != null ) {
+            m_tlv_formatted_packets.put(tlv);
         }
     }
 
