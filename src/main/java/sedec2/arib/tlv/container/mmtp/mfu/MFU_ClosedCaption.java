@@ -53,7 +53,7 @@ public class MFU_ClosedCaption extends BitReadWriter {
                 last_subsample_number > 0 &&
                 subsample_info_list_flag == 1 ) {
             /**
-             * TODO Checking out Table 9-1 of ARIB B60
+             * TODO Should verify Table 9-1 of ARIB B60
              */
             for ( int i=0; i<last_subsample_number; i++ ) {
                 SubSample ss = new SubSample();

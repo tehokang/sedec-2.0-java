@@ -252,7 +252,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         default:
             if ( table.isUnknownTable() == true ) {
                 System.out.print(String.format(
-                        "It's a table which sedec couldn't decode (table_id : 0x%x)\n",
+                        "There might be a table which sedec couldn't decode (table_id : 0x%x)\n",
                         table.getTableId()));
             }
             break;
@@ -457,6 +457,58 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * <li> NTP which is included in IPv4, IPv6 packet of TLV as NetworkTimeProtocolData
  * <li> MPU, MFU to be used for media which is included in MMTP Packet
  * </ul>
+ *
+ * Case 1 of Putting a TLV raw packet into SimpleTlvCoordinator
+ * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
+ * from event listener which you registered to TlvDemultiplexer
+ * <pre>
+ * {@code
+     //tlv_packet below is a TLV packet as byte buffer
+    if ( false == simple_tlv_coordinator.put(tlv_packet) ) {
+        // Succeed to put a TLV packet into Extractor of Sedec
+    }
+ * }
+ * </pre>
+ *
+ * Case 2 of Putting a TLV formatted packet into SimpleTlvCoordinator
+ * and you can get both the results of TLV as table and MFU asynchronously
+ * from event listener which you registered to TlvDemultiplxer
+ * <pre>
+ * {@code
+    //tlv_packet below is a TLV packet as byte buffer
+    TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
+    if ( false == simple_tlv_coordinator.put(tlv) ) {
+        // Succeed to put a TLV packet into Extractor of Sedec
+    }
+ * }
+ * </pre>
+ * Case 3 of Putting a TLV formatted packet which's including scrambled
+ * tlv_packet is a TLV packet as byte buffer
+ * <pre>
+ * {@code
+    //tlv_packet below is a TLV packet as byte buffer
+    TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
+    switch ( tlv.getPacketType() ) {
+        case PacketFactory.COMPRESSED_IP_PACKET:
+            CompressedIpPacket compress_ip_packet = (CompressedIpPacket) tlv;
+            MMTP_Packet mmtp_packet = compress_ip_packet.getPacketData().mmtp_packet;
+            if ( mmtp_packet != null && mmtp_packet.isScrambled() == true ) {
+                byte[] mmtp_payload = mmtp_packet.getPayloadBytes();
+
+                // ... descrambling
+
+                mmtp_packet.updatePayload(mmtp_payload);
+            }
+            break;
+        default:
+            // Others couldn't be scrambled
+            break;
+    }
+    if ( false == simple_tlv_coordinator.put(tlv) ) {
+        // Succeed to put a TLV packet into Extractor of Sedec
+    }
+ * }
+ * </pre>
  */
 public class TlvPacketDecoder {
     public static void main(String []args) throws InterruptedException {
@@ -505,6 +557,28 @@ public class TlvPacketDecoder {
                  */
                 TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
                 if ( false == simple_tlv_coordinator.put(tlv) ) break;
+
+                /**
+                 * Case 3 of Putting a TLV formatted packet which's including scrambled
+                 */
+//                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
+//                switch ( tlv.getPacketType() ) {
+//                    case PacketFactory.COMPRESSED_IP_PACKET:
+//                        CompressedIpPacket compress_ip_packet = (CompressedIpPacket) tlv;
+//                        MMTP_Packet mmtp_packet = compress_ip_packet.getPacketData().mmtp_packet;
+//                        if ( mmtp_packet != null && mmtp_packet.isScrambled() == true ) {
+//                            byte[] mmtp_payload = mmtp_packet.getPayloadBytes();
+//                            // ...
+//                            // Descrambling payload of MMTP which's scrambled
+//                            // ...
+//                            mmtp_packet.updatePayload(mmtp_payload);
+//                        }
+//                        break;
+//                    default:
+//                        // Others couldn't be scrambled
+//                        break;
+//                }
+//                if ( false == simple_tlv_coordinator.put(tlv) ) break;
 
                 /**
                  * Updating of console user interface
