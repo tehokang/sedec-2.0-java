@@ -497,7 +497,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
                 // ... descrambling
 
-                mmtp_packet.updatePayload(mmtp_payload);
+                mmtp_packet.updateDescramblePayload(mmtp_payload);
             }
             break;
         default:
@@ -571,7 +571,7 @@ public class TlvPacketDecoder {
 //                            // ...
 //                            // Descrambling payload of MMTP which's scrambled
 //                            // ...
-//                            mmtp_packet.updatePayload(mmtp_payload);
+//                            mmtp_packet.updateDescramblePayload(mmtp_payload);
 //                        }
 //                        break;
 //                    default:
