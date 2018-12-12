@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Map;
 
 import sedec2.arib.extractor.TlvDemultiplexer;
-import sedec2.arib.tlv.container.PacketFactory;
 import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 import sedec2.arib.tlv.container.mmt.si.descriptors.Descriptor;
@@ -548,15 +547,15 @@ public class TlvPacketDecoder {
                  * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
                  * from event listener which you registered to TlvDemultiplexer
                  */
-//                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
+                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
 
                 /**
                  * Case 2 of Putting a TLV formatted packet into SimpleTlvCoordinator
                  * and you can get both the results of TLV as table and MFU asynchronously
                  * from event listener which you registered to TlvDemultiplxer
                  */
-                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
-                if ( false == simple_tlv_coordinator.put(tlv) ) break;
+//                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
+//                if ( false == simple_tlv_coordinator.put(tlv) ) break;
 
                 /**
                  * Case 3 of Putting a TLV formatted packet which's including scrambled
