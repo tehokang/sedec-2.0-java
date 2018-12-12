@@ -99,7 +99,6 @@ public class TtmlExtractor extends BaseExtractor {
                  * MPU-MFU
                  */
                 if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                    if ( mmtp_packet.isScrambled() == true ) break;
                     if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
                         for ( int i=0; i<samples.size(); i++ ) {

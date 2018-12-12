@@ -392,7 +392,7 @@ public abstract class BaseExtractor {
         MMTP_Payload_MPU mpu = mmtp.getMPU();
         List<ByteArrayOutputStream> samples = new ArrayList<>();
 
-        if ( mpu == null ) return samples;
+        if ( mmtp.isScrambled() == true || mpu == null ) return samples;
 
         switch ( mpu.getFragmentationIndicator() ) {
             case 0x00:

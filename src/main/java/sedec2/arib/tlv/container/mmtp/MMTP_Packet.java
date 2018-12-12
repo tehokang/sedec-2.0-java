@@ -79,7 +79,7 @@ public class MMTP_Packet extends BitReadWriter {
      * Put new payload being descramble
      * @param buffer MMTP payload being descramble
      */
-    public void updatePayload(byte[] buffer ) {
+    public void updateDescramblePayload(byte[] buffer ) {
         mmtp_payload_mpu = new MMTP_Payload_MPU(new BitReadWriter(buffer));
         mmtp_payload_scramble_bytes = null;
     }
