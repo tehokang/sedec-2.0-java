@@ -151,7 +151,7 @@ public abstract class BaseExtractor {
                          */
                     } catch ( Exception e ) {
                         /**
-                         * @todo You should remove a line below like break, exit statement,
+                         * You should remove a line below like break, exit statement,
                          * because TLVExtractor has to keep alive even though
                          * TLVExtractor get any wrong packets.
                          */
