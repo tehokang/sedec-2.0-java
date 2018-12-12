@@ -329,7 +329,7 @@ public final class CodecSpecificDataUtil {
     }
     boolean extensionFlag = bitArray.readBit();
     if (channelConfiguration == 0) {
-      throw new UnsupportedOperationException(); // @TODO Implement programConfigElement();
+      throw new UnsupportedOperationException(); // TODO Implement programConfigElement();
     }
     if (audioObjectType == 6 || audioObjectType == 20) {
       bitArray.skipBits(3); // layerNr.
