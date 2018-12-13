@@ -85,7 +85,7 @@ public class TransportStream extends BitReadWriter {
     }
 
     public void print() {
-        Logger.d(String.format("======= TS Header ======= (%s)\n", getClass().getName()));
+        Logger.d(String.format("======= Transport-Stream ======= (%s)\n", getClass().getName()));
         Logger.d(String.format("sync_byte : 0x%x \n", sync_byte));
         Logger.d(String.format("transport_error_indicator : 0x%x \n",
                 transport_error_indicator));
