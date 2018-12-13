@@ -1,6 +1,12 @@
 package zexamples.dvb;
 
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
@@ -18,9 +24,17 @@ import sedec2.util.TsPacketReader;
  */
 class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     protected static final String TAG = SimpleTsCoordinator.class.getSimpleName();
-    protected TsDemultiplexer ts_demuxer = null;
-    protected ProgramAssociationTable pat = null;
+
     protected ProgramMapTable pmt = null;
+    protected ProgramAssociationTable pat = null;
+    protected TsDemultiplexer ts_demuxer = null;
+
+    protected final String download_path = "./download/";
+    protected final String video_download_path = download_path + "/video/";
+    protected final String audio_download_path = download_path + "/audio/";
+
+    protected Map<Integer, BufferedOutputStream> video_bs_map = new HashMap<>();
+    protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
 
     int ddb_counter = 0;
     int dsi_dii_counter = 0;
@@ -29,7 +43,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         ts_demuxer.addEventListener(this);
 
         ts_demuxer.enableSiFilter();
-        ts_demuxer.addFilter(0x0000); // PAT
+        ts_demuxer.enableAudioFilter();
+        ts_demuxer.enableVideoFilter();
+        ts_demuxer.addSiFilter(0x0000); // PAT
+
 //        ts_demuxer.enableSiLogging();
     }
 
@@ -56,7 +73,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                     List<Program> programs = pat.getPrograms();
                     for ( int i=0; i<programs.size(); i++ ) {
                         Program program = programs.get(i);
-                        ts_demuxer.addFilter(program.getPid());
+                        ts_demuxer.addSiFilter(program.getPid());
                     }
 //                    pat.print();
                 }
@@ -94,6 +111,40 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             default:
 //                table.print();
                 break;
+        }
+    }
+
+    @Override
+    public void onReceivedAudio(int packet_id, byte[] buffer) {
+        try {
+            if ( audio_bs_map.containsKey(packet_id) == false ) {
+                new File(audio_download_path).mkdirs();
+                audio_bs_map.put(packet_id, new BufferedOutputStream(new FileOutputStream(
+                        new File(String.format("%s/audio.pes.0x%04x",
+                                audio_download_path, packet_id)))));
+            }
+
+            BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
+            audio_bs.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+    @Override
+    public void onReceivedVideo(int packet_id, byte[] buffer) {
+        try {
+            if ( video_bs_map.containsKey(packet_id) == false ) {
+                new File(video_download_path).mkdirs();
+                video_bs_map.put(packet_id, new BufferedOutputStream(new FileOutputStream(
+                        new File(String.format("%s/video.pes.0x%04x",
+                                video_download_path, packet_id)))));
+            }
+
+            BufferedOutputStream video_bs = video_bs_map.get(packet_id);
+            video_bs.write(buffer);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

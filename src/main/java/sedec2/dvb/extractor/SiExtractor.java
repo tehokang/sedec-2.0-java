@@ -105,7 +105,7 @@ public class SiExtractor extends BaseExtractor {
          */
         if ( m_int_id_filter.contains(ts.getPID()) == false ) return;
 
-        ByteArrayOutputStream section_buffer = m_fragmented_section.get(ts.getPID());
+        ByteArrayOutputStream section_buffer = m_fragmented_transport_stream.get(ts.getPID());
         if ( ts.getPayloadUnitStartIndicator() == 0x01 ) {
             if ( null == section_buffer ) {
                 /**
@@ -113,7 +113,7 @@ public class SiExtractor extends BaseExtractor {
                  */
                 section_buffer = new ByteArrayOutputStream();
                 section_buffer.write(ts.getDataByte(), 1, ts.getDataByte().length-1);
-                m_fragmented_section.put(ts.getPID(), section_buffer);
+                m_fragmented_transport_stream.put(ts.getPID(), section_buffer);
             } else {
                 /**
                  * Put previous buffered sections out since new section come here
@@ -136,14 +136,14 @@ public class SiExtractor extends BaseExtractor {
                  * Clear buffer
                  */
                 section_buffer.reset();
-                m_fragmented_section.remove(ts.getPID());
+                m_fragmented_transport_stream.remove(ts.getPID());
 
                 /**
                  * Put new section into buffer
                  */
                 section_buffer.write(ts.getDataByte(), 1 + remaining,
                         ts.getDataByte().length-1-remaining);
-                m_fragmented_section.put(ts.getPID(), section_buffer);
+                m_fragmented_transport_stream.put(ts.getPID(), section_buffer);
             }
         } else {
             /**

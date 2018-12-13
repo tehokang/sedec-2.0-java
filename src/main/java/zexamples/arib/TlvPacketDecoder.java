@@ -58,7 +58,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     /**
      * Video, Audio, IndexItem of Application to extract from TLV
      */
-    protected BufferedOutputStream video_bs = null;
+    protected Map<Integer, BufferedOutputStream> video_bs_map = new HashMap<>();
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
 
     public SimpleTlvCoordinator() {
@@ -99,14 +99,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         tlv_demuxer.destroy();
         tlv_demuxer = null;
 
-        try {
-            if ( video_bs != null ) {
-                video_bs.close();
-                video_bs = null;
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        video_bs_map.clear();
+        video_bs_map = null;
 
         audio_bs_map.clear();
         audio_bs_map = null;
@@ -261,13 +255,14 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     @Override
     public void onReceivedVideo(int packet_id, byte[] buffer) {
         try {
-            if ( video_bs == null ) {
+            if ( video_bs_map.containsKey(packet_id) == false ) {
                 new File(video_download_path).mkdirs();
-                video_bs = new BufferedOutputStream(new FileOutputStream(
+                video_bs_map.put(packet_id, new BufferedOutputStream(new FileOutputStream(
                         new File(String.format("%s/video.mfu.0x%04x.hevc",
-                                        video_download_path, packet_id))));
-
+                                video_download_path, packet_id)))));
             }
+
+            BufferedOutputStream video_bs = video_bs_map.get(packet_id);
             video_bs.write(buffer);
             /**
              * sedec provide wrapper class to check SPS, AUD of H.265
@@ -280,6 +275,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 //            if ( non_vcl_nal_unit.getSPS() != null ) {
 //                non_vcl_nal_unit.getSPS().print();
 //            }
+
         } catch (IOException e) {
             e.printStackTrace();
         }

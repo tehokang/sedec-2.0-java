@@ -69,7 +69,7 @@ public abstract class BaseExtractor {
      */
     protected BlockingQueue<QueueData> m_event_queue = null;
 
-    protected Map<Integer, ByteArrayOutputStream> m_fragmented_section = new HashMap<>();
+    protected Map<Integer, ByteArrayOutputStream> m_fragmented_transport_stream = new HashMap<>();
 
     protected static final String TAG = BaseExtractor.class.getSimpleName();
 
@@ -145,7 +145,7 @@ public abstract class BaseExtractor {
         m_ts_packets.clear();
         m_event_queue.clear();
 
-        m_fragmented_section.clear();
+        m_fragmented_transport_stream.clear();
     }
 
     /**
@@ -155,14 +155,17 @@ public abstract class BaseExtractor {
     public void destroy() {
         m_is_running = false;
 
+        m_byte_id_filter.clear();
+        m_int_id_filter.clear();
+
         m_ts_extractor_thread.interrupt();
         m_ts_extractor_thread = null;
 
         m_ts_packets.clear();
         m_ts_packets = null;
 
-        m_fragmented_section.clear();
-        m_fragmented_section = null;
+        m_fragmented_transport_stream.clear();
+        m_fragmented_transport_stream = null;
 
         m_event_queue.clear();
         m_event_queue = null;

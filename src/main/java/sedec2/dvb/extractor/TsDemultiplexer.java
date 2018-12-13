@@ -5,11 +5,19 @@ import java.util.List;
 
 import sedec2.base.Table;
 
-public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
+public class TsDemultiplexer implements
+        SiExtractor.ITableExtractorListener,
+        AudioExtractor.IAudioExtractorListener,
+        VideoExtractor.IVideoExtractorListener {
     protected static final String TAG = TsDemultiplexer.class.getSimpleName();
     protected BaseExtractor m_si_extractor = null;
+    protected BaseExtractor m_audio_extractor = null;
+    protected BaseExtractor m_video_extractor = null;
+
     protected List<Listener> m_listeners = new ArrayList<>();
     protected boolean m_enable_si_filter = false;
+    protected boolean m_enable_audio_filter = false;
+    protected boolean m_enable_video_filter = false;
 
     /**
      * Listener to get information after putting TS into here
@@ -19,11 +27,19 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      */
     public interface Listener {
         public void onReceivedTable(Table table);
+        public void onReceivedAudio(int packet_id, byte[] buffer);
+        public void onReceivedVideo(int packet_id, byte[] buffer);
     }
 
     public TsDemultiplexer() {
         m_si_extractor = new SiExtractor();
         m_si_extractor.addEventListener(this);
+
+        m_audio_extractor = new AudioExtractor();
+        m_audio_extractor.addEventListener(this);
+
+        m_video_extractor = new VideoExtractor();
+        m_video_extractor.addEventListener(this);
     }
 
     /**
@@ -33,6 +49,8 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      */
     public void clearQueue() {
         m_si_extractor.clearQueue();
+        m_audio_extractor.clearQueue();
+        m_video_extractor.clearQueue();
     }
 
     /**
@@ -42,6 +60,14 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
         m_si_extractor.removeEventListener(this);
         m_si_extractor.destroy();
         m_si_extractor = null;
+
+        m_audio_extractor.removeEventListener(this);
+        m_audio_extractor.destroy();
+        m_audio_extractor = null;
+
+        m_video_extractor.removeEventListener(this);
+        m_video_extractor.destroy();
+        m_video_extractor = null;
     }
 
     /**
@@ -69,8 +95,49 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
      * User can receive Table via {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
      */
-    public void addFilter(int pid) {
+    public void addSiFilter(int pid) {
         if ( m_si_extractor != null ) m_si_extractor.addPidFilter(pid);
+    }
+
+    /**
+     * Remove a filter as table id of Private Section.
+     * @param pid of TS which user doesn't want to receive via
+     * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
+     */
+    public void removeSiFilter(int pid) {
+        if ( m_si_extractor != null ) m_si_extractor.removePidFilter(pid);
+    }
+
+    /**
+     * Add a filter to get audio corresponding only to PID by user setting.
+     * @param pid PID of TS which user wants to get
+     */
+    public void addAudioFilter(int pid) {
+        if ( m_audio_extractor != null ) m_audio_extractor.addPidFilter(pid);
+    }
+
+    /**
+     * Removes a filter of audio PID
+     * @param pid
+     */
+    public void removeAudioFilter(int pid) {
+        if ( m_audio_extractor != null ) m_audio_extractor.removePidFilter(pid);
+    }
+
+    /**
+     * Add a filter to get video corresponding only to PID by user setting.
+     * @param pid PID of TS which user wants to get
+     */
+    public void addVideoFilter(int pid) {
+        if ( m_video_extractor != null ) m_video_extractor.addPidFilter(pid);
+    }
+
+    /**
+     * Removes a filter of video PID
+     * @param pid
+     */
+    public void removeVideoFilter(int pid) {
+        if ( m_video_extractor != null ) m_video_extractor.removePidFilter(pid);
     }
 
     /**
@@ -80,19 +147,22 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
      */
     public void removeAllFilter() {
         if ( m_si_extractor != null ) {
-            for ( int i=0; i<256; i++ ) {
-                m_si_extractor.removePidFilter((byte)(i & 0xff));
+            for ( int i=0; i<0x2000; i++ ) {
+                m_si_extractor.removePidFilter(i & 0x1fff);
             }
         }
-    }
 
-    /**
-     * Remove a filter as table id of Private Section.
-     * @param pid of TS which user doesn't want to receive via
-     * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
-     */
-    public void removeFilter(int pid) {
-        if ( m_si_extractor != null ) m_si_extractor.removePidFilter(pid);
+        if ( m_audio_extractor != null ) {
+            for ( int i=0; i<0x2000; i++ ) {
+                m_audio_extractor.removePidFilter(i & 0x1fff);
+            }
+        }
+
+        if ( m_video_extractor != null ) {
+            for ( int i=0; i<0x2000; i++ ) {
+                m_video_extractor.removePidFilter(i & 0x1fff);
+            }
+        }
     }
 
     /**
@@ -126,6 +196,34 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
     }
 
     /**
+     * Enable audio filter by PID of TS
+     */
+    public void enableAudioFilter() {
+        m_enable_audio_filter = true;
+    }
+
+    /**
+     * Disable audio filter by PID of TS
+     */
+    public void disableAudioFilter() {
+        m_enable_audio_filter = false;
+    }
+
+    /**
+     * Enable video filter by PID of TS
+     */
+    public void enableVideoFilter() {
+        m_enable_video_filter = true;
+    }
+
+    /**
+     * Disable video filter by PID of TS
+     */
+    public void disableVideoFilter() {
+        m_enable_video_filter = false;
+    }
+
+    /**
      * Put a TS packet into and the packet will be decoded by each Extractor.
      * The packet can be 188 bytes as maximum
      * @param ts_raw one TS packet
@@ -141,6 +239,17 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
                     m_si_extractor != null ) {
                 m_si_extractor.putIn(ts_raw);
             }
+
+            if ( m_enable_audio_filter == true &&
+                    m_audio_extractor != null ) {
+                m_audio_extractor.putIn(ts_raw);
+            }
+
+            if ( m_enable_video_filter == true &&
+                    m_video_extractor != null ) {
+                m_video_extractor.putIn(ts_raw);
+            }
+
         } catch (InterruptedException e) {
             return false;
         }
@@ -152,5 +261,20 @@ public class TsDemultiplexer implements SiExtractor.ITableExtractorListener {
         for ( int i=0; i<m_listeners.size(); i++ ) {
             m_listeners.get(i).onReceivedTable(table);
         }
+    }
+
+    @Override
+    public void onReceivedAudio(int packet_id, byte[] data) {
+        for ( int i=0; i<m_listeners.size(); i++ ) {
+            m_listeners.get(i).onReceivedAudio(packet_id, data);
+        }
+    }
+
+    @Override
+    public void onReceivedVideo(int packet_id, byte[] data) {
+        for ( int i=0; i<m_listeners.size(); i++ ) {
+            m_listeners.get(i).onReceivedVideo(packet_id, data);
+        }
+
     }
 }
