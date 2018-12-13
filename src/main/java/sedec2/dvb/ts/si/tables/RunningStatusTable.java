@@ -9,7 +9,7 @@ import sedec2.util.Logger;
 public class RunningStatusTable extends Table {
     protected List<StreamStatus> stream_statuses = new ArrayList<>();
 
-    class StreamStatus {
+    public class StreamStatus {
         public int transport_stream_id;
         public int orignal_network_id;
         public int service_id;

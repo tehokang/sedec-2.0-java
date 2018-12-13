@@ -17,6 +17,8 @@ public class PacketizedElementaryStream extends BitReadWriter {
     protected static final byte H222_TYPE_E = (byte) 0b11111000;
     protected static final byte ANCILLARY_STREAM = (byte) 0b11111001;
     protected static final byte PROGRAM_STREAM_DIRECTORY = (byte) 0b11111111;
+    // AUDIO_STREAM 110x xxxx (0xC0 ~ 0xDF)
+    // VIDEO_STREAM 1110 xxxx (0xE0 ~ 0xEF)
 
     protected int packet_start_code_prefix;
     protected byte stream_id;

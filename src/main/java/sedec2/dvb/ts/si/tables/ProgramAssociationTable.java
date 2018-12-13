@@ -21,19 +21,12 @@ public class ProgramAssociationTable extends Table {
     private List<Program> programs = new ArrayList<>();
 
     public class Program {
-        private int program_number;
-        private int pid;
+        public  int program_number;
+        public int pid;
+
         Program(int _program_number, int _pid) {
             program_number = _program_number;
             pid = _pid;
-        }
-
-        public int getProgramNumber() {
-            return program_number;
-        }
-
-        public int getPid() {
-            return pid;
         }
     }
 
@@ -74,8 +67,8 @@ public class ProgramAssociationTable extends Table {
         Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
 
         for ( int i=0; i<programs.size(); i++ ) {
-            Logger.d(String.format("\t program_number : 0x%x \n", programs.get(i).getProgramNumber()));
-            Logger.d(String.format("\t pid : 0x%x \n", programs.get(i).getPid()));
+            Logger.d(String.format("\t program_number : 0x%x \n", programs.get(i).program_number));
+            Logger.d(String.format("\t pid : 0x%x \n", programs.get(i).pid));
         }
         Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
                         (checksum_CRC32 >> 24) & 0xff,

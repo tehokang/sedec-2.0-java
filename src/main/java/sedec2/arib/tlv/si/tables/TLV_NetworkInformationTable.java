@@ -22,7 +22,7 @@ public class TLV_NetworkInformationTable extends Table {
     protected int TLV_stream_loop_length;
     protected List<TLVStream> tlv_streams = new ArrayList<>();
 
-    class TLVStream {
+    public class TLVStream {
         public int tlv_stream_id;
         public int original_network_id;
         public int tlv_stream_descriptors_length;

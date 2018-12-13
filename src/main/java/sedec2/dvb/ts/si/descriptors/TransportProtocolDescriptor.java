@@ -18,7 +18,7 @@ public class TransportProtocolDescriptor extends Descriptor {
     private List<UrlExtension> url_extensions = new ArrayList<>();
     private ChannelTransport channel_transport = new ChannelTransport();
 
-    class Transport {
+    public class Transport {
         public byte remote_connection;
         public int original_network_id;
         public int transport_stream_id;
@@ -26,12 +26,12 @@ public class TransportProtocolDescriptor extends Descriptor {
         public byte component_tag;
     }
 
-    class UrlExtension {
+    public class UrlExtension {
         public byte URL_extension_length;
         public byte[] URL_exntension_byte = new byte[256];
     }
 
-    class ChannelTransport {
+    public class ChannelTransport {
         public byte URL_base_length;
         public byte[] URL_base_byte = new byte[256];
         public byte URL_extension_count;

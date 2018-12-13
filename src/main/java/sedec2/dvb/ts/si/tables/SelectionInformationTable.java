@@ -17,7 +17,7 @@ public class SelectionInformationTable extends Table {
     protected List<Descriptor> descriptors = new ArrayList<>();
     protected List<Service> services = new ArrayList<>();
 
-    class Service {
+    public class Service {
         public int service_id;
         public byte running_status;
         public int service_loop_length;

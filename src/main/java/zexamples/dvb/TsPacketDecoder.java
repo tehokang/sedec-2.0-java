@@ -12,7 +12,6 @@ import sedec2.base.Table;
 import sedec2.dvb.extractor.TsDemultiplexer;
 import sedec2.dvb.ts.si.TableFactory;
 import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
-import sedec2.dvb.ts.si.tables.ProgramAssociationTable.Program;
 import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
@@ -45,6 +44,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         ts_demuxer.enableSiFilter();
         ts_demuxer.enableAudioFilter();
         ts_demuxer.enableVideoFilter();
+
         ts_demuxer.addSiFilter(0x0000); // PAT
 
 //        ts_demuxer.enableSiLogging();
@@ -70,10 +70,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             case TableFactory.PROGRAM_ASSOCIATION_TABLE:
                 if ( pat == null ) {
                     pat = (ProgramAssociationTable)table;
-                    List<Program> programs = pat.getPrograms();
+                    List<ProgramAssociationTable.Program> programs = pat.getPrograms();
                     for ( int i=0; i<programs.size(); i++ ) {
-                        Program program = programs.get(i);
-                        ts_demuxer.addSiFilter(program.getPid());
+                        ProgramAssociationTable.Program program = programs.get(i);
+                        ts_demuxer.addSiFilter(program.pid);
                     }
 //                    pat.print();
                 }
@@ -81,6 +81,22 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
             case TableFactory.PROGRAM_MAP_TABLE:
                 if ( pmt == null ) {
                     pmt = (ProgramMapTable)table;
+                    List<ProgramMapTable.Program> programs = pmt.getPrograms();
+                    for ( int i=0; i<programs.size(); i++ ) {
+                        ProgramMapTable.Program program = programs.get(i);
+                        switch ( program.stream_type ) {
+                            case 0x01:
+                            case 0x02:
+                                // video
+                                ts_demuxer.addVideoFilter(program.elementary_PID);
+                                break;
+                            case 0x03:
+                            case 0x04:
+                                // audio
+                                ts_demuxer.addAudioFilter(program.elementary_PID);
+                                break;
+                        }
+                    }
 //                    pmt.print();
                 }
                 break;

@@ -20,7 +20,7 @@ public class EventInformationTable extends Table {
     protected byte last_table_id;
     protected List<Event> events = new ArrayList<>();
 
-    class Event {
+    public class Event {
         public int event_id;
         public long start_time;
         public int duration;

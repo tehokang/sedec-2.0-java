@@ -16,7 +16,7 @@ public class AddressMapTable extends Table {
     protected int num_of_service_id;
     protected List<Service> services = new ArrayList<>();
 
-    class Service {
+    public class Service {
         public int service_id;
         public byte ip_version;
         public int service_loop_length;
@@ -25,14 +25,14 @@ public class AddressMapTable extends Table {
         public byte[] private_data_byte;
     }
 
-    class IPv4 {
+    public class IPv4 {
         public byte[] src_address_32 = new byte[4];
         public byte src_address_mask_32;
         public byte[] dst_address_32 = new byte[4];
         public byte dst_address_mask_32;
     }
 
-    class IPv6 {
+    public class IPv6 {
         public byte[] src_address_128 = new byte[16];
         public byte src_address_mask_128;
         public byte[] dst_address_128 = new byte[16];
