@@ -21,7 +21,7 @@ public class MH_ShortEventDescriptor extends Descriptor {
         ISO_639_language_code[2] = (byte) brw.readOnBuffer(8);
 
         event_name_length = (byte) brw.readOnBuffer(8);
-        event_name_char = new byte[event_name_length];
+        event_name_char = new byte[0xff & event_name_length];
 
         for ( int i=0; i<event_name_char.length; i++ ) {
             event_name_char[i] = (byte) brw.readOnBuffer(8);

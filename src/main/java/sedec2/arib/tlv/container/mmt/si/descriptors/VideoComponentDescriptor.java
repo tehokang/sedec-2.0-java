@@ -80,6 +80,7 @@ public class VideoComponentDescriptor extends Descriptor {
                 video_transfer_characteristics));
         Logger.d(String.format("\t ISO_639_language_code : %s \n",
                 new String(ISO_639_language_code)));
+        Logger.d(String.format("\t text_char.length : 0x%x \n",  text_char.length));
         Logger.d(String.format("\t text_char : %s \n",  new String(text_char)));
     }
 

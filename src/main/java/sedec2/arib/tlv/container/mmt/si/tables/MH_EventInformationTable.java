@@ -98,7 +98,7 @@ public class MH_EventInformationTable extends Table {
             event.free_CA_mode = (byte) readOnBuffer(1);
             event.descriptors_loop_length = readOnBuffer(12);
 
-            for ( int j=event.descriptors_loop_length-4; j>0; ) {
+            for ( int j=event.descriptors_loop_length; j>0; ) {
                 Descriptor desc = DescriptorFactory.createDescriptor(this);
                 j-=desc.getDescriptorLength();
                 event.descriptors.add(desc);
