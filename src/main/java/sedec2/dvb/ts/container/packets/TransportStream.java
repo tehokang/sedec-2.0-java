@@ -1,6 +1,7 @@
 package sedec2.dvb.ts.container.packets;
 
 import sedec2.base.BitReadWriter;
+import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class TransportStream extends BitReadWriter {
@@ -13,6 +14,7 @@ public class TransportStream extends BitReadWriter {
     protected byte adaptation_field_control;
     protected byte continuity_counter;
     protected byte pointer_field;
+    protected AdaptationField adaptation_field = null;
     protected byte[] data_byte = {0x00, };
 
     public TransportStream(byte[] buffer) {
@@ -27,13 +29,17 @@ public class TransportStream extends BitReadWriter {
         adaptation_field_control = (byte) readOnBuffer(2);
         continuity_counter = (byte) readOnBuffer(4);
 
-        if ( adaptation_field_control == 2 || adaptation_field_control == 3 ) {
-            // Adaptation field
+        if ( adaptation_field_control == 0x02 || adaptation_field_control == 0x03 ) {
+            adaptation_field = new AdaptationField(this);
         }
 
-        if ( adaptation_field_control == 1 || adaptation_field_control == 3 ) {
-            data_byte = new byte[184];
-            for ( int i=0; i<184; i++) {
+        if ( adaptation_field_control == 0x01 || adaptation_field_control == 0x03 ) {
+            int adaptation_field_length = 0;
+            if ( adaptation_field != null ) {
+                adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
+            }
+            data_byte = new byte[188 - 4 - adaptation_field_length];
+            for ( int i=0; i<data_byte.length; i++) {
                 data_byte[i] = (byte) readOnBuffer(8);
             }
         }
@@ -94,5 +100,9 @@ public class TransportStream extends BitReadWriter {
                 adaptation_field_control));
         Logger.d(String.format("continuity_counter : 0x%x \n", continuity_counter));
         Logger.d(String.format("pointer_field : 0x%x \n", getPointerField()));
+
+        if ( adaptation_field != null ) adaptation_field.print();
+
+        if ( data_byte != null ) BinaryLogger.print(data_byte);
     }
 }
