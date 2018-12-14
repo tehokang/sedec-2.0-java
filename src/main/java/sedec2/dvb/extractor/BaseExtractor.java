@@ -17,6 +17,8 @@ import sedec2.util.Logger;
  * BaseExtractor has implementations which are able to parse TS packet.
  */
 public abstract class BaseExtractor {
+    protected static final String TAG = BaseExtractor.class.getSimpleName();
+
     /**
      * Flag which can stop thread or run.
      */
@@ -80,8 +82,6 @@ public abstract class BaseExtractor {
     protected BlockingQueue<QueueData> m_event_queue = null;
 
     protected Map<Integer, ByteArrayOutputStream> m_fragmented_transport_stream = new HashMap<>();
-
-    protected static final String TAG = BaseExtractor.class.getSimpleName();
 
     /**
      * Every Extractor has to inherit from this so that user can use unified listener.
