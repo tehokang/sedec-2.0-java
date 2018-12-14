@@ -29,11 +29,11 @@ public class TransportStream extends BitReadWriter {
         adaptation_field_control = (byte) readOnBuffer(2);
         continuity_counter = (byte) readOnBuffer(4);
 
-        if ( adaptation_field_control == 0x02 || adaptation_field_control == 0x03 ) {
+        if ( adaptation_field_control == 0b10 || adaptation_field_control == 0b11 ) {
             adaptation_field = new AdaptationField(this);
         }
 
-        if ( adaptation_field_control == 0x01 || adaptation_field_control == 0x03 ) {
+        if ( adaptation_field_control == 0b01 || adaptation_field_control == 0b11 ) {
             int adaptation_field_length = 0;
             if ( adaptation_field != null ) {
                 adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
