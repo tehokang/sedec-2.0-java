@@ -57,12 +57,22 @@ public abstract class BaseExtractor {
     /**
      * Extracting thread which can pull out a TS packet from TS packets queue
      */
-    protected Thread m_ts_extractor_thread;
+    protected Thread m_ts_raw_extractor_thread;
+
+    /**
+     * Extracting thread which can pull out a TS packet from TS packets formatted queue
+     */
+    protected Thread m_ts_formatted_extractor_thread;
 
     /**
      * TS packets queue
      */
-    protected BlockingQueue<byte[]> m_ts_packets = null;
+    protected BlockingQueue<byte[]> m_ts_raw_packets = null;
+
+    /**
+     * TS packets queue as being formatted
+     */
+    protected BlockingQueue<TransportStream> m_ts_formatted_packets = null;
 
     /**
      * Event queue which can sent to user
@@ -99,18 +109,19 @@ public abstract class BaseExtractor {
      * start running thread with blocking queue which only run when queue obtain an input.
      */
     public BaseExtractor() {
-        m_ts_packets = new ArrayBlockingQueue<byte[]>(100);
+        m_ts_raw_packets = new ArrayBlockingQueue<byte[]>(100);
+        m_ts_formatted_packets = new ArrayBlockingQueue<TransportStream>(100);
         m_event_queue = new ArrayBlockingQueue<QueueData>(100);
 
-        m_ts_extractor_thread = new Thread(new Runnable() {
+        m_ts_raw_extractor_thread = new Thread(new Runnable() {
             @Override
             public void run() {
                 TransportStream ts = null;
 
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_ts_packets ) {
-                            byte[] ts_raw = m_ts_packets.take();
+                        if ( null != m_ts_raw_packets ) {
+                            byte[] ts_raw = m_ts_raw_packets.take();
                             ts = PacketFactory.createPacket(ts_raw);
 
                             if ( ts != null ) process(ts);
@@ -118,7 +129,7 @@ public abstract class BaseExtractor {
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         Logger.e(TAG,
-                                String.format("Error while parsing TS)\n"));
+                                String.format("Error while parsing TS \n"));
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
@@ -135,14 +146,50 @@ public abstract class BaseExtractor {
                 }
             }
         });
-        m_ts_extractor_thread.start();
+
+        m_ts_formatted_extractor_thread = new Thread(new Runnable() {
+            @Override
+            public void run() {
+                TransportStream ts = null;
+
+                while ( m_is_running ) {
+                    try {
+                        if ( null != m_ts_formatted_packets ) {
+                            ts = m_ts_formatted_packets.take();
+
+                            if ( ts != null ) process(ts);
+                        }
+
+                    } catch ( ArrayIndexOutOfBoundsException e ) {
+                        Logger.e(TAG,
+                                String.format("Error while parsing TS \n"));
+                        e.printStackTrace();
+                    } catch ( InterruptedException e ) {
+                        /**
+                         * Nothing to do
+                         */
+                    } catch ( Exception e ) {
+                        /**
+                         * You should remove a line below like break, exit statement,
+                         * because TLVExtractor has to keep alive even though
+                         * TLVExtractor get any wrong packets.
+                         */
+                        e.printStackTrace();
+                    }
+                }
+            }
+        });
+
+        m_ts_formatted_extractor_thread.start();
+        m_ts_raw_extractor_thread.start();
     }
 
     /**
      * Clear all of queue containing TS, and fragmented packets.
      */
     public void clearQueue() {
-        m_ts_packets.clear();
+        m_ts_formatted_packets.clear();
+        m_ts_raw_packets.clear();
         m_event_queue.clear();
 
         m_fragmented_transport_stream.clear();
@@ -158,17 +205,18 @@ public abstract class BaseExtractor {
         m_byte_id_filter.clear();
         m_int_id_filter.clear();
 
-        m_ts_extractor_thread.interrupt();
-        m_ts_extractor_thread = null;
+        m_ts_formatted_extractor_thread.interrupt();
+        m_ts_formatted_extractor_thread = null;
 
-        m_ts_packets.clear();
-        m_ts_packets = null;
+        m_ts_raw_extractor_thread.interrupt();
+        m_ts_raw_extractor_thread = null;
 
-        m_fragmented_transport_stream.clear();
-        m_fragmented_transport_stream = null;
+        clearQueue();
 
-        m_event_queue.clear();
         m_event_queue = null;
+        m_ts_raw_packets = null;
+        m_ts_formatted_packets = null;
+        m_fragmented_transport_stream = null;
 
         m_listeners.clear();
         m_listeners = null;
@@ -196,12 +244,23 @@ public abstract class BaseExtractor {
 
     /**
      * User should put a TS packet into extractor, the packet will be collected as kinds of them
-     * @param ts one TS packet
+     * @param ts one TS packet as being raw
      * @throws InterruptedException occur when thread interrupted
      */
     public void putIn(byte[] ts) throws InterruptedException {
-        if ( m_is_running == true && m_ts_packets != null && ts != null ) {
-            m_ts_packets.put(ts);
+        if ( m_is_running == true && m_ts_raw_packets != null && ts != null ) {
+            m_ts_raw_packets.put(ts);
+        }
+    }
+
+    /**
+     * User should put a TS packet into extractor, the packet will be collected as kinds of them
+     * @param ts one TS packet
+     * @throws InterruptedException occur when thread interrupted
+     */
+    public void putIn(TransportStream ts) throws InterruptedException {
+        if ( m_is_running == true && m_ts_raw_packets != null && ts != null ) {
+            m_ts_formatted_packets.put(ts);
         }
     }
 
