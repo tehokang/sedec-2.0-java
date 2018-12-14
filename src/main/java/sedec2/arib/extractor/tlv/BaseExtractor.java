@@ -141,9 +141,7 @@ public abstract class BaseExtractor {
                         }
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
-                        Logger.e(TAG,
-                                String.format("Error while parsing TLV (type %d)\n",
-                                tlv.getPacketType()));
+                        Logger.e(TAG, String.format("Error while parsing TLV \n"));
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**
@@ -176,7 +174,7 @@ public abstract class BaseExtractor {
                     } catch ( ArrayIndexOutOfBoundsException e ) {
                         Logger.e(TAG,
                                 String.format("Error while parsing TLV (type %d)\n",
-                                tlv.getPacketType()));
+                                tlv != null ? tlv.getPacketType() : "-" ));
                         e.printStackTrace();
                     } catch ( InterruptedException e ) {
                         /**

@@ -1,13 +1,9 @@
-package sedec2.arib.extractor.ts;
+package sedec2.arib.extractor.tlvts;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.util.List;
 
-import sedec2.arib.tlv.container.PacketFactory;
-import sedec2.arib.tlv.container.mmtp.MMTP_Packet;
-import sedec2.arib.tlv.container.packets.CompressedIpPacket;
-import sedec2.arib.tlv.container.packets.TypeLengthValue;
+import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 import sedec2.util.Logger;
 
 public class TlvExtractor extends BaseExtractor {
@@ -72,41 +68,50 @@ public class TlvExtractor extends BaseExtractor {
     @Override
     /**
      * Chapter 8 of ARIB-B60v1-12
-     * Processes to get MPU-MFU and put it into output queue to be sent user
+     * Processes to get TLV and put it into output queue to be sent user
      *
-     * @param tlv one TLV packet
+     * @param ts one TS packet
      */
-    protected synchronized void process(TypeLengthValue tlv)
+    protected synchronized void process(TlvTransportStream tlvts)
             throws InterruptedException, IOException {
-        switch ( tlv.getPacketType() ) {
-            case PacketFactory.COMPRESSED_IP_PACKET:
-                CompressedIpPacket cip = (CompressedIpPacket) tlv;
-                MMTP_Packet mmtp_packet = cip.getPacketData().mmtp_packet;
+        /**
+         * PID filter by TS PID
+         */
+        if ( m_int_id_filter.contains(tlvts.getPID()) == false ) return;
 
-                if ( mmtp_packet == null ) break;
+        ByteArrayOutputStream tlv_buffer = m_fragmented_tlvts.get(tlvts.getPID());
+        if ( tlvts.getTLVStartIndicator() == 0x01 ) {
+            if ( null == tlv_buffer ) {
+                /**
+                 * Put begin of TLV
+                 */
+                tlv_buffer = new ByteArrayOutputStream();
+                tlv_buffer.write(tlvts.getFragmentedTlvPacket(), 1,
+                        tlvts.getFragmentedTlvPacket().length-1);
+                m_fragmented_tlvts.put(tlvts.getPID(), tlv_buffer);
+            } else {
+                putOut(new QueueData(tlvts.getPID(), tlv_buffer.toByteArray()));
 
                 /**
-                 * MPU-MFU
+                 * Clear buffer
                  */
-                if ( 0x00 == mmtp_packet.getPayloadType() ) {
-                    if ( m_int_id_filter.contains(mmtp_packet.getPacketId()) ) {
-                        byte[] nal_prefix = {0x00, 0x00, 0x00, 0x01};
-                        List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
+                tlv_buffer.reset();
+                m_fragmented_tlvts.remove(tlvts.getPID());
 
-                        for ( int i=0; i<samples.size(); i++ ) {
-                            ByteArrayOutputStream sample = samples.get(i);
-                            byte[] sample_binary = sample.toByteArray();
-                            if ( m_enable_pre_modification == true ) {
-                                System.arraycopy(nal_prefix, 0,
-                                        sample_binary, 0, nal_prefix.length);
-                            }
-                            putOut(new QueueData(mmtp_packet.getPacketId(), sample_binary));
-                        }
-                    }
-                }
-                break;
-            default:
-                break;
+                /**
+                 * Put new TLV into buffer
+                 */
+                tlv_buffer.write(tlvts.getFragmentedTlvPacket(), 1,
+                        tlvts.getFragmentedTlvPacket().length-1);
+                m_fragmented_tlvts.put(tlvts.getPID(), tlv_buffer);
+            }
+        } else {
+            /**
+             * Put middle of TLV
+             */
+            if ( tlv_buffer != null ) {
+                tlv_buffer.write(tlvts.getFragmentedTlvPacket());
+            }
         }
     }
 }

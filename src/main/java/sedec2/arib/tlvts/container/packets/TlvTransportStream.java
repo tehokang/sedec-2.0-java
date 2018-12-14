@@ -1,4 +1,4 @@
-package sedec2.arib.ts.container.packets;
+package sedec2.arib.tlvts.container.packets;
 
 import sedec2.base.BitReadWriter;
 import sedec2.util.BinaryLogger;
@@ -7,14 +7,14 @@ import sedec2.util.Logger;
 /**
  * Class represents  Table-1 of ITU-T J.288 Encapsulation of TLV for cable transmission systems
  */
-public class TransportStream extends BitReadWriter {
+public class TlvTransportStream extends BitReadWriter {
     protected byte sync_byte;
     protected byte transport_error_indicator;
     protected byte TLV_start_indicator;
     protected int PID;
     protected byte[] fragmented_tlv_packet;
 
-    public TransportStream(byte[] buffer) {
+    public TlvTransportStream(byte[] buffer) {
         super(buffer);
 
         sync_byte = (byte) readOnBuffer(8);

@@ -1,6 +1,6 @@
-package sedec2.arib.ts.container;
+package sedec2.arib.tlvts.container;
 
-import sedec2.arib.ts.container.packets.TransportStream;
+import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 
 public class PacketFactory {
     public final static byte TS_188_PACKET = (byte) 0x47;
@@ -10,12 +10,12 @@ public class PacketFactory {
      * @param buffer one TS packet raw
      * @return one TS packet which is decoded
      */
-    public static TransportStream createPacket(byte[] buffer) {
+    public static TlvTransportStream createPacket(byte[] buffer) {
         byte packet_type = (byte)(buffer[0] & 0xff);
 
         switch ( packet_type ) {
             case TS_188_PACKET:
-                return new TransportStream(buffer);
+                return new TlvTransportStream(buffer);
             default:
                 break;
         }
