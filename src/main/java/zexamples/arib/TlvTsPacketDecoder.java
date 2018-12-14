@@ -487,7 +487,7 @@ public class TlvTsPacketDecoder {
                 /**
                  * Updating of console user interface
                  */
-//                progress_bar.update(ts_packet.length);
+                progress_bar.update(ts_packet.length);
             }
 
             simple_tlvts_coordinator.clearQueue();
