@@ -100,7 +100,10 @@ public class TransportStream extends BitReadWriter {
         Logger.d(String.format("adaptation_field_control : 0x%x \n",
                 adaptation_field_control));
         Logger.d(String.format("continuity_counter : 0x%x \n", continuity_counter));
-        Logger.d(String.format("pointer_field : 0x%x \n", getPointerField()));
+
+        if ( payload_unit_start_indicator == 1) {
+            Logger.d(String.format("pointer_field : 0x%x \n", getPointerField()));
+        }
 
         if ( adaptation_field != null ) adaptation_field.print();
 
