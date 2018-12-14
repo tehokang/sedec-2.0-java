@@ -31,8 +31,11 @@ public class TransportStream extends BitReadWriter {
 
         int adaptation_field_length = 0;
         if ( adaptation_field_control == 0b10 || adaptation_field_control == 0b11 ) {
-            adaptation_field = new AdaptationField(this);
-            adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
+            /**
+             * TODO Some of TS stream has wrong adaptation_field like length is over 184
+             */
+//            adaptation_field = new AdaptationField(this);
+//            adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
         }
 
         if ( adaptation_field_control == 0b01 || adaptation_field_control == 0b11 ) {

@@ -5,7 +5,7 @@ import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
 public class AdaptationField {
-    protected byte adaptation_field_length;
+    protected int adaptation_field_length;
     protected byte discontinuity_indicator;
     protected byte random_access_indicator;
     protected byte elementary_stream_priority_indicator;
@@ -38,11 +38,11 @@ public class AdaptationField {
     protected byte[] stuffing_byte;
 
     public int getAdaptationFieldLength() {
-        return adaptation_field_length & 0xff;
+        return adaptation_field_length;
     }
 
     public AdaptationField(BitReadWriter brw) {
-        adaptation_field_length = (byte) brw.readOnBuffer(8);
+        adaptation_field_length = brw.readOnBuffer(8) & 0xff;
         int stuffing_length = adaptation_field_length;
 
         if ( adaptation_field_length > 0 ) {
