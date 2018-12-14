@@ -75,7 +75,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         ProgramAssociationTable.Program program = programs.get(i);
                         ts_demuxer.addSiFilter(program.pid);
                     }
-                    pat.print();
+//                    pat.print();
                 }
                 break;
             case TableFactory.PROGRAM_MAP_TABLE:
@@ -97,7 +97,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 break;
                         }
                     }
-                    pmt.print();
+//                    pmt.print();
                 }
                 break;
             case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
