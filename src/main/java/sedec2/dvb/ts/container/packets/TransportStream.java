@@ -29,15 +29,13 @@ public class TransportStream extends BitReadWriter {
         adaptation_field_control = (byte) readOnBuffer(2);
         continuity_counter = (byte) readOnBuffer(4);
 
+        int adaptation_field_length = 0;
         if ( adaptation_field_control == 0b10 || adaptation_field_control == 0b11 ) {
             adaptation_field = new AdaptationField(this);
+            adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
         }
 
         if ( adaptation_field_control == 0b01 || adaptation_field_control == 0b11 ) {
-            int adaptation_field_length = 0;
-            if ( adaptation_field != null ) {
-                adaptation_field_length = adaptation_field.getAdaptationFieldLength() + 1;
-            }
             data_byte = new byte[188 - 4 - adaptation_field_length];
             for ( int i=0; i<data_byte.length; i++) {
                 data_byte[i] = (byte) readOnBuffer(8);
