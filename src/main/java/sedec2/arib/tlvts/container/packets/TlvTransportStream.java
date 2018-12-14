@@ -49,6 +49,13 @@ public class TlvTransportStream extends BitReadWriter {
         return fragmented_tlv_packet;
     }
 
+    public byte getPointerField() {
+        if ( fragmented_tlv_packet != null ) {
+            return fragmented_tlv_packet[0];
+        }
+        return 0;
+    }
+
     public void print() {
         Logger.d(String.format("======= Transport-Stream (Fragmented TLV) ======= (%s)\n",
                 getClass().getName()));

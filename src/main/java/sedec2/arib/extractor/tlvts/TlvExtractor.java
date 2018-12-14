@@ -90,6 +90,15 @@ public class TlvExtractor extends BaseExtractor {
                         tlvts.getFragmentedTlvPacket().length-1);
                 m_fragmented_tlvts.put(tlvts.getPID(), tlv_buffer);
             } else {
+                /**
+                 * Put previous buffered sections out since new TLV come here
+                 * with being careful whether current package has pointer field which
+                 * refers to previous TLV data or not.
+                 */
+                int remaining = 0xff & tlvts.getPointerField();
+                if ( remaining > 0x00 ) {
+                    tlv_buffer.write(tlvts.getFragmentedTlvPacket(), 1, remaining);
+                }
                 putOut(new QueueData(tlvts.getPID(), tlv_buffer.toByteArray()));
 
                 /**
@@ -101,8 +110,8 @@ public class TlvExtractor extends BaseExtractor {
                 /**
                  * Put new TLV into buffer
                  */
-                tlv_buffer.write(tlvts.getFragmentedTlvPacket(), 1,
-                        tlvts.getFragmentedTlvPacket().length-1);
+                tlv_buffer.write(tlvts.getFragmentedTlvPacket(), 1 + remaining,
+                        tlvts.getFragmentedTlvPacket().length-1-remaining);
                 m_fragmented_tlvts.put(tlvts.getPID(), tlv_buffer);
             }
         } else {

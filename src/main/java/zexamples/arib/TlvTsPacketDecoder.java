@@ -178,7 +178,7 @@ class SimpleTlvTsCoordinator implements
         case TableFactory.MPT:
             if ( mpt == null ) {
                 mpt = (MMT_PackageTable) table;
-                mpt.print();
+//                mpt.print();
                 List<Asset> assets = mpt.getAssets();
                 for ( int i=0; i<assets.size(); i++) {
                     Asset asset = assets.get(i);

@@ -135,9 +135,13 @@ public abstract class BaseExtractor {
                     try {
                         if ( null != m_tlv_raw_packets ) {
                             byte[] tlv_raw = m_tlv_raw_packets.take();
-                            tlv = PacketFactory.createPacket(tlv_raw);
+                            if ( tlv_raw.length > 0 ) {
+                                tlv = PacketFactory.createPacket(tlv_raw);
+                            }
 
-                            if ( tlv != null ) process(tlv);
+                            if ( tlv != null ) {
+                                process(tlv);
+                            }
                         }
 
                     } catch ( ArrayIndexOutOfBoundsException e ) {
