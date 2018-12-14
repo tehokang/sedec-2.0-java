@@ -1,4 +1,4 @@
-package sedec2.arib.extractor;
+package sedec2.arib.extractor.tlv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
@@ -11,33 +11,32 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.util.Logger;
 
 /**
- * Class to extract TTML as MFU from MPU.
+ * Class to extract General Purpose Data as MFU from MPU.
  * It has inherited from BaseExtractor which has already implementations to get MPU-MFU.
  * {@link BaseExtractor}
  *
- * <p>
- * User can receive TTML via
- * {@link TtmlExtractor.ITtmlExtractorListener#onReceivedTtml(int, byte[])}
+ * User can receive data via
+ * {@link GeneralPurposeDataExtractor.IGeneralPurposeDataExtractorListener#onReceivedGeneralPurposeData(int, byte[])}
  */
-public class TtmlExtractor extends BaseExtractor {
-    protected static final String TAG = TtmlExtractor.class.getSimpleName();
+public class GeneralPurposeDataExtractor extends BaseExtractor {
+    protected static final String TAG = GeneralPurposeDataExtractor.class.getSimpleName();
 
     /**
-     * Listener to receive TTML of chapter 9 of ARIB B60
+     * Listener to receive MFU of General Purpose Data in Chapter 12 of ARIB B60
      */
-    public interface ITtmlExtractorListener extends BaseExtractor.Listener {
+    public interface IGeneralPurposeDataExtractorListener extends BaseExtractor.Listener {
         /**
-         * Receives TTML MFU which already gathered from fragmentation.
+         * Receives audio MFU which already gathered from fragmentation.
          * @param packet_id MMT packet id
-         * @param buffer MFU_data_byte as non-timed data of Table 6-1, 9-1 MMTP_payload
+         * @param buffer MFU_data_byte of Table 12-1 MMTP_payload
          */
-        public void onReceivedTtml(int packet_id, byte[] buffer);
+        public void onReceivedGeneralPurposeData(int packet_id, byte[] buffer);
     }
 
     /**
      * Constructor which start running thread to emit Event to user.
      */
-    public TtmlExtractor() {
+    public GeneralPurposeDataExtractor() {
         super();
 
         m_event_thread = new Thread(new Runnable() {
@@ -45,14 +44,13 @@ public class TtmlExtractor extends BaseExtractor {
             @Override
             public void run() {
                 QueueData data = null;
-
                 while ( m_is_running ) {
                     try {
                         if ( null != m_event_queue &&
                                 (data = m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                ((ITtmlExtractorListener)m_listeners.get(i)).
-                                        onReceivedTtml(data.packet_id, data.data);
+                                ((IGeneralPurposeDataExtractorListener)m_listeners.get(i)).
+                                        onReceivedGeneralPurposeData(data.packet_id, data.data);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -80,12 +78,6 @@ public class TtmlExtractor extends BaseExtractor {
     }
 
     @Override
-    /**
-     * Chapter 9 of ARIB-B60v1-12
-     * Processes to put QueueData with TTML into event queue
-     *
-     * @param one TLV packet
-     */
     protected synchronized void process(TypeLengthValue tlv)
             throws InterruptedException, IOException {
         switch ( tlv.getPacketType() ) {

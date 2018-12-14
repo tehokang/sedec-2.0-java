@@ -1,4 +1,4 @@
-package sedec2.arib.extractor;
+package sedec2.arib.extractor.tlv;
 
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;

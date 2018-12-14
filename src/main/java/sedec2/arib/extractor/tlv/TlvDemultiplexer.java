@@ -1,4 +1,4 @@
-package sedec2.arib.extractor;
+package sedec2.arib.extractor.tlv;
 
 import java.util.ArrayList;
 import java.util.List;

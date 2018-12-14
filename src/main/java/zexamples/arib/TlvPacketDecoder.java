@@ -10,7 +10,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import sedec2.arib.extractor.TlvDemultiplexer;
+import sedec2.arib.extractor.tlv.TlvDemultiplexer;
 import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
 import sedec2.arib.tlv.container.mmt.si.descriptors.Descriptor;
