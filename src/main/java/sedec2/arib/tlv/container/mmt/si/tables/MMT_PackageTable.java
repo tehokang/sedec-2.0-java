@@ -133,7 +133,7 @@ public class MMT_PackageTable extends Table {
         Logger.d(String.format("MMT_package_id_length : 0x%x \n", MMT_package_id_length));
         Logger.d(String.format("MMT_package_id_byte : \n"));
 
-        BinaryLogger.debug(MMT_package_id_byte);
+        BinaryLogger.print(MMT_package_id_byte);
 
         for ( int i=0; i<descriptors.size(); i++ ) {
             descriptors.get(i).print();
