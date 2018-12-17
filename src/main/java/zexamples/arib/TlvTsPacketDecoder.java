@@ -445,6 +445,27 @@ class SimpleTlvTsCoordinator implements
 
     @Override
     public void onReceivedTlv(int packet_id, byte[] buffer) {
+        /**
+         * Putting a TLV formatted packet which's including MPU-MFU scrambled
+         */
+//        TypeLengthValue tlv = PacketFactory.createPacket(buffer);
+//        switch ( tlv.getPacketType() ) {
+//            case PacketFactory.COMPRESSED_IP_PACKET:
+//                CompressedIpPacket compress_ip_packet = (CompressedIpPacket) tlv;
+//                MMTP_Packet mmtp_packet = compress_ip_packet.getPacketData().mmtp_packet;
+//                if ( mmtp_packet != null && mmtp_packet.isScrambled() == true ) {
+//                    byte[] mmtp_payload = mmtp_packet.getPayloadBytes();
+//                    // ...
+//                    // Descrambling payload of MMTP which's scrambled
+//                    // ...
+//                    mmtp_packet.updateDescramblePayload(mmtp_payload);
+//                }
+//                break;
+//            default:
+//                // Others couldn't be scrambled
+//                break;
+//        }
+
         tlv_demuxer.put(buffer);
     }
 }
