@@ -22,6 +22,7 @@ import sedec2.arib.tlv.container.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
+import sedec2.arib.tlv.container.mmt.si.tables.dsmcc.DSMCCSection;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlvts.container.packets.TlvTransportStream;
@@ -240,6 +241,30 @@ class SimpleTlvTsCoordinator implements
                 plt = (PackageListTable) table;
                 mpt = null;
             }
+            break;
+        case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
+        case TableFactory.DSMCC_STREAM_DESCRIPTORS_TABLE:
+//            ((DSMCCSection) table).print();
+            break;
+        case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
+            /**
+             * EN 301 192 Table A.1 Regisitration of private data broadcast systems
+             * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+             * in order to confirm which carousel user should use.
+             */
+            DSMCCSection dsmcc_ddb = (DSMCCSection) table;
+            dsmcc_ddb.updateToObjectCarousel();
+            dsmcc_ddb.print();
+            break;
+        case TableFactory.DSMCC_UN_MESSAGE_TABLE:
+            /**
+             * EN 301 192 Table A.1 Regisitration of private data broadcast systems
+             * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+             * in order to confirm which carousel user should use.
+             */
+            DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
+            dsmcc_dsi_or_dii.updateToObjectCarousel();
+            dsmcc_dsi_or_dii.print();
             break;
         default:
             if ( table.isUnknownTable() == true ) {
@@ -474,11 +499,12 @@ public class TlvTsPacketDecoder {
     public static void main(String []args) throws InterruptedException {
         if ( args.length < 1 ) {
             System.out.println("Oops, " +
-                    "You need TLV packet(or file) to be parsed as 1st parameter");
+                    "You need TS packet which having fragmented TLV (or file) " +
+                    "to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
                     "zexamples.arib.TlvPacketDecoder " +
-                    "{TLV Raw File} \n");
+                    "{TS Raw File} \n");
         }
 
         SimpleTlvTsCoordinator simple_tlvts_coordinator = new SimpleTlvTsCoordinator();
