@@ -5,6 +5,14 @@ import java.util.List;
 
 import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 
+/**
+ * Wrapper class containing each Extractor TLV in TS who can be extracted.
+ * <p>
+ * This is able to control all of Extractor with public interfaces and even
+ * user can directly use each Extractor like below
+ *
+ * @see TlvExtractor
+ */
 public class TlvTsDemultiplexer implements
         TlvExtractor.ITlvExtractorListener {
     protected static final String TAG = TlvTsDemultiplexer.class.getSimpleName();
@@ -78,10 +86,10 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Add a filter to get a TLV as corresponding only to packet_id of TS.
-     * @param pid packet_id of MMTP
+     * @param pid packet_id of TS
      *
      * <p>
-     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
+     * Packet ID refers to ISO-13818
      */
     public void addTlvFilter(int pid) {
         if ( m_tlv_extractor != null ) m_tlv_extractor.addPidFilter(pid);
@@ -96,18 +104,18 @@ public class TlvTsDemultiplexer implements
     }
 
     /**
-     * Remove a filter which user added corresponding only to packet_id of MMTP.
-     * @param pid packet_id of MMTP
+     * Remove a filter which user added corresponding only to packet_id of TS.
+     * @param pid packet_id of TS
      *
      * <p>
-     * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
+     * Packet ID refers to ISO-13818
      */
     public void removeTlvFilter(int pid) {
         if ( m_tlv_extractor != null ) m_tlv_extractor.removePidFilter(pid);
     }
 
     /**
-     * Enable logging while extracting of video.
+     * Enable logging while extracting of TLV.
      * {@link TlvTsDemultiplexer#disableVideoLogging()}
      */
     public void enableTlvLogging() {
@@ -115,7 +123,7 @@ public class TlvTsDemultiplexer implements
     }
 
     /**
-     * Disable logging while extracting of audio.
+     * Disable logging while extracting of TLV.
      * {@link TlvTsDemultiplexer#enableVideoLogging()}
      */
     public void disableTlvLogging() {
@@ -123,8 +131,7 @@ public class TlvTsDemultiplexer implements
     }
 
     /**
-     * Enable or disable Video filter, user can get Video which delivered
-     * in CompressedIPPacket of TS.
+     * Enable or disable TLV filter, user can get TLV which delivered in TS.
      * {@link TlvTsDemultiplexer#disableVideoFilter()}
      */
     public void enableTlvFilter() {
@@ -132,8 +139,7 @@ public class TlvTsDemultiplexer implements
     }
 
     /**
-     * Enable or disable Video filter, user can get Video which delivered
-     * in CompressedIPPacket of TS.
+     * Enable or disable TLV filter, user can get TLV which delivered in TS.
      * {@link TlvTsDemultiplexer#enableVideoFilter()}
      */
     public void disableTlvFilter() {
@@ -142,7 +148,6 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Put a TS packet into and the packet will be decoded by each Extractor.
-     * The packet can be 64K bytes as maximum since packet_length of TS has 16 bits.
      * @param tlvts_raw one TS packet
      * @return return true if putting succeed or return false
      *
@@ -164,9 +169,8 @@ public class TlvTsDemultiplexer implements
     }
 
     /**
-     * Put a TS packet as formatted by sedec into and the packet will be decoded by each Extractor.
-     * The packet can be 64K bytes as maximum since packet_length of TS has 16 bits.
-     * @param tlv one TS packet
+     * Put a TS packet as formatted by sedec into and the packet will be decoded by TLV Extractor.
+     * @param tlvts one TS packet
      * @return return true if putting succeed or return false
      *
      * <p>
