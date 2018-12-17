@@ -20,8 +20,8 @@ import sedec2.arib.tlv.container.mmt.si.tables.MH_TimeOffsetTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmt.si.tables.UnknownTable;
-import sedec2.arib.tlv.container.mmt.si.tables.dsmcc.DSMCCSection;
 import sedec2.base.Table;
+import sedec2.dvb.ts.si.tables.dsmcc.DSMCCSection;
 
 /**
  * Factory to obtain a kind of table of MMT-SI like below.
@@ -51,12 +51,6 @@ public class TableFactory {
     /** MMT-PT */
     public final static byte MMT_PACKAGE_TABLE = (byte) 0x20;
     public final static byte MPT = MMT_PACKAGE_TABLE;
-
-    /** DSMCC */
-    public final static byte DSMCC_UN_MESSAGE_TABLE = 0x3b;
-    public final static byte DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE = 0x3c;
-    public final static byte DSMCC_STREAM_DESCRIPTORS_TABLE = 0x3d;
-    public final static byte DSMCC_PRIVATE_DATA_TABLE = 0x3e;
 
     /** PLT */
     public final static byte PACKAGE_LIST_TABLE = (byte) 0x80;
@@ -199,11 +193,6 @@ public class TableFactory {
         byte table_id = (byte)(buffer[0] & 0xff);
 
         switch ( table_id ) {
-            case DSMCC_UN_MESSAGE_TABLE:
-            case DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
-            case DSMCC_STREAM_DESCRIPTORS_TABLE:
-            case DSMCC_PRIVATE_DATA_TABLE:
-                return new DSMCCSection(buffer);
             case DATA_CONTENT_MANAGEMENT_TABLE:
                 return new DataContentConfigurationTable(buffer);
             case DATA_ASSET_MANAGEMENT_TABLE:
