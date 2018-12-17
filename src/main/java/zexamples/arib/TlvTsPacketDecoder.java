@@ -125,7 +125,7 @@ class SimpleTlvTsCoordinator implements
             break;
         case TableFactory.DDMT:
             ddmt = (DataDirectoryManagementTable) table;
-            ddmt.print();
+//            ddmt.print();
             boolean found_app = false;
             for ( int i=0; i<applications.size(); i++ ) {
                 if ( applications.get(i).base_directory_path.contains(
