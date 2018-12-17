@@ -269,7 +269,6 @@ public class MMTP_Packet extends BitReadWriter {
                  * User must do descrambling for payload
                  */
                 mmtp_payload_scramble_bytes = getCurrentBuffer();
-//                Logger.w(String.format("Payload of MMTP has scrambled \n"));
             } else {
                 mmtp_payload_mpu = new MMTP_Payload_MPU(this);
             }
