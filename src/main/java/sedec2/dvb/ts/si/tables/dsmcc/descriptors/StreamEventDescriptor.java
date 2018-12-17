@@ -5,6 +5,9 @@ import sedec2.base.Descriptor;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Descriptor to describe Table 8-7 Stream Event Descriptor of ISO 13818-6
+ */
 public class StreamEventDescriptor extends Descriptor {
     protected int eventId;
     protected int eventNPT;

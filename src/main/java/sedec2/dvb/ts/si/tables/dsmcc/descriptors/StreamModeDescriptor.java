@@ -4,6 +4,9 @@ import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
 import sedec2.util.Logger;
 
+/**
+ * Descriptor to describe Table 8-5 Stream Mode Descriptor of ISO 13818-6
+ */
 public class StreamModeDescriptor extends Descriptor {
     protected byte streamMode;
 

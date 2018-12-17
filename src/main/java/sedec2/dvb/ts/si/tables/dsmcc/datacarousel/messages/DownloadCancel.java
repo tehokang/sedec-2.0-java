@@ -3,6 +3,9 @@ package sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to represent Table 7-10 DownloadCancel of ISO 13818-6
+ */
 public class DownloadCancel extends DownloadControlMessage {
     protected int downloadId;
     protected int moduleId;

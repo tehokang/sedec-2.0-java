@@ -8,6 +8,9 @@ import sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.descriptors.Compatibi
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to represent Table 7-6 DownloadInfoIndication of ISO 13818-6
+ */
 public class DownloadInfoIndication extends DownloadControlMessage {
     protected int downloadId;
     protected int blockSize;

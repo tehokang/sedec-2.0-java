@@ -8,6 +8,10 @@ import sedec2.dvb.ts.si.tables.dsmcc.descriptors.NTPReferenceDescriptor;
 import sedec2.dvb.ts.si.tables.dsmcc.descriptors.StreamEventDescriptor;
 import sedec2.dvb.ts.si.tables.dsmcc.descriptors.StreamModeDescriptor;
 
+/**
+ * DescriptorFactory to provide descriptors of Table 8-2 descriptorTag field values in
+ * 8.Stream Descriptors of ISO 13818-6.
+ */
 public class DescriptorFactory {
     public static final int NPT_REFERENCE_DESCRIPTOR = 0x01;
     public static final int NPT_ENDPOINT_DESCRIPTOR = 0x02;

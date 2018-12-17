@@ -3,6 +3,9 @@ package sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to represent Table 7-7 DownloadDataBlock of ISO 13818-6
+ */
 public class DownloadDataBlock extends DownloadDataMessage {
     protected int moduleId;
     protected byte moduleVersion;

@@ -9,6 +9,9 @@ import sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.descriptors.Compatibi
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Descriptor to describe Table 43 of 10.1.2 DownloadServerInitiate of EN 301 192
+ */
 public class GroupInfoIndication extends BitReadWriter {
     protected int numberOfGroups;
     protected List<GroupInfo> group_infos = new ArrayList<>();

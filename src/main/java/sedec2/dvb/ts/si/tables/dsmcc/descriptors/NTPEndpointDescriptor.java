@@ -4,6 +4,9 @@ import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
 import sedec2.util.Logger;
 
+/**
+ * Descriptor to describe Table 8-4 NTP Endpoint Descriptor of ISO 13818-6
+ */
 public class NTPEndpointDescriptor extends Descriptor {
     protected int startNPT;
     protected int stopNPT;

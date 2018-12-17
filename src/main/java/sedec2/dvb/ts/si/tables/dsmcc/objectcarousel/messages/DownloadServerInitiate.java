@@ -5,6 +5,9 @@ import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.Compati
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 
+/**
+ * Class to represent 7.3.6 DownloadServerInitiate of ISO 13818-6
+ */
 public class DownloadServerInitiate extends DownloadControlMessage {
     protected byte[] serverId = new byte[20];
     protected CompatibilityDescriptor compatibilityDescriptor;

@@ -1,8 +1,23 @@
 package sedec2.dvb.ts.si.tables.dsmcc;
 
 import sedec2.base.BitReadWriter;
+import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.DownloadInfoIndication;
+import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.DownloadServerInitiate;
 import sedec2.util.Logger;
 
+/**
+ * Abstraction class to describe header of both dsmccMessageHeader of DSI, DII and
+ * dsmccDownloadDataHeader of DDB.
+ * - dsmccMessageHeader of Table 2-1 in ISO 13818-6 2.DSM-CC Message Header
+ * - dsmccDownloadDataHeader of Table 7-3 in ISO 13818-6
+ *
+ * {@link DownloadInfoIndication} as ObjectCarousel
+ * {@link DownloadServerInitiate} as ObjectCarousel
+ * {@link sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadInfoIndication} as DataCarousel
+ * {@link sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadServerInitiate} as DataCarousel
+ *
+ * The messages should be defined by the kind of carousel of Data or Object.
+ */
 public abstract class Message extends BitReadWriter {
     protected byte protocolDiscriminator;
     protected byte dsmccType;

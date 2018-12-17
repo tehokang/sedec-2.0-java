@@ -7,6 +7,9 @@ import sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadDataBlock;
 import sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadInfoIndication;
 import sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadServerInitiate;
 
+/**
+ * Message Factory to provide DSI, DII, DDB in data carousel.
+ */
 public class MessageFactory {
     public static final int DOWNLOAD_INFO_INDICATION = 0x1002;
     public static final int DOWNLOAD_DATA_BLOCK = 0x1003;
