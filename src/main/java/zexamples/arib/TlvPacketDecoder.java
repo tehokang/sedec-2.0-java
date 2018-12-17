@@ -513,8 +513,8 @@ public class TlvPacketDecoder {
                     "You need TLV packet(or file) to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.arib.TlvPacketDecoder " +
-                    "{TLV Raw File} \n");
+                    TlvPacketDecoder.class.getName() +
+                    " {TLV Raw File} \n");
         }
 
         SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();

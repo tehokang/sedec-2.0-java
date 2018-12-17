@@ -478,8 +478,8 @@ public class TlvTsPacketDecoder {
                     "to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.arib.TlvPacketDecoder " +
-                    "{TS Raw File} \n");
+                    TlvTsPacketDecoder.class.getName() +
+                    " {TS Raw File} \n");
         }
 
         SimpleTlvTsCoordinator simple_tlvts_coordinator = new SimpleTlvTsCoordinator();

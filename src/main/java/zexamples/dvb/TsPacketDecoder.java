@@ -178,8 +178,8 @@ public class TsPacketDecoder {
                     "You need TS packet(or file) to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.dvb.TsPacketDecoder " +
-                    "{TS Raw File} \n");
+                    TsPacketDecoder.class.getName() +
+                    " {TS Raw File} \n");
         }
 
         SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator();

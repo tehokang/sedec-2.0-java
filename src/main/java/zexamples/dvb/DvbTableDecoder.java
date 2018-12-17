@@ -24,8 +24,8 @@ public class DvbTableDecoder {
                     "I need mpeg2 table to be parsed as 1st parameter");
             System.out.println(
                     "Usage: java -classpath . " +
-                    "zexamples.decoder.DvbDecoder " +
-                    "{Table Raw File} \n");
+                    DvbTableDecoder.class.getName() +
+                    " {Table Raw File} \n");
         }
 
         for ( int i=0; i<args.length; i++ ) {
