@@ -116,7 +116,7 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Enable logging while extracting of TLV.
-     * {@link TlvTsDemultiplexer#disableVideoLogging()}
+     * {@link TlvTsDemultiplexer#disableTlvLogging()}
      */
     public void enableTlvLogging() {
         if ( m_tlv_extractor != null ) m_tlv_extractor.enableLogging();
@@ -124,7 +124,7 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Disable logging while extracting of TLV.
-     * {@link TlvTsDemultiplexer#enableVideoLogging()}
+     * {@link TlvTsDemultiplexer#enableTlvLogging()}
      */
     public void disableTlvLogging() {
         if ( m_tlv_extractor != null ) m_tlv_extractor.disableLogging();
@@ -132,7 +132,7 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Enable or disable TLV filter, user can get TLV which delivered in TS.
-     * {@link TlvTsDemultiplexer#disableVideoFilter()}
+     * {@link TlvTsDemultiplexer#disableTlvFilter()}
      */
     public void enableTlvFilter() {
         m_enable_tlv_filter = true;
@@ -140,7 +140,7 @@ public class TlvTsDemultiplexer implements
 
     /**
      * Enable or disable TLV filter, user can get TLV which delivered in TS.
-     * {@link TlvTsDemultiplexer#enableVideoFilter()}
+     * {@link TlvTsDemultiplexer#enableTlvFilter()}
      */
     public void disableTlvFilter() {
         m_enable_tlv_filter = false;

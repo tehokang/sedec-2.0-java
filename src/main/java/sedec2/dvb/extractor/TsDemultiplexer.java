@@ -118,7 +118,7 @@ public class TsDemultiplexer implements
 
     /**
      * Removes a filter of audio PID
-     * @param pid
+     * @param pid packet id of TS
      */
     public void removeAudioFilter(int pid) {
         if ( m_audio_extractor != null ) m_audio_extractor.removePidFilter(pid);
@@ -134,7 +134,7 @@ public class TsDemultiplexer implements
 
     /**
      * Removes a filter of video PID
-     * @param pid
+     * @param pid packet id of TS
      */
     public void removeVideoFilter(int pid) {
         if ( m_video_extractor != null ) m_video_extractor.removePidFilter(pid);

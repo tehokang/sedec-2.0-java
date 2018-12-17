@@ -15,7 +15,7 @@ public class TlvExtractor extends BaseExtractor {
     public interface ITlvExtractorListener extends BaseExtractor.Listener {
         /**
          * Receives a TLV packet which already gathered from fragmentation.
-         * @param PID of TS which's including the TLV
+         * @param packet_id PID of TS which's including the TLV
          * @param buffer TLV packet
          */
         public void onReceivedTlv(int packet_id, byte[] buffer);
