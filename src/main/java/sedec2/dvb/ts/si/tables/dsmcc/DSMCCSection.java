@@ -11,11 +11,13 @@ import sedec2.util.Logger;
 /**
  * DSMCCSection describes Table 9-2 of ISO 13818-6.
  * According to table_id, the kinds of table can be defined
- * 0x3A DSM-CC Sections containing multi-protocol encapsulated data
- * 0x3B DSM-CC Sections containing U-N Messages, except Download Data Messages (DSI, DII)
- * 0x3C DSM-CC Sections containing Download Data Messages (DDB)
- * 0x3D DSM-CC Sections containing Stream Descriptors
- * 0x3E DSM-CC Sections containing private data
+ * <ul>
+ * <li> 0x3A DSM-CC Sections containing multi-protocol encapsulated data
+ * <li> 0x3B DSM-CC Sections containing U-N Messages, except Download Data Messages (DSI, DII)
+ * <li> 0x3C DSM-CC Sections containing Download Data Messages (DDB)
+ * <li> 0x3D DSM-CC Sections containing Stream Descriptors
+ * <li> 0x3E DSM-CC Sections containing private data
+ * </ul>
  */
 public class DSMCCSection extends Table {
     protected int table_id_extension;
@@ -57,6 +59,10 @@ public class DSMCCSection extends Table {
 
     public List<Descriptor> getDSMCCDescriptorList() {
         return DSMCC_descriptor_list;
+    }
+
+    public byte[] getMessageBytes() {
+        return message_byte;
     }
 
     public Message getMessage() {
