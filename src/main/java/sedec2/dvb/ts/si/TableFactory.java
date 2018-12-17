@@ -2,7 +2,6 @@ package sedec2.dvb.ts.si;
 
 import sedec2.base.Table;
 import sedec2.base.UnknownTable;
-import sedec2.dvb.ts.dsmcc.DSMCCSection;
 import sedec2.dvb.ts.si.tables.ApplicationInformationTable;
 import sedec2.dvb.ts.si.tables.BouquetAssociationTable;
 import sedec2.dvb.ts.si.tables.ConditionalAccessTable;
@@ -17,6 +16,7 @@ import sedec2.dvb.ts.si.tables.ServiceDescriptionTable;
 import sedec2.dvb.ts.si.tables.StuffingTable;
 import sedec2.dvb.ts.si.tables.TimeDateTable;
 import sedec2.dvb.ts.si.tables.TimeOffsetTable;
+import sedec2.dvb.ts.si.tables.dsmcc.DSMCCSection;
 
 /**
  * Factory to obtain a kind of table of DVB like below.
