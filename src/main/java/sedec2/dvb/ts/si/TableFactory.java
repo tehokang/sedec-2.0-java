@@ -21,6 +21,7 @@ import sedec2.dvb.ts.si.tables.dsmcc.DSMCCSection;
 /**
  * Factory to obtain a kind of table of DVB like below.
  * <ul>
+ * <li> {@link DSMCCSection}
  * <li> {@link ApplicationInformationTable}
  * <li> {@link BouquetAssociationTable}
  * <li> {@link ConditionalAccessTable}
