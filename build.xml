@@ -10,11 +10,11 @@
     <property name="debuglevel" value="source,lines,vars"/>
     <property name="target" value="1.7"/>
     <property name="source" value="1.7"/>
-    <property name="release.dir" value="out"/>
+    <property name="release.dir" value="release"/>
     <property name="bin.dir" value="bin"/>
     <property name="lib.dir" value="libs"/>
     <property name="src.dir" value="src/main/java"/>
-    <property name="doc.dir" value="${release.dir}/doc"/>
+    <property name="doc.dir" value="${release.dir}/docs"/>
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
             <include name="**/*.jar" />
