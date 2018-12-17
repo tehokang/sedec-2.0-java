@@ -35,7 +35,7 @@ import sedec2.util.TsPacketReader;
 class SimpleTlvTsCoordinator implements
         TlvDemultiplexer.Listener,
         TlvTsDemultiplexer.Listener {
-    protected static final String TAG = SimpleTlvCoordinator.class.getSimpleName();
+    protected static final String TAG = SimpleTlvTsCoordinator.class.getSimpleName();
     protected TlvDemultiplexer tlv_demuxer = null;
     protected TlvTsDemultiplexer tlvts_demuxer = null;
 
