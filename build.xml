@@ -4,7 +4,7 @@
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. -->
-<project basedir="." default="build-project" name="sedec" >
+<project basedir="." default="build" name="sedec" >
     <property environment="env"/>
     <property name="version" value="2.0"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -37,7 +37,7 @@
         <delete dir="${release.dir}"/>
     </target>
               
-    <target depends="build-project" name="versioning">
+    <target depends="build" name="versioning">
         <tstamp>
             <format property="builtat" pattern="MM/dd/yyyy hh:mm aa" />
         </tstamp>        
@@ -53,15 +53,15 @@
         </propertyfile>
     </target>
               
-    <target depends="init" name="build-project">
+    <target depends="init" name="build">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="${bin.dir}" includeantruntime="false" source="${source}" target="${target}">
-            <src path="src"/>
+            <src path="${src.dir}"/>
             <classpath refid="project.classpath"/>
         </javac>
     </target>
               
-    <target depends="init,build-project" name="release-sdk">
+    <target depends="init,build" name="release-sdk">
         <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
             basedir="${bin.dir}" 
             includes="**/*.class">
