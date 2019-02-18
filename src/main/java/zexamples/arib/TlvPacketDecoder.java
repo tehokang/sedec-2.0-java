@@ -253,7 +253,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] buffer) {
+    public void onReceivedVideo(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         try {
             if ( video_bs_map.containsKey(packet_id) == false ) {
                 new File(video_download_path).mkdirs();
@@ -282,7 +282,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] buffer) {
+    public void onReceivedAudio(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         try {
             if ( audio_bs_map.containsKey(packet_id) == false ) {
                 new File(audio_download_path).mkdirs();
