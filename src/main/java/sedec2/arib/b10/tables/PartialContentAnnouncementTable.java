@@ -108,7 +108,7 @@ public class PartialContentAnnouncementTable extends Table {
 
             for ( int j=content_version.schedule_description_length; j>0; ) {
                 Schedule schedule_description = new Schedule();
-                schedule_description.start_time = readOnBuffer(40);
+                schedule_description.start_time = readLongOnBuffer(40);
                 schedule_description.duration = readOnBuffer(24);
                 content_version.schedule_descriptions.add(schedule_description);
                 j-=8;

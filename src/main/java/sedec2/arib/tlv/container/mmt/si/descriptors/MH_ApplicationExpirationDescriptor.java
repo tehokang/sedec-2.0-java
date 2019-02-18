@@ -9,7 +9,7 @@ public class MH_ApplicationExpirationDescriptor extends Descriptor {
     public MH_ApplicationExpirationDescriptor(BitReadWriter brw) {
         super(brw);
 
-        expiration_date_and_time = brw.readOnBuffer(40);
+        expiration_date_and_time = brw.readLongOnBuffer(40);
     }
 
     public long getExpirationDateAndTime() {

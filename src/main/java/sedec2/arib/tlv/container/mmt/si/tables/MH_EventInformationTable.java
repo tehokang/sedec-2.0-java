@@ -92,7 +92,7 @@ public class MH_EventInformationTable extends Table {
         for ( int i=(section_length-11-4); i>0; ) {
             Event event = new Event();
             event.event_id = readOnBuffer(16);
-            event.start_time = readOnBuffer(40);
+            event.start_time = readLongOnBuffer(40);
             event.duration = readOnBuffer(24);
             event.running_status = (byte) readOnBuffer(3);
             event.free_CA_mode = (byte) readOnBuffer(1);

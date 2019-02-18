@@ -26,10 +26,10 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FilePacketReader;
+import sedec2.util.HttpTlvPacketReader;
+import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
-import sedec2.util.TlvPacketReader;
 
 /**
  * SimpleTlvCoordinator is an example which's using TlvDemultiplexer of sedec2 to get information
@@ -529,7 +529,10 @@ public class TlvPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            FilePacketReader tlv_reader = new TlvPacketReader(args[i]);
+            /**
+             * You can choose HttpTlvPacketReader or FileTlvPacketReader
+             */
+            PacketReader tlv_reader = new HttpTlvPacketReader(args[i]);
             if ( false == tlv_reader.open() ) continue;
 
             progress_bar.start(tlv_reader.filesize());

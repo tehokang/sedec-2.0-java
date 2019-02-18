@@ -30,7 +30,7 @@ public class NtpExtractor extends BaseExtractor {
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
     }
 
-    public class QueueData extends BaseExtractor.QueueData {
+    protected class QueueData extends BaseExtractor.QueueData {
         public NetworkTimeProtocolData ntp;
 
         public QueueData(NetworkTimeProtocolData ntp) {

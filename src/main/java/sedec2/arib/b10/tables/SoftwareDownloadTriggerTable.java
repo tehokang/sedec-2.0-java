@@ -114,7 +114,7 @@ public class SoftwareDownloadTriggerTable extends Table {
 
             for ( int j=content.schedule_description_length; j>0; ) {
                 Schedule schedule = new Schedule();
-                schedule.start_time = readOnBuffer(40);
+                schedule.start_time = readLongOnBuffer(40);
                 schedule.duration = readOnBuffer(24);
                 content.schedules.add(schedule);
                 j-=8;

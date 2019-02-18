@@ -27,11 +27,11 @@ public class EventMessageDescriptor extends Descriptor {
         if ( time_mode == 0 ) {
             brw.skipOnBuffer(64);
         } else if ( time_mode == 0x01 || time_mode == 0x05 ) {
-            event_msg_UTC = brw.readOnBuffer(64);
+            event_msg_UTC = brw.readLongOnBuffer(64);
         } else if ( time_mode == 0x02 ) {
-            event_msg_NPT = brw.readOnBuffer(64);
+            event_msg_NPT = brw.readLongOnBuffer(64);
         } else if ( time_mode == 0x03 ) {
-            event_msg_relativeTime = brw.readOnBuffer(64);
+            event_msg_relativeTime = brw.readLongOnBuffer(64);
         }
 
         event_msg_type = (byte) brw.readOnBuffer(8);

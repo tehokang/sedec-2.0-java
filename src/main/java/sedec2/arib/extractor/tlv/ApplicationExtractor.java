@@ -50,15 +50,16 @@ public class ApplicationExtractor extends BaseExtractor {
                 int mpu_sequence_number, byte[] buffer);
     }
 
-    class QueueData extends BaseExtractor.QueueData {
+    protected class QueueData extends BaseExtractor.QueueData {
         public int item_id;
         public int mpu_sequence_number;
         public boolean is_index_item = false;
 
         public QueueData(int pid, int item_id, int mpu_sequence_number,
                 boolean is_index_item, byte[] data) {
-            this.data = data;
-            this.packet_id = pid;
+
+            super(pid, data);
+
             this.item_id = item_id;
             this.is_index_item = is_index_item;
             this.mpu_sequence_number = mpu_sequence_number;

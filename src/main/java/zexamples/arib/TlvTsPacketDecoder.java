@@ -30,7 +30,7 @@ import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
-import sedec2.util.TsPacketReader;
+import sedec2.util.FileTsPacketReader;
 
 class SimpleTlvTsCoordinator implements
         TlvDemultiplexer.Listener,
@@ -252,7 +252,7 @@ class SimpleTlvTsCoordinator implements
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] buffer) {
+    public void onReceivedVideo(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         try {
             if ( video_bs_map.containsKey(packet_id) == false ) {
                 new File(video_download_path).mkdirs();
@@ -281,7 +281,7 @@ class SimpleTlvTsCoordinator implements
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] buffer) {
+    public void onReceivedAudio(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         try {
             if ( audio_bs_map.containsKey(packet_id) == false ) {
                 new File(audio_download_path).mkdirs();
@@ -494,7 +494,7 @@ public class TlvTsPacketDecoder {
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            FilePacketReader ts_reader = new TsPacketReader(args[i]);
+            FilePacketReader ts_reader = new FileTsPacketReader(args[i]);
             if ( false == ts_reader.open() ) continue;
 
             progress_bar.start(ts_reader.filesize());

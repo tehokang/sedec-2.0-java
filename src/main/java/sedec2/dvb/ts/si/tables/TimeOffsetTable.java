@@ -60,7 +60,7 @@ public class TimeOffsetTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        UTC_time_bits = readOnBuffer(40);
+        UTC_time_bits = readLongOnBuffer(40);
         UTC_time = new UTCTime(UTC_time_bits);
 
         skipOnBuffer(4);

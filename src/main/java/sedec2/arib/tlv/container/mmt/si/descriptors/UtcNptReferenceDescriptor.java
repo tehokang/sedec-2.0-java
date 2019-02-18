@@ -11,8 +11,8 @@ public class UtcNptReferenceDescriptor extends Descriptor {
     public UtcNptReferenceDescriptor(BitReadWriter brw) {
         super(brw);
 
-        UTC_Reference = brw.readOnBuffer(64);
-        NPT_Reference = brw.readOnBuffer(64);
+        UTC_Reference = brw.readLongOnBuffer(64);
+        NPT_Reference = brw.readLongOnBuffer(64);
         scale = (byte) brw.readOnBuffer(2);
         brw.skipOnBuffer(6);
     }

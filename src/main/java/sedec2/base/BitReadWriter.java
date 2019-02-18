@@ -96,6 +96,10 @@ public class BitReadWriter {
         }
     }
 
+    public long readLongOnBuffer(int len) {
+        return readOnBuffer((long)len);
+    }
+
     public long readOnBuffer(long len) {
         int mask;
         byte sp = m_buffer[m_pos];

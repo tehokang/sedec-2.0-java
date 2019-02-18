@@ -14,7 +14,7 @@ public class MH_ExpireDescriptor extends Descriptor {
         time_mode = brw.readOnBuffer(8);
 
         if ( 0x01 == time_mode ) {
-            UTC_time = brw.readOnBuffer(64);
+            UTC_time = brw.readLongOnBuffer(64);
         } else if ( 0x04 == time_mode ) {
             brw.skipOnBuffer(8);
             passed_seconds = brw.readOnBuffer(32);

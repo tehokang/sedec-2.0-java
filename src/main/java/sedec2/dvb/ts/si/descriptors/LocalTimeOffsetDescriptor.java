@@ -14,7 +14,7 @@ public class LocalTimeOffsetDescriptor extends Descriptor {
         public byte country_region_id;
         public byte local_time_offset_polarity;
         public int local_time_offset;
-        public int time_of_change;
+        public long time_of_change;
         public int next_time_offset;
     }
 
@@ -28,7 +28,7 @@ public class LocalTimeOffsetDescriptor extends Descriptor {
             brw.skipOnBuffer(1);
             offset.local_time_offset_polarity = (byte) brw.readOnBuffer(1);
             offset.local_time_offset = brw.readOnBuffer(16);
-            offset.time_of_change = brw.readOnBuffer(40);
+            offset.time_of_change = brw.readLongOnBuffer(40);
             offset.next_time_offset = brw.readOnBuffer(16);
             i-=13;
 

@@ -1,22 +1,32 @@
 package sedec2.util;
 
-import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
 /**
  * Base class to read specific file
  */
-public abstract class FilePacketReader implements PacketReader {
+public abstract class HttpPacketReader implements PacketReader {
     protected static final String TAG = HttpPacketReader.class.getSimpleName();
-    protected File file = null;
+    protected URL url= null;
+    protected URLConnection conn = null;
+    protected InputStream input_stream = null;
 
     /**
      * Constructor with full path
      * @param file Full path
      */
-    public FilePacketReader(String file) {
-        this.file = new File(file);
+    public HttpPacketReader(String url) {
+        try {
+            this.url = new URL(url);
+        } catch (MalformedURLException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -24,14 +34,28 @@ public abstract class FilePacketReader implements PacketReader {
      * @return true if succeed to open else return false
      */
     @Override
-    public abstract boolean open();
+    public boolean open() {
+        try {
+            conn = url.openConnection();
+            input_stream = conn.getInputStream();
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+        return true;
+    }
 
     /**
      * Closes a file
      */
     @Override
     public void close() {
-        file = null;
+        try {
+            input_stream.close();
+            input_stream = null;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -40,7 +64,7 @@ public abstract class FilePacketReader implements PacketReader {
      */
     @Override
     public long filesize() {
-        return file.length();
+        return conn.getContentLengthLong();
     }
 
     /**

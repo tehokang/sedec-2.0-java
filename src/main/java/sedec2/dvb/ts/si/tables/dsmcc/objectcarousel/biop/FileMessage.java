@@ -18,7 +18,7 @@ public class FileMessage extends BIOPMessage {
     public FileMessage(byte[] buffer) {
         super(buffer);
 
-        content_size = readOnBuffer(64);
+        content_size = readLongOnBuffer(64);
         for ( int i=0; i<objectInfo_length; i++ ) {
             objectInfo_data_byte[i] = (byte) readOnBuffer(8);
         }

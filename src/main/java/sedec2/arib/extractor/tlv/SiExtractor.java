@@ -37,7 +37,7 @@ public class SiExtractor extends BaseExtractor {
         public void onReceivedTable(Table table);
     }
 
-    public class QueueData extends BaseExtractor.QueueData {
+    protected class QueueData extends BaseExtractor.QueueData {
         public Table table;
 
         public QueueData(Table table) {

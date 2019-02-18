@@ -42,7 +42,7 @@ public class AdditionalAribSubtitleInfo {
         }
 
         if ( TMD == 0x02 ) {
-            reference_start_time = brw.readOnBuffer(64);
+            reference_start_time = brw.readLongOnBuffer(64);
             reference_start_time_leap_indicator = (byte) brw.readOnBuffer(2);
             brw.skipOnBuffer(6);
         }

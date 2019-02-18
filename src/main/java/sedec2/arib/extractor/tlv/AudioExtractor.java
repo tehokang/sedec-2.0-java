@@ -19,7 +19,7 @@ import sedec2.util.Logger;
  * <p>
  * Audio MFU can automatically include prefix like sync bytes by {@link BaseExtractor#enablePreModification()}.
  * Then user can get audio having prefix as synchronization byte and length in AudioSyncStream.
- * User can receive audio via {@link AudioExtractor.IAudioExtractorListener#onReceivedAudio(int, byte[])}
+ * User can receive audio via {@link AudioExtractor.IAudioExtractorListener#onReceivedAudio(int, int, int, byte[])}
  */
 public class AudioExtractor extends BaseExtractor {
     protected static final String TAG = AudioExtractor.class.getSimpleName();
@@ -33,7 +33,19 @@ public class AudioExtractor extends BaseExtractor {
          * @param packet_id MMT packet id
          * @param buffer MFU_data_byte as timed data of Table 6-1 MMTP_payload
          */
-        public void onReceivedAudio(int packet_id, byte[] buffer);
+        public void onReceivedAudio(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer);
+    }
+
+    protected class QueueData extends BaseExtractor.QueueData {
+        public int sample_number;
+        public int mpu_sequence_number;
+
+        public QueueData(int pid, int mpu_sequence_number, int sample_number, byte[] data) {
+            super(pid, data);
+
+            this.sample_number = sample_number;
+            this.mpu_sequence_number = mpu_sequence_number;
+        }
     }
 
     /**
@@ -50,10 +62,10 @@ public class AudioExtractor extends BaseExtractor {
 
                 while ( m_is_running ) {
                     try {
-                        if ( null != m_event_queue && ( data = m_event_queue.take()) != null) {
+                        if ( null != m_event_queue && ( data = (QueueData) m_event_queue.take()) != null) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((IAudioExtractorListener)m_listeners.get(i)).
-                                        onReceivedAudio(data.packet_id, data.data);
+                                        onReceivedAudio(data.packet_id, data.mpu_sequence_number, data.sample_number, data.data);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -122,6 +134,8 @@ public class AudioExtractor extends BaseExtractor {
                             out.write(sample_binary);
                             putOut(new QueueData(
                                     mmtp_packet.getPacketId(),
+                                    mmtp_packet.getMPU().getMPUSequenceNumber(),
+                                    ((mmtp_packet.getMPU().getAggregationFlag() == 0) ? -1 : i),
                                     out.toByteArray()));
                         }
                     }

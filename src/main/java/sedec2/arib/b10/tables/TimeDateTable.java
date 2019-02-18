@@ -48,7 +48,7 @@ public class TimeDateTable extends Table {
 
     @Override
     protected void __decode_table_body__() {
-        JST_time_bits = readOnBuffer(40);
+        JST_time_bits = readLongOnBuffer(40);
         JST_time = new JSTTime(JST_time_bits);
     }
 

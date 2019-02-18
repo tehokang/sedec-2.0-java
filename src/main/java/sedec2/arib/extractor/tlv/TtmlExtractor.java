@@ -34,6 +34,18 @@ public class TtmlExtractor extends BaseExtractor {
         public void onReceivedTtml(int packet_id, byte[] buffer);
     }
 
+    protected class QueueData extends BaseExtractor.QueueData {
+        public int sample_number;
+        public int mpu_sequence_number;
+
+        public QueueData(int pid, int mpu_sequence_number, int sample_number, byte[] data) {
+            super(pid, data);
+
+            this.sample_number = sample_number;
+            this.mpu_sequence_number = mpu_sequence_number;
+        }
+    }
+
     /**
      * Constructor which start running thread to emit Event to user.
      */
@@ -49,7 +61,7 @@ public class TtmlExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         if ( null != m_event_queue &&
-                                (data = m_event_queue.take()) != null ) {
+                                (data = (QueueData) m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITtmlExtractorListener)m_listeners.get(i)).
                                         onReceivedTtml(data.packet_id, data.data);
@@ -105,6 +117,8 @@ public class TtmlExtractor extends BaseExtractor {
                             ByteArrayOutputStream sample = samples.get(i);
                             putOut(new QueueData(
                                     mmtp_packet.getPacketId(),
+                                    mmtp_packet.getMPU().getMPUSequenceNumber(),
+                                    i,
                                     sample.toByteArray()));
                         }
                     }

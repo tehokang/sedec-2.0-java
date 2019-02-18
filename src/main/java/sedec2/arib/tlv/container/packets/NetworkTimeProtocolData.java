@@ -40,10 +40,10 @@ public class NetworkTimeProtocolData extends BitReadWriter {
         root_dispersion = readOnBuffer(32);
         reference_identification = readOnBuffer(32);
 
-        reference_timestamp = readOnBuffer(64);
-        origin_timestamp = readOnBuffer(64);
-        receive_timestamp = readOnBuffer(64);
-        transmit_timestamp = readOnBuffer(64);
+        reference_timestamp = readLongOnBuffer(64);
+        origin_timestamp = readLongOnBuffer(64);
+        receive_timestamp = readLongOnBuffer(64);
+        transmit_timestamp = readLongOnBuffer(64);
     }
 
     public void print() {

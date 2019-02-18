@@ -9,7 +9,7 @@ public class EmergencyNewsDescriptor extends Descriptor {
     public EmergencyNewsDescriptor(BitReadWriter brw) {
         super(brw);
 
-        transmit_timestamp = brw.readOnBuffer(64);
+        transmit_timestamp = brw.readLongOnBuffer(64);
         brw.skipOnBuffer(8);
     }
 

@@ -15,7 +15,7 @@ import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
 import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
-import sedec2.util.TsPacketReader;
+import sedec2.util.FileTsPacketReader;
 
 /**
  * SimpleTsCoordinator is an example which's using TsDemultiplexer of sedec2 to get information
@@ -190,7 +190,7 @@ public class TsPacketDecoder {
          * It assume that platform should give a TS packet to us as input of TSExtractor
          */
         for ( int i=0; i<args.length; i++ ) {
-            FilePacketReader ts_reader = new TsPacketReader(args[i]);
+            FilePacketReader ts_reader = new FileTsPacketReader(args[i]);
             if ( false == ts_reader.open() ) continue;
 
             progress_bar.start(ts_reader.filesize());

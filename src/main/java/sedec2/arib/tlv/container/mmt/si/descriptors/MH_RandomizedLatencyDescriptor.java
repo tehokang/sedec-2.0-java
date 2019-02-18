@@ -17,7 +17,7 @@ public class MH_RandomizedLatencyDescriptor extends Descriptor {
         randomization_end_time_flag = (byte) brw.readOnBuffer(1);
         brw.skipOnBuffer(7);
         if ( 0 != randomization_end_time_flag ) {
-            randomization_end_time = brw.readOnBuffer(40);
+            randomization_end_time = brw.readLongOnBuffer(40);
         }
     }
 

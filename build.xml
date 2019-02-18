@@ -4,7 +4,7 @@
               To include a user specific buildfile here, simply create one in the same
               directory with the processing instruction <?eclipse.ant.import?>
               as the first entry and export the buildfile again. -->
-<project basedir="." default="build" name="sedec" >
+<project basedir="." default="compile" name="sedec" >
     <property environment="env"/>
     <property name="version" value="2.0"/>
     <property name="debuglevel" value="source,lines,vars"/>
@@ -15,15 +15,17 @@
     <property name="lib.dir" value="libs"/>
     <property name="src.dir" value="src/main/java"/>
     <property name="doc.dir" value="${release.dir}/docs"/>
+    <property name="output.prefix" value="${release.dir}/${ant.project.name}-${version}"/>
+    <property name="output.jar" value="${output.prefix}.jar"/>
+
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
             <include name="**/*.jar" />
         </fileset>
     </path>
               
-    <target name="init">
+    <target name="initialize">
         <mkdir dir="${bin.dir}"/>
-        <mkdir dir="${release.dir}"/>
         <copy includeemptydirs="false" todir="${bin.dir}">
             <fileset dir="${src.dir}">
                 <exclude name="**/*.launch"/>
@@ -34,10 +36,10 @@
               
     <target name="distclean">
         <delete dir="${bin.dir}"/>
-        <delete dir="${release.dir}"/>
+        <delete file="${output.jar}"/>
     </target>
               
-    <target depends="build" name="versioning">
+    <target depends="compile" name="versioning">
         <tstamp>
             <format property="builtat" pattern="MM/dd/yyyy hh:mm aa" />
         </tstamp>        
@@ -53,7 +55,7 @@
         </propertyfile>
     </target>
               
-    <target depends="init" name="build">
+    <target depends="initialize" name="compile">
         <echo message="${ant.project.name}: ${ant.file}"/>
         <javac debug="true" debuglevel="${debuglevel}" destdir="${bin.dir}" includeantruntime="false" source="${source}" target="${target}">
             <src path="${src.dir}"/>
@@ -61,8 +63,8 @@
         </javac>
     </target>
               
-    <target depends="init,build" name="release-sdk">
-        <jar jarfile="${release.dir}/${ant.project.name}-${version}.jar" 
+    <target depends="initialize,compile" name="release-sdk">
+        <jar jarfile="${output.jar}" 
             basedir="${bin.dir}" 
             includes="**/*.class">
         </jar>
@@ -79,8 +81,8 @@
                  printseeds="on"
                  obfuscate="yes">
             -libraryjars ${java.home}/lib/rt.jar
-            -injars ${release.dir}/${ant.project.name}-${version}.jar
-            -outjars ${release.dir}/${ant.project.name}-${version}.min.jar
+            -injars ${output.jar}
+            -outjars ${output.prefix}.min.jar
             -dontnote
             -dontwarn
             -keep class ** { 
@@ -103,7 +105,7 @@
             <arg value="${id}@${server_ip}:${server_path}/${ant.project.name}"/>
         </exec>
     </target>
-	
+
     <target name="doc-internal" description="generate documentation">
         <javadoc destdir="${doc.dir}/internal/" 
                 classpathref="project.classpath" 
@@ -130,7 +132,7 @@
             </classpath>
         </javadoc>
     </target>
-	
+
     <target name="doc-external" description="generate documentation">
         <javadoc destdir="${doc.dir}/external/" 
                 classpathref="project.classpath" 

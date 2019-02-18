@@ -38,8 +38,8 @@ public class TlvDemultiplexer implements
         public void onReceivedTable(Table table);
         public void onReceivedNtp(NetworkTimeProtocolData ntp);
         public void onReceivedTtml(int packet_id, byte[] buffer);
-        public void onReceivedVideo(int packet_id, byte[] buffer);
-        public void onReceivedAudio(int packet_id, byte[] buffer);
+        public void onReceivedVideo(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer);
+        public void onReceivedAudio(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer);
         public void onReceivedApplication(int packet_id, int item_id,
                 int mpu_sequence_number, byte[] buffer);
         public void onReceivedIndexItem(int packet_id, int item_id,
@@ -716,16 +716,16 @@ public class TlvDemultiplexer implements
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] buffer) {
+    public void onReceivedAudio(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedAudio(packet_id, buffer);
+            m_listeners.get(i).onReceivedAudio(packet_id, mpu_sequence_number, sample_number, buffer);
         }
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] buffer) {
+    public void onReceivedVideo(int packet_id, int mpu_sequence_number, int sample_number, byte[] buffer) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedVideo(packet_id, buffer);
+            m_listeners.get(i).onReceivedVideo(packet_id, mpu_sequence_number, sample_number, buffer);
         }
     }
 

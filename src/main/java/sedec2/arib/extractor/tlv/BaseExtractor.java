@@ -104,7 +104,7 @@ public abstract class BaseExtractor {
     }
 
     protected class QueueData {
-        public int packet_id;
+        public int packet_id = 0;
         public byte[] data;
 
         public QueueData() {

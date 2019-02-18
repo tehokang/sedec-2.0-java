@@ -20,7 +20,7 @@ public class MPU_TimestampDescriptor extends Descriptor {
         for ( int i=descriptor_length; i>0; ) {
             MPU mpu = new MPU();
             mpu.mpu_sequence_number = brw.readOnBuffer(32);
-            mpu.mpu_presentation_time = brw.readOnBuffer(64);
+            mpu.mpu_presentation_time = brw.readLongOnBuffer(64);
             mpus.add(mpu);
             i-=(4 + 8);
         }
