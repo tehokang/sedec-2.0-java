@@ -28,9 +28,9 @@ import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
+import sedec2.util.FileTsPacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
-import sedec2.util.FileTsPacketReader;
 
 class SimpleTlvTsCoordinator implements
         TlvDemultiplexer.Listener,
@@ -488,7 +488,7 @@ public class TlvTsPacketDecoder {
          * Decoration of console user interface
          */
         ConsoleProgress progress_bar = new ConsoleProgress("TLV-TS").
-                show(true, true, true, true, true, false, false);
+                show(true, true, true, true, true, false);
         /**
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor

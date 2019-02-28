@@ -1,7 +1,5 @@
 package sedec2.util;
 
-import java.lang.management.ManagementFactory;
-import java.lang.management.MemoryUsage;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -23,8 +21,6 @@ public class ConsoleProgress {
     protected double bitrate_average = 0;
     protected StringBuilder anim_progress_bar;
     protected char[] anim_circle = new char[]{'|', '/', '-', '\\'};
-    protected MemoryUsage heap_usage = null;
-    protected MemoryUsage nonheap_usage = null;
 
     protected boolean m_enable_progress_bar = false;
     protected boolean m_enable_percentage = false;
@@ -32,8 +28,6 @@ public class ConsoleProgress {
     protected boolean m_enable_bitrate = false;
     protected boolean m_enable_duration = false;
     protected boolean m_enable_proceed_amount = false;
-    protected boolean m_enable_heap_usage = false;
-    protected boolean m_enable_cpu_usage = false;
 
     /**
      * Constructor with title of progress
@@ -134,41 +128,6 @@ public class ConsoleProgress {
     }
 
     /**
-     * Show progress bar, percentage, bitrate, duration, amount and heap usage during processing
-     * @param progress_bar flag to enable progress bar
-     * @param percentage flag to enable percentage
-     * @param bitrate flag to enable bitrate
-     * @param duration flag to enable duration
-     * @param amount flag to enable amount to be proceed
-     * @param heap_usage flag to enable heap usage
-     * @return instance of ConsoleProgress
-     */
-    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
-            boolean duration, boolean amount, boolean heap_usage) {
-        this.show(progress_bar, percentage, bitrate, duration, amount);
-        m_enable_heap_usage = heap_usage;
-        return this;
-    }
-
-    /**
-     * Show progress bar, percentage, bitrate, duration, amount, heap usage, cpu usage during processing
-     * @param progress_bar flag to enable progress bar
-     * @param percentage flag to enable percentage
-     * @param bitrate flag to enable bitrate
-     * @param duration flag to enable duration
-     * @param amount flag to enable amount to be proceed
-     * @param heap_usage flag to enable heap usage
-     * @param cpu_usage flag to enable cpu usage
-     * @return instance of ConsoleProgress
-     */
-    public ConsoleProgress show(boolean progress_bar, boolean percentage, boolean bitrate,
-            boolean duration, boolean amount, boolean heap_usage, boolean cpu_usage) {
-        this.show(progress_bar, percentage, bitrate, duration, amount, heap_usage);
-        m_enable_cpu_usage = cpu_usage;
-        return this;
-    }
-
-    /**
      * Show progress bar, percentage, bitrate, duration, amount, heap usage, cpu usage
      * and loading circle during processing
      * @param progress_bar flag to enable progress bar
@@ -182,11 +141,9 @@ public class ConsoleProgress {
      * @return instance of ConsoleProgress
      */
     public ConsoleProgress show(boolean progress_bar, boolean percentage,
-            boolean loading_circle, boolean bitrate, boolean duration, boolean amount,
-            boolean heap_usage, boolean cpu_usage ) {
-        this.show(progress_bar, percentage, bitrate, duration, amount, heap_usage);
+            boolean loading_circle, boolean bitrate, boolean duration, boolean amount ) {
+        this.show(progress_bar, percentage, bitrate, duration, amount);
         m_enable_loading_circle = loading_circle;
-        m_enable_cpu_usage = cpu_usage;
         return this;
     }
 
@@ -243,35 +200,6 @@ public class ConsoleProgress {
         if ( m_enable_proceed_amount )
             output += String.format("(%.2f / %.2f MBytes) ",
                     read_size/1024/1024, total_size/1024/1024 );
-
-        /**
-         * Memory usage during processing
-         */
-        if ( m_enable_heap_usage ) {
-            if ( System.currentTimeMillis() - memory_process_time >= 1000 ) {
-                memory_process_time = System.currentTimeMillis();
-                heap_usage = ManagementFactory.getMemoryMXBean().getHeapMemoryUsage();
-                nonheap_usage = ManagementFactory.getMemoryMXBean().getNonHeapMemoryUsage();
-            }
-
-            if ( heap_usage != null ) {
-                output += String.format("Heap : %d MBytes ",
-                        heap_usage.getUsed() / 1024 / 1024);
-            }
-
-            if ( nonheap_usage != null ) {
-                output += String.format("Non-heap : %d MBytes ",
-                        nonheap_usage.getUsed() / 1024 / 1024);
-            }
-        }
-
-        /**
-         * CPU usage during processing
-         */
-        if ( m_enable_cpu_usage ) {
-            output += String.format("CPU : %.2f " ,
-                    ManagementFactory.getOperatingSystemMXBean().getSystemLoadAverage());
-        }
 
         /**
          * Duration time during demuxing

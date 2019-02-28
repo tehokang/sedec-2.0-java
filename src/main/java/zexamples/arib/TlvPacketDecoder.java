@@ -523,7 +523,7 @@ public class TlvPacketDecoder {
          * Decoration of console user interface
          */
         ConsoleProgress progress_bar = new ConsoleProgress("TLV").
-                show(true, true, true, true, true, false, false);
+                show(true, true, true, true, true, false);
         /**
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
