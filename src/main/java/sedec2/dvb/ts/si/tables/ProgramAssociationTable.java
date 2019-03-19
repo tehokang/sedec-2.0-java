@@ -21,12 +21,20 @@ public class ProgramAssociationTable extends Table {
     private List<Program> programs = new ArrayList<>();
 
     public class Program {
-        public  int program_number;
-        public int pid;
+        private  int program_number;
+        private int pid;
 
         Program(int _program_number, int _pid) {
             program_number = _program_number;
             pid = _pid;
+        }
+
+        public int getProgramNumber() {
+            return program_number;
+        }
+
+        public int getPid() {
+            return pid;
         }
     }
 

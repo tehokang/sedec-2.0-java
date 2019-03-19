@@ -21,12 +21,11 @@ import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
 import sedec2.arib.tlv.container.mmt.si.tables.UnknownTable;
 import sedec2.base.Table;
-import sedec2.dvb.ts.si.tables.dsmcc.DSMCCSection;
+
 
 /**
  * Factory to obtain a kind of table of MMT-SI like below.
  * <ul>
- * <li> {@link DSMCCSection}
  * <li> {@link ConditionalAccessTable}
  * <li> {@link DataAssetManagementTable}
  * <li> {@link DataContentConfigurationTable}

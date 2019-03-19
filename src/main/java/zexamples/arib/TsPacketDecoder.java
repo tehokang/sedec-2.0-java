@@ -1,4 +1,4 @@
-package zexamples.dvb;
+package zexamples.arib;
 
 import java.io.BufferedOutputStream;
 import java.io.File;
@@ -8,11 +8,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import sedec2.arib.b10.TableFactory;
+import sedec2.arib.b10.tables.ProgramAssociationTable;
+import sedec2.arib.b10.tables.ProgramMapTable;
+import sedec2.arib.extractor.ts.TsDemultiplexer;
 import sedec2.base.Table;
-import sedec2.dvb.extractor.TsDemultiplexer;
-import sedec2.dvb.ts.si.TableFactory;
-import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
-import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FilePacketReader;
 import sedec2.util.FileTsPacketReader;
@@ -75,7 +75,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         ProgramAssociationTable.Program program = programs.get(i);
                         ts_demuxer.addSiFilter(program.getPid());
                     }
-//                    pat.print();
+                    pat.print();
                 }
                 break;
             case TableFactory.PROGRAM_MAP_TABLE:
@@ -97,35 +97,11 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 break;
                         }
                     }
-//                    pmt.print();
+                    pmt.print();
                 }
                 break;
-            case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
-            case TableFactory.DSMCC_STREAM_DESCRIPTORS_TABLE:
-//                ((DSMCCSection) table).print();
-                break;
-            case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
-                /**
-                 * EN 301 192 Table A.1 Regisitration of private data broadcast systems
-                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
-                 * in order to confirm which carousel user should use.
-                 */
-//                DSMCCSection dsmcc_ddb = (DSMCCSection) table;
-//                dsmcc_ddb.updateToObjectCarousel();
-//                dsmcc_ddb.print();
-                break;
-            case TableFactory.DSMCC_UN_MESSAGE_TABLE:
-                /**
-                 * EN 301 192 Table A.1 Regisitration of private data broadcast systems
-                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
-                 * in order to confirm which carousel user should use.
-                 */
-//                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
-//                dsmcc_dsi_or_dii.updateToObjectCarousel();
-//                dsmcc_dsi_or_dii.print();
-                break;
             default:
-//                table.print();
+                table.print();
                 break;
         }
     }
@@ -206,7 +182,7 @@ public class TsPacketDecoder {
                  * from event listener which you registered to TsDemultiplexer
                  */
                 if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-                progress_bar.update(ts_packet.length);
+//                progress_bar.update(ts_packet.length);
             }
 
             simple_ts_coordinator.clearQueue();
