@@ -14,9 +14,9 @@ public class AdaptationField {
     protected byte splicing_point_flag;
     protected byte transport_private_data_flag;
     protected byte adaptation_field_extension_flag;
-    protected int program_clock_reference_base;
+    protected long program_clock_reference_base;
     protected int program_clock_reference_extension;
-    protected int original_program_clock_reference_base;
+    protected long original_program_clock_reference_base;
     protected int original_program_clock_reference_extension;
     protected byte splice_countdown;
     protected byte transport_private_data_length;
@@ -57,14 +57,14 @@ public class AdaptationField {
             stuffing_length -= 1;
 
             if ( PCR_flag == 1 ) {
-                program_clock_reference_base = brw.readOnBuffer(33);
+                program_clock_reference_base = brw.readLongOnBuffer(33);
                 brw.skipOnBuffer(6);
                 program_clock_reference_extension = brw.readOnBuffer(9);
                 stuffing_length -= 6;
             }
 
             if ( OPCR_flag == 1) {
-                original_program_clock_reference_base = brw.readOnBuffer(33);
+                original_program_clock_reference_base = brw.readLongOnBuffer(33);
                 brw.skipOnBuffer(6);
                 original_program_clock_reference_extension = brw.readOnBuffer(9);
                 stuffing_length -= 6;
