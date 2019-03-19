@@ -119,7 +119,7 @@ public class AudioExtractor extends BaseExtractor {
                         BitReadWriter syncword = null;
                         ByteArrayOutputStream out = null;
                         List<ByteArrayOutputStream> samples = getMFU(mmtp_packet);
-
+                        int sample_number = -1;
                         for ( int i=0; i<samples.size(); i++ ) {
                             ByteArrayOutputStream sample = samples.get(i);
                             byte[] sample_binary = sample.toByteArray();
@@ -132,10 +132,18 @@ public class AudioExtractor extends BaseExtractor {
                                 out.write(syncword.getBuffer());
                             }
                             out.write(sample_binary);
+                            if(mmtp_packet.getMPU().getAggregationFlag() == 0 ) {
+                                int indicator = mmtp_packet.getMPU().getFragmentationIndicator();
+                                if(indicator == 0 || indicator == 1) {
+                                    sample_number = 0;
+                                }
+                            } else {
+                                sample_number = 0;
+                            }
                             putOut(new QueueData(
                                     mmtp_packet.getPacketId(),
                                     mmtp_packet.getMPU().getMPUSequenceNumber(),
-                                    ((mmtp_packet.getMPU().getAggregationFlag() == 0) ? -1 : i),
+                                    sample_number,
                                     out.toByteArray()));
                         }
                     }
