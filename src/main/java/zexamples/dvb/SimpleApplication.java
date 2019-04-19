@@ -1,4 +1,4 @@
-package zexamples.arib;
+package zexamples.dvb;
 
 import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
@@ -22,10 +22,6 @@ public class SimpleApplication {
                 "Target input section");
         CommandLineUtility.addOption("ts", "input_ts_file", true,
                 "Target input file as ts");
-        CommandLineUtility.addOption("tlv", "input_tlv_file", true,
-                "Target input file as tlv");
-        CommandLineUtility.addOption("tstlv", "input_tstlv_file", true,
-                "Target input file as ts including tlv");
 
         CommandLineUtility.done(args);
         CommandLine cli = CommandLineUtility.getCommandLine();
@@ -41,12 +37,8 @@ public class SimpleApplication {
             BaseSimpleDecoder decoder = null;
             if ( cli.hasOption("ts") ) {
                 decoder = new TsPacketDecoder();
-            } else if ( cli.hasOption("tlv") ) {
-                decoder = new TlvPacketDecoder();
-            } else if ( cli.hasOption("tstlv") ) {
-                decoder = new TlvTsPacketDecoder();
             } else if ( cli.hasOption("s") ) {
-                decoder = new AribTableDecoder();
+                decoder = new DvbTableDecoder();
             }
 
             if ( decoder != null ) decoder.justDoIt(cli);

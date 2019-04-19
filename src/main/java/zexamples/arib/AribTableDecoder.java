@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 
 import sedec2.base.Table;
+import zexamples.BaseSimpleDecoder;
 
 /**
  * AribTableDecoder is an application as example for getting

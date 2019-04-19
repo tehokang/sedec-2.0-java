@@ -1,4 +1,4 @@
-package zexamples.arib;
+package zexamples;
 
 import org.apache.commons.cli.CommandLine;
 
