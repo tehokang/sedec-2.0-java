@@ -113,9 +113,9 @@ public class AdaptationField {
                     splice_type = (byte) brw.readOnBuffer(4);
                     DTS_next_AU_32_30 = (byte) brw.readOnBuffer(3);
                     marker_bit1 = (byte) brw.readOnBuffer(1);
-                    DTS_next_AU_29_15 = (byte) brw.readOnBuffer(15);
+                    DTS_next_AU_29_15 = brw.readOnBuffer(15);
                     marker_bit2 = (byte) brw.readOnBuffer(1);
-                    DTS_next_AU_14_10 = (byte) brw.readOnBuffer(15);
+                    DTS_next_AU_14_10 = brw.readOnBuffer(15);
                     marker_bit3 = (byte) brw.readOnBuffer(1);
                     stuffing_length -= 5;
                     reserved_length -= 5;

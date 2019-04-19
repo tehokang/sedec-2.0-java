@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+
 import sedec2.arib.extractor.tlv.TlvDemultiplexer;
 import sedec2.arib.extractor.tlvts.TlvTsDemultiplexer;
 import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
@@ -36,6 +38,7 @@ class SimpleTlvTsCoordinator implements
         TlvDemultiplexer.Listener,
         TlvTsDemultiplexer.Listener {
     protected static final String TAG = SimpleTlvTsCoordinator.class.getSimpleName();
+    protected CommandLine commandLine;
     protected TlvDemultiplexer tlv_demuxer = null;
     protected TlvTsDemultiplexer tlvts_demuxer = null;
 
@@ -61,7 +64,9 @@ class SimpleTlvTsCoordinator implements
     protected Map<Integer, BufferedOutputStream> video_bs_map = new HashMap<>();
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
 
-    public SimpleTlvTsCoordinator() {
+    public SimpleTlvTsCoordinator(CommandLine commandLine) {
+        this.commandLine = commandLine;
+
         tlvts_demuxer = new TlvTsDemultiplexer();
         tlvts_demuxer.addEventListener(this);
         tlvts_demuxer.enableTlvFilter();
@@ -247,6 +252,8 @@ class SimpleTlvTsCoordinator implements
                         "There might be a table which sedec couldn't decode (table_id : 0x%x)\n",
                         table.getTableId()));
             }
+
+            if ( commandLine.hasOption("st") ) table.print();
             break;
         }
     }
@@ -261,8 +268,10 @@ class SimpleTlvTsCoordinator implements
                                 video_download_path, packet_id)))));
             }
 
-            BufferedOutputStream video_bs = video_bs_map.get(packet_id);
-            video_bs.write(buffer);
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream video_bs = video_bs_map.get(packet_id);
+                video_bs.write(buffer);
+            }
             /**
              * sedec provide wrapper class to check SPS, AUD of H.265
              * If user do {@link VideoExtractor#enablePreModification},
@@ -290,8 +299,11 @@ class SimpleTlvTsCoordinator implements
                                 audio_download_path, packet_id)))));
             }
 
-            BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
-            audio_bs.write(buffer);
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
+                audio_bs.write(buffer);
+            }
+
             /**
              * sedec provide wrapper class to check AudioSyncStream of LATM of ISO 14496-3
              * If user do {@link AudioExtractor#enablePremodification},
@@ -470,19 +482,12 @@ class SimpleTlvTsCoordinator implements
     }
 }
 
-public class TlvTsPacketDecoder {
-    public static void main(String []args) throws InterruptedException {
-        if ( args.length < 1 ) {
-            System.out.println("Oops, " +
-                    "You need TS packet which having fragmented TLV (or file) " +
-                    "to be parsed as 1st parameter");
-            System.out.println(
-                    "Usage: java -classpath . " +
-                    TlvTsPacketDecoder.class.getName() +
-                    " {TS Raw File} \n");
-        }
-
-        SimpleTlvTsCoordinator simple_tlvts_coordinator = new SimpleTlvTsCoordinator();
+public class TlvTsPacketDecoder extends BaseSimpleDecoder {
+    @Override
+    public void justDoIt(CommandLine commandLine) {
+        String target_file = commandLine.getOptionValue("tlvts");
+        SimpleTlvTsCoordinator simple_tlvts_coordinator =
+                new SimpleTlvTsCoordinator(commandLine);
 
         /**
          * Decoration of console user interface
@@ -493,31 +498,29 @@ public class TlvTsPacketDecoder {
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
-        for ( int i=0; i<args.length; i++ ) {
-            FilePacketReader ts_reader = new FileTsPacketReader(args[i]);
-            if ( false == ts_reader.open() ) continue;
+        FilePacketReader ts_reader = new FileTsPacketReader(target_file);
+        if ( false == ts_reader.open() ) return;
 
-            progress_bar.start(ts_reader.filesize());
+        progress_bar.start(ts_reader.filesize());
 
-            while ( ts_reader.readable() > 0) {
-                final byte[] ts_packet = ts_reader.readPacket();
-                if ( ts_packet == null ||
-                        ts_packet.length == 0 ||
-                        ts_packet[0] != 0x47 ) continue;
+        while ( ts_reader.readable() > 0) {
+            final byte[] ts_packet = ts_reader.readPacket();
+            if ( ts_packet == null ||
+                    ts_packet.length == 0 ||
+                    ts_packet[0] != 0x47 ) continue;
 
-                if ( false == simple_tlvts_coordinator.put(ts_packet) ) break;
-                /**
-                 * Updating of console user interface
-                 */
-                progress_bar.update(ts_packet.length);
-            }
-
-            simple_tlvts_coordinator.clearQueue();
-
-            progress_bar.stop();
-            ts_reader.close();
-            ts_reader = null;
+            if ( false == simple_tlvts_coordinator.put(ts_packet) ) break;
+            /**
+             * Updating of console user interface
+             */
+            if ( commandLine.hasOption("sp") ) progress_bar.update(ts_packet.length);
         }
+
+        simple_tlvts_coordinator.clearQueue();
+
+        progress_bar.stop();
+        ts_reader.close();
+        ts_reader = null;
 
         /**
          * Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
@@ -525,8 +528,6 @@ public class TlvTsPacketDecoder {
         simple_tlvts_coordinator.destroy();
         simple_tlvts_coordinator = null;
 
-        System.out.println("ByeBye");
-        System.exit(0);
     }
 }
 
