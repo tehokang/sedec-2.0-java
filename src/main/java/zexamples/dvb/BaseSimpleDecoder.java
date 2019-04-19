@@ -1,4 +1,4 @@
-package zexamples;
+package zexamples.dvb;
 
 import org.apache.commons.cli.CommandLine;
 

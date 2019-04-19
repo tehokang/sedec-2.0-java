@@ -4,7 +4,6 @@ import org.apache.commons.cli.CommandLine;
 import org.apache.commons.cli.HelpFormatter;
 
 import sedec2.util.CommandLineUtility;
-import zexamples.BaseSimpleDecoder;
 
 public class SimpleApplication {
 

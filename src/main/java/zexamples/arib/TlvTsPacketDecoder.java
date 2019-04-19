@@ -34,7 +34,6 @@ import sedec2.util.HttpTsPacketReader;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
-import zexamples.BaseSimpleDecoder;
 
 class SimpleTlvTsCoordinator implements
         TlvDemultiplexer.Listener,

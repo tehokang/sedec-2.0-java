@@ -33,7 +33,6 @@ import sedec2.util.HttpTlvPacketReader;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
-import zexamples.BaseSimpleDecoder;
 
 /**
  * SimpleTlvCoordinator is an example which's using TlvDemultiplexer of sedec2 to get information

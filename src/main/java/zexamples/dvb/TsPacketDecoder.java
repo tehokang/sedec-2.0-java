@@ -19,7 +19,6 @@ import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTsPacketReader;
 import sedec2.util.HttpTsPacketReader;
 import sedec2.util.PacketReader;
-import zexamples.BaseSimpleDecoder;
 
 /**
  * SimpleTsCoordinator is an example which's using TsDemultiplexer of sedec2 to get information

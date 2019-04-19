@@ -11,7 +11,6 @@ import org.apache.commons.cli.CommandLine;
 
 import sedec2.base.Table;
 import sedec2.dvb.ts.si.TableFactory;
-import zexamples.BaseSimpleDecoder;
 
 /**
  * DvbTableDecoder is an application as example for getting
