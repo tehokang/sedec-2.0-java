@@ -8,6 +8,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+
 import sedec2.arib.b10.TableFactory;
 import sedec2.arib.b10.tables.ProgramAssociationTable;
 import sedec2.arib.b10.tables.ProgramMapTable;
@@ -23,7 +25,7 @@ import sedec2.util.FileTsPacketReader;
  */
 class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     protected static final String TAG = SimpleTsCoordinator.class.getSimpleName();
-
+    protected CommandLine commandLine;
     protected ProgramMapTable pmt = null;
     protected ProgramAssociationTable pat = null;
     protected TsDemultiplexer ts_demuxer = null;
@@ -37,7 +39,9 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
     int ddb_counter = 0;
     int dsi_dii_counter = 0;
-    public SimpleTsCoordinator() {
+    public SimpleTsCoordinator(CommandLine commandLine) {
+        this.commandLine = commandLine;
+
         ts_demuxer = new TsDemultiplexer();
         ts_demuxer.addEventListener(this);
 
@@ -75,7 +79,6 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         ProgramAssociationTable.Program program = programs.get(i);
                         ts_demuxer.addSiFilter(program.getPid());
                     }
-                    pat.print();
                 }
                 break;
             case TableFactory.PROGRAM_MAP_TABLE:
@@ -97,11 +100,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 break;
                         }
                     }
-                    pmt.print();
                 }
                 break;
             default:
-                table.print();
+                if ( commandLine.hasOption("st") ) table.print();
                 break;
         }
     }
@@ -116,8 +118,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 audio_download_path, packet_id)))));
             }
 
-            BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
-            audio_bs.write(buffer);
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
+                audio_bs.write(buffer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -133,8 +137,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 video_download_path, packet_id)))));
             }
 
-            BufferedOutputStream video_bs = video_bs_map.get(packet_id);
-            video_bs.write(buffer);
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream video_bs = video_bs_map.get(packet_id);
+                video_bs.write(buffer);
+            }
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -147,58 +153,46 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
  * <li> Tables which are include in SI of TS
  * </ul>
  */
-public class TsPacketDecoder {
-    public static void main(String []args) throws InterruptedException {
-        if ( args.length < 1 ) {
-            System.out.println("Oops, " +
-                    "You need TS packet(or file) to be parsed as 1st parameter");
-            System.out.println(
-                    "Usage: java -classpath . " +
-                    TsPacketDecoder.class.getName() +
-                    " {TS Raw File} \n");
-        }
-
-        SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator();
+public class TsPacketDecoder extends BaseSimpleDecoder {
+    @Override
+    public void justDoIt(CommandLine commandLine) {
+        String target_file = commandLine.getOptionValue("ts");
+        SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator(commandLine);
         ConsoleProgress progress_bar = new ConsoleProgress("TS").
                 show(true, true, true, true, true, false);
         /**
          * Getting each one TS packet from specific file.
          * It assume that platform should give a TS packet to us as input of TSExtractor
          */
-        for ( int i=0; i<args.length; i++ ) {
-            FilePacketReader ts_reader = new FileTsPacketReader(args[i]);
-            if ( false == ts_reader.open() ) continue;
+        FilePacketReader ts_reader = new FileTsPacketReader(target_file);
+        if ( false == ts_reader.open() ) return;
 
-            progress_bar.start(ts_reader.filesize());
+        progress_bar.start(ts_reader.filesize());
 
-            while ( ts_reader.readable() > 0) {
-                final byte[] ts_packet = ts_reader.readPacket();
-                if ( ts_packet == null ||
-                        ts_packet.length == 0 ||
-                        ts_packet[0] != 0x47 ) continue;
-                /**
-                 * Putting a TS packet into SimpleTsCoordinator
-                 * and you can get both the results of as table of MPEG2
-                 * from event listener which you registered to TsDemultiplexer
-                 */
-                if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-//                progress_bar.update(ts_packet.length);
-            }
-
-            simple_ts_coordinator.clearQueue();
-
-            progress_bar.stop();
-            ts_reader.close();
-            ts_reader = null;
+        while ( ts_reader.readable() > 0) {
+            final byte[] ts_packet = ts_reader.readPacket();
+            if ( ts_packet == null ||
+                    ts_packet.length == 0 ||
+                    ts_packet[0] != 0x47 ) continue;
+            /**
+             * Putting a TS packet into SimpleTsCoordinator
+             * and you can get both the results of as table of MPEG2
+             * from event listener which you registered to TsDemultiplexer
+             */
+            if ( false == simple_ts_coordinator.put(ts_packet) ) break;
+            if ( commandLine.hasOption("sp") ) progress_bar.update(ts_packet.length);
         }
+
+        simple_ts_coordinator.clearQueue();
+
+        progress_bar.stop();
+        ts_reader.close();
+        ts_reader = null;
 
         /**
          * Destroy of SimpleTsCoordinator to not handle and released by garbage collector
          */
         simple_ts_coordinator.destroy();
         simple_ts_coordinator = null;
-
-        System.out.println("ByeBye");
-        System.exit(0);
     }
 }

@@ -10,6 +10,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.commons.cli.CommandLine;
+
 import sedec2.arib.extractor.tlv.TlvDemultiplexer;
 import sedec2.arib.tlv.container.mmt.si.DescriptorFactory;
 import sedec2.arib.tlv.container.mmt.si.TableFactory;
@@ -26,7 +28,7 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.HttpTlvPacketReader;
+import sedec2.util.FileTlvPacketReader;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
@@ -38,7 +40,7 @@ import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
 class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected static final String TAG = SimpleTlvCoordinator.class.getSimpleName();
     protected TlvDemultiplexer tlv_demuxer = null;
-
+    protected CommandLine commandLine;
     /**
      * Tables to extract from TLV
      */
@@ -61,7 +63,9 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
     protected Map<Integer, BufferedOutputStream> video_bs_map = new HashMap<>();
     protected Map<Integer, BufferedOutputStream> audio_bs_map = new HashMap<>();
 
-    public SimpleTlvCoordinator() {
+    public SimpleTlvCoordinator(CommandLine commandLine) {
+        this.commandLine = commandLine;
+
         tlv_demuxer = new TlvDemultiplexer();
         tlv_demuxer.addEventListener(this);
 
@@ -248,6 +252,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         "There might be a table which sedec couldn't decode (table_id : 0x%x)\n",
                         table.getTableId()));
             }
+
+            if ( commandLine.hasOption("st") ) table.print();
             break;
         }
     }
@@ -262,8 +268,10 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                                 video_download_path, packet_id)))));
             }
 
-            BufferedOutputStream video_bs = video_bs_map.get(packet_id);
-            video_bs.write(buffer);
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream video_bs = video_bs_map.get(packet_id);
+                video_bs.write(buffer);
+            }
             /**
              * sedec provide wrapper class to check SPS, AUD of H.265
              * If user do {@link VideoExtractor#enablePreModification},
@@ -290,9 +298,11 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         new File(String.format("%s/audio.mfu.0x%04x.aac",
                                 audio_download_path, packet_id)))));
             }
+            if ( commandLine.hasOption("e") ) {
+                BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
+                audio_bs.write(buffer);
+            }
 
-            BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
-            audio_bs.write(buffer);
             /**
              * sedec provide wrapper class to check AudioSyncStream of LATM of ISO 14496-3
              * If user do {@link AudioExtractor#enablePremodification},
@@ -506,18 +516,13 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
  * }
  * </pre>
  */
-public class TlvPacketDecoder {
-    public static void main(String []args) throws InterruptedException {
-        if ( args.length < 1 ) {
-            System.out.println("Oops, " +
-                    "You need TLV packet(or file) to be parsed as 1st parameter");
-            System.out.println(
-                    "Usage: java -classpath . " +
-                    TlvPacketDecoder.class.getName() +
-                    " {TLV Raw File} \n");
-        }
+public class TlvPacketDecoder extends BaseSimpleDecoder {
 
-        SimpleTlvCoordinator simple_tlv_coordinator = new SimpleTlvCoordinator();
+    @Override
+    public void justDoIt(CommandLine commandLine) {
+        String target_file = commandLine.getOptionValue("tlv");
+        SimpleTlvCoordinator simple_tlv_coordinator =
+                new SimpleTlvCoordinator(commandLine);
 
         /**
          * Decoration of console user interface
@@ -527,39 +532,36 @@ public class TlvPacketDecoder {
         /**
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
+         * You can choose HttpTlvPacketReader or FileTlvPacketReader
          */
-        for ( int i=0; i<args.length; i++ ) {
+        PacketReader tlv_reader = new FileTlvPacketReader(target_file);
+        if ( false == tlv_reader.open() ) return;
+
+        progress_bar.start(tlv_reader.filesize());
+
+        while ( tlv_reader.readable() > 0) {
+            final byte[] tlv_packet = tlv_reader.readPacket();
+            if ( tlv_packet == null ||
+                    tlv_packet.length == 0 ||
+                    tlv_packet[0] != 0x7f ) continue;
             /**
-             * You can choose HttpTlvPacketReader or FileTlvPacketReader
+             * Case 1 of Putting a TLV raw packet into SimpleTlvCoordinator
+             * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
+             * from event listener which you registered to TlvDemultiplexer
              */
-            PacketReader tlv_reader = new HttpTlvPacketReader(args[i]);
-            if ( false == tlv_reader.open() ) continue;
+            if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
 
-            progress_bar.start(tlv_reader.filesize());
-
-            while ( tlv_reader.readable() > 0) {
-                final byte[] tlv_packet = tlv_reader.readPacket();
-                if ( tlv_packet == null ||
-                        tlv_packet.length == 0 ||
-                        tlv_packet[0] != 0x7f ) continue;
-                /**
-                 * Case 1 of Putting a TLV raw packet into SimpleTlvCoordinator
-                 * and you can get both the results of TLV as table of MPEG2 and MFU asynchronously
-                 * from event listener which you registered to TlvDemultiplexer
-                 */
-                if ( false == simple_tlv_coordinator.put(tlv_packet) ) break;
-
-                /**
-                 * Case 2 of Putting a TLV formatted packet into SimpleTlvCoordinator
-                 * and you can get both the results of TLV as table and MFU asynchronously
-                 * from event listener which you registered to TlvDemultiplxer
-                 */
+            /**
+             * Case 2 of Putting a TLV formatted packet into SimpleTlvCoordinator
+             * and you can get both the results of TLV as table and MFU asynchronously
+             * from event listener which you registered to TlvDemultiplxer
+             */
 //                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
 //                if ( false == simple_tlv_coordinator.put(tlv) ) break;
 
-                /**
-                 * Case 3 of Putting a TLV formatted packet which's including scrambled
-                 */
+            /**
+             * Case 3 of Putting a TLV formatted packet which's including scrambled
+             */
 //                TypeLengthValue tlv = PacketFactory.createPacket(tlv_packet);
 //                switch ( tlv.getPacketType() ) {
 //                    case PacketFactory.COMPRESSED_IP_PACKET:
@@ -579,26 +581,22 @@ public class TlvPacketDecoder {
 //                }
 //                if ( false == simple_tlv_coordinator.put(tlv) ) break;
 
-                /**
-                 * Updating of console user interface
-                 */
-                progress_bar.update(tlv_packet.length);
-            }
-
-            simple_tlv_coordinator.clearQueue();
-
-            progress_bar.stop();
-            tlv_reader.close();
-            tlv_reader = null;
+            /**
+             * Updating of console user interface
+             */
+            if ( commandLine.hasOption("sp") ) progress_bar.update(tlv_packet.length);
         }
+
+        simple_tlv_coordinator.clearQueue();
+
+        progress_bar.stop();
+        tlv_reader.close();
+        tlv_reader = null;
 
         /**
          * Destroy of SimpleTlvCoordinator to not handle and released by garbage collector
          */
         simple_tlv_coordinator.destroy();
         simple_tlv_coordinator = null;
-
-        System.out.println("ByeBye");
-        System.exit(0);
     }
 }

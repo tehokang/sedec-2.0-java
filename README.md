@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.com/tehokang/sedec-2.0-java.svg?token=tukzKYpBaAzTzcPeGfcg&branch=master)](https://travis-ci.com/tehokang/sedec-2.0-java)
 
 # Table of Contents
 * [Introduction](#Introduction)
@@ -287,56 +286,40 @@ To use this in android, you could just import this library in your gradle of pro
 
 # How To Run
 
-After building a target, release-arib-example-decoder via Eclipse(or ANT), you can run with a parameter as section path dumped.
+After building a target, release-sdk via Eclipse(or ANT), you can run with parameters as section path dumped, ts and even tlv file.
+Please notice I run followings in bin folder after building
 
-* 1st method of run
+When you type default command to run SimpleApplication then you can see the helps like below,
 <pre>
-$cd bin
-$java -classpath . zexamples.decoder.AribTableDecoder ../tables-dumped/arib/b39/ait/mh-ait.bin
+PROMPT> java -classpath .:../libs/commons-cli-1.4.jar  zexamples.arib.SimpleApplication
+usage: SimpleApplication in sedec2
+ -e,--extract                      Enable to extract elementary stream
+ -s,--input_section_file <arg>     Target input section
+ -sp,--show_progress               Enable to show progress bar
+ -st,--show_tables                 Enable to print tables
+ -tlv,--input_tlv_file <arg>       Target input file as tlv
+ -ts,--input_ts_file <arg>         Target input file as ts
+ -tstlv,--input_tstlv_file <arg>   Target input file as ts including tlv
 </pre>
 
-* 2nd method of run
+When you'd like to run with section file then you can type command like this, 
 <pre>
-$cd dist
-$java -jar sedec2-2.0-example-arib-decoder.jar ../tables-dumped/arib/b10/pat/pat_dump_0
+PROMPT> java -classpath .:../libs/commons-cli-1.4.jar  zexamples.arib.SimpleApplication -s /Users/tehokang/Downloads/ts/dumped_section.ait
 </pre>
 
-As a result, the example will show up like below,
-```
-########### Byte Align ###########
-001 : 00 b0 25 40 f1 c1 00 00 00 00
-002 : e0 10 00 65 e1 f0 00 66 e2 f0
-003 : 02 bc f0 f0 02 bd f1 f0 02 c3
-004 : f7 f0 03 a1 e7 01 01 aa 7b 24
-005 :
-###################################
-SEDEC2[D] ======= Section Header ======= (sedec2.arib.b10.tables.ProgramAssociationTable)
-SEDEC2[D] table_id : 0x0
-SEDEC2[D] section_syntax_indicator : 0x1
-SEDEC2[D] section_length : 0x25 (37)
-SEDEC2[D] ------------------------------
-SEDEC2[D] transport_stream_id : 0x40f1
-SEDEC2[D] version_number : 0x0
-SEDEC2[D] current_next_indicator : 0x1
-SEDEC2[D] section_number : 0x0
-SEDEC2[D] last_section_number : 0x0
-SEDEC2[D] 	 program_number : 0x0
-SEDEC2[D] 	 pid : 0x10
-SEDEC2[D] 	 program_number : 0x65
-SEDEC2[D] 	 pid : 0x1f0
-SEDEC2[D] 	 program_number : 0x66
-SEDEC2[D] 	 pid : 0x2f0
-SEDEC2[D] 	 program_number : 0x2bc
-SEDEC2[D] 	 pid : 0x10f0
-SEDEC2[D] 	 program_number : 0x2bd
-SEDEC2[D] 	 pid : 0x11f0
-SEDEC2[D] 	 program_number : 0x2c3
-SEDEC2[D] 	 pid : 0x17f0
-SEDEC2[D] 	 program_number : 0x3a1
-SEDEC2[D] 	 pid : 0x701
-SEDEC2[D] checksum_CRC32 : 0x01aa7b24
-SEDEC2[D] ======================================
-```
+<img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-simple-application-section-example.gif?raw=true"></img>
+
+When you'd like to run with TS file then you can type command like this, 
+<pre>
+PROMPT> java -classpath .:../libs/commons-cli-1.4.jar  zexamples.arib.SimpleApplication -ts /Users/tehokang/Downloads/ts/DasErste_dvbt.ts -sp
+</pre>
+<img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-simple-application-ts-example.gif?raw=true"></img>
+
+When you'd like to run with TLV file then you can type command like this,
+<pre>
+PROMPT> java -classpath .:../libs/commons-cli-1.4.jar  zexamples.arib.SimpleApplication -tlv /Users/tehokang/Downloads/ts/another.tlv -sp
+</pre>
+<img src="https://github.com/tehokang/documents/blob/master/sedec/sedec2-simple-application-tlv-example.gif?raw=true"></img>
 
 If you have any questions and if the app is misbehaving or missing critical features write me at [tehokang@gmail.com](mailto:tehokang@gmail.com).
 

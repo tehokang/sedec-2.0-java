@@ -7,6 +7,8 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 
+import org.apache.commons.cli.CommandLine;
+
 import sedec2.base.Table;
 
 /**
@@ -16,54 +18,43 @@ import sedec2.base.Table;
  * </ul>
  * from byte buffer as a whole of table gathered.
  */
-public class AribTableDecoder {
+public class AribTableDecoder extends BaseSimpleDecoder {
     protected static final String TAG = AribTableDecoder.class.getSimpleName();
 
-    public static void main(String []args) {
-        if ( args.length < 1 ) {
-            System.out.println("Oops, " +
-                    "I need mpeg2 table to be parsed as 1st parameter");
-            System.out.println(
-                    "Usage: java -classpath . " +
-                    AribTableDecoder.class.getName() +
-                    " {Table Raw File} \n");
-        }
+    @Override
+    public void justDoIt(CommandLine commandLine) {
+        String target_file = commandLine.getOptionValue("s");
+        File inOutFile = new File(target_file);
+        DataInputStream dataInputStream = null;
+        try {
 
-        for ( int i=0; i<args.length; i++ ) {
-            File inOutFile = new File(args[i]);
-            DataInputStream dataInputStream = null;
-            try {
+            dataInputStream =
+                    new DataInputStream(
+                            new BufferedInputStream(
+                                    new FileInputStream(inOutFile)));
 
-                dataInputStream =
-                        new DataInputStream(
-                                new BufferedInputStream(
-                                        new FileInputStream(inOutFile)));
+            long table_buffer_length = inOutFile.length();
+            byte[] table_buffer = new byte[(int) table_buffer_length];
 
-                long table_buffer_length = inOutFile.length();
-                byte[] table_buffer = new byte[(int) table_buffer_length];
+            dataInputStream.readFully(table_buffer);
 
-                dataInputStream.readFully(table_buffer);
-
-                Table table = sedec2.arib.b10.TableFactory.createTable(table_buffer);
+            Table table = sedec2.arib.b10.TableFactory.createTable(table_buffer);
+            if ( null == table ) {
+                table = sedec2.arib.tlv.si.TableFactory.createTable(table_buffer);
                 if ( null == table ) {
-                    table = sedec2.arib.tlv.si.TableFactory.createTable(table_buffer);
-                    if ( null == table ) {
-                        table = sedec2.arib.tlv.container.mmt.si.TableFactory.createTable(table_buffer);
-                    }
+                    table = sedec2.arib.tlv.container.mmt.si.TableFactory.createTable(table_buffer);
                 }
-
-                System.out.println(
-                        String.format("[%d] table information \n",  i));
-                table.printBuffer();
-                table.print();
-                dataInputStream.close();
-            } catch (FileNotFoundException e) {
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } finally {
-                System.out.println("ByeBye");
             }
+
+            table.printBuffer();
+            table.print();
+            dataInputStream.close();
+        } catch (FileNotFoundException e) {
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            System.out.println("ByeBye");
         }
     }
 }
