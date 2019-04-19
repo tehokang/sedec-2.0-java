@@ -137,7 +137,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] buffer) {
+    public void onReceivedAudio(int packet_id, byte[] buffer, long pts) {
         try {
             if ( audio_bs_map.containsKey(packet_id) == false ) {
                 new File(audio_download_path).mkdirs();
@@ -157,7 +157,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] buffer) {
+    public void onReceivedVideo(int packet_id, byte[] buffer, long pts) {
         try {
             if ( video_bs_map.containsKey(packet_id) == false ) {
                 new File(video_download_path).mkdirs();

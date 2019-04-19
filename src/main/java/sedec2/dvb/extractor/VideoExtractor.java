@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import sedec2.dvb.ts.container.packets.TransportStream;
 import sedec2.util.Logger;
+import sedec2.util.TimeStampUtil;
 
 /**
  * Class to extract video from Transport Stream of ISO-13818
@@ -13,6 +14,8 @@ import sedec2.util.Logger;
  */
 public class VideoExtractor extends BaseExtractor {
     protected static final String TAG = VideoExtractor.class.getSimpleName();
+
+    private long pts;
 
     /**
      * Listener to receive stream as video type of Table 2-36 of ISO 13818
@@ -23,7 +26,17 @@ public class VideoExtractor extends BaseExtractor {
          * @param packet_id PID of TS
          * @param data video raw data
          */
-        public void onReceivedVideo(int packet_id, byte[] data);
+        public void onReceivedVideo(int packet_id, byte[] data, long pts);
+    }
+
+    public class QueueData extends BaseExtractor.QueueData {
+        public long pts;
+
+        public QueueData(int pid, byte[] data, long pts) {
+            this.packet_id = pid;
+            this.data = data;
+            this.pts = pts;
+        }
     }
 
     /**
@@ -40,10 +53,10 @@ public class VideoExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         if ( null != m_event_queue &&
-                                ( data = m_event_queue.take()) != null ) {
-                            for ( int i=0; i<m_listeners.size(); i++ ) {
-                                ((IVideoExtractorListener)m_listeners.get(i)).
-                                        onReceivedVideo(data.packet_id, data.data);
+                                ( data = (QueueData)m_event_queue.take()) != null ) {
+                             for ( int i=0; i<m_listeners.size(); i++ ) {
+                                 ((IVideoExtractorListener)m_listeners.get(i)).
+                                         onReceivedVideo(data.packet_id, data.data, data.pts);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -87,26 +100,28 @@ public class VideoExtractor extends BaseExtractor {
         ByteArrayOutputStream video_buffer = m_fragmented_transport_stream.get(ts.getPID());
         if ( ts.getPayloadUnitStartIndicator() == 0x01 ) {
             if ( null == video_buffer ) {
-                /**
-                 * Put begin of video without PES header 6 bytes especially only for video
-                 */
                 video_buffer = new ByteArrayOutputStream();
-                video_buffer.write(ts.getDataByte(), 6, ts.getDataByte().length-6);
-                m_fragmented_transport_stream.put(ts.getPID(), video_buffer);
-            } else {
-                putOut(new QueueData(ts.getPID(), video_buffer.toByteArray()));
+            }
+            else {
+                putOut(new QueueData(ts.getPID(), video_buffer.toByteArray(), pts));
+
                 /**
                  * Clear buffer
                  */
                 video_buffer.reset();
                 m_fragmented_transport_stream.remove(ts.getPID());
-
-                /**
-                 * Put new video into buffer without PES header 6 bytes especially only for video
-                 */
-                video_buffer.write(ts.getDataByte(), 6, ts.getDataByte().length-6);
-                m_fragmented_transport_stream.put(ts.getPID(), video_buffer);
             }
+
+            /**
+             * Get PTS
+             */
+            pts = TimeStampUtil.getPtsFromTS(ts);
+
+            /**
+             * Put new video into buffer without PES header 6 bytes especially only for video
+             */
+            video_buffer.write(ts.getDataByte(), 6, ts.getDataByte().length-6);
+            m_fragmented_transport_stream.put(ts.getPID(), video_buffer);
         } else {
             /**
              * Put middle of video

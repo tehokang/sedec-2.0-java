@@ -27,8 +27,8 @@ public class TsDemultiplexer implements
      */
     public interface Listener {
         public void onReceivedTable(Table table);
-        public void onReceivedAudio(int packet_id, byte[] buffer);
-        public void onReceivedVideo(int packet_id, byte[] buffer);
+        public void onReceivedAudio(int packet_id, byte[] buffer, long pts);
+        public void onReceivedVideo(int packet_id, byte[] buffer, long pts);
     }
 
     public TsDemultiplexer() {
@@ -256,6 +256,25 @@ public class TsDemultiplexer implements
         return true;
     }
 
+    public int getRemainingPackets() {
+        int size = 0;
+        if ( m_enable_si_filter == true &&
+            m_si_extractor != null ) {
+            size += m_si_extractor.getRemainingPackets();
+        }
+
+        if ( m_enable_audio_filter == true &&
+            m_audio_extractor != null ) {
+            size += m_audio_extractor.getRemainingPackets();
+        }
+
+        if ( m_enable_video_filter == true &&
+            m_video_extractor != null ) {
+            size += m_video_extractor.getRemainingPackets();
+        }
+        return size;
+    }
+
     @Override
     public void onReceivedTable(Table table) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
@@ -264,17 +283,16 @@ public class TsDemultiplexer implements
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] data) {
+    public void onReceivedAudio(int packet_id, byte[] data, long pts) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedAudio(packet_id, data);
+            m_listeners.get(i).onReceivedAudio(packet_id, data, pts);
         }
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] data) {
+    public void onReceivedVideo(int packet_id, byte[] data, long pts) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedVideo(packet_id, data);
+            m_listeners.get(i).onReceivedVideo(packet_id, data, pts);
         }
-
     }
 }

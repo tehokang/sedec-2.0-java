@@ -243,6 +243,17 @@ public abstract class BaseExtractor {
     }
 
     /**
+     * User can get size of remaining packets.
+     * @return size of remaining packets
+     */
+    public int getRemainingPackets() {
+        if ( m_is_running == true && m_ts_raw_packets != null) {
+            return m_ts_raw_packets.size();
+        }
+        return 0;
+    }
+
+    /**
      * User should put a TS packet into extractor, the packet will be collected as kinds of them
      * @param ts one TS packet as being raw
      * @throws InterruptedException occur when thread interrupted

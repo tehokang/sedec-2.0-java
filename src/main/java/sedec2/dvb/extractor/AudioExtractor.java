@@ -5,6 +5,7 @@ import java.io.IOException;
 
 import sedec2.dvb.ts.container.packets.TransportStream;
 import sedec2.util.Logger;
+import sedec2.util.TimeStampUtil;
 
 /**
  * Class to extract audio from Transport Stream of ISO-13818
@@ -13,6 +14,8 @@ import sedec2.util.Logger;
  */
 public class AudioExtractor extends BaseExtractor {
     protected static final String TAG = AudioExtractor.class.getSimpleName();
+
+    private long pts;
 
     /**
      * Listener to receive stream as audio type of Table 2-36 of ISO 13818
@@ -23,7 +26,17 @@ public class AudioExtractor extends BaseExtractor {
          * @param packet_id PID of TS
          * @param data audio raw data
          */
-        public void onReceivedAudio(int packet_id, byte[] data);
+        public void onReceivedAudio(int packet_id, byte[] data, long pts);
+    }
+
+    public class QueueData extends BaseExtractor.QueueData {
+        public long pts;
+
+        public QueueData(int pid, byte[] data, long pts) {
+            this.packet_id = pid;
+            this.data = data;
+            this.pts = pts;
+        }
     }
 
     /**
@@ -40,10 +53,10 @@ public class AudioExtractor extends BaseExtractor {
                 while ( m_is_running ) {
                     try {
                         if ( null != m_event_queue &&
-                                ( data = m_event_queue.take()) != null ) {
+                                ( data = (QueueData)m_event_queue.take()) != null ) {
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((IAudioExtractorListener)m_listeners.get(i)).
-                                        onReceivedAudio(data.packet_id, data.data);
+                                    onReceivedAudio(data.packet_id, data.data, data.pts);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -91,23 +104,27 @@ public class AudioExtractor extends BaseExtractor {
                  * Put begin of audio
                  */
                 audio_buffer = new ByteArrayOutputStream();
-                audio_buffer.write(ts.getDataByte(), 0, ts.getDataByte().length);
-                m_fragmented_transport_stream.put(ts.getPID(), audio_buffer);
-            } else {
-                putOut(new QueueData(ts.getPID(), audio_buffer.toByteArray()));
+            }
+            else {
+                putOut(new QueueData(ts.getPID(), audio_buffer.toByteArray(), pts));
 
                 /**
                  * Clear buffer
                  */
                 audio_buffer.reset();
                 m_fragmented_transport_stream.remove(ts.getPID());
-
-                /**
-                 * Put new audio into buffer
-                 */
-                audio_buffer.write(ts.getDataByte(), 0, ts.getDataByte().length);
-                m_fragmented_transport_stream.put(ts.getPID(), audio_buffer);
             }
+
+            /**
+             * Get PTS
+             */
+            pts = TimeStampUtil.getPtsFromTS(ts);
+
+            /**
+             * Put new audio into buffer
+             */
+            audio_buffer.write(ts.getDataByte(), 0, ts.getDataByte().length);
+            m_fragmented_transport_stream.put(ts.getPID(), audio_buffer);
         } else {
             /**
              * Put middle of audio
