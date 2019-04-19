@@ -58,7 +58,7 @@ public class VideoExtractor extends BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
         m_event_thread.start();
     }
 

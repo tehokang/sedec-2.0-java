@@ -74,7 +74,7 @@ public class SiExtractor extends BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
         m_event_thread.start();
     }
 

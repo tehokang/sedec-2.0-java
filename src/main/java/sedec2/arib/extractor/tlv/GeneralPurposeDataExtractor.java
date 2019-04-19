@@ -65,7 +65,7 @@ public class GeneralPurposeDataExtractor extends BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
         m_event_thread.start();
     }
 
