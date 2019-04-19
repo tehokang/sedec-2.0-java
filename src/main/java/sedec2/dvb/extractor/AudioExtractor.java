@@ -58,7 +58,7 @@ public class AudioExtractor extends BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
         m_event_thread.start();
     }
 

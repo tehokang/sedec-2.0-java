@@ -79,7 +79,7 @@ public class TtmlExtractor extends BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
         m_event_thread.start();
     }
 

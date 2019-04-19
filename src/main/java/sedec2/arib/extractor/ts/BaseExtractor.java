@@ -145,7 +145,7 @@ public abstract class BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
 
         m_ts_formatted_extractor_thread = new Thread(new Runnable() {
             @Override
@@ -178,7 +178,7 @@ public abstract class BaseExtractor {
                     }
                 }
             }
-        });
+        }, TAG);
 
         m_ts_formatted_extractor_thread.start();
         m_ts_raw_extractor_thread.start();
