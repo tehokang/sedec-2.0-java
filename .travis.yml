@@ -1,9 +1,12 @@
 language : java
 
+<<<<<<< HEAD
 install: ant deps
 jdk:
 	- oraclejdk8
   	- openjdk8
+=======
+>>>>>>> 759f481529509a0a54ee1cf729ee0811475357d9
 
 script:
 	- ant release-sdk
