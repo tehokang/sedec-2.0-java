@@ -15,7 +15,7 @@ public class SimpleApplication {
                 "Enable to print tables");
         CommandLineUtility.addOption("e", "extract", false,
                 "Enable to extract elementary stream");
-        CommandLineUtility.addOption("r", "extract", false,
+        CommandLineUtility.addOption("r", "remote", false,
                 "Enable getting via remote stream like http");
         CommandLineUtility.addOption("s",  "input_section_file", true,
                 "Target input section");
