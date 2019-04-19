@@ -29,6 +29,7 @@ import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTlvPacketReader;
+import sedec2.util.HttpTlvPacketReader;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
@@ -535,6 +536,10 @@ public class TlvPacketDecoder extends BaseSimpleDecoder {
          * You can choose HttpTlvPacketReader or FileTlvPacketReader
          */
         PacketReader tlv_reader = new FileTlvPacketReader(target_file);
+
+        if ( commandLine.hasOption("r") )
+            tlv_reader = new HttpTlvPacketReader(target_file);
+
         if ( false == tlv_reader.open() ) return;
 
         progress_bar.start(tlv_reader.filesize());

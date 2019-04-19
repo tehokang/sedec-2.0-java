@@ -16,8 +16,9 @@ import sedec2.arib.b10.tables.ProgramMapTable;
 import sedec2.arib.extractor.ts.TsDemultiplexer;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FilePacketReader;
 import sedec2.util.FileTsPacketReader;
+import sedec2.util.HttpTsPacketReader;
+import sedec2.util.PacketReader;
 
 /**
  * SimpleTsCoordinator is an example which's using TsDemultiplexer of sedec2 to get information
@@ -164,7 +165,11 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
          * Getting each one TS packet from specific file.
          * It assume that platform should give a TS packet to us as input of TSExtractor
          */
-        FilePacketReader ts_reader = new FileTsPacketReader(target_file);
+        PacketReader ts_reader = new FileTsPacketReader(target_file);
+
+        if ( commandLine.hasOption("r") )
+            ts_reader = new HttpTsPacketReader(target_file);
+
         if ( false == ts_reader.open() ) return;
 
         progress_bar.start(ts_reader.filesize());

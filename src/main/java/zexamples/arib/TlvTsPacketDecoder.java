@@ -29,8 +29,9 @@ import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 import sedec2.base.Table;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FilePacketReader;
 import sedec2.util.FileTsPacketReader;
+import sedec2.util.HttpTsPacketReader;
+import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
 
@@ -498,7 +499,11 @@ public class TlvTsPacketDecoder extends BaseSimpleDecoder {
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
-        FilePacketReader ts_reader = new FileTsPacketReader(target_file);
+        PacketReader ts_reader = new FileTsPacketReader(target_file);
+
+        if ( commandLine.hasOption("r") )
+            ts_reader = new HttpTsPacketReader(target_file);
+
         if ( false == ts_reader.open() ) return;
 
         progress_bar.start(ts_reader.filesize());
