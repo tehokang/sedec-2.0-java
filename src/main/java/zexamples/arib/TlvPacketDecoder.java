@@ -27,6 +27,7 @@ import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
 import sedec2.base.Table;
+import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTlvPacketReader;
 import sedec2.util.HttpTlvPacketReader;
@@ -125,6 +126,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedTable(Table table) {
+        if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) table.print();
+
         switch ( table.getTableId() ) {
         case TableFactory.MH_AIT:
 //            table.print();
@@ -253,8 +256,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         "There might be a table which sedec couldn't decode (table_id : 0x%x)\n",
                         table.getTableId()));
             }
-
-            if ( commandLine.hasOption("st") ) table.print();
             break;
         }
     }
@@ -269,7 +270,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                                 video_download_path, packet_id)))));
             }
 
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream video_bs = video_bs_map.get(packet_id);
                 video_bs.write(buffer);
             }
@@ -299,7 +300,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                         new File(String.format("%s/audio.mfu.0x%04x.aac",
                                 audio_download_path, packet_id)))));
             }
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
                 audio_bs.write(buffer);
             }
@@ -521,7 +522,7 @@ public class TlvPacketDecoder extends BaseSimpleDecoder {
 
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue("tlv");
+        String target_file = commandLine.getOptionValue(CommandLineParam.TLV_TYPE);
         SimpleTlvCoordinator simple_tlv_coordinator =
                 new SimpleTlvCoordinator(commandLine);
 
@@ -537,7 +538,7 @@ public class TlvPacketDecoder extends BaseSimpleDecoder {
          */
         PacketReader tlv_reader = new FileTlvPacketReader(target_file);
 
-        if ( commandLine.hasOption("r") )
+        if ( commandLine.hasOption(CommandLineParam.REMOTE_RESOURCES) )
             tlv_reader = new HttpTlvPacketReader(target_file);
 
         if ( false == tlv_reader.open() ) return;
@@ -589,7 +590,8 @@ public class TlvPacketDecoder extends BaseSimpleDecoder {
             /**
              * Updating of console user interface
              */
-            if ( commandLine.hasOption("sp") ) progress_bar.update(tlv_packet.length);
+            if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
+                progress_bar.update(tlv_packet.length);
         }
 
         simple_tlv_coordinator.clearQueue();

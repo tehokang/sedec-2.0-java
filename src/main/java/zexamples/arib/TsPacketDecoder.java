@@ -15,6 +15,7 @@ import sedec2.arib.b10.tables.ProgramAssociationTable;
 import sedec2.arib.b10.tables.ProgramMapTable;
 import sedec2.arib.extractor.ts.TsDemultiplexer;
 import sedec2.base.Table;
+import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTsPacketReader;
 import sedec2.util.HttpTsPacketReader;
@@ -71,6 +72,8 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
     @Override
     public void onReceivedTable(Table table) {
+        if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) table.print();
+
         switch ( table.getTableId() ) {
             case TableFactory.PROGRAM_ASSOCIATION_TABLE:
                 if ( pat == null ) {
@@ -104,7 +107,6 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                 }
                 break;
             default:
-                if ( commandLine.hasOption("st") ) table.print();
                 break;
         }
     }
@@ -119,7 +121,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 audio_download_path, packet_id)))));
             }
 
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
                 audio_bs.write(buffer);
             }
@@ -138,7 +140,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 video_download_path, packet_id)))));
             }
 
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream video_bs = video_bs_map.get(packet_id);
                 video_bs.write(buffer);
             }
@@ -157,7 +159,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 public class TsPacketDecoder extends BaseSimpleDecoder {
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue("ts");
+        String target_file = commandLine.getOptionValue(CommandLineParam.TS_TYPE);
         SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator(commandLine);
         ConsoleProgress progress_bar = new ConsoleProgress("TS").
                 show(true, true, true, true, true, false);
@@ -185,7 +187,8 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
              * from event listener which you registered to TsDemultiplexer
              */
             if ( false == simple_ts_coordinator.put(ts_packet) ) break;
-            if ( commandLine.hasOption("sp") ) progress_bar.update(ts_packet.length);
+            if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
+                progress_bar.update(ts_packet.length);
         }
 
         simple_ts_coordinator.clearQueue();

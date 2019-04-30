@@ -10,6 +10,7 @@ import java.io.IOException;
 import org.apache.commons.cli.CommandLine;
 
 import sedec2.base.Table;
+import sedec2.util.CommandLineParam;
 
 /**
  * AribTableDecoder is an application as example for getting
@@ -23,7 +24,7 @@ public class AribTableDecoder extends BaseSimpleDecoder {
 
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue("s");
+        String target_file = commandLine.getOptionValue(CommandLineParam.SECTION_TYPE);
         File inOutFile = new File(target_file);
         DataInputStream dataInputStream = null;
         try {
