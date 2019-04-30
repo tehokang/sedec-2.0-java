@@ -11,6 +11,7 @@ import org.apache.commons.cli.CommandLine;
 
 import sedec2.base.Table;
 import sedec2.dvb.ts.si.TableFactory;
+import sedec2.util.CommandLineParam;
 
 /**
  * DvbTableDecoder is an application as example for getting
@@ -23,7 +24,7 @@ public class DvbTableDecoder extends BaseSimpleDecoder {
 
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue("ts");
+        String target_file = commandLine.getOptionValue(CommandLineParam.TS_TYPE);
         File inOutFile = new File(target_file);
         DataInputStream dataInputStream = null;
         try {

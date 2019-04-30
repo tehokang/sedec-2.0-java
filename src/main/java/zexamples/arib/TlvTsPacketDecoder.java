@@ -28,6 +28,7 @@ import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 import sedec2.base.Table;
+import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTsPacketReader;
 import sedec2.util.HttpTsPacketReader;
@@ -125,6 +126,8 @@ class SimpleTlvTsCoordinator implements
 
     @Override
     public void onReceivedTable(Table table) {
+        if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) table.print();
+
         switch ( table.getTableId() ) {
         case TableFactory.MH_AIT:
 //            table.print();
@@ -142,7 +145,8 @@ class SimpleTlvTsCoordinator implements
             }
 
             if ( found_app == false ) {
-                SimpleApplicationCoordinator app = new SimpleApplicationCoordinator(app_download_path);
+                SimpleApplicationCoordinator app =
+                        new SimpleApplicationCoordinator(app_download_path);
                 app.base_directory_path = new String(ddmt.getBaseDirectoryPath());
                 for ( int i=0; i<ddmt.getDirectoryNodes().size(); i++ ) {
                     SubDirectory sub_directory = app.new SubDirectory();
@@ -253,8 +257,6 @@ class SimpleTlvTsCoordinator implements
                         "There might be a table which sedec couldn't decode (table_id : 0x%x)\n",
                         table.getTableId()));
             }
-
-            if ( commandLine.hasOption("st") ) table.print();
             break;
         }
     }
@@ -269,7 +271,7 @@ class SimpleTlvTsCoordinator implements
                                 video_download_path, packet_id)))));
             }
 
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream video_bs = video_bs_map.get(packet_id);
                 video_bs.write(buffer);
             }
@@ -300,7 +302,7 @@ class SimpleTlvTsCoordinator implements
                                 audio_download_path, packet_id)))));
             }
 
-            if ( commandLine.hasOption("e") ) {
+            if ( commandLine.hasOption(CommandLineParam.EXTRACT) ) {
                 BufferedOutputStream audio_bs = audio_bs_map.get(packet_id);
                 audio_bs.write(buffer);
             }
@@ -486,7 +488,7 @@ class SimpleTlvTsCoordinator implements
 public class TlvTsPacketDecoder extends BaseSimpleDecoder {
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue("tlvts");
+        String target_file = commandLine.getOptionValue(CommandLineParam.TSTLV_TYPE);
         SimpleTlvTsCoordinator simple_tlvts_coordinator =
                 new SimpleTlvTsCoordinator(commandLine);
 
@@ -501,7 +503,7 @@ public class TlvTsPacketDecoder extends BaseSimpleDecoder {
          */
         PacketReader ts_reader = new FileTsPacketReader(target_file);
 
-        if ( commandLine.hasOption("r") )
+        if ( commandLine.hasOption(CommandLineParam.REMOTE_RESOURCES) )
             ts_reader = new HttpTsPacketReader(target_file);
 
         if ( false == ts_reader.open() ) return;
@@ -518,7 +520,8 @@ public class TlvTsPacketDecoder extends BaseSimpleDecoder {
             /**
              * Updating of console user interface
              */
-            if ( commandLine.hasOption("sp") ) progress_bar.update(ts_packet.length);
+            if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
+                progress_bar.update(ts_packet.length);
         }
 
         simple_tlvts_coordinator.clearQueue();
