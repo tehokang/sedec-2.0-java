@@ -520,12 +520,9 @@ public class TlvTsPacketDecoder extends BaseSimpleDecoder {
             /**
              * Updating of console user interface
              */
-<<<<<<< HEAD
+
             if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
                 progress_bar.update(ts_packet.length);
-=======
-            if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) ) progress_bar.update(ts_packet.length);
->>>>>>> 6bd26927c68062fc6664761d039e182b773c8889
         }
 
         simple_tlvts_coordinator.clearQueue();
