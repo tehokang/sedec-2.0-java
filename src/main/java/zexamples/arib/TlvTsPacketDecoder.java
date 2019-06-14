@@ -30,7 +30,7 @@ import sedec2.arib.tlvts.container.packets.TlvTransportStream;
 import sedec2.base.Table;
 import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FileTsPacketReader;
+import sedec2.util.FileTs188PacketReader;
 import sedec2.util.HttpTsPacketReader;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
@@ -501,7 +501,7 @@ public class TlvTsPacketDecoder extends BaseSimpleDecoder {
          * Getting each one TLV packet from specific file.
          * It assume that platform should give a TLV packet to us as input of TLVExtractor
          */
-        PacketReader ts_reader = new FileTsPacketReader(target_file);
+        PacketReader ts_reader = new FileTs188PacketReader(target_file);
 
         if ( commandLine.hasOption(CommandLineParam.REMOTE_RESOURCES) )
             ts_reader = new HttpTsPacketReader(target_file);
