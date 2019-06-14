@@ -17,7 +17,7 @@ import sedec2.arib.extractor.ts.TsDemultiplexer;
 import sedec2.base.Table;
 import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FileTsPacketReader;
+import sedec2.util.FileTs188PacketReader;
 import sedec2.util.HttpTsPacketReader;
 import sedec2.util.PacketReader;
 
@@ -167,7 +167,7 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
          * Getting each one TS packet from specific file.
          * It assume that platform should give a TS packet to us as input of TSExtractor
          */
-        PacketReader ts_reader = new FileTsPacketReader(target_file);
+        PacketReader ts_reader = new FileTs188PacketReader(target_file);
 
         if ( commandLine.hasOption(CommandLineParam.REMOTE_RESOURCES) )
             ts_reader = new HttpTsPacketReader(target_file);

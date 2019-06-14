@@ -6,8 +6,8 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.nio.ByteBuffer;
 
-public class FileTsPacketReader extends FilePacketReader {
-    protected static final String TAG = FileTsPacketReader.class.getSimpleName();
+public class FileTs204PacketReader extends FilePacketReader {
+    protected static final String TAG = FileTs188PacketReader.class.getSimpleName();
     protected DataInputStream input_stream  = null;
     protected ByteBuffer output_buffer = null;
 
@@ -15,7 +15,7 @@ public class FileTsPacketReader extends FilePacketReader {
      * Constructor with a TS full path
      * @param ts_file TS full file path
      */
-    public FileTsPacketReader(String ts_file) {
+    public FileTs204PacketReader(String ts_file) {
         super(ts_file);
     }
 
@@ -64,7 +64,7 @@ public class FileTsPacketReader extends FilePacketReader {
         byte[] ts_buffer = null;
 
         try {
-            ts_buffer = new byte[188];
+            ts_buffer = new byte[204];
             input_stream.read(ts_buffer);
 
             output_buffer = ByteBuffer.wrap(ts_packet);
@@ -80,7 +80,7 @@ public class FileTsPacketReader extends FilePacketReader {
         byte[] ts_buffer = null;
 
         try {
-            ts_buffer = new byte[188];
+            ts_buffer = new byte[204];
             input_stream.read(ts_buffer);
 
             output_buffer = ByteBuffer.allocate(ts_buffer.length);
