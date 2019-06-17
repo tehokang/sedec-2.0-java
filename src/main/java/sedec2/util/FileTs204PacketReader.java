@@ -7,7 +7,11 @@ import java.io.IOException;
 import java.nio.ByteBuffer;
 
 public class FileTs204PacketReader extends FilePacketReader {
+<<<<<<< HEAD
     protected static final String TAG = FileTs204PacketReader.class.getSimpleName();
+=======
+    protected static final String TAG = FileTs188PacketReader.class.getSimpleName();
+>>>>>>> 068a30b7bf7d0d9359723ad2430384ecdfe49ad4
     protected DataInputStream input_stream  = null;
     protected ByteBuffer output_buffer = null;
 
