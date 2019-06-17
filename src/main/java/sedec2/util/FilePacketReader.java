@@ -8,7 +8,7 @@ import java.util.List;
  * Base class to read specific file
  */
 public abstract class FilePacketReader implements PacketReader {
-    protected static final String TAG = HttpPacketReader.class.getSimpleName();
+    protected static final String TAG = FilePacketReader.class.getSimpleName();
     protected File file = null;
 
     /**
