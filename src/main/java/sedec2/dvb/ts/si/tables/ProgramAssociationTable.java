@@ -38,6 +38,10 @@ public class ProgramAssociationTable extends Table {
         }
     }
 
+    public int getTransportStreamId() {
+        return transport_stream_id;
+    }
+
     public List<Program> getPrograms() {
         return programs;
     }
