@@ -1,6 +1,7 @@
 package zexamples.dvb;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -17,7 +18,7 @@ import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
 import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
-import sedec2.util.FileTs188PacketReader;
+import sedec2.util.FileTs204PacketReader;
 import sedec2.util.HttpTsPacketReader;
 import sedec2.util.PacketReader;
 
@@ -71,7 +72,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedTable(Table table) {
+    public void onReceivedTable(int packet_id, Table table) {
         if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) table.print();
 
         switch ( table.getTableId() ) {
@@ -195,7 +196,7 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
          * Getting each one TS packet from specific file.
          * It assume that platform should give a TS packet to us as input of TSExtractor
          */
-        PacketReader ts_reader = new FileTs188PacketReader(target_file);
+        PacketReader ts_reader = new FileTs204PacketReader(target_file);
 
         if ( commandLine.hasOption(CommandLineParam.REMOTE_RESOURCES) )
             ts_reader = new HttpTsPacketReader(target_file);
@@ -214,7 +215,10 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
              * and you can get both the results of as table of MPEG2
              * from event listener which you registered to TsDemultiplexer
              */
-            if ( false == simple_ts_coordinator.put(ts_packet) ) break;
+            ByteArrayOutputStream ts188 = new ByteArrayOutputStream();
+            ts188.write(ts_packet, 0, 188);
+
+            if ( false == simple_ts_coordinator.put(ts188.toByteArray()) ) break;
 
             if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
                 progress_bar.update(ts_packet.length);

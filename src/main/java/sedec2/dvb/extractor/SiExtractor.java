@@ -29,13 +29,15 @@ public class SiExtractor extends BaseExtractor {
          * Receives table
          * @param table in chapter of DVB
          */
-        public void onReceivedTable(Table table);
+        public void onReceivedTable(int pid, Table table);
     }
 
     public class QueueData extends BaseExtractor.QueueData {
         public Table table;
+        public int pid;
 
-        public QueueData(Table table) {
+        public QueueData(int pid, Table table) {
+            this.pid = pid;
             this.table = table;
         }
     }
@@ -59,7 +61,7 @@ public class SiExtractor extends BaseExtractor {
                             if ( m_enable_logging == true ) table.print();
                             for ( int i=0; i<m_listeners.size(); i++ ) {
                                 ((ITableExtractorListener)m_listeners.get(i)).
-                                        onReceivedTable(table);
+                                        onReceivedTable(data.pid, table);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {
@@ -130,7 +132,7 @@ public class SiExtractor extends BaseExtractor {
                     Logger.d(String.format("PID : 0x%04x, table_id : 0x%x\n",
                             ts.getPID(), table.getTableId()));
                 }
-                putOut(new QueueData(table));
+                putOut(new QueueData(ts.getPID(), table));
 
                 /**
                  * Clear buffer

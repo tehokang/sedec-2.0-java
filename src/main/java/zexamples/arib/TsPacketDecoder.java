@@ -71,7 +71,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedTable(Table table) {
+    public void onReceivedTable(int packet_id, Table table) {
         if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) table.print();
 
         switch ( table.getTableId() ) {

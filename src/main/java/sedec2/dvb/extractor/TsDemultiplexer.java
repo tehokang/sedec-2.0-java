@@ -26,7 +26,7 @@ public class TsDemultiplexer implements
      * {@link TsDemultiplexer#removeEventListener(Listener)}
      */
     public interface Listener {
-        public void onReceivedTable(Table table);
+        public void onReceivedTable(int packet_id, Table table);
         public void onReceivedAudio(int packet_id, byte[] buffer, long pts);
         public void onReceivedVideo(int packet_id, byte[] buffer, long pts);
     }
@@ -276,9 +276,9 @@ public class TsDemultiplexer implements
     }
 
     @Override
-    public void onReceivedTable(Table table) {
+    public void onReceivedTable(int packet_id, Table table) {
         for ( int i=0; i<m_listeners.size(); i++ ) {
-            m_listeners.get(i).onReceivedTable(table);
+            m_listeners.get(i).onReceivedTable(packet_id, table);
         }
     }
 
