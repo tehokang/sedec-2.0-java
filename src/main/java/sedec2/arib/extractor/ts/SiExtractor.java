@@ -98,11 +98,6 @@ public class SiExtractor extends BaseExtractor {
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
         /**
-         * Section already has 0x01 of adaptation field control
-         */
-        if ( ts.getAdaptationFieldControl() != 0x01 ) return;
-
-        /**
          * Section filter by TS PID
          */
         if ( m_int_id_filter.contains(ts.getPID()) == false ) return;

@@ -104,6 +104,10 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 // audio
                                 ts_demuxer.addAudioFilter(program.elementary_PID);
                                 break;
+                            case 0x0d:
+                                // dsmcc
+                                ts_demuxer.addSiFilter(program.elementary_PID);
+                                break;
                         }
                     }
 //                    pmt.print();
@@ -120,6 +124,9 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                  * in order to confirm which carousel user should use.
                  */
 //                DSMCCSection dsmcc_ddb = (DSMCCSection) table;
+                /**
+                 * User must be sure what this is exactly ObjectCarousel or DataCarousel to update
+                 */
 //                dsmcc_ddb.updateToObjectCarousel();
 //                dsmcc_ddb.print();
                 break;
@@ -130,6 +137,9 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                  * in order to confirm which carousel user should use.
                  */
 //                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
+                /**
+                 * User must be sure what this is exactly ObjectCarousel or DataCarousel to update
+                 */
 //                dsmcc_dsi_or_dii.updateToObjectCarousel();
 //                dsmcc_dsi_or_dii.print();
                 break;

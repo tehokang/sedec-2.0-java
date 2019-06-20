@@ -98,11 +98,6 @@ public class SiExtractor extends BaseExtractor {
     protected synchronized void process(TransportStream ts)
             throws InterruptedException, IOException {
         /**
-         * Section already has 0x01 of adaptation field control
-         */
-        if ( ts.getAdaptationFieldControl() != 0x01 ) return;
-
-        /**
          * Section filter by TS PID
          */
         if ( m_int_id_filter.contains(ts.getPID()) == false ) return;
@@ -127,12 +122,16 @@ public class SiExtractor extends BaseExtractor {
                     section_buffer.write(ts.getDataByte(), 1, remaining);
                 }
 
+                try {
                 Table table = TableFactory.createTable(section_buffer.toByteArray());
                 if ( m_enable_logging ) {
                     Logger.d(String.format("PID : 0x%04x, table_id : 0x%x\n",
                             ts.getPID(), table.getTableId()));
                 }
                 putOut(new QueueData(ts.getPID(), table));
+                } catch (ArrayIndexOutOfBoundsException e) {
+                    e.printStackTrace();
+                }
 
                 /**
                  * Clear buffer
