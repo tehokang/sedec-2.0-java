@@ -3,9 +3,9 @@ package sedec2.arib.b10.tables.dsmcc.objectcarousel.biop;
 import java.util.ArrayList;
 import java.util.List;
 
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.DescriptorFactory;
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.DescriptorFactory;
 import sedec2.util.BinaryLogger;
 import sedec2.util.Logger;
 

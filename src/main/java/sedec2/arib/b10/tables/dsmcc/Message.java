@@ -1,8 +1,8 @@
 package sedec2.arib.b10.tables.dsmcc;
 
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.DownloadInfoIndication;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.DownloadServerInitiate;
 import sedec2.base.BitReadWriter;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.DownloadInfoIndication;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.DownloadServerInitiate;
 import sedec2.util.Logger;
 
 /**
@@ -13,8 +13,8 @@ import sedec2.util.Logger;
  *
  * {@link DownloadInfoIndication} as ObjectCarousel
  * {@link DownloadServerInitiate} as ObjectCarousel
- * {@link sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadInfoIndication} as DataCarousel
- * {@link sedec2.dvb.ts.si.tables.dsmcc.datacarousel.messages.DownloadServerInitiate} as DataCarousel
+ * {@link sedec2.arib.b10.tables.dsmcc.datacarousel.messages.DownloadInfoIndication} as DataCarousel
+ * {@link sedec2.arib.b10.tables.dsmcc.datacarousel.messages.DownloadServerInitiate} as DataCarousel
  *
  * The messages should be defined by the kind of carousel of Data or Object.
  */

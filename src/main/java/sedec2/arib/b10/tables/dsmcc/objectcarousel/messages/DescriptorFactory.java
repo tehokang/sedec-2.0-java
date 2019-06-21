@@ -1,18 +1,18 @@
 package sedec2.arib.b10.tables.dsmcc.objectcarousel.messages;
 
+import sedec2.arib.b10.descriptors.UnknownDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.CRC32Descriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.CachingPriorityDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.CompressedModuleDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.EstimatedDownloadTimeDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.GroupLinkDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.InfoDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.LocationDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.ModuleLinkDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.NameDescriptor;
+import sedec2.arib.b10.tables.dsmcc.objectcarousel.messages.descriptors.TypeDescriptor;
 import sedec2.base.BitReadWriter;
 import sedec2.base.Descriptor;
-import sedec2.dvb.ts.si.descriptors.UnknownDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.CRC32Descriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.CachingPriorityDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.CompressedModuleDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.EstimatedDownloadTimeDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.GroupLinkDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.InfoDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.LocationDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.ModuleLinkDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.NameDescriptor;
-import sedec2.dvb.ts.si.tables.dsmcc.objectcarousel.messages.descriptors.TypeDescriptor;
 
 public class DescriptorFactory {
     public static final int TYPE_DESCRIPTOR = 0x01;

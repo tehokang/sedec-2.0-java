@@ -24,7 +24,7 @@ public class DvbTableDecoder extends BaseSimpleDecoder {
 
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue(CommandLineParam.TS_TYPE);
+        String target_file = commandLine.getOptionValue(CommandLineParam.TS188_TYPE);
         File inOutFile = new File(target_file);
         DataInputStream dataInputStream = null;
         try {

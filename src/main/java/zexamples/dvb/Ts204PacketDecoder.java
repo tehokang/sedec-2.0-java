@@ -1,6 +1,7 @@
-package zexamples.arib;
+package zexamples.dvb;
 
 import java.io.BufferedOutputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -10,11 +11,11 @@ import java.util.Map;
 
 import org.apache.commons.cli.CommandLine;
 
-import sedec2.arib.b10.TableFactory;
-import sedec2.arib.b10.tables.ProgramAssociationTable;
-import sedec2.arib.b10.tables.ProgramMapTable;
-import sedec2.arib.extractor.ts.TsDemultiplexer;
 import sedec2.base.Table;
+import sedec2.dvb.extractor.TsDemultiplexer;
+import sedec2.dvb.ts.si.TableFactory;
+import sedec2.dvb.ts.si.tables.ProgramAssociationTable;
+import sedec2.dvb.ts.si.tables.ProgramMapTable;
 import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTs204PacketReader;
@@ -41,9 +42,9 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
 
     int ddb_counter = 0;
     int dsi_dii_counter = 0;
+
     public SimpleTsCoordinator(CommandLine commandLine) {
         this.commandLine = commandLine;
-
         ts_demuxer = new TsDemultiplexer();
         ts_demuxer.addEventListener(this);
 
@@ -83,6 +84,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                         ProgramAssociationTable.Program program = programs.get(i);
                         ts_demuxer.addSiFilter(program.getPid());
                     }
+//                    pat.print();
                 }
                 break;
             case TableFactory.PROGRAM_MAP_TABLE:
@@ -103,11 +105,43 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
                                 ts_demuxer.addAudioFilter(program.elementary_PID);
                                 break;
                             case 0x0d:
+                                // dsmcc
                                 ts_demuxer.addSiFilter(program.elementary_PID);
                                 break;
                         }
                     }
+//                    pmt.print();
                 }
+                break;
+            case TableFactory.DSMCC_PRIVATE_DATA_TABLE:
+            case TableFactory.DSMCC_STREAM_DESCRIPTORS_TABLE:
+//                ((DSMCCSection) table).print();
+                break;
+            case TableFactory.DSMCC_DOWNLOAD_DATA_MESSAGE_TABLE:
+                /**
+                 * EN 301 192 Table A.1 Regisitration of private data broadcast systems
+                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+                 * in order to confirm which carousel user should use.
+                 */
+//                DSMCCSection dsmcc_ddb = (DSMCCSection) table;
+                /**
+                 * User must be sure what this is exactly ObjectCarousel or DataCarousel to update
+                 */
+//                dsmcc_ddb.updateToObjectCarousel();
+//                dsmcc_ddb.print();
+                break;
+            case TableFactory.DSMCC_UN_MESSAGE_TABLE:
+                /**
+                 * EN 301 192 Table A.1 Regisitration of private data broadcast systems
+                 * User should check the value of data_broadcast_id of DataBroadcastIdentifierDescriptor
+                 * in order to confirm which carousel user should use.
+                 */
+//                DSMCCSection dsmcc_dsi_or_dii = (DSMCCSection) table;
+                /**
+                 * User must be sure what this is exactly ObjectCarousel or DataCarousel to update
+                 */
+//                dsmcc_dsi_or_dii.updateToObjectCarousel();
+//                dsmcc_dsi_or_dii.print();
                 break;
             default:
                 break;
@@ -115,7 +149,7 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
     }
 
     @Override
-    public void onReceivedAudio(int packet_id, byte[] buffer) {
+    public void onReceivedAudio(int packet_id, byte[] buffer, long pts) {
         try {
             if ( audio_bs_map.containsKey(packet_id) == false ) {
                 new File(audio_download_path).mkdirs();
@@ -131,10 +165,11 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
         } catch (IOException e) {
             e.printStackTrace();
         }
+
     }
 
     @Override
-    public void onReceivedVideo(int packet_id, byte[] buffer) {
+    public void onReceivedVideo(int packet_id, byte[] buffer, long pts) {
         try {
             if ( video_bs_map.containsKey(packet_id) == false ) {
                 new File(video_download_path).mkdirs();
@@ -159,12 +194,13 @@ class SimpleTsCoordinator implements TsDemultiplexer.Listener {
  * <li> Tables which are include in SI of TS
  * </ul>
  */
-public class TsPacketDecoder extends BaseSimpleDecoder {
+public class Ts204PacketDecoder extends BaseSimpleDecoder {
+
     @Override
     public void justDoIt(CommandLine commandLine) {
-        String target_file = commandLine.getOptionValue(CommandLineParam.TS_TYPE);
+        String target_file = commandLine.getOptionValue(CommandLineParam.TS204_TYPE);
         SimpleTsCoordinator simple_ts_coordinator = new SimpleTsCoordinator(commandLine);
-        ConsoleProgress progress_bar = new ConsoleProgress("TS").
+        ConsoleProgress progress_bar = new ConsoleProgress("TS204").
                 show(true, true, true, true, true, false);
         /**
          * Getting each one TS packet from specific file.
@@ -189,7 +225,11 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
              * and you can get both the results of as table of MPEG2
              * from event listener which you registered to TsDemultiplexer
              */
-            if ( false == simple_ts_coordinator.put(ts_packet) ) break;
+            ByteArrayOutputStream ts188 = new ByteArrayOutputStream();
+            ts188.write(ts_packet, 0, 188);
+
+            if ( false == simple_ts_coordinator.put(ts188.toByteArray()) ) break;
+
             if ( commandLine.hasOption(CommandLineParam.SHOW_PROGRESS) )
                 progress_bar.update(ts_packet.length);
         }
@@ -205,5 +245,9 @@ public class TsPacketDecoder extends BaseSimpleDecoder {
          */
         simple_ts_coordinator.destroy();
         simple_ts_coordinator = null;
+
+        System.out.println("ByeBye");
+        System.exit(0);
+
     }
 }

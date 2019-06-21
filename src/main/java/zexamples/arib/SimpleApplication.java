@@ -20,7 +20,9 @@ public class SimpleApplication {
                 "Enable getting via remote stream like http");
         CommandLineUtility.addOption(CommandLineParam.SECTION_TYPE,  "input_section_file", true,
                 "Target input section");
-        CommandLineUtility.addOption(CommandLineParam.TS_TYPE, "input_ts_file", true,
+        CommandLineUtility.addOption(CommandLineParam.TS188_TYPE, "input_ts188_file", true,
+                "Target input file as ts");
+        CommandLineUtility.addOption(CommandLineParam.TS204_TYPE, "input_ts204_file", true,
                 "Target input file as ts");
         CommandLineUtility.addOption(CommandLineParam.TLV_TYPE, "input_tlv_file", true,
                 "Target input file as tlv");
@@ -31,7 +33,8 @@ public class SimpleApplication {
         CommandLine cli = CommandLineUtility.getCommandLine();
 
         if ( cli.hasOption(CommandLineParam.SECTION_TYPE) == false &&
-                cli.hasOption(CommandLineParam.TS_TYPE) == false &&
+                cli.hasOption(CommandLineParam.TS188_TYPE) == false &&
+                cli.hasOption(CommandLineParam.TS204_TYPE) == false &&
                 cli.hasOption(CommandLineParam.TLV_TYPE) == false &&
                 cli.hasOption(CommandLineParam.TSTLV_TYPE) == false ) {
             HelpFormatter formmater = new HelpFormatter();
@@ -39,8 +42,10 @@ public class SimpleApplication {
             formmater.printHelp(title, CommandLineUtility.getOptions());
         } else {
             BaseSimpleDecoder decoder = null;
-            if ( cli.hasOption(CommandLineParam.TS_TYPE) ) {
-                decoder = new TsPacketDecoder();
+            if ( cli.hasOption(CommandLineParam.TS188_TYPE) ) {
+                decoder = new Ts188PacketDecoder();
+            } else if ( cli.hasOption(CommandLineParam.TS204_TYPE) ){
+                decoder = new Ts204PacketDecoder();
             } else if ( cli.hasOption(CommandLineParam.TLV_TYPE) ) {
                 decoder = new TlvPacketDecoder();
             } else if ( cli.hasOption(CommandLineParam.TSTLV_TYPE) ) {
