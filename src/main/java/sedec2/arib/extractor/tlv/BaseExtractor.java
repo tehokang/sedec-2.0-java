@@ -3,6 +3,7 @@ package sedec2.arib.extractor.tlv;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Iterator;
 import java.util.List;
 import java.util.concurrent.ArrayBlockingQueue;
@@ -329,9 +330,7 @@ public abstract class BaseExtractor {
      * Packet ID refers to 6.4 MMTP Packet of ARIB STD-B60
      */
     public void removePidFilter(int id) {
-        if ( m_int_id_filter.contains(id) == true ) {
-            m_int_id_filter.remove(id);
-        }
+        m_int_id_filter.removeAll(Collections.singleton(id));
     }
 
     /**
@@ -339,9 +338,7 @@ public abstract class BaseExtractor {
      * @param id which user doesn't want to receive via
      */
     public void removePidFilter(byte id) {
-        if ( m_byte_id_filter.contains(id) == true ) {
-            m_byte_id_filter.remove(id);
-        }
+        m_byte_id_filter.removeAll(Collections.singleton(id));
     }
 
     /**
