@@ -44,11 +44,6 @@ public abstract class BaseExtractor {
     protected List<Listener> m_listeners = new ArrayList<>();
 
     /**
-     * Filter as byte like table_id of table(AKS section) of ISO-13818
-     */
-    protected List<Byte> m_byte_id_filter = new ArrayList<>();
-
-    /**
      * Filter as int like packet_id of MMTP Packet
      */
     protected List<Integer> m_int_id_filter = new ArrayList<>();
@@ -290,19 +285,6 @@ public abstract class BaseExtractor {
     }
 
     /**
-     * Add a filter to get SI corresponding only to table_id of Private Section.
-     * @param id specific table id which user wants to get
-     *
-     * <p>
-     * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
-     */
-    public void addPidFilter(byte id) {
-        if ( m_byte_id_filter.contains(id) == false ) {
-            m_byte_id_filter.add(id);
-        }
-    }
-
-    /**
      * Remove a filter which user added corresponding only to packet_id of MMTP.
      * @param id packet_id of MMTP
      *
@@ -311,14 +293,6 @@ public abstract class BaseExtractor {
      */
     public void removePidFilter(int id) {
         m_int_id_filter.removeAll(Collections.singleton(id));
-    }
-
-    /**
-     * Remove a filter as table id of Private Section.
-     * @param id which user doesn't want to receive via
-     */
-    public void removePidFilter(byte id) {
-        m_byte_id_filter.removeAll(Collections.singleton(id));
     }
 
     /**

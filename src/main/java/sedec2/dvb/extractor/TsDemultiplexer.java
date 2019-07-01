@@ -108,6 +108,12 @@ public class TsDemultiplexer implements
         if ( m_si_extractor != null ) m_si_extractor.removePidFilter(pid);
     }
 
+    public List<Integer> getSiFilters() {
+        if ( m_si_extractor != null )
+            return m_si_extractor.getPidFilters();
+        return new ArrayList<>();
+    }
+
     /**
      * Add a filter to get audio corresponding only to PID by user setting.
      * @param pid PID of TS which user wants to get
