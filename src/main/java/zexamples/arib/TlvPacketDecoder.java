@@ -4,8 +4,10 @@ import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -23,6 +25,7 @@ import sedec2.arib.tlv.container.mmt.si.tables.DataDirectoryManagementTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable;
 import sedec2.arib.tlv.container.mmt.si.tables.MMT_PackageTable.Asset;
 import sedec2.arib.tlv.container.mmt.si.tables.PackageListTable;
+import sedec2.arib.tlv.container.mmtp.mfu.MFU_ClosedCaption;
 import sedec2.arib.tlv.container.mmtp.mfu.MFU_IndexItem;
 import sedec2.arib.tlv.container.packets.NetworkTimeProtocolData;
 import sedec2.arib.tlv.container.packets.TypeLengthValue;
@@ -30,7 +33,9 @@ import sedec2.base.Table;
 import sedec2.util.CommandLineParam;
 import sedec2.util.ConsoleProgress;
 import sedec2.util.FileTlvPacketReader;
+import sedec2.util.FileUtility;
 import sedec2.util.HttpTlvPacketReader;
+import sedec2.util.Logger;
 import sedec2.util.PacketReader;
 import sedec2.util.SimpleApplicationCoordinator;
 import sedec2.util.SimpleApplicationCoordinator.SubDirectory;
@@ -320,56 +325,84 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
 
     @Override
     public void onReceivedTtml(int packet_id, byte[] buffer) {
-        /*
+        if ( !commandLine.hasOption(CommandLineParam.EXTRACT) ) return;
+
+        long time = System.currentTimeMillis();
+        SimpleDateFormat dayTime = new SimpleDateFormat("yyyy-mm-dd.hh:mm:ss");
+        String date = dayTime.format(new Date(time));
+
         MFU_ClosedCaption ttml = new MFU_ClosedCaption(buffer);
         new File(ttml_download_path).mkdirs();
         switch ( ttml.getDataType() ) {
             case 0x00:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-DOC] \n");
                 Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
+                }
+
                 FileUtility.save(
-                        String.format("%s/ttml.mfu.0x%x.txt",
-                                ttml_download_path, packet_id),
+                        String.format("%s/ttml.mfu.%s.0x%x.txt",
+                                ttml_download_path, date, packet_id),
                                 new String(ttml.getDataByte()));
                 break;
             case 0x01:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-PNG] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.png",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x02:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-SVG] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.svg",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x03:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-PCM] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.pcm",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x04:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-MP3] \n");
+                }
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.mp3",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x05:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-AAC] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.aac",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x06:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-FONT-SVG] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.font.svg",
                                 ttml_download_path, packet_id), buffer);
                 break;
             case 0x07:
+                if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
                 Logger.d("\t [TTML-FONT-WOFF] \n");
+                }
+
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.font.woff",
                                 ttml_download_path, packet_id), buffer);
@@ -377,7 +410,6 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
             default:
                 break;
         }
-        */
     }
 
     @Override
