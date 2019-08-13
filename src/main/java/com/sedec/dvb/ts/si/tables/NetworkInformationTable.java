@@ -1,0 +1,144 @@
+package com.sedec.dvb.ts.si.tables;
+
+import java.util.ArrayList;
+import java.util.List;
+
+import com.sedec.base.Table;
+import com.sedec.dvb.ts.si.DescriptorFactory;
+import com.sedec.dvb.ts.si.descriptors.Descriptor;
+import com.sedec.util.Logger;
+
+public class NetworkInformationTable extends Table {
+    protected int network_id;
+    protected byte version_number;
+    protected byte current_next_indicator;
+    protected byte section_number;
+    protected byte last_section_number;
+    protected int network_descriptors_length;
+    protected List<Descriptor> descriptors = new ArrayList<>();
+    protected int transport_stream_loop_length;
+    protected List<TransportStream> transport_streams = new ArrayList<>();
+
+    class TransportStream {
+        public int transport_stream_id;
+        public int original_network_id;
+        public int transport_descriptors_length;
+        public List<Descriptor> descriptors = new ArrayList<>();
+    }
+
+    public NetworkInformationTable(byte[] buffer) {
+        super(buffer);
+
+        __decode_table_body__();
+    }
+
+    public int getNetworkId() {
+        return network_id;
+    }
+
+    public byte getVersionNumber() {
+        return version_number;
+    }
+
+    public byte getCurrentNextIndicator() {
+        return current_next_indicator;
+    }
+
+    public byte getSectionNumber() {
+        return section_number;
+    }
+
+    public byte getLastSectionNumber() {
+        return last_section_number;
+    }
+
+    public List<Descriptor> getNetworkDescriptors() {
+        return descriptors;
+    }
+
+    public int getTsStreamLoopLength() {
+        return transport_stream_loop_length;
+    }
+
+    public List<TransportStream> getTsStreams() {
+        return transport_streams;
+    }
+
+    @Override
+    protected void __decode_table_body__() {
+        network_id = readOnBuffer(16);
+        skipOnBuffer(2);
+        version_number = (byte) readOnBuffer(5);
+        current_next_indicator = (byte) readOnBuffer(1);
+        section_number = (byte) readOnBuffer(8);
+        last_section_number = (byte) readOnBuffer(8);
+        skipOnBuffer(4);
+        network_descriptors_length = readOnBuffer(12);
+
+        for ( int i=network_descriptors_length; i>0; ) {
+            Descriptor desc = DescriptorFactory.createDescriptor(this);
+            i-=desc.getDescriptorLength();
+            descriptors.add(desc);
+        }
+        skipOnBuffer(4);
+        transport_stream_loop_length = readOnBuffer(12);
+
+        for ( int i=transport_stream_loop_length; i>0; ) {
+            TransportStream transport_stream = new TransportStream();
+            transport_stream.transport_stream_id = readOnBuffer(16);
+            transport_stream.original_network_id = readOnBuffer(16);
+            skipOnBuffer(4);
+            transport_stream.transport_descriptors_length = readOnBuffer(12);
+
+            for ( int j=transport_stream.transport_descriptors_length; j>0; ) {
+                Descriptor desc = DescriptorFactory.createDescriptor(this);
+                j-=desc.getDescriptorLength();
+                transport_stream.descriptors.add(desc);
+            }
+            i-= ( 6 + transport_stream.transport_descriptors_length);
+            transport_streams.add(transport_stream);
+        }
+        checksum_CRC32 = readOnBuffer(32);
+    }
+
+    @Override
+    public void print() {
+        super.print();
+
+        Logger.d(String.format("network_id : 0x%x \n", network_id));
+        Logger.d(String.format("version_number : 0x%x \n", version_number));
+        Logger.d(String.format("current_next_indicator : 0x%x \n", current_next_indicator));
+        Logger.d(String.format("section_number : 0x%x \n", section_number));
+        Logger.d(String.format("last_section_number : 0x%x \n", last_section_number));
+        Logger.d(String.format("network_descriptors_length : 0x%x \n",
+                network_descriptors_length));
+
+        for ( int i=0; i<descriptors.size(); i++ ) {
+            Descriptor desc = descriptors.get(i);
+            desc.print();
+        }
+
+        Logger.d(String.format("TS_stream_loop_length : 0x%x \n", transport_stream_loop_length));
+
+        for ( int i=0; i<transport_streams.size(); i++ ) {
+            TransportStream transport_stream = transport_streams.get(i);
+            Logger.d(String.format(" [%d] ts_stream_id : 0x%x \n", i,
+                    transport_stream.transport_stream_id));
+            Logger.d(String.format(" [%d] original_network_id : 0x%x \n", i,
+                    transport_stream.original_network_id));
+            Logger.d(String.format(" [%d] ts_stream_descriptors_length : 0x%x \n",
+                    i, transport_stream.transport_descriptors_length));
+
+            for (int j=0; j<transport_stream.descriptors.size(); j++ ) {
+                Descriptor desc = transport_stream.descriptors.get(j);
+                desc.print();
+            }
+        }
+
+        Logger.d(String.format("checksum_CRC32 : 0x%02x%02x%02x%02x \n",
+                (checksum_CRC32 >> 24) & 0xff,
+                (checksum_CRC32 >> 16) & 0xff,
+                (checksum_CRC32 >> 8) & 0xff,
+                checksum_CRC32 & 0xff));
+    }
+}
