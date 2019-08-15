@@ -1,0 +1,101 @@
+/* release gradle of components */
+// apply from: 'constants.gradle'
+
+/**
+ * deploy unit function to copy specific file or directory.
+ */
+def deploy = {
+    source, destination, exclusion ->
+        println "Deploying $source to $destination (exclude : $exclusion )"
+        file("$destination").mkdirs()
+        copy {
+            from "$source"
+            into "$destination"
+            exclude "$exclusion"
+        }
+        println "Completed to deploy"
+}
+
+/**
+ * zip unit function to do zipping resources.
+ */
+def zip = {
+    source_folder, destination_folder, target_name ->
+        println "Zipping $source_folder into $destination_folder/$target_name"
+        ant.zip(destfile: "$destination_folder/$target_name", basedir: "$source_folder")
+        println "Completed to release $target_name zipped"
+}
+
+/**
+ * BaseTask to release libraries.
+ */
+class ReleaseTask extends DefaultTask {
+    def logo = ""
+    def title = ""
+    def version = ""
+    def release_date = new Date().format('yyyyMMddHHmmss')
+
+    @TaskAction
+    void doAction() {
+        println logo
+    }
+
+    void checkSum(zipName) {
+        ant.checksum file: zipName
+    }
+}
+
+/**
+ * Release task of JBmlView
+ */
+task releaseSedec2(dependsOn: [':distclean',
+                                 ':release-sdk',
+                                 ':doc-external'], type: ReleaseTask) {
+
+    title = "sedec2"
+    version = "2.0"
+    logo = "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMMMMMMNds+oosydMMMMMMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMMMMy+::/ossshsoyyNMMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMNho/::::+ssssssyhhhooymMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMmyo::::::/+sssssssssyhhhhsoshNMMMMMMMMMM\n" +
+            "MMMMMMMdo+::::::::/osssssssssssyhhhhhhhooymMMMMMMM\n" +
+            "MMMNho:::::::::::/ossssssssssssssyhhhhhhhhssshMMMM\n" +
+            "MMd:::::::::::::+sssssstehosssssssshhhhhhhhhhhhMMM\n" +
+            "MMd:/:::::::::/ossssssskangsssssssssyhhhhhhdddhMMM\n" +
+            "MMd:o/:::::::/osssssssssedec2sssssssssyhddddddhMMM\n" +
+            "MMd:o+::::::+sssssssssssssssssssssyyyyhhddddddhMMM\n" +
+            "MMd:oo+:::/+ssssssssssssssyyyhhhhddddhyyddddddhMMM\n" +
+            "MMd:ooo/:/osssssssyyyhhhhddddddddddddyssydddddhMMM\n" +
+            "MMd:ooo+/syyyhhhhdddddddddddddddddddhssssyddddhMMM\n" +
+            "MMd:ooosyyhhhddddddddddddddddddddddhyssssshdddhMMM\n" +
+            "MMd:ooohhhyyyyhhdddddddddddddddddddysssssssdddhMMM\n" +
+            "MMd:ooyhhhhyyyyyyyhhddddddddddddddhssssssssyddhMMM\n" +
+            "MMd:oyhhhhhhhyyyyyyyyhhhdddddddddhysssssssssydhMMM\n" +
+            "MMd:yhhhhhhhhhyyyyyyyyyyyhhhdddddysssssssssssyhMMM\n" +
+            "MMNooyhhhhhhhhhhyyyyyyyyyyyyyhhhhsssssssssssoomMMM\n" +
+            "MMMMNmyoshhhhhhhhyyyyyyyyyyyyyyyssssssssooshMMMMMM\n" +
+            "MMMMMMMMmhyoyhhhhhhyyyyyyyyyyysssssss++ymMMMMMMMMM\n" +
+            "MMMMMMMMMMMMdyssyhhhyyyyyyyyyssssooyhNMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMNhsoyhhyyyyysss+yydMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMMMMMdyssyyyooshNMMMMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMMMMMMMMNysydMMMMMMMMMMMMMMMMMMMMMMM\n" +
+            "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n" +
+            String.format("M\t\t %s %8s \t\t M\n", title, version) +
+            "MMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMMM\n\n"
+
+    doFirst {
+        /* Clean up release/bml for new one */
+    }
+
+    doLast {
+        /* Copy sources and libraries of JBmlView */
+        deploy("src/main/java/", "release/source", "")
+
+        /* Zip whole of resources */
+        zip("release/", "./", "${title}-${version}-${release_date}.zip")
+
+        /* MD5 checksum */
+        checkSum("./${title}-${version}-${release_date}.zip")
+    }
+}

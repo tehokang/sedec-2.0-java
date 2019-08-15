@@ -1,6 +1,7 @@
 language : java
 install: ant
 jdk:
+- oraclejdk8
 - openjdk8
 script:
 - gradle release-sdk

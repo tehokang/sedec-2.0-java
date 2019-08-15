@@ -23,3 +23,5 @@ dependencies {
     testImplementation 'junit:junit:4.12'
     implementation fileTree(dir: 'libs', include: ['commons-cli-1.4.jar'])
 }
+
+apply from: 'release.gradle'
