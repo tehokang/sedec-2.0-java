@@ -14,9 +14,9 @@
     <property name="bin.dir" value="bin"/>
     <property name="lib.dir" value="libs"/>
     <property name="src.dir" value="src/main/java"/>
-    <property name="doc.dir" value="${release.dir}/docs"/>
-    <property name="output.prefix" value="${release.dir}/${ant.project.name}-${version}"/>
-    <property name="output.jar" value="${output.prefix}.jar"/>
+    <property name="doc.dir" value="${release.dir}/document"/>
+    <property name="output.prefix" value="${release.dir}/library/"/>
+    <property name="output.jar" value="${output.prefix}/${ant.project.name}-${version}.jar"/>
 
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
@@ -82,7 +82,7 @@
                  obfuscate="yes">
             -libraryjars ${java.home}/lib/rt.jar
             -injars ${output.jar}
-            -outjars ${output.prefix}.min.jar
+            -outjars ${output.jar}.min.jar
             -dontnote
             -dontwarn
             -keep class ** { 
