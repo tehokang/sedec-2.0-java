@@ -16,7 +16,7 @@ import com.sedec.util.Logger;
  * {@link BaseExtractor}
  *
  * User can receive Table via
- * {@link SiExtractor.ITableExtractorListener#onReceivedTable(Table)}
+ * SiExtractor.ITableExtractorListener.onReceivedTable(Table)
  */
 public class SiExtractor extends BaseExtractor {
     protected static final String TAG = SiExtractor.class.getSimpleName();

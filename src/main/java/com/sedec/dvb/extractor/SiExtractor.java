@@ -9,14 +9,13 @@ import com.sedec.dvb.ts.si.TableFactory;
 import com.sedec.util.Logger;
 
 /**
- * Class to extract SI as Table from Transport Stream of ISO-13818.
- * {@link Table}
+ * Class to extract SI as Table from Transport Stream of ISO-13818.Table
  *
  * It has inherited from BaseExtractor which has already implementations to get Table.
- * {@link BaseExtractor}
+ * BaseExtractor
  *
  * User can receive Table via
- * {@link SiExtractor.ITableExtractorListener#onReceivedTable(Table)}
+ * SiExtractor.ITableExtractorListener#onReceivedTable(Table)
  */
 public class SiExtractor extends BaseExtractor {
     protected static final String TAG = SiExtractor.class.getSimpleName();

@@ -19,7 +19,7 @@ public abstract class HttpPacketReader implements PacketReader {
 
     /**
      * Constructor with full path
-     * @param file Full path
+     * @param url Full path
      */
     public HttpPacketReader(String url) {
         try {

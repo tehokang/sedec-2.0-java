@@ -17,6 +17,8 @@
     <property name="doc.dir" value="${release.dir}/document"/>
     <property name="output.prefix" value="${release.dir}/library/"/>
     <property name="output.jar" value="${output.prefix}/${ant.project.name}-${version}.jar"/>
+    <property name="source.prefix" value="${release.dir}/source/"/>
+    <property name="source.jar" value="${source.prefix}/${ant.project.name}-${version}.source.jar"/>
 
     <path id="project.classpath">
         <fileset dir="${lib.dir}">
@@ -37,6 +39,7 @@
     <target name="distclean">
         <delete dir="${bin.dir}"/>
         <delete file="${output.jar}"/>
+        <delete file="${source.jar}"/>
     </target>
               
     <target depends="compile" name="versioning">
@@ -67,6 +70,9 @@
         <jar jarfile="${output.jar}" 
             basedir="${bin.dir}" 
             includes="**/*.class">
+        </jar>
+        <jar jarfile="${source.jar}"
+            basedir="${src.dir}">
         </jar>
     </target>
     

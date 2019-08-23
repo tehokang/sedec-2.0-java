@@ -136,8 +136,6 @@ public class ConsoleProgress {
      * @param bitrate flag to enable bitrate
      * @param duration flag to enable duration
      * @param amount flag to enable amount to be proceed
-     * @param heap_usage flag to enable heap usage
-     * @param cpu_usage flag to enable cpu usage
      * @return instance of ConsoleProgress
      */
     public ConsoleProgress show(boolean progress_bar, boolean percentage,

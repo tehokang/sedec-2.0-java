@@ -93,7 +93,7 @@ public class TsDemultiplexer implements
      * @param pid PID of TS which user wants to get
      *
      * Table ID refers to 2.4.4.10 Syntax of the Private section in ISO13838-1
-     * User can receive Table via {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
+     * User can receive Table via TsDemultiplexer.Listener#onReceivedTable(Table)
      */
     public void addSiFilter(int pid) {
         if ( m_si_extractor != null ) m_si_extractor.addPidFilter(pid);
@@ -102,7 +102,7 @@ public class TsDemultiplexer implements
     /**
      * Remove a filter as table id of Private Section.
      * @param pid of TS which user doesn't want to receive via
-     * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
+     * TsDemultiplexer.Listener#onReceivedTable(Table)
      */
     public void removeSiFilter(int pid) {
         if ( m_si_extractor != null ) m_si_extractor.removePidFilter(pid);
@@ -149,7 +149,7 @@ public class TsDemultiplexer implements
     /**
      * Remove all of filter which user added.
      * User can't receive any table information via
-     * {@link TsDemultiplexer.Listener#onReceivedTable(Table)}
+     * TsDemultiplexer.Listener#onReceivedTable(Table)
      */
     public void removeAllFilter() {
         if ( m_si_extractor != null ) {
