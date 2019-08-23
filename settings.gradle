@@ -15,4 +15,4 @@ include 'api'
 include 'services:webservice'
 */
 
-rootProject.name = 'sedec-2.0'
+rootProject.name = 'sedec-java'
