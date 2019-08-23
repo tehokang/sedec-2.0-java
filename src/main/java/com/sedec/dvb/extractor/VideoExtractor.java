@@ -54,9 +54,9 @@ public class VideoExtractor extends BaseExtractor {
                     try {
                         if ( null != m_event_queue &&
                                 ( data = (QueueData)m_event_queue.take()) != null ) {
-                             for ( int i=0; i<m_listeners.size(); i++ ) {
-                                 ((IVideoExtractorListener)m_listeners.get(i)).
-                                         onReceivedVideo(data.packet_id, data.data, data.pts);
+                            for ( int i=0; i<m_listeners.size(); i++ ) {
+                                ((IVideoExtractorListener)m_listeners.get(i)).
+                                        onReceivedVideo(data.packet_id, data.data, data.pts);
                             }
                         }
                     } catch ( ArrayIndexOutOfBoundsException e ) {

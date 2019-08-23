@@ -336,8 +336,8 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
         switch ( ttml.getDataType() ) {
             case 0x00:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-DOC] \n");
-                Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
+                    Logger.d("\t [TTML-DOC] \n");
+                    Logger.d(String.format("%s \n", new String(ttml.getDataByte())));
                 }
 
                 FileUtility.save(
@@ -347,7 +347,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x01:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-PNG] \n");
+                    Logger.d("\t [TTML-PNG] \n");
                 }
 
                 FileUtility.save(
@@ -356,7 +356,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x02:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-SVG] \n");
+                    Logger.d("\t [TTML-SVG] \n");
                 }
 
                 FileUtility.save(
@@ -365,7 +365,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x03:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-PCM] \n");
+                    Logger.d("\t [TTML-PCM] \n");
                 }
 
                 FileUtility.save(
@@ -374,7 +374,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x04:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-MP3] \n");
+                    Logger.d("\t [TTML-MP3] \n");
                 }
                 FileUtility.save(
                         String.format("%s/ttml.mfu.0x%x.mp3",
@@ -382,7 +382,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x05:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-AAC] \n");
+                    Logger.d("\t [TTML-AAC] \n");
                 }
 
                 FileUtility.save(
@@ -391,7 +391,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x06:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-FONT-SVG] \n");
+                    Logger.d("\t [TTML-FONT-SVG] \n");
                 }
 
                 FileUtility.save(
@@ -400,7 +400,7 @@ class SimpleTlvCoordinator implements TlvDemultiplexer.Listener {
                 break;
             case 0x07:
                 if ( commandLine.hasOption(CommandLineParam.SHOW_TABLES) ) {
-                Logger.d("\t [TTML-FONT-WOFF] \n");
+                    Logger.d("\t [TTML-FONT-WOFF] \n");
                 }
 
                 FileUtility.save(
