@@ -299,6 +299,14 @@ public abstract class BaseExtractor {
     }
 
     /**
+     * Get filter list of table id
+     * @return
+     */
+    public List<Integer> getPidFilters() {
+        return m_int_id_filter;
+    }
+
+    /**
      * Remove a filter which user added corresponding only to PID of TS.
      * @param id PID of TS
      *

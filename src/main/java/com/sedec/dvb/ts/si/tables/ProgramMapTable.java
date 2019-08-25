@@ -36,7 +36,7 @@ public class ProgramMapTable extends Table {
         return program_number;
     }
 
-    public byte getVersion() {
+    public byte getVersionNumber() {
         return version_number;
     }
 
