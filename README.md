@@ -263,7 +263,7 @@ Every Tables and Descriptors are based on base/Table or arib/Table and so on wha
 </pre>
 
 # How To Build
-
+## Case of eclipse with ant
 We could build with Apache Ant as build tool, please install ant in your system. Following is explaining with prerequisite you already installed. Obviously ant build tool has almost same mechanism with make tool like make has target, dependencies and command.
 
 Basically targets of ant has followings :
@@ -285,6 +285,14 @@ $ant release-arib-example-decoder
 </pre>
 
 To use this in android, you could just import this library in your gradle of project.
+
+## Case of android studio
+If you would like to use this library in android studio then just done with following dependency.
+<pre>
+dependencies {
+    implementation 'com.teho.sedec:sedec-java:2.0.2'
+}
+</pre>
 
 # How To Run
 
