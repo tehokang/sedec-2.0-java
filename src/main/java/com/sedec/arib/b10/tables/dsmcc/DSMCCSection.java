@@ -82,47 +82,51 @@ public class DSMCCSection extends Table {
         section_number = (byte) readOnBuffer(8);
         last_section_number = (byte) readOnBuffer(8);
 
-        if ( table_id == 0x3a ) {
-            /**
-             * LLCSNAP() not support
-             */
-            skipOnBuffer((section_length-9)*8);
-        } else if ( table_id == 0x3b ) {
-            /**
-             * userNetworkMessage() DSI, DII, DC
-             */
-            message_byte = new byte[section_length-9];
-            for ( int i=0; i<message_byte.length; i++ ) {
-                message_byte[i] = (byte) readOnBuffer(8);
-            }
-        } else if ( table_id == 0x3c ) {
-            /**
-             * downloadDataMessage() DDB
-             */
-            message_byte = new byte[section_length-9];
-            for ( int i=0; i<message_byte.length; i++ ) {
-                message_byte[i] = (byte) readOnBuffer(8);
-            }
-        } else if ( table_id == 0x3d ) {
-            /**
-             * DSMCC_descriptor_list()
-             */
-            for ( int i=section_length-9; i>0; ) {
-                Descriptor desc = DescriptorFactory.createDescriptor(this);
-                i-=desc.getDescriptorLength();
-                DSMCC_descriptor_list.add(desc);
-            }
-        } else if ( table_id == 0x3e ) {
-            /**
-             * private_data_byte
-             */
-            private_data_byte = new byte[section_length - 9];
-            for ( int i=0; i<private_data_byte.length; i++ ) {
-                private_data_byte[i] = (byte) readOnBuffer(8);
-            }
-        }
-
-        checksum_CRC32 = readOnBuffer(32);
+        /**
+         * Following to decode DSMCC has problem especially for DDB, so skipped
+         */
+        skipOnBuffer((section_length-9)*8);
+//        if ( table_id == 0x3a ) {
+//            /**
+//             * LLCSNAP() not support
+//             */
+//            skipOnBuffer((section_length-9)*8);
+//        } else if ( table_id == 0x3b ) {
+//            /**
+//             * userNetworkMessage() DSI, DII, DC
+//             */
+//            message_byte = new byte[section_length-9];
+//            for ( int i=0; i<message_byte.length; i++ ) {
+//                message_byte[i] = (byte) readOnBuffer(8);
+//            }
+//        } else if ( table_id == 0x3c ) {
+//            /**
+//             * downloadDataMessage() DDB
+//             */
+//            print();
+//            message_byte = new byte[section_length-9];
+//            for ( int i=0; i<message_byte.length; i++ ) {
+//                message_byte[i] = (byte) readOnBuffer(8);
+//            }
+//        } else if ( table_id == 0x3d ) {
+//            /**
+//             * DSMCC_descriptor_list()
+//             */
+//            for ( int i=section_length-9; i>0; ) {
+//                Descriptor desc = DescriptorFactory.createDescriptor(this);
+//                i-=desc.getDescriptorLength();
+//                DSMCC_descriptor_list.add(desc);
+//            }
+//        } else if ( table_id == 0x3e ) {
+//            /**
+//             * private_data_byte
+//             */
+//            private_data_byte = new byte[section_length - 9];
+//            for ( int i=0; i<private_data_byte.length; i++ ) {
+//                private_data_byte[i] = (byte) readOnBuffer(8);
+//            }
+//        }
+//        checksum_CRC32 = readOnBuffer(32);
     }
 
     public void updateToDataCarousel() {
