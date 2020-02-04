@@ -290,7 +290,7 @@ To use this in android, you could just import this library in your gradle of pro
 If you would like to use this library in android studio then just done with following dependency.
 <pre>
 dependencies {
-    implementation 'com.teho.sedec:sedec-java:2.0.2'
+    implementation 'com.teho.sedec:sedec-java:2.0.5'
 }
 </pre>
 
